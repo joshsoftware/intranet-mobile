@@ -1,3 +1,4 @@
+import {Alert} from 'react-native';
 import {
   GoogleSignin,
   statusCodes,
@@ -19,13 +20,13 @@ export const googleSignIn = async () => {
     return userInfo;
   } catch (error: any) {
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      return {error: 'user cancelled the login flow'};
+      Alert.alert('', 'user cancelled the login flow');
     } else if (error.code === statusCodes.IN_PROGRESS) {
-      return {error: 'sign in is in progress already'};
+      Alert.alert('', 'sign in is in progress already');
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      return {error: 'play services not available or outdated'};
+      Alert.alert('', 'play services not available or outdated');
     } else {
-      return {error: 'Something went wrong'};
+      Alert.alert('', 'Something went wrong');
     }
   }
 };

@@ -1,11 +1,12 @@
-import {useContext, useState} from 'react';
+import {useContext} from 'react';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 
 import UserContext from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
-import {googleSignIn} from '../../services/auth/google.auth';
+import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
+import {Alert} from 'react-native';
 
 export const useLogin = () => {
   const [, setUserData] = useContext(UserContext);
@@ -18,34 +19,39 @@ export const useLogin = () => {
       await AsyncStore.setAuthToken(authToken);
       setUserData({token: authToken});
     },
-    onError: (error: AxiosError<LoginResponseBody>) => {
+    onError: async (error: AxiosError<LoginResponseBody>) => {
+      await googleSignOut();
+
       if (error.response) {
         const responseData = error.response.data;
-        setErrorMessage(responseData.message);
+        Alert.alert('', responseData.message);
       } else {
-        setErrorMessage(error.message);
+        Alert.alert('', error.message);
       }
     },
   });
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const signIn = async () => {
-    setErrorMessage(null);
+  const emailPasswordSignInHandler = async (
+    email: string,
+    password: string,
+  ) => {
+    // User login from backend
+    mutation.mutate({email, password});
+  };
 
+  const googleSignInHandler = async () => {
     const response = await googleSignIn();
 
-    if ('error' in response) {
-      setErrorMessage(response.error);
-    } else {
+    if (response) {
       // User login from backend
       mutation.mutate(response);
     }
   };
 
   return {
-    signIn,
+    googleSignInHandler,
+    emailPasswordSignInHandler,
     isLoading: mutation.isLoading,
-    errorMessage,
     mutate: mutation.mutate,
   };
 };

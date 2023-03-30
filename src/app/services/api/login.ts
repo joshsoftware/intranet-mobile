@@ -3,7 +3,12 @@ import {AxiosResponse} from 'axios';
 
 import {apiCall} from '.';
 
-export type LoginRequestBody = User;
+export type LoginRequestBody =
+  | User
+  | {
+      email: string;
+      password: string;
+    };
 
 export type LoginResponseBody = {
   message: string;
