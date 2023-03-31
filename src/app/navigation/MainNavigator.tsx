@@ -11,6 +11,11 @@ import TimesheetScreen from '../screens/TimesheetScreen';
 import TabBar from '../components/TabBar';
 
 import {MainTabParamList} from './types';
+import {
+  HOME_SCREEN,
+  LEAVE_SCREEN,
+  TIMESHEET_SCREEN,
+} from '../constant/screenNames';
 
 const MainTab = createBottomTabNavigator<MainTabParamList>();
 
@@ -28,9 +33,9 @@ const MainNavigator = () => {
       screenOptions={screenOptions}
       tabBar={TabBar}
       sceneContainerStyle={sceneContainerStyle}>
-      <MainTab.Screen name="Home" component={HomeScreen} />
-      <MainTab.Screen name="Leave" component={LeaveScreen} />
-      <MainTab.Screen name="Timesheet" component={TimesheetScreen} />
+      <MainTab.Screen name={HOME_SCREEN} component={HomeScreen} />
+      <MainTab.Screen name={LEAVE_SCREEN} component={LeaveScreen} />
+      <MainTab.Screen name={TIMESHEET_SCREEN} component={TimesheetScreen} />
     </MainTab.Navigator>
   );
 };

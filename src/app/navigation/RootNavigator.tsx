@@ -11,6 +11,7 @@ import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
 import SplashScreen from '../screens/SplashScreen';
 import {RootStackParamList} from './types';
+import {LOGIN_SCREEN, MAIN_SCREEN} from '../constant/screenNames';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -47,9 +48,9 @@ const RootNavigator = () => {
   return (
     <RootStack.Navigator screenOptions={screenOptions}>
       {user ? (
-        <RootStack.Screen name="Main" component={MainScreen} />
+        <RootStack.Screen name={MAIN_SCREEN} component={MainScreen} />
       ) : (
-        <RootStack.Screen name="Login" component={LoginScreen} />
+        <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
       )}
     </RootStack.Navigator>
   );

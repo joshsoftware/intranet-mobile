@@ -6,12 +6,11 @@ import {
   BottomTabNavigationEventMap,
 } from '@react-navigation/bottom-tabs';
 
-import HomeIcon from '../../assets/svg/home.svg';
-import ClockIcon from '../../assets/svg/clock.svg';
-import CalendarIcon from '../../assets/svg/calendar.svg';
-import MenuIcon from '../../assets/svg/menu.svg';
+import {Home, Calendar, Clock, Menu as MenuIcon} from '../constant/icons';
 
 import {MainTabParamList} from '../navigation/types';
+import colors from '../constant/colors';
+import {SvgProps} from 'react-native-svg';
 
 // Defining specific types because
 // ButtonTabBarProps is not generic in the library
@@ -21,10 +20,10 @@ type NavigationType = NavigationHelpers<
   BottomTabNavigationEventMap
 >;
 
-const screenIcons: Record<keyof MainTabParamList, JSX.Element> = {
-  Home: <HomeIcon />,
-  Leave: <CalendarIcon />,
-  Timesheet: <ClockIcon />,
+const screenIcons: Record<keyof MainTabParamList, React.FC<SvgProps>> = {
+  Home: Home,
+  Leave: Calendar,
+  Timesheet: Clock,
 };
 
 const TabBar = (props: BottomTabBarProps) => {
@@ -47,12 +46,14 @@ const TabBar = (props: BottomTabBarProps) => {
       }
     };
 
+    const Icon = screenIcons[route.name];
+
     return (
       <TouchableOpacity
         key={route.name}
         style={styles.buttonContainer}
         onPress={onPress}>
-        {screenIcons[route.name]}
+        <Icon />
         <Text style={styles.buttonTitle}>{label}</Text>
       </TouchableOpacity>
     );
@@ -80,10 +81,10 @@ const styles = StyleSheet.create({
   container: {
     height: 56,
     flexDirection: 'row',
-    backgroundColor: '#F2F2F2',
+    backgroundColor: colors.SECONDARY_BACKGROUND,
 
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: '#707070',
+    borderColor: colors.GREY_BORDER_COLOR,
 
     paddingVertical: 9,
   },
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonTitle: {
-    color: '#000000',
+    color: colors.SECONDARY,
   },
 });
 
