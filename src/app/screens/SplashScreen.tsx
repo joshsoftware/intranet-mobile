@@ -1,7 +1,8 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 
-import JoshLogo from '../../assets/svg/logo.svg';
+import colors from '../constant/colors';
+import {JoshLogo} from '../constant/icons';
 
 const SplashScreen = () => {
   return (
@@ -18,6 +19,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.WHITE,
   },
 });

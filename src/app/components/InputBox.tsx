@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, TextInputProps} from 'react-native';
 
+import colors from '../constant/colors';
+
 type Props = TextInputProps & {error?: string};
 
 const InputBox = (props: Props) => {
@@ -24,14 +26,14 @@ const styles = StyleSheet.create({
     marginVertical: 9,
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: '#D6D6D6',
+    borderColor: colors.BORDER,
     paddingHorizontal: 20,
-    color: '#333333',
+    color: colors.TERTIARY_TEXT,
   },
   errorStyle: {
-    borderColor: 'red',
+    borderColor: colors.ERROR_RED,
   },
   errorText: {
-    color: 'red',
+    color: colors.ERROR_RED,
   },
 });

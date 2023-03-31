@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 
 import {useLogin} from './login.hooks';
-import JoshLogo from '../../../assets/svg/logo.svg';
 import LoginForm from './LoginForm';
+
+import colors from '../../constant/colors';
+import {JoshLogo} from '../../constant/icons';
 
 const LoginScreen = () => {
   const {googleSignInHandler, emailPasswordSignInHandler, isLoading} =
@@ -46,7 +48,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.WHITE,
     padding: 16,
   },
   ScrollView: {
@@ -60,26 +62,26 @@ const styles = StyleSheet.create({
   loginText: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#333333',
+    color: colors.TERTIARY_TEXT,
     paddingVertical: 20,
   },
 
   googleSigninButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.WHITE,
     padding: 9,
     borderRadius: 4,
     alignItems: 'center',
-    borderColor: '#3069F6',
+    borderColor: colors.PRIMARY,
     borderWidth: 2,
   },
   googleSigninButtonText: {
-    color: '#3069F6',
+    color: colors.PRIMARY,
     fontSize: 14,
     fontWeight: '600',
   },
   orText: {
     fontSize: 12,
-    color: '#6A6A6A',
+    color: colors.QUATERNARY_TEXT,
     fontWeight: 'bold',
     marginVertical: 14,
     alignSelf: 'center',

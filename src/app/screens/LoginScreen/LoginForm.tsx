@@ -17,6 +17,7 @@ import {
   INVALID_EMAIL_ERROR,
   INVALID_JOSHSOFTWARE_EMAIL_ERROR,
 } from '../../constant/message';
+import colors from '../../constant/colors';
 
 interface FormData {
   email: string;
@@ -123,10 +124,10 @@ const styles = StyleSheet.create({
   labelText: {
     marginTop: 13,
     fontSize: 12,
-    color: '#000000',
+    color: colors.SECONDARY,
   },
   forgotPasswordText: {
-    color: '#6A6A6A',
+    color: colors.QUATERNARY_TEXT,
     fontSize: 12,
     fontWeight: 'bold',
     marginTop: 4,
@@ -134,13 +135,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   loginButton: {
-    backgroundColor: '#3069F6',
+    backgroundColor: colors.PRIMARY,
     padding: 9,
     borderRadius: 4,
     alignItems: 'center',
   },
   loginButtonText: {
-    color: '#FFFFFF',
+    color: colors.WHITE,
     fontSize: 14,
     fontWeight: '600',
   },

@@ -5,5 +5,6 @@ import Edit from '../../assets/svg/edit.svg';
 import Home from '../../assets/svg/home.svg';
 import Menu from '../../assets/svg/menu.svg';
 import Floating from '../../assets/svg/floating.svg';
+import JoshLogo from '../../assets/svg/logo.svg';
 
-export {Calendar, Delete, Edit, Clock, Home, Menu, Floating};
+export {Calendar, Delete, Edit, Clock, Home, Menu, Floating, JoshLogo};
