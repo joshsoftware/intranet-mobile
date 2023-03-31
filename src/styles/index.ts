@@ -21,6 +21,12 @@ const borderStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
+  circleBorder: {
+    borderColor: colors.GREY_BORDER_COLOR,
+    borderRadius: 32 / 2,
+    borderWidth: 1,
+    backgroundColor: colors.WHITE,
+  },
 });
 
 export {flexStyles, borderStyles};

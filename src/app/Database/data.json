@@ -1,0 +1,199 @@
+{
+  "publicProfile": {
+    "profileDetails": {
+      "firstName": "Sushant",
+      "lastName": "Patil",
+      "Gender": "Male",
+      "mobileNumber": "9075674610",
+      "bloodGroup": "B+",
+      "dateOfBirth": "16/12/2001"
+    },
+
+    "socialDetails": [
+      {
+        "name": "linkdin",
+        "uri": "https://www.linkedin.com/in/sushant-patil-b280ba1ba/"
+      },
+
+      {
+        "name": "facebook",
+        "uri": "https://instagram.com/sushant_patil_2512?igshid=ZDdkNTZiNTM="
+      },
+      {
+        "name": "blog",
+        "uri": "https://instagram.com/sushant_patil_2512?igshid=ZDdkNTZiNTM="
+      },
+      {
+        "name": "github",
+        "uri": "https://instagram.com/sushant_patil_2512?igshid=ZDdkNTZiNTM="
+      }
+    ]
+  },
+
+  "personalDetails": {
+    "personalDetails": {
+      "panNumber": "133 333 544",
+      "personalEmail": "patilsushant518@gmail.com",
+      "passportNumber": "112 223 444",
+      "qualification": "B Tech",
+      "dateOfJoining": "1/1/2012",
+      "workExprience": 15,
+      "previousCompany": "",
+      "bonuslyAuthToken": "",
+      "tshirtSize": "L"
+    },
+
+    "emergencyContactDetails": {
+      "name": "Saurabh",
+      "relation": "friend",
+      "phoneNumber": "99332343"
+    },
+
+    "temporaryAddress": {
+      "address": "A/p pune Near Mahalunge 4261178",
+      "city": "Pune",
+      "pinCode": "416118",
+      "state": "Maharshtra",
+      "mobileNumber": "9075674610"
+    },
+
+    "permanentAddress": {
+      "address": "A/p pune Near Mahalunge 4261178",
+      "city": "Pune",
+      "pinCode": "416118",
+      "state": "Maharshtra",
+      "mobileNumber": "9075674610"
+    }
+  },
+
+  "skills": {
+    "primary": "Data Strcture and algorithms",
+    "secondary": "React Native",
+    "others": ["C", "Node", "React"]
+  },
+
+  "employeeDetails": {
+    "employeeDetails": {
+      "employeeId": "1223344",
+      "emailId": "patilsushant223@gmail.com",
+      "employeeLocation": "Kolhapur"
+    },
+    "designationDetails": {
+      "Designation": "Software Engineer",
+      "designationTrack": "Stuent-Software Engineer"
+    },
+
+    "assessmentDetails": {
+      "assessmentPlatform": "LMS",
+      "assessmentMonth": 6
+    },
+    "otherDetails": {
+      "grade": "A+",
+      "company": "",
+      "businessUnit": "Intrnal",
+      "subBusinessUnit": "INtranet",
+      "function": "",
+      "dateOfReleaving": "1/12/2023",
+      "notificationEmail": "",
+      "defaultLeaveApprover": "",
+      "source": "",
+      "project": "Intranet"
+    },
+    "currentProjects": [
+      {
+        "projectName": "intanet",
+        "type": "Internal",
+        "startDate": "1/1/2001",
+        "endDate": "2/12/2023",
+        "isTimesheetRequired": true,
+        "billable": true,
+        "allocation": 5
+      },
+      {
+        "projectName": "intanet",
+        "type": "Internal",
+        "startDate": "1/1/2001",
+        "endDate": "5/12/2023",
+        "isTimesheetRequired": true,
+        "billable": true,
+        "allocation": 300
+      }
+    ],
+
+    "previousProjects": [
+      {
+        "projectName": "intanet",
+        "type": "Internal",
+        "startDate": "1/1/2001",
+        "endDate": "2/12/2023",
+        "isTimesheetRequired": true,
+        "billable": true,
+        "allocation": 5
+      },
+      {
+        "projectName": "intanet",
+        "type": "Internal",
+        "startDate": "1/1/2001",
+        "endDate": "2/12/2023",
+        "isTimesheetRequired": true,
+        "billable": true,
+        "allocation": 5
+      }
+    ]
+  },
+
+  "assets": {
+    "currentAssets": [
+      {
+        "name": "Iphone",
+        "startDate": "4/4/2023",
+        "isActive": true
+      },
+      {
+        "name": "Iphone",
+        "startDate": "4/4/2023",
+        "isActive": true
+      },
+      {
+        "name": "Iphone",
+        "startDate": "4/4/2023",
+        "isActive": true
+      }
+    ],
+    "previousAssets": [
+      {
+        "name": "Iphone",
+        "startDate": "4/4/2023",
+        "endDate": "",
+        "isActive": true
+      },
+      {
+        "name": "Iphone",
+        "startDate": "4/4/2023",
+        "endDate": "",
+        "isActive": true
+      },
+      {
+        "name": "Iphone",
+        "startDate": "4/4/2023",
+        "endDate": "",
+        "isActive": true
+      }
+    ]
+  },
+
+  "deploymentDetails": {
+    "deploymentDetails": {
+      "availableForm": "",
+      "cvLink": "",
+      "deploymentOwnerEmail": "",
+      "ownedByEmails": "",
+      "OETA": "",
+      "NETA": "",
+      "availableHours": 30,
+      "interviewRejected": "",
+      "deploymentNote": "",
+      "remark": "Excellent"
+    }
+  }
+}

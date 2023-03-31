@@ -6,7 +6,11 @@ import fonts from '../../constant/fonts';
 
 type Props = PropsWithChildren & {
   style?: TextStyle;
-  type?: 'title' | 'header' | 'subheader' | 'description';
+  type?: 'title' | 'header' | 'subheader' | 'description' | 'label';
+  size?: number;
+  alignment?: 'center' | 'left' | 'right' | 'justify';
+  fontFamily?: string;
+  key?: number;
 };
 
 const Typography = ({children, type = 'title', style}: Props) => (
@@ -43,6 +47,12 @@ const styles = StyleSheet.create({
     lineHeight: 12,
     fontFamily: fonts.OVERPASS,
     fontSize: 10,
+  },
+  label: {
+    color: colors.LABEL_COLOR_PRIMARY,
+    lineHeight: 16,
+    fontFamily: fonts.ARIAL,
+    fontSize: 14,
   },
 });
 export default memo(Typography);

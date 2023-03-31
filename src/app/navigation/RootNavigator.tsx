@@ -12,8 +12,8 @@ import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
 import {initNotificationService} from '../services/firebase/messaging';
 
-import {LOGIN_SCREEN, MAIN_SCREEN} from '../constant/screenNames';
 import {RootStackParamList} from './types';
+import {LOGIN_SCREEN, MAIN_SCREEN} from '../constant/screenNames';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
