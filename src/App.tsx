@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {QueryClient, QueryClientProvider} from 'react-query';
 
 import RootNavigator from './app/navigation/RootNavigator';
+import CustomTabView from './app/navigation/customTabView';
 
 import UserContext, {UserData} from './app/context/user.context';
 
