@@ -38,9 +38,7 @@ interface Props {
   isLoading: boolean;
 }
 
-const LoginForm = (props: Props) => {
-  const {signIn, isLoading} = props;
-
+const LoginForm = ({signIn, isLoading}: Props) => {
   const {
     control,
     handleSubmit,
