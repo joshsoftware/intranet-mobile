@@ -1,10 +1,10 @@
-import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
-import Typography from '../typography';
+import Typography from '../../typography';
 
-import {AssetType} from '../types';
+import {AssetType} from '../../types';
 
-import colors from '../../constant/colors';
+import colors from '../../../constant/colors';
 
 type Props = {
   asset: AssetType;

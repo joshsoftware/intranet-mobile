@@ -1,14 +1,14 @@
-import {Text, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 
-import DetailsView from '../../components/views/detailsView';
-import DetailsCard from '../../components/cards/detailsCard';
+import DetailsView from '../../components/profile/cardDetails/detailsView';
+import CardDetails from '../../components/profile/cardDetails';
 
 const EmployeeDetails = () => {
   return (
     <ScrollView>
-      <DetailsCard title="Employee Details">
+      <CardDetails title="Employee Details">
         <DetailsView />
-      </DetailsCard>
+      </CardDetails>
     </ScrollView>
   );
 };

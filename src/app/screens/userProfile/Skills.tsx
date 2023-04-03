@@ -1,19 +1,20 @@
-import {Text, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 
-import DetailsCard from '../../components/cards/detailsCard';
-import DetailsView from '../../components/views/detailsView';
-import DescriptionView from '../../components/views/descriptionView';
+import CardDetails from '../../components/profile/cardDetails';
+import DetailsView from '../../components/profile/cardDetails/detailsView';
+import Typography from '../../components/typography';
 
-const data = 'skofoka odkvsp dvksp svokps svoksov';
+const data = 'skofoka,odkvsp,dvksp,svokps,svoksov';
+
 const Skills = () => {
   return (
     <ScrollView>
-      <DetailsCard title="Details">
+      <CardDetails title="Details">
         <DetailsView />
-      </DetailsCard>
-      <DetailsCard title="Other Skills">
-        <DescriptionView data={data} />
-      </DetailsCard>
+      </CardDetails>
+      <CardDetails title="Other Skills">
+        <Typography type="header">{data}</Typography>
+      </CardDetails>
     </ScrollView>
   );
 };

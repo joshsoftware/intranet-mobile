@@ -2,13 +2,13 @@ import React from 'react';
 
 import {StyleSheet, View} from 'react-native';
 
-import Typography from '../typography';
+import Typography from '../../typography';
 
 interface DetailInterface {
   label: string;
   data: string;
 }
-const Detail = ({detail}: {detail: DetailInterface}) => {
+const CardDetailsRow = ({detail}: {detail: DetailInterface}) => {
   const {label, data} = detail;
   return (
     <View style={styles.detailsData}>
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
     flexBasis: '50%',
   },
 });
-export default Detail;
+export default CardDetailsRow;

@@ -1,20 +1,20 @@
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView} from 'react-native';
 
-import DetailsCard from '../../components/cards/detailsCard';
-import DetailsView from '../../components/views/detailsView';
-import ProfileView from '../../components/views/profileView';
+import CardDetails from '../../components/profile/cardDetails';
+import DetailsView from '../../components/profile/cardDetails/detailsView';
+import ProfileView from '../../components/profile/cardDetails/profileView';
 
 import colors from '../../constant/colors';
 
 const PublicProfile = () => {
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
-      <DetailsCard title="profile Details">
+      <CardDetails title="profile Details">
         <DetailsView />
-      </DetailsCard>
-      <DetailsCard title="Social Media Links">
+      </CardDetails>
+      <CardDetails title="Social Media Links">
         <ProfileView />
-      </DetailsCard>
+      </CardDetails>
     </ScrollView>
   );
 };

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 
 import {useWindowDimensions, StyleSheet} from 'react-native';
 
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {TabView, SceneMap, TabBar, TabBarProps} from 'react-native-tab-view';
 
 import Deployment from '../Deployment';
 import EmployeeDetails from '../EmployeeDetails';
@@ -36,8 +36,7 @@ const CustomTabView = () => {
     {key: 'deployment', title: 'Deployment'},
   ]);
 
-  type Props = {};
-  const renderTabBar = props => {
+  const renderTabBar = (props: TabBarProps) => {
     return (
       <TabBar
         {...props}
