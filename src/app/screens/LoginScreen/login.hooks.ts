@@ -16,7 +16,7 @@ export const useLogin = () => {
       const responseData = response.data;
       const authToken = responseData.data.token;
 
-      await AsyncStore.setAuthToken(authToken);
+      await AsyncStore.setItem(AsyncStore.AUTH_TOKEN_KEY, authToken);
       setUserData({token: authToken});
     },
     onError: async (error: AxiosError<LoginResponseBody>) => {
@@ -31,10 +31,7 @@ export const useLogin = () => {
     },
   });
 
-  const emailPasswordSignInHandler = async (
-    email: string,
-    password: string,
-  ) => {
+  const emailPasswordSignInHandler = (email: string, password: string) => {
     // User login from backend
     mutation.mutate({email, password});
   };

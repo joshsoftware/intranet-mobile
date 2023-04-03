@@ -25,7 +25,7 @@ const RootNavigator = () => {
 
   useEffect(() => {
     const run = async () => {
-      const authToken = await AsyncStore.getAuthToken();
+      const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
 
       if (authToken === null || authToken === '') {
         setUser(null);

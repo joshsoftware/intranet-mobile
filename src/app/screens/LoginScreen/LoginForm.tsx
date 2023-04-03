@@ -34,11 +34,13 @@ const schema = yup.object().shape({
 });
 
 interface Props {
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => void;
   isLoading: boolean;
 }
 
 const LoginForm = (props: Props) => {
+  const {signIn, isLoading} = props;
+
   const {
     control,
     handleSubmit,
@@ -52,8 +54,8 @@ const LoginForm = (props: Props) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmitHandler = async (data: FormData) => {
-    props.signIn(data.email, data.password);
+  const onSubmitHandler = (data: FormData) => {
+    signIn(data.email, data.password);
   };
 
   const forgotPasswordHandler = async () => {
@@ -96,19 +98,19 @@ const LoginForm = (props: Props) => {
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={forgotPasswordHandler}
-        disabled={props.isLoading}>
+        disabled={isLoading}>
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        disabled={props.isLoading}
+        disabled={isLoading}
         style={[
           styles.loginButton,
-          props.isLoading ? styles.loginButtonDisabled : {},
+          isLoading ? styles.loginButtonDisabled : {},
         ]}
         activeOpacity={0.5}
         onPress={handleSubmit(onSubmitHandler)}>
-        {props.isLoading ? (
+        {isLoading ? (
           <ActivityIndicator color="#ffffff" />
         ) : (
           <Text style={styles.loginButtonText}>Login</Text>

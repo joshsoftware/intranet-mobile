@@ -2,6 +2,7 @@ import {User} from '@react-native-google-signin/google-signin';
 import {AxiosResponse} from 'axios';
 
 import {apiCall} from '.';
+import {LOGIN_ROUTE} from '../../constant/apiRoutes';
 
 export type LoginRequestBody =
   | User
@@ -23,7 +24,7 @@ export type LoginResponseBody = {
 export const sendLoginRequest = async (payload: LoginRequestBody) => {
   const response = await apiCall<LoginRequestBody, LoginResponseBody>({
     method: 'POST',
-    url: '/login',
+    url: LOGIN_ROUTE,
     data: payload,
   });
 

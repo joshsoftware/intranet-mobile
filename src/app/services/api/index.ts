@@ -3,14 +3,12 @@ import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 import {API_BASE_URL} from '@env';
 import AsyncStore from '../asyncStorage';
 
-console.log(API_BASE_URL);
-
-let axiosInstance: AxiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
 });
 
 export const apiCall = async <T, D>(config: AxiosRequestConfig<T>) => {
-  const authToken = await AsyncStore.getAuthToken();
+  const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
 
   const authorizationHeader = `Bearer ${authToken}`;
 

@@ -5,15 +5,15 @@ import colors from '../constant/colors';
 
 type Props = TextInputProps & {error?: string};
 
-const InputBox = (props: Props) => {
+const InputBox = ({error, ...props}: Props) => {
   return (
     <>
       <TextInput
         {...props}
-        style={[styles.textInput, props.error ? styles.errorStyle : {}]}
+        style={[styles.textInput, error ? styles.errorStyle : {}]}
         placeholderTextColor="#C7C6C6"
       />
-      {props.error && <Text style={styles.errorText}>{props.error}</Text>}
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </>
   );
 };

@@ -6,8 +6,6 @@ import {
 
 import {WEB_CLIENT_ID} from '@env';
 
-console.log(WEB_CLIENT_ID);
-
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
 });
