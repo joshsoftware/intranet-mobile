@@ -1,6 +1,8 @@
 import {Text, View, StyleSheet, ScrollView} from 'react-native';
+
 import AssetItem from '../atoms/assetItem';
 import Label from '../atoms/label';
+
 import {AssetType} from '../types';
 
 type Props = {
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     marginBottom: 20,
+    flex: 1,
   },
   labelOfDetails: {
     color: '#A3A3A3',

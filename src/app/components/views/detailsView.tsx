@@ -1,4 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
+
 import Detail from '../atoms/detail';
 
 const data = [
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-around',
-    width: '100%',
+    flex: 1,
   },
 });
 

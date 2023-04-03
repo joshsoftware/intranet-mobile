@@ -1,5 +1,7 @@
 import React from 'react';
+
 import {StyleSheet, View} from 'react-native';
+
 import Typography from '../typography';
 
 interface DetailInterface {
@@ -23,7 +25,7 @@ const Detail = ({detail}: {detail: DetailInterface}) => {
 const styles = StyleSheet.create({
   detailsData: {
     flexDirection: 'row',
-    width: '100%',
+    flex: 1,
     paddingBottom: 20,
   },
   labelFlex: {
