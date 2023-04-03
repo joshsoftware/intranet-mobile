@@ -1,10 +1,10 @@
-import {Text, View} from 'react-native';
+import {Text, ScrollView} from 'react-native';
 
 const Deployment = () => {
   return (
-    <View>
+    <ScrollView>
       <Text>Deployment</Text>
-    </View>
+    </ScrollView>
   );
 };
 
