@@ -46,11 +46,13 @@ const employeeList = [
   },
 ];
 
-type Props = {item: {name: string; email: string; employee_id: string}};
+type Props = {
+  item: {name: string; email: string; employee_id: string};
+};
 
-const RenderItem = ({item}: Props) => (
+const renderItem = ({item}: Props) => (
   <Card key={item.name} onPress={() => undefined}>
-    <EmployeeCard details={item} />
+    <EmployeeCard name={item.name} email={item.email} />
   </Card>
 );
 
@@ -80,7 +82,7 @@ const ManagerScreen = () => {
 
       <FlatList
         data={employeeList}
-        renderItem={RenderItem}
+        renderItem={renderItem}
         keyExtractor={(item, index) => item.employee_id + index}
       />
     </View>

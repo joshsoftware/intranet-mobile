@@ -3,9 +3,14 @@ import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 
 import Typography from '../typography';
 
-import {Timesheet} from '../../interfaces/timesheet';
-
 import {Delete, Edit} from '../../constant/icons';
+
+interface Timesheet {
+  timesheet_id: string;
+  date: string;
+  work_in_hours: string;
+  description: string;
+}
 
 type Props = {
   style?: ViewStyle;
