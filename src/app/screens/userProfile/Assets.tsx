@@ -1,5 +1,7 @@
-import {Text, View} from 'react-native';
-import DetailsCard from '../components/cards/detailsCard';
+import {Text, ScrollView} from 'react-native';
+
+import DetailsCard from '../../components/cards/detailsCard';
+import AssetView from '../../components/views/assetView';
 
 const assets1 = [
   {
@@ -43,10 +45,15 @@ const labels2 = ['Name', 'Start Date', 'End Date', 'is Active'];
 
 const Asset = () => {
   return (
-    <View>
-      <DetailsCard title="Current Assets" labels={labels1} assets={assets1} />
-      <DetailsCard title="Previous Assets" labels={labels2} assets={assets2} />
-    </View>
+    <ScrollView>
+      <DetailsCard title="Current Assets">
+        <AssetView labels={labels1} assets={assets1} />
+      </DetailsCard>
+
+      <DetailsCard title="Previous Assets">
+        <AssetView labels={labels2} assets={assets2} />
+      </DetailsCard>
+    </ScrollView>
   );
 };
 
