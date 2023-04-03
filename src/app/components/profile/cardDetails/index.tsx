@@ -1,19 +1,20 @@
 import {PropsWithChildren} from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ViewStyle} from 'react-native';
 
-import Typography from '../typography';
+import Typography from '../../typography';
 
-import colors from '../../constant/colors';
-import fonts from '../../constant/fonts';
+import colors from '../../../constant/colors';
+import fonts from '../../../constant/fonts';
 
 type Props = PropsWithChildren & {
   title: string;
+  cardStyle?: ViewStyle;
 };
 
-const DetailsCard = ({children, title}: Props) => {
+const CardDetails = ({children, title, cardStyle}: Props) => {
   return (
-    <View style={styles.detailContainer}>
+    <View style={[styles.detailContainer, cardStyle]}>
       <Typography
         style={styles.titlePadding}
         type="header"
@@ -32,7 +33,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: colors.TERNARY_BACKGROUND,
     flexDirection: 'column',
-    // flexWrap: 'wrap',
     padding: 16,
     shadowColor: colors.SHADOW_COLOR,
     shadowRadius: 6,
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailsCard;
+export default CardDetails;

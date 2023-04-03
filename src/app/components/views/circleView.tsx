@@ -1,24 +1,24 @@
-import {StyleSheet, View, TouchableOpacity, Linking, Alert} from 'react-native';
+import {TouchableOpacity, ViewStyle} from 'react-native';
 
 import {borderStyles} from '../../../styles';
-import CustomImage from '../atoms/customImage';
+import CustomImage from '../images/customImage';
 
-const handlePress = async (uri: string) => {
-  const supported = await Linking.canOpenURL(uri);
-
-  if (supported) {
-    console.log(uri);
-    await Linking.openURL(uri);
-  } else {
-    Alert.alert(`Don't know how to open this URL: ${uri}`);
-  }
+type Props = {
+  uri: string;
+  circleViewStyle?: ViewStyle;
+  borderType?: 'thinBorder' | 'circleBorder';
+  handlePress: (uri: string) => {};
 };
 
-const CircleView = ({uri}: {uri: string}) => {
-  console.log(uri);
+const CircleView = ({
+  uri,
+  circleViewStyle,
+  borderType = 'circleBorder',
+  handlePress,
+}: Props) => {
   return (
     <TouchableOpacity
-      style={borderStyles.circleBorder}
+      style={[borderStyles[borderType], circleViewStyle]}
       onPress={() => handlePress(uri)}>
       <CustomImage
         uri={
@@ -28,7 +28,5 @@ const CircleView = ({uri}: {uri: string}) => {
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default CircleView;

@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
-import Detail from '../atoms/detail';
+import CardDetailsRow from './cardDetailsRow';
 
 const data = [
   {label: 'First Name', data: 'sushant'},
@@ -15,7 +15,7 @@ const DetailsView = () => {
   return (
     <View style={styles.detailsContainer}>
       {data.map((detail, index) => (
-        <Detail key={index} detail={detail} />
+        <CardDetailsRow key={index} detail={detail} />
       ))}
     </View>
   );

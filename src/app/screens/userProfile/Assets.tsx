@@ -1,7 +1,7 @@
-import {Text, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 
-import DetailsCard from '../../components/cards/detailsCard';
-import AssetView from '../../components/views/assetView';
+import DetailsCard from '../../components/profile/cardDetails';
+import AssetView from '../../components/profile/assets/assetView';
 
 const assets1 = [
   {
@@ -40,8 +40,8 @@ const assets2 = [
   },
 ];
 
-const labels1 = ['Name', 'Start Date', 'is Active'];
-const labels2 = ['Name', 'Start Date', 'End Date', 'is Active'];
+const labels1 = ['Name', 'Start Date', 'is active'];
+const labels2 = ['Name', 'Start Date', 'End Date', 'is active'];
 
 const Asset = () => {
   return (

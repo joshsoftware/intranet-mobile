@@ -1,9 +1,10 @@
-import {Text, View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
-import AssetItem from '../atoms/assetItem';
-import Label from '../atoms/label';
+import AssetItem from './assetItem';
+import AssetLabel from './assetLabel';
 
-import {AssetType} from '../types';
+import {AssetType} from '../../types';
+import colors from '../../../constant/colors';
 
 type Props = {
   labels: string[];
@@ -11,18 +12,16 @@ type Props = {
 };
 const AssetView = ({labels, assets}: Props) => {
   return (
-    <ScrollView
-      horizontal={true}
-      contentContainerStyle={{flexDirection: 'column', flex: 1}}>
-      <Label
+    <View>
+      <AssetLabel
         containerStyle={{marginBottom: 10}}
-        textColor={{color: '#333333'}}
+        textColor={{color: colors.LABEL_COLOR_SECONDARY}}
         labels={labels}
       />
       {assets.map((asset, index) => (
         <AssetItem asset={asset} key={index} count={labels.length} />
       ))}
-    </ScrollView>
+    </View>
   );
 };
 
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   labelOfDetails: {
-    color: '#A3A3A3',
+    color: colors.LABEL_COLOR_PRIMARY,
     fontFamily: 'Arial, Regular',
   },
 });

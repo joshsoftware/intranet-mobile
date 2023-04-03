@@ -1,15 +1,15 @@
-import {StyleSheet, ViewStyle, Text, View, TextStyle} from 'react-native';
+import {StyleSheet, ViewStyle, View, TextStyle} from 'react-native';
 
-import Typography from '../typography';
+import Typography from '../../typography';
 
-import colors from '../../constant/colors';
+import colors from '../../../constant/colors';
 
 type Props = {
   containerStyle?: ViewStyle;
   labels: string[];
   textColor?: TextStyle;
 };
-const Label = ({containerStyle, labels, textColor}: Props) => {
+const AssetLabel = ({containerStyle, labels, textColor}: Props) => {
   return (
     <View style={{...styles.assetContainer, ...containerStyle}}>
       {labels.map((label, index) => {
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Label;
+export default AssetLabel;
