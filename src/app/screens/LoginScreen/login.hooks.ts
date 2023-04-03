@@ -14,7 +14,7 @@ export const useLogin = () => {
   const mutation = useMutation(sendLoginRequest, {
     onSuccess: async response => {
       const responseData = response.data;
-      const authToken = responseData.data.token;
+      const authToken = responseData.data.jwtToken;
 
       await AsyncStore.setItem(AsyncStore.AUTH_TOKEN_KEY, authToken);
       setUserData({token: authToken});

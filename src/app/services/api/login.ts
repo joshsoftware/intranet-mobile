@@ -14,7 +14,7 @@ export type LoginRequestBody =
 export type LoginResponseBody = {
   message: string;
   data: {
-    token: string;
+    jwtToken: string;
     user: {
       id: string;
     };
