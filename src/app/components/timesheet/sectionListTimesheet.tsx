@@ -5,33 +5,38 @@ import Typography from '../typography';
 import UserTimesheet from './userTimesheet';
 import Linear from '../seperator/linear';
 
-import {Timesheet} from '../../interfaces/timesheet';
+interface Timesheet {
+  timesheet_id: string;
+  date: string;
+  work_in_hours: string;
+  description: string;
+}
 
 type Props = {
   style?: ViewStyle;
   data: Array<{title: string; data: Timesheet[]}>;
 };
 
-const Seperator = () => <Linear style={styles.seperator} />;
+const seperator = () => <Linear style={styles.seperator} />;
 
-const Footer = () => <Linear style={styles.footer} />;
+const footer = () => <Linear style={styles.footer} />;
 
-const SectionHeader = ({section}: {section: {title: string}}) => (
+const sectionHeader = ({section}: {section: {title: string}}) => (
   <Typography>{section.title}</Typography>
 );
 
-const RenderItem = ({item}: {item: Timesheet}) => <UserTimesheet data={item} />;
+const renderItem = ({item}: {item: Timesheet}) => <UserTimesheet data={item} />;
 
 const SectionListTimesheet = ({data, style}: Props) => (
   <SectionList
     sections={data}
     keyExtractor={(item, index) => item.timesheet_id + index}
-    renderItem={RenderItem}
-    renderSectionHeader={SectionHeader}
-    renderSectionFooter={Seperator}
+    renderItem={renderItem}
+    renderSectionHeader={sectionHeader}
+    renderSectionFooter={seperator}
     style={style}
-    ItemSeparatorComponent={Seperator}
-    ListFooterComponent={Footer}
+    ItemSeparatorComponent={seperator}
+    ListFooterComponent={footer}
   />
 );
 
