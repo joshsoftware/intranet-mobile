@@ -1,9 +1,9 @@
 import React, {memo} from 'react';
 import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 
-import Typography from '../typography';
+import Typography from '../../../components/typography';
 
-import {Delete, Edit} from '../../constant/icons';
+import {Delete, Edit} from '../../../constant/icons';
 
 interface Timesheet {
   timesheet_id: string;
@@ -17,10 +17,10 @@ type Props = {
   data: Timesheet;
 };
 
-const UserTimesheet = ({style, data}: Props) => (
+const TimesheetItem = ({style, data}: Props) => (
   <View style={[style]}>
     <Typography type="header">{data.date}</Typography>
-    <Typography type="subheader" style={styles.worked_hours}>
+    <Typography type="subheader" style={styles.workedHours}>
       {data.work_in_hours}
     </Typography>
     <Typography type="description">{data.description}</Typography>
@@ -36,7 +36,7 @@ const UserTimesheet = ({style, data}: Props) => (
 );
 
 const styles = StyleSheet.create({
-  worked_hours: {
+  workedHours: {
     marginTop: 4,
     marginBottom: 8,
   },
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 });
-export default memo(UserTimesheet);
+export default memo(TimesheetItem);

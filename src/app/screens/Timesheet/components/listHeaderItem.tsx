@@ -1,9 +1,9 @@
 import React, {memo} from 'react';
 import {TextStyle, View, ViewStyle} from 'react-native';
 
-import Typography from '../typography';
+import Typography from '../../../components/typography';
 
-import {flexStyles} from '../../../styles';
+import {flexStyles} from '../../../../styles';
 
 type Props = {
   style?: ViewStyle;

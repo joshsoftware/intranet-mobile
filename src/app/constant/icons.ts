@@ -5,5 +5,17 @@ import Edit from '../../assets/svg/edit.svg';
 import Home from '../../assets/svg/home.svg';
 import Menu from '../../assets/svg/menu.svg';
 import Floating from '../../assets/svg/floating.svg';
+import Search from '../../assets/svg/searchIcon.svg';
+import RightArrow from '../../assets/svg/rightArrow.svg';
 
-export {Calendar, Delete, Edit, Clock, Home, Menu, Floating};
+export {
+  RightArrow,
+  Search,
+  Calendar,
+  Delete,
+  Edit,
+  Clock,
+  Home,
+  Menu,
+  Floating,
+};

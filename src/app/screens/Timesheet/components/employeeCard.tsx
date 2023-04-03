@@ -1,11 +1,11 @@
 import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import Typography from '../typography';
+import Typography from '../../../components/typography';
 
-import {RightArrow} from '../../constant/icons';
+import {RightArrow} from '../../../constant/icons';
 
-import {flexStyles} from '../../../styles';
+import {flexStyles} from '../../../../styles';
 
 type Props = {
   name: string;
@@ -22,7 +22,6 @@ const EmployeeCard = ({name, email}: Props) => (
         {email}
       </Typography>
     </View>
-
     <RightArrow style={styles.arrow} />
   </View>
 );

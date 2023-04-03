@@ -7,7 +7,7 @@ type Props = {
   style?: ViewStyle;
 };
 
-const Linear = ({style}: Props) => <View style={[style, styles.divider]} />;
+const Linear = ({style}: Props) => <View style={[styles.divider, style]} />;
 
 const styles = StyleSheet.create({
   divider: {

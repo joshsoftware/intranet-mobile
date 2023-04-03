@@ -1,8 +1,8 @@
 import React, {useCallback, useState} from 'react';
 
-import DateRange from '../../pickers/dateRange';
-import TimesheetHeader from '../listHeader';
-import SectionListTimesheet from '../sectionListTimesheet';
+import DateRange from '../../../components/pickers/dateRange';
+import TimesheetHeader from '../components/listHeader';
+import SectionListTimesheet from '../components/sectionListTimesheet';
 
 const List = [
   {
@@ -112,7 +112,7 @@ const timesheetList = [
   },
 ];
 
-const UserScreen = () => {
+const TimesheetList = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
 
@@ -132,4 +132,4 @@ const UserScreen = () => {
   );
 };
 
-export default UserScreen;
+export default TimesheetList;
