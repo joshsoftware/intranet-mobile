@@ -1,7 +1,10 @@
 import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
-import colors from '../../constant/colors';
-import {AssetType} from '../types';
+
 import Typography from '../typography';
+
+import {AssetType} from '../types';
+
+import colors from '../../constant/colors';
 
 type Props = {
   asset: AssetType;
@@ -23,7 +26,7 @@ const AssetItem = ({asset, count}: Props) => {
       <Typography
         style={{
           color: colors.TERNARY_TEXT_COLOR,
-          flexBasis: `${60 / (count - 2)}%`,
+          flexBasis: `${55 / (count - 2)}%`,
           textAlign: 'center',
         }}
         type="header">
@@ -33,7 +36,7 @@ const AssetItem = ({asset, count}: Props) => {
         <Typography
           style={{
             color: colors.TERNARY_TEXT_COLOR,
-            flexBasis: `${60 / (count - 2)}%`,
+            flexBasis: `${55 / (count - 2)}%`,
             textAlign: 'center',
           }}
           type="header">
@@ -43,7 +46,7 @@ const AssetItem = ({asset, count}: Props) => {
       <Typography
         style={{
           color: colors.TERNARY_TEXT_COLOR,
-          flexBasis: '15%',
+          flexBasis: '20%',
           textAlign: 'center',
         }}>
         {asset.isActive ? 'Yes' : asset.isActive == false ? 'No' : '-'}
@@ -58,6 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
+    flex: 1,
   },
 });
 
