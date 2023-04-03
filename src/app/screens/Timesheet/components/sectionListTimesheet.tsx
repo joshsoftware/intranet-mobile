@@ -1,9 +1,9 @@
 import React, {memo} from 'react';
 import {SectionList, StyleSheet, ViewStyle} from 'react-native';
 
-import Typography from '../typography';
-import UserTimesheet from './userTimesheet';
-import Linear from '../seperator/linear';
+import Typography from '../../../components/typography';
+import TimesheetItem from './timesheetItem';
+import Linear from '../../../components/seperator/linear';
 
 interface Timesheet {
   timesheet_id: string;
@@ -14,7 +14,10 @@ interface Timesheet {
 
 type Props = {
   style?: ViewStyle;
-  data: Array<{title: string; data: Timesheet[]}>;
+  data: Array<{
+    title: string;
+    data: Timesheet[];
+  }>;
 };
 
 const seperator = () => <Linear style={styles.seperator} />;
@@ -22,10 +25,10 @@ const seperator = () => <Linear style={styles.seperator} />;
 const footer = () => <Linear style={styles.footer} />;
 
 const sectionHeader = ({section}: {section: {title: string}}) => (
-  <Typography>{section.title}</Typography>
+  <Typography style={styles.title}>{section.title}</Typography>
 );
 
-const renderItem = ({item}: {item: Timesheet}) => <UserTimesheet data={item} />;
+const renderItem = ({item}: {item: Timesheet}) => <TimesheetItem data={item} />;
 
 const SectionListTimesheet = ({data, style}: Props) => (
   <SectionList
@@ -41,6 +44,9 @@ const SectionListTimesheet = ({data, style}: Props) => (
 );
 
 const styles = StyleSheet.create({
+  title: {
+    marginVertical: 10,
+  },
   footer: {
     paddingBottom: 200,
     borderWidth: 0,

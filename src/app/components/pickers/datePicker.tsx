@@ -7,7 +7,7 @@ import DateTimePicker, {
 
 import Typography from '../typography';
 
-import {dateFormater} from '../../utils/dateFormatter';
+import {dateFormater} from '../../utils/dateFormater';
 
 import fonts from '../../constant/fonts';
 import colors from '../../constant/colors';

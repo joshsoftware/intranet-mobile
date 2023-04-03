@@ -2,7 +2,6 @@ import React, {memo} from 'react';
 import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 
 import {Floating} from '../../constant/icons';
-import margin from '../../constant/sizes';
 
 type Props = {
   style?: ViewStyle;
@@ -20,8 +19,8 @@ const FloatingActionButton = ({style, onPress}: Props) => {
 const styles = StyleSheet.create({
   floating: {
     position: 'absolute',
-    right: margin.FLOATING_MARGIN_RIGHT,
-    bottom: margin.FLOATING_MARGIN_BOTTOM,
+    right: 0,
+    bottom: 0,
   },
 });
 

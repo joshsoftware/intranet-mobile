@@ -1,10 +1,10 @@
 import React, {useCallback, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 
-import Card from '../../card';
-import Input from '../../input/textInput';
-import DateRange from '../../pickers/dateRange';
-import EmployeeCard from '../employeeCard';
+import Card from '../../../components/card';
+import Input from '../../../components/input/textInput';
+import DateRange from '../../../components/pickers/dateRange';
+import EmployeeCard from '../components/employeeCard';
 
 import {Search} from '../../../constant/icons';
 
@@ -47,7 +47,11 @@ const employeeList = [
 ];
 
 type Props = {
-  item: {name: string; email: string; employee_id: string};
+  item: {
+    name: string;
+    email: string;
+    employee_id: string;
+  };
 };
 
 const renderItem = ({item}: Props) => (
