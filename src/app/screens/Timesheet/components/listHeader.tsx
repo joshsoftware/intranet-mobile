@@ -1,14 +1,17 @@
 import React, {memo} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
 
-import Linear from '../seperator/linear';
+import Linear from '../../../components/seperator/linear';
 import TimesheetHeaderItem from './listHeaderItem';
 
-import colors from '../../constant/colors';
+import colors from '../../../constant/colors';
 
 type Props = {
   style?: ViewStyle;
-  data: Array<{label: string; value: string}>;
+  data: Array<{
+    label: string;
+    value: string;
+  }>;
 };
 
 const ListHeader = ({style, data}: Props) => (

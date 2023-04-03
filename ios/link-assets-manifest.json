@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Arial Bold.ttf",
+      "sha1": "fe7e8d7a5f8131c38fbe7dcb3c44a45c4730ad0f"
+    },
+    {
+      "path": "src/assets/fonts/Arial regular.ttf",
+      "sha1": "cf34f40fca9d319c3f039f982b3faf7661642012"
+    },
+    {
+      "path": "src/assets/fonts/Overpass-Regular.ttf",
+      "sha1": "0dab6623885d01676c91a370c6d450b6cc9dce9b"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-SemiBold.ttf",
+      "sha1": "8a4ace9392d06bcb7f8ea2f5169b07e4c383a90d"
+    }
+  ]
+}

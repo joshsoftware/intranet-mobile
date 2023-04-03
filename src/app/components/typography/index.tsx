@@ -7,27 +7,11 @@ import fonts from '../../constant/fonts';
 type Props = PropsWithChildren & {
   style?: TextStyle;
   type?: 'title' | 'header' | 'subheader' | 'description';
-  size?: number;
-  alignment?: 'center' | 'left' | 'right' | 'justify';
-  fontFamily?: string;
 };
 
-const Typography = ({
-  children,
-  type = 'title',
-  size,
-  style,
-  alignment,
-  fontFamily,
-}: Props) => {
-  const selectedStyle = {
-    fontSize: size,
-    textAlign: alignment,
-    fontFamily: fontFamily,
-  };
-
-  return <Text style={[styles[type], selectedStyle, style]}>{children}</Text>;
-};
+const Typography = ({children, type = 'title', style}: Props) => (
+  <Text style={[styles[type], style]}>{children}</Text>
+);
 
 const styles = StyleSheet.create({
   title: {
@@ -62,4 +46,3 @@ const styles = StyleSheet.create({
   },
 });
 export default memo(Typography);
-export {styles};
