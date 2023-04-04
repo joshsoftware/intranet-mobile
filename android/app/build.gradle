@@ -112,10 +112,10 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file("intranet-dev.keystore")
-            storePassword "intranet@Josh"
-            keyAlias "intranet-dev"
-            keyPassword "intranet@Josh"
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
     }
     buildTypes {
