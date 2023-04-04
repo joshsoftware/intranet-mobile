@@ -1,21 +1,24 @@
-import React, {memo, PropsWithChildren} from 'react';
+import React, {memo, PropsWithChildren, useMemo} from 'react';
 import {StyleSheet, ViewStyle, Platform, TouchableOpacity} from 'react-native';
 
 import colors from '../../constant/colors';
 
 type Props = PropsWithChildren & {
   style?: ViewStyle;
-  onPress: Function;
+  onPress: () => void;
 };
 
 const Card = ({children, style, onPress}: Props) => {
-  const plateformStyle =
-    Platform.OS === 'ios'
-      ? {...styles.background, ...styles.iosShadow}
-      : styles.background;
+  const plateformStyle = useMemo(
+    () =>
+      Platform.OS === 'ios'
+        ? {...styles.background, ...styles.iosShadow}
+        : styles.background,
+    [],
+  );
 
   return (
-    <TouchableOpacity style={[plateformStyle, style]} onPress={() => onPress}>
+    <TouchableOpacity style={[plateformStyle, style]} onPress={onPress}>
       {children}
     </TouchableOpacity>
   );
