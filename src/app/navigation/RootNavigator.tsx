@@ -6,12 +6,13 @@ import {
 
 import LoginScreen from '../screens/LoginScreen';
 import MainScreen from '../screens/MainScreen';
+import SplashScreen from '../screens/SplashScreen';
 
 import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
-import SplashScreen from '../screens/SplashScreen';
-import {RootStackParamList} from './types';
+
 import {LOGIN_SCREEN, MAIN_SCREEN} from '../constant/screenNames';
+import {RootStackParamList} from './types';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

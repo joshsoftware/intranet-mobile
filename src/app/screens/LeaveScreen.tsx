@@ -9,8 +9,6 @@ const LeaveScreen = () => {
   );
 };
 
-export default LeaveScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -22,3 +20,5 @@ const styles = StyleSheet.create({
     color: '#707070',
   },
 });
+
+export default LeaveScreen;

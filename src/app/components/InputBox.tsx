@@ -18,8 +18,6 @@ const InputBox = ({error, ...props}: Props) => {
   );
 };
 
-export default InputBox;
-
 const styles = StyleSheet.create({
   textInput: {
     height: 40,
@@ -37,3 +35,5 @@ const styles = StyleSheet.create({
     color: colors.ERROR_RED,
   },
 });
+
+export default InputBox;

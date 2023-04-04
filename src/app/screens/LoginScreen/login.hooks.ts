@@ -1,4 +1,5 @@
 import {useContext} from 'react';
+import {Alert} from 'react-native';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 
@@ -6,7 +7,6 @@ import UserContext from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
-import {Alert} from 'react-native';
 
 export const useLogin = () => {
   const [, setUserData] = useContext(UserContext);

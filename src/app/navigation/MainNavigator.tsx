@@ -3,19 +3,19 @@ import {
   createBottomTabNavigator,
   BottomTabNavigationOptions,
 } from '@react-navigation/bottom-tabs';
-import {StyleProp, ViewStyle} from 'react-native/types';
+import {StyleProp, ViewStyle} from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import LeaveScreen from '../screens/LeaveScreen';
 import TimesheetScreen from '../screens/TimesheetScreen';
 import TabBar from '../components/TabBar';
 
-import {MainTabParamList} from './types';
 import {
   HOME_SCREEN,
   LEAVE_SCREEN,
   TIMESHEET_SCREEN,
 } from '../constant/screenNames';
+import {MainTabParamList} from './types';
 
 const MainTab = createBottomTabNavigator<MainTabParamList>();
 

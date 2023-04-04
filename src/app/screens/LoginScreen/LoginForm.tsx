@@ -118,8 +118,6 @@ const LoginForm = ({signIn, isLoading}: Props) => {
   );
 };
 
-export default LoginForm;
-
 const styles = StyleSheet.create({
   labelText: {
     marginTop: 13,
@@ -149,3 +147,5 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 });
+
+export default LoginForm;

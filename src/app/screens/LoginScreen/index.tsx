@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {useLogin} from './login.hooks';
 import LoginForm from './LoginForm';
+import {useLogin} from './login.hooks';
 
 import colors from '../../constant/colors';
 import {JoshLogo} from '../../constant/icons';
@@ -42,8 +42,6 @@ const LoginScreen = () => {
     </SafeAreaView>
   );
 };
-
-export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -87,3 +85,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+
+export default LoginScreen;
