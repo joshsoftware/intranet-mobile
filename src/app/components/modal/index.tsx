@@ -1,20 +1,15 @@
 import React, {memo, PropsWithChildren} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
 
-import ReactNativeModal from 'react-native-modal';
+import ReactNativeModal, {ModalProps} from 'react-native-modal';
 
-type Props = PropsWithChildren & {
-  style?: ViewStyle | undefined;
-  contentStyle?: ViewStyle | undefined;
-  isVisible?: boolean;
+type Props = (PropsWithChildren | ModalProps) & {
+  style?: ViewStyle;
+  contentStyle?: ViewStyle;
 };
 
-const BottomModal = ({children, style, contentStyle, isVisible}: Props) => (
-  <ReactNativeModal
-    isVisible={isVisible}
-    style={[styles.main, style]}
-    animationIn="slideInUp"
-    animationOut="slideOutDown">
+const BottomModal = ({children, style, contentStyle, ...props}: Props) => (
+  <ReactNativeModal style={[styles.main, style]} {...props}>
     <View style={[styles.contentStyle, contentStyle]}>{children}</View>
   </ReactNativeModal>
 );
