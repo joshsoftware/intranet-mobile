@@ -1,4 +1,4 @@
 const dateFormater = (date: Date) =>
-  `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
 export {dateFormater};

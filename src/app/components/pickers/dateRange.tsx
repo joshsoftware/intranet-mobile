@@ -8,32 +8,40 @@ import strings from '../../constant/strings';
 
 type Props = {
   style?: ViewStyle;
-  startDate: Date | undefined;
-  endDate: Date | undefined;
-  onChange: (date: Date | undefined, isStart: boolean) => void;
+  startDate?: Date;
+  endDate?: Date;
+  onChangeStart: (date?: Date) => void;
+  onChangeEnd: (date?: Date) => void;
 };
 
-const DateRange = ({style, startDate, endDate, onChange}: Props) => {
+const DateRange = ({
+  style,
+  startDate,
+  endDate,
+  onChangeStart,
+  onChangeEnd,
+}: Props) => {
   return (
     <View style={[styles.main, style]}>
       <DatePicker
-        initialDate={startDate ? startDate : new Date()}
+        value={startDate ? startDate : new Date()}
         selectedDate={startDate}
-        placeHolder={strings.FROM}
-        onChange={onChange}
-        maximumDate={endDate}
+        placeholder={strings.FROM}
+        onDateChange={onChangeStart}
+        maximumDate={endDate ? endDate : new Date()}
         style={styles.leftDatePicker}
       />
 
       <Linear />
 
       <DatePicker
-        initialDate={endDate ? endDate : new Date()}
+        value={endDate ? endDate : new Date()}
         selectedDate={endDate}
-        placeHolder={strings.TO}
-        onChange={onChange}
+        placeholder={strings.TO}
+        onDateChange={onChangeEnd}
         hideIcon={false}
         minimumDate={startDate}
+        maximumDate={new Date()}
         style={styles.rightDatePicker}
       />
     </View>
