@@ -4,4 +4,5 @@ export default {
   FROM: 'From',
   TO: 'To',
   SEARCH: 'Search',
+  DESCRIPTION_PLACEHOLDER: 'Type Description here',
 };

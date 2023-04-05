@@ -1,4 +1,5 @@
 import React, {useCallback, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 
 import DateRange from '../../../components/pickers/dateRange';
 import TimesheetHeader from '../components/listHeader';
@@ -116,20 +117,27 @@ const TimesheetList = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
 
-  const onChange = useCallback(
-    (date: Date | undefined, isStart: boolean) =>
-      isStart ? setStartDate(date) : setEndDate(date),
-    [],
-  );
+  const onChangeStart = useCallback((date?: Date) => setStartDate(date), []);
+
+  const onChangeEnd = useCallback((date?: Date) => setEndDate(date), []);
 
   return (
-    <>
-      <DateRange onChange={onChange} startDate={startDate} endDate={endDate} />
+    <View style={styles.view}>
+      <DateRange
+        onChangeStart={onChangeStart}
+        onChangeEnd={onChangeEnd}
+        startDate={startDate}
+        endDate={endDate}
+      />
       <TimesheetHeader data={List} />
 
       <SectionListTimesheet data={timesheetList} />
-    </>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  view: {height: '100%'},
+});
 
 export default TimesheetList;

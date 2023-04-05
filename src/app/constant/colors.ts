@@ -17,4 +17,5 @@ export default {
   GREY_BORDER_COLOR: '#707070',
   TEXT_INPUT_BORDER: '#D0DDFF',
   BACKGROUND: '#F4F4F4',
+  ERROR: '#B00020',
 };
