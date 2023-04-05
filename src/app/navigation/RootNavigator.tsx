@@ -10,6 +10,7 @@ import SplashScreen from '../screens/SplashScreen';
 
 import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
+import {initNotificationService} from '../services/firebase/messaging';
 
 import {LOGIN_SCREEN, MAIN_SCREEN} from '../constant/screenNames';
 import {RootStackParamList} from './types';
@@ -26,12 +27,15 @@ const RootNavigator = () => {
 
   useEffect(() => {
     const run = async () => {
+      // Setup Application to receive notifications
+      await initNotificationService();
+
       const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
 
       if (authToken === null || authToken === '') {
         setUser(null);
       } else {
-        setUser({token: authToken});
+        setUser({authToken});
       }
 
       await new Promise<void>(resolve => setTimeout(resolve, 1000));

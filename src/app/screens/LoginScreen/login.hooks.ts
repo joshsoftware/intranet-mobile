@@ -7,10 +7,6 @@ import UserContext from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
-import {
-  getNotificationToken,
-  initNotificationService,
-} from '../../services/firebase/messaging';
 
 export const useLogin = () => {
   const [, setUserData] = useContext(UserContext);
@@ -22,10 +18,7 @@ export const useLogin = () => {
 
       await AsyncStore.setItem(AsyncStore.AUTH_TOKEN_KEY, authToken);
 
-      await initNotificationService();
-      const notificationToken = await getNotificationToken();
-
-      setUserData({authToken, notificationToken});
+      setUserData({authToken});
     },
     onError: async (error: AxiosError<LoginResponseBody>) => {
       await googleSignOut();

@@ -3,14 +3,11 @@ import {AxiosResponse} from 'axios';
 
 import {apiCall} from '.';
 import {LOGIN_ROUTE} from '../../constant/apiRoutes';
+import {getNotificationToken} from '../firebase/messaging';
 
-export type LoginRequestBody =
-  | User
-  | {
-      email: string;
-      password: string;
-    };
+type PayloadType = User | {email: string; password: string};
 
+export type LoginRequestBody = PayloadType & {notificationToken: string};
 export type LoginResponseBody = {
   message: string;
   data: {
@@ -21,11 +18,14 @@ export type LoginResponseBody = {
   };
 };
 
-export const sendLoginRequest = async (payload: LoginRequestBody) => {
+export const sendLoginRequest = async (payload: PayloadType) => {
+  const notificationToken = await getNotificationToken();
+  const data = {...payload, notificationToken};
+
   const response = await apiCall<LoginRequestBody, LoginResponseBody>({
     method: 'POST',
     url: LOGIN_ROUTE,
-    data: payload,
+    data: data,
   });
 
   return response as AxiosResponse<LoginResponseBody>;

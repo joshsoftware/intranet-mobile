@@ -2,7 +2,6 @@ import React from 'react';
 
 export interface UserData {
   authToken: string;
-  notificationToken: string;
 }
 
 type ContextValue = [
