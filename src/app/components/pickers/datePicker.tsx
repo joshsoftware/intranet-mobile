@@ -1,8 +1,12 @@
-import React, {memo, useCallback, useMemo, useState} from 'react';
-import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
+import React, {memo, useCallback, useState} from 'react';
+import {StyleSheet, TextStyle, TouchableOpacity, ViewStyle} from 'react-native';
 
 import DateTimePicker, {
+  DatePickerOptions,
   DateTimePickerEvent,
+  BaseProps,
+  IOSNativeProps,
+  AndroidNativeProps,
 } from '@react-native-community/datetimepicker';
 
 import Typography from '../typography';
@@ -12,75 +16,61 @@ import {dateFormater} from '../../utils/dateFormater';
 import fonts from '../../constant/fonts';
 import colors from '../../constant/colors';
 import {Calendar} from '../../constant/icons';
-import strings from '../../constant/strings';
 
 import {borderStyles, flexStyles} from '../../../styles';
 
-type Props = {
-  style?: ViewStyle | undefined;
-  initialDate?: Date;
-  placeHolder?: string;
-  selectedDate: Date | undefined;
-  maximumDate?: Date;
-  minimumDate?: Date;
-  onChange: (date: Date | undefined, isStart: boolean) => void;
+type Props = (BaseProps &
+  IOSNativeProps &
+  DatePickerOptions &
+  AndroidNativeProps) & {
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+  selectedDate?: Date;
+  placeholder?: string;
+  onDateChange: (date?: Date) => void;
   hideIcon?: boolean;
 };
 const DatePicker = ({
   style,
-  initialDate = new Date(),
+  textStyle,
   selectedDate,
-  placeHolder = strings.SELECT,
-  onChange,
-  maximumDate = new Date(),
-  minimumDate,
+  placeholder,
+  onDateChange,
   hideIcon = true,
+  ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState<Boolean>(false);
-  const isStart = placeHolder === strings.FROM;
 
   const handleVisibility = useCallback(() => setIsVisible(value => !value), []);
 
   const handleDateChange = useCallback(
     (event: DateTimePickerEvent, date: Date | undefined) => {
       event.type === 'neutralButtonPressed'
-        ? onChange(undefined, isStart)
-        : onChange(date, isStart);
+        ? onDateChange(undefined)
+        : onDateChange(date);
       handleVisibility();
     },
-    [handleVisibility, isStart, onChange],
-  );
-
-  const selectedStyle = useMemo(
-    () =>
-      selectedDate
-        ? {
-            color: colors.SECONDARY,
-            fontFamily: fonts.ARIAL,
-          }
-        : {
-            color: colors.PLACEHOLDER_TEXT,
-            fontFamily: fonts.OVERPASS,
-          },
-    [selectedDate],
+    [handleVisibility, onDateChange],
   );
 
   return (
     <TouchableOpacity
       onPress={handleVisibility}
       style={[borderStyles.thinBorder, flexStyles.horizontal, style]}>
-      <Typography type={'header'} style={selectedStyle}>
-        {selectedDate ? dateFormater(selectedDate) : placeHolder}
+      <Typography
+        type={'header'}
+        style={{
+          ...(selectedDate ? styles.date : styles.placeholder),
+          ...textStyle,
+        }}>
+        {selectedDate ? dateFormater(selectedDate) : placeholder}
       </Typography>
       {!hideIcon && <Calendar style={styles.icon} />}
       {isVisible && (
         <DateTimePicker
-          value={initialDate}
           onChange={handleDateChange}
-          maximumDate={maximumDate}
-          minimumDate={minimumDate}
-          onTouchEnd={handleVisibility}
           neutralButton={{label: 'Clear', textColor: 'grey'}}
+          {...props}
         />
       )}
     </TouchableOpacity>
@@ -91,6 +81,14 @@ const styles = StyleSheet.create({
   icon: {
     position: 'absolute',
     right: 9,
+  },
+  date: {
+    color: colors.SECONDARY,
+    fontFamily: fonts.ARIAL,
+  },
+  placeholder: {
+    color: colors.PLACEHOLDER_TEXT,
+    fontFamily: fonts.OVERPASS,
   },
 });
 

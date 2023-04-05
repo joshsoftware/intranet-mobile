@@ -1,16 +1,11 @@
-import React, {memo} from 'react';
+import React from 'react';
 import {SectionList, StyleSheet, ViewStyle} from 'react-native';
 
 import Typography from '../../../components/typography';
 import TimesheetItem from './timesheetItem';
 import Linear from '../../../components/seperator/linear';
 
-interface Timesheet {
-  timesheet_id: string;
-  date: string;
-  work_in_hours: string;
-  description: string;
-}
+import {Timesheet} from '../interfaces';
 
 type Props = {
   style?: ViewStyle;
@@ -37,6 +32,7 @@ const SectionListTimesheet = ({data, style}: Props) => (
     renderItem={renderItem}
     renderSectionHeader={sectionHeader}
     renderSectionFooter={seperator}
+    extraData={data}
     style={style}
     ItemSeparatorComponent={seperator}
     ListFooterComponent={footer}
@@ -48,11 +44,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   footer: {
-    paddingBottom: 200,
     borderWidth: 0,
   },
   seperator: {
     marginVertical: 10,
   },
 });
-export default memo(SectionListTimesheet);
+export default SectionListTimesheet;

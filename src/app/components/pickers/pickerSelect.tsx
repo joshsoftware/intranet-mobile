@@ -1,9 +1,10 @@
 import React, {memo, useMemo} from 'react';
 import {Platform, StyleSheet, View, ViewStyle} from 'react-native';
 
-import RNPickerSelect, {Item, PickerStyle} from 'react-native-picker-select';
-
-import Typography from '../typography';
+import RNPickerSelect, {
+  PickerSelectProps,
+  PickerStyle,
+} from 'react-native-picker-select';
 
 import strings from '../../constant/strings';
 import colors from '../../constant/colors';
@@ -11,48 +12,29 @@ import fonts from '../../constant/fonts';
 
 import {flexStyles, borderStyles} from '../../../styles';
 
-type Props = {
+type Props = PickerSelectProps & {
   style?: ViewStyle;
   textStyle?: PickerStyle;
-  label: String;
-  placeHolder: Item;
-  state: String;
-  onChange: (text: string) => void;
-  itemsList: Item[];
 };
 
-const PickerSelect = ({
-  label,
-  placeHolder,
-  state,
-  onChange,
-  itemsList,
-  style,
-  textStyle,
-}: Props) => {
+const PickerSelect = ({style, textStyle, ...props}: Props) => {
   const selectedStyle = useMemo(
     () =>
       Platform.OS === 'ios'
         ? {inputIOS: styles.header}
         : {
-            inputAndroid: state.match(strings.NO_SELECT)
-              ? styles.placeholder
-              : styles.header,
+            inputAndroid:
+              props.value && props.value.match(strings.NO_SELECT)
+                ? styles.placeholder
+                : styles.header,
           },
-    [state],
+    [props.value],
   );
 
   return (
-    <View style={flexStyles.horizontal}>
-      <Typography type="header">{label}</Typography>
+    <View style={flexStyles.vertical}>
       <View style={[borderStyles.thinBorder, style]}>
-        <RNPickerSelect
-          onValueChange={onChange}
-          items={itemsList}
-          value={state}
-          placeholder={placeHolder}
-          style={{...textStyle, ...selectedStyle}}
-        />
+        <RNPickerSelect style={{...textStyle, ...selectedStyle}} {...props} />
       </View>
     </View>
   );
