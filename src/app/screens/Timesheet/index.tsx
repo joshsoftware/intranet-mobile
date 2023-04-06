@@ -13,19 +13,16 @@ const TimesheetScreen = () => {
 
   const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
-  const onChangeModalVisibility = (value: boolean) => setShouldShowModal(value);
+  const toggleModal = (value: boolean) => setShouldShowModal(value);
 
   return (
     <>
       <View style={styles.container}>
         {isManager ? <ManagerScreen /> : <TimesheetList />}
       </View>
-      <FloatingActionButton onPress={() => onChangeModalVisibility(true)} />
+      <FloatingActionButton onPress={() => toggleModal(true)} />
 
-      <CreateTimesheet
-        onChange={onChangeModalVisibility}
-        value={shouldShowModal}
-      />
+      <CreateTimesheet toggleModal={toggleModal} isVisible={shouldShowModal} />
     </>
   );
 };

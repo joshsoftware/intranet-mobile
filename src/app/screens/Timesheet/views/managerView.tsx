@@ -7,44 +7,7 @@ import DateRange from '../../../components/pickers/dateRange';
 import EmployeeCard from '../components/employeeCard';
 
 import {Search} from '../../../constant/icons';
-
-const employeeList = [
-  {
-    employee_id: '101',
-    name: 'Abhijit Kasbe',
-    email: 'abhijit.kasbe@joshsoftware.com',
-  },
-  {
-    employee_id: '102',
-    name: 'Abhijit Kasbe',
-    email: 'abhijit.kasbe@joshsoftware.com',
-  },
-  {
-    employee_id: '103',
-    name: 'Abhijit Kasbe',
-    email: 'abhijit.kasbe@joshsoftware.com',
-  },
-  {
-    employee_id: '104',
-    name: 'Abhijit Kasbe',
-    email: 'abhijit.kasbe@joshsoftware.com',
-  },
-  {
-    employee_id: '105',
-    name: 'Abhijit Kasbe',
-    email: 'abhijit.kasbe@joshsoftware.com',
-  },
-  {
-    employee_id: '106',
-    name: 'Abhijit Kasbe',
-    email: 'abhijit.kasbe@joshsoftware.com',
-  },
-  {
-    employee_id: '107',
-    name: 'Abhijit Kasbe',
-    email: 'abhijit.kasbe@joshsoftware.com',
-  },
-];
+import {employeeList} from '../../../constant/timesheet';
 
 type Props = {
   item: {
@@ -66,19 +29,22 @@ const ManagerScreen = () => {
 
   const [input, setInput] = useState<string>();
 
-  const onChange = useCallback(
-    (date: Date | undefined, isStart: boolean) =>
-      isStart ? setStartDate(date) : setEndDate(date),
-    [],
-  );
+  const onChangeStart = useCallback((date?: Date) => setStartDate(date), []);
+
+  const onChangeEnd = useCallback((date?: Date) => setEndDate(date), []);
 
   const onTextChange = useCallback((value: string) => setInput(value), []);
 
   return (
     <View style={styles.main}>
-      <DateRange onChange={onChange} startDate={startDate} endDate={endDate} />
+      <DateRange
+        onChangeStart={onChangeStart}
+        onChangeEnd={onChangeEnd}
+        startDate={startDate}
+        endDate={endDate}
+      />
       <Input
-        onChange={onTextChange}
+        onChangeText={onTextChange}
         startIcon={<Search />}
         value={input}
         placeholder="Search"

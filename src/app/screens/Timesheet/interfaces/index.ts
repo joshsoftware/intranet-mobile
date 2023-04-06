@@ -3,6 +3,8 @@ export interface Timesheet {
   date: string;
   work_in_hours: string;
   description: string;
+  project?: string;
+  project_id?: string;
 }
 
 export interface TimesheetFormData {

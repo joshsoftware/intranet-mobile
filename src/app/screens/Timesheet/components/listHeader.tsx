@@ -8,16 +8,16 @@ import colors from '../../../constant/colors';
 
 type Props = {
   style?: ViewStyle;
-  data: Array<{
+  headerData: Array<{
     label: string;
-    value: string;
+    value: string | number;
   }>;
 };
 
-const ListHeader = ({style, data}: Props) => (
+const ListHeader = ({style, headerData}: Props) => (
   <>
-    <View style={[style, styles.listStyle]}>
-      {data.map((item, index) => (
+    <View style={[styles.listStyle, style]}>
+      {headerData.map((item, index) => (
         <React.Fragment key={item.label}>
           <TimesheetHeaderItem
             headerTextStyle={styles.headerText}
@@ -26,7 +26,7 @@ const ListHeader = ({style, data}: Props) => (
             label={item.label}
             value={item.value.toString()}
           />
-          {index !== data.length - 1 ? <Linear /> : <View />}
+          {index !== headerData.length - 1 ? <Linear /> : <View />}
         </React.Fragment>
       ))}
     </View>
