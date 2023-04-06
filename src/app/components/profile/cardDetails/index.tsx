@@ -1,5 +1,4 @@
-import {PropsWithChildren} from 'react';
-
+import React, {PropsWithChildren} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
 
 import Typography from '../../typography';
@@ -16,7 +15,7 @@ const CardDetails = ({children, title, cardStyle}: Props) => {
   return (
     <View style={[styles.detailContainer, cardStyle]}>
       <Typography
-        style={styles.titlePadding}
+        style={styles.title}
         type="header"
         fontFamily={fonts.ARIAL_AND_BOLD}>
         {title}
@@ -39,8 +38,9 @@ const styles = StyleSheet.create({
     elevation: 6,
     margin: 10,
   },
-  titlePadding: {
+  title: {
     paddingBottom: 21.5,
+    textTransform: 'capitalize',
   },
 });
 

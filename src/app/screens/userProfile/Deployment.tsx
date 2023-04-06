@@ -1,9 +1,23 @@
-import {Text, ScrollView} from 'react-native';
+import React from 'react';
+import {ScrollView} from 'react-native';
 
-const Deployment = () => {
+import CardDetails from '../../components/profile/cardDetails';
+import DetailsView from '../../components/profile/cardDetails/detailsView';
+
+import {deploymentDetailsType} from '../../types';
+
+type Props = {
+  data: {
+    deploymentDetails: deploymentDetailsType;
+  };
+};
+
+const Deployment = ({data}: Props) => {
   return (
     <ScrollView>
-      <Text>Deployment</Text>
+      <CardDetails title="Deployment Details">
+        <DetailsView data={data.deploymentDetails} />
+      </CardDetails>
     </ScrollView>
   );
 };

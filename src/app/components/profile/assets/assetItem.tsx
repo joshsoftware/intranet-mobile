@@ -1,8 +1,9 @@
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import Typography from '../../typography';
 
-import {AssetType} from '../../types';
+import {AssetType} from '../../../types';
 
 import colors from '../../../constant/colors';
 
@@ -40,7 +41,7 @@ const AssetItem = ({asset, count}: Props) => {
             textAlign: 'center',
           }}
           type="header">
-          {asset.startDate ? asset.startDate : '-'}
+          {asset.endDate ? asset.endDate : '-'}
         </Typography>
       )}
       <Typography

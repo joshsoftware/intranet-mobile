@@ -1,22 +1,24 @@
 import React from 'react';
-
 import {StyleSheet, View} from 'react-native';
+
+import labelFormatter from '../../../utils/labelFormatter';
+import dataFormatter from '../../../utils/dataFormatter';
 
 import Typography from '../../typography';
 
-interface DetailInterface {
+type Props = {
   label: string;
   data: string;
-}
-const CardDetailsRow = ({detail}: {detail: DetailInterface}) => {
-  const {label, data} = detail;
+};
+
+const CardDetailsRow = ({label, data}: Props) => {
   return (
     <View style={styles.detailsData}>
       <Typography style={styles.labelFlex} type="label">
-        {label}
+        {labelFormatter(label)}
       </Typography>
-      <Typography style={styles.contentFlex} alignment="right" type="header">
-        {data}
+      <Typography style={styles.contentStyle} type="header">
+        {dataFormatter(data)}
       </Typography>
     </View>
   );
@@ -30,9 +32,12 @@ const styles = StyleSheet.create({
   },
   labelFlex: {
     flexBasis: '50%',
+    textTransform: 'capitalize',
   },
-  contentFlex: {
+  contentStyle: {
     flexBasis: '50%',
+    lineHeight: 20,
+    textAlign: 'right',
   },
 });
 export default CardDetailsRow;

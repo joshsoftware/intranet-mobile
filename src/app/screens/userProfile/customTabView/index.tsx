@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {useWindowDimensions, StyleSheet} from 'react-native';
 
 import {TabView, SceneMap, TabBar, TabBarProps} from 'react-native-tab-view';
@@ -11,22 +10,29 @@ import PublicProfile from '../PublicProfile';
 import Skills from '../Skills';
 import Asset from '../Assets';
 
+import Data from '../../../Database/data.json';
+
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
 
-const renderScene = SceneMap({
-  publicProfile: () => <PublicProfile />,
-  personalDetails: () => <PersonalDetails />,
-  skills: () => <Skills />,
-  employeeDetails: () => <EmployeeDetails />,
-  assets: () => <Asset />,
-  deployment: () => <Deployment />,
-});
-
 const CustomTabView = () => {
   const layout = useWindowDimensions();
-
+  console.log(Data);
   const [index, setIndex] = React.useState(0);
+  const renderScene = SceneMap({
+    publicProfile: () => (
+      <PublicProfile
+        profileDetails={Data.publicProfile.profileDetails}
+        socialDetails={Data.publicProfile.socialDetails}
+      />
+    ),
+    personalDetails: () => <PersonalDetails data={Data.personalDetails} />,
+    skills: () => <Skills data={Data.skills} />,
+    employeeDetails: () => <EmployeeDetails data={Data.employeeDetails} />,
+    assets: () => <Asset data={Data.assets} />,
+    deployment: () => <Deployment data={Data.deploymentDetails} />,
+  });
+
   const [routes] = React.useState([
     {key: 'publicProfile', title: 'Public Profile'},
     {key: 'personalDetails', title: 'Personal Details'},

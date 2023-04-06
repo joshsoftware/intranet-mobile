@@ -1,3 +1,4 @@
+import React from 'react';
 import {StyleSheet, ViewStyle, View, TextStyle} from 'react-native';
 
 import Typography from '../../typography';
