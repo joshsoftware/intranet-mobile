@@ -7,7 +7,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import LeaveScreen from '../screens/LeaveScreen';
-import TimesheetScreen from '../screens/TimesheetScreen';
+import TimesheetScreen from '../screens/Timesheet/index';
 import TabBar from '../components/TabBar';
 
 import {

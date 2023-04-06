@@ -1,9 +1,8 @@
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {useForm, Controller} from 'react-hook-form';
-import {Item} from 'react-native-picker-select';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import Typography from '../../../components/typography';
@@ -16,21 +15,15 @@ import {TimesheetFormData} from '../interfaces';
 
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
+import {workHoursData, projectListData} from '../../../constant/timesheet';
 
 import {flexStyles} from '../../../../styles';
 
-const projectList = [
-  {label: 'Intranet', value: 'intranet'},
-  {label: 'Intranet1', value: 'intranet1'},
-  {label: 'Intranet2', value: 'intranet2'},
-  {label: 'Intranet3', value: 'intranet3'},
-];
-
-const timesheetFormSchema = Yup.object().shape({
-  project: Yup.string().required(),
-  date: Yup.date().required(),
-  workHours: Yup.string().required(),
-  description: Yup.string().required(),
+const timesheetFormSchema = yup.object().shape({
+  project: yup.string().required(),
+  date: yup.date().required(),
+  workHours: yup.string().required(),
+  description: yup.string().required(),
 });
 
 type Props = {
@@ -40,13 +33,6 @@ type Props = {
 };
 
 const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
-  const [timelist, setTimelist] = useState<Item[]>([
-    {
-      label: '30mins',
-      value: '30 mins',
-    },
-  ]);
-
   const {
     handleSubmit,
     control,
@@ -64,35 +50,6 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
         },
     resolver: yupResolver(timesheetFormSchema),
   });
-
-  const hoursGenerator = useCallback(() => {
-    const mins = '30mins';
-    const hours = 'hours';
-    const list: Item[] | undefined = [
-      {label: mins, value: mins},
-      {label: '1 hour', value: '1 hour'},
-      {label: '1hour30mins', value: '1 hour 30 mins'},
-    ];
-
-    Array(11)
-      .fill(0)
-      .map((value, index) => {
-        list.push({
-          label: `${index + 2} ${hours}`,
-          value: `${index + 2}${hours}`,
-        });
-        list.push({
-          label: `${index + 2} ${hours} ${mins}`,
-          value: `${index + 2}${hours}${mins}`,
-        });
-      });
-
-    setTimelist(list);
-  }, []);
-
-  useEffect(() => {
-    hoursGenerator();
-  }, [hoursGenerator]);
 
   return (
     <>
@@ -112,12 +69,11 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
                   }}
                   onValueChange={onChange}
                   value={value ? value : strings.SELECT}
-                  items={projectList}
+                  items={projectListData}
                   style={styles.item}
                 />
               )}
               name="project"
-              rules={{required: true}}
             />
             {errors.project && (
               <Typography style={styles.error} type="description">
@@ -146,7 +102,6 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
                   />
                 )}
                 name="date"
-                rules={{required: true}}
               />
               {errors.date && (
                 <Typography style={styles.error} type="description">
@@ -169,12 +124,11 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
                     }}
                     onValueChange={onChange}
                     value={value ? value : strings.SELECT}
-                    items={timelist}
+                    items={workHoursData}
                     style={styles.item}
                   />
                 )}
                 name="workHours"
-                rules={{required: true}}
               />
               {errors.workHours && (
                 <Typography style={styles.error} type="description">
@@ -193,7 +147,7 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
               render={({field: {onChange, onBlur, value}}) => (
                 <Input
                   onBlur={onBlur}
-                  onChange={onChange}
+                  onChangeText={onChange}
                   value={value}
                   multiline={true}
                   placeholder={strings.DESCRIPTION_PLACEHOLDER}
@@ -202,7 +156,6 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
                 />
               )}
               name="description"
-              rules={{required: true}}
             />
             {errors.description && (
               <Typography style={styles.error} type="description">
