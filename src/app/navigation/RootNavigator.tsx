@@ -18,7 +18,7 @@ import {
   MAIN_SCREEN,
   USER_PROFILE_SCREEN,
 } from '../constant/screenNames';
-import UserProfileScreen from '../screens/UserProfileScreen';
+import UserProfile from '../screens/userProfile';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -62,7 +62,7 @@ const RootNavigator = () => {
           <RootStack.Screen name={MAIN_SCREEN} component={MainScreen} />
           <RootStack.Screen
             name={USER_PROFILE_SCREEN}
-            component={UserProfileScreen}
+            component={UserProfile}
           />
         </>
       ) : (

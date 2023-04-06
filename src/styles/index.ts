@@ -22,8 +22,6 @@ const borderStyles = StyleSheet.create({
     borderRadius: 5,
   },
   circleBorder: {
-    width: 32,
-    height: 32,
     borderColor: colors.GREY_BORDER_COLOR,
     borderRadius: 32 / 2,
     borderWidth: 1,

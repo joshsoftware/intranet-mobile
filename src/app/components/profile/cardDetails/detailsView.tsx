@@ -1,21 +1,22 @@
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import CardDetailsRow from './cardDetailsRow';
 
-const data = [
-  {label: 'First Name', data: 'sushant'},
-  {label: 'Last Name', data: 'patil'},
-  {label: 'Gender', data: 'male'},
-  {label: 'Mobile Number', data: '9075674610'},
-  {label: 'Blood Group', data: 'B+'},
-  {label: 'Date of Birth', data: '16-12-2001'},
-];
+import {detailsKeyType, detailsType} from '../../../types';
 
-const DetailsView = () => {
+type Props = {
+  data: detailsType;
+};
+
+const DetailsView = ({data}: Props) => {
+  console.log(data);
+  const keys: detailsKeyType[] = Object.keys(data) as detailsKeyType[];
+
   return (
     <View style={styles.detailsContainer}>
-      {data.map((detail, index) => (
-        <CardDetailsRow key={index} detail={detail} />
+      {keys.map((key: detailsKeyType, index: number) => (
+        <CardDetailsRow key={index} label={key} data={data[key]} />
       ))}
     </View>
   );

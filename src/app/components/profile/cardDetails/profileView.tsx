@@ -1,6 +1,9 @@
+import React from 'react';
 import {View, StyleSheet, Linking, Alert} from 'react-native';
 
 import CircleView from '../../views/circleView';
+
+import {socialDetailsType} from '../../../types';
 
 const handlePress = async (uri: string) => {
   const supported = await Linking.canOpenURL(uri);
@@ -13,22 +16,23 @@ const handlePress = async (uri: string) => {
   }
 };
 
-const ProfileView = () => {
+type Props = {
+  data: socialDetailsType;
+};
+
+const ProfileView = ({data}: Props) => {
   return (
     <View style={styles.profileContainer}>
-      <CircleView
-        uri="https://github.com/Sushant-2512"
-        handlePress={handlePress}
-      />
-      <CircleView
-        uri="https://github.com/Sushant-2512"
-        handlePress={handlePress}
-      />
-      <CircleView uri="//rrr/s/s/" handlePress={handlePress} />
-      <CircleView
-        uri="https://reactnavigation.org/docs/5.x/tab-based-navigation"
-        handlePress={handlePress}
-      />
+      {data.map((item, index) =>
+        item.uri ? (
+          <CircleView
+            key={index}
+            data={{name: item.name}}
+            uri={item.uri}
+            handlePress={handlePress}
+          />
+        ) : undefined,
+      )}
     </View>
   );
 };

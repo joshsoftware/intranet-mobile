@@ -1,9 +1,11 @@
+import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import AssetItem from './assetItem';
 import AssetLabel from './assetLabel';
 
-import {AssetType} from '../../types';
+import {AssetType} from '../../../types';
+
 import colors from '../../../constant/colors';
 
 type Props = {
