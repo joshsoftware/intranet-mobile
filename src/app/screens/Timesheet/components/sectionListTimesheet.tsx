@@ -9,10 +9,12 @@ import {Timesheet} from '../interfaces';
 
 type Props = {
   style?: ViewStyle;
-  data: Array<{
+  timesheetListData: Array<{
     title: string;
     data: Timesheet[];
   }>;
+  onEdit: Function;
+  onDelete: Function;
 };
 
 const seperator = () => <Linear style={styles.seperator} />;
@@ -23,21 +25,41 @@ const sectionHeader = ({section}: {section: {title: string}}) => (
   <Typography style={styles.title}>{section.title}</Typography>
 );
 
-const renderItem = ({item}: {item: Timesheet}) => <TimesheetItem data={item} />;
+const SectionListTimesheet = ({
+  timesheetListData,
+  onEdit,
+  onDelete,
+  style,
+}: Props) => {
+  const renderItem = ({
+    item,
+    section,
+  }: {
+    item: Timesheet;
+    section: {title: string};
+  }) => (
+    <TimesheetItem
+      timesheetData={item}
+      onEdit={onEdit}
+      onDelete={onDelete}
+      title={section.title}
+    />
+  );
 
-const SectionListTimesheet = ({data, style}: Props) => (
-  <SectionList
-    sections={data}
-    keyExtractor={(item, index) => item.timesheet_id + index}
-    renderItem={renderItem}
-    renderSectionHeader={sectionHeader}
-    renderSectionFooter={seperator}
-    extraData={data}
-    style={style}
-    ItemSeparatorComponent={seperator}
-    ListFooterComponent={footer}
-  />
-);
+  return (
+    <SectionList
+      sections={timesheetListData}
+      keyExtractor={(item, index) => item.timesheet_id + index}
+      renderItem={renderItem}
+      renderSectionHeader={sectionHeader}
+      renderSectionFooter={seperator}
+      extraData={timesheetListData}
+      style={style}
+      ItemSeparatorComponent={seperator}
+      ListFooterComponent={footer}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   title: {

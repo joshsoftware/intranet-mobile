@@ -1,45 +1,49 @@
-import React, {memo, useContext} from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 
 import Typography from '../../../components/typography';
 
-import TimesheetContext from '../../../contexts/timesheetContext';
+import {Timesheet} from '../interfaces';
 
 import {Delete, Edit} from '../../../constant/icons';
 
-interface Timesheet {
-  timesheet_id: string;
-  date: string;
-  work_in_hours: string;
-  description: string;
-}
-
 type Props = {
   style?: ViewStyle;
-  data: Timesheet;
+  timesheetData: Timesheet;
+  title: string;
+  onEdit?: Function;
+  onDelete?: Function;
 };
 
-const TimesheetItem = ({style, data}: Props) => {
-  const timesheet = useContext(TimesheetContext);
-
-  return (
-    <View style={[style]}>
-      <Typography type="header">{data.date}</Typography>
-      <Typography type="subheader" style={styles.workedHours}>
-        {data.work_in_hours}
-      </Typography>
-      <Typography type="description">{data.description}</Typography>
-      <View style={styles.buttons}>
-        <TouchableOpacity onPress={() => timesheet.onDelete(data.timesheet_id)}>
+const TimesheetItem = ({
+  timesheetData,
+  title,
+  onEdit,
+  onDelete,
+  style,
+}: Props) => (
+  <View style={[style]}>
+    <Typography type="header">{timesheetData.date}</Typography>
+    <Typography type="subheader" style={styles.workedHours}>
+      {timesheetData.work_in_hours}
+    </Typography>
+    <Typography type="description">{timesheetData.description}</Typography>
+    <View style={styles.buttons}>
+      {onDelete && (
+        <TouchableOpacity
+          onPress={() => onDelete({...timesheetData, project: title})}>
           <Delete />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => timesheet.onEdit(data.timesheet_id)}>
+      )}
+      {onEdit && (
+        <TouchableOpacity
+          onPress={() => onEdit({...timesheetData, project: title})}>
           <Edit />
         </TouchableOpacity>
-      </View>
+      )}
     </View>
-  );
-};
+  </View>
+);
 
 const styles = StyleSheet.create({
   workedHours: {
