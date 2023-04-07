@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
@@ -17,9 +17,12 @@ type Props = {
 const CustomAccordian = ({data}: Props) => {
   const [activeProjects, setActiveProjects] = useState<number[]>([]);
 
-  const setProjects = (sections: number[]) => {
-    setActiveProjects(sections ? sections : []);
-  };
+  const setProjects = useCallback(
+    (sections: number[]) => {
+      setActiveProjects(sections ? sections : []);
+    },
+    [activeProjects],
+  );
 
   const renderHeader = (
     content: projectType,

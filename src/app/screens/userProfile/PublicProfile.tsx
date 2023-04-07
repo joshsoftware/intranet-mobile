@@ -19,23 +19,15 @@ const PublicProfile = ({data}: Props) => {
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
       {dataArray.map(([key, content], index: number) =>
-        key === 'socialDetails'
-          ? useMemo(
-              () => (
-                <CardDetails key={index} title={labelFormatter(key)}>
-                  <ProfileView data={content as socialDetailsType} />
-                </CardDetails>
-              ),
-              [key, content],
-            )
-          : useMemo(
-              () => (
-                <CardDetails key={index} title={labelFormatter(key)}>
-                  <DetailsView data={content as detailsType} />
-                </CardDetails>
-              ),
-              [key, content],
-            ),
+        key === 'socialDetails' ? (
+          <CardDetails key={index} title={labelFormatter(key)}>
+            <ProfileView data={content as socialDetailsType} />
+          </CardDetails>
+        ) : (
+          <CardDetails key={index} title={labelFormatter(key)}>
+            <DetailsView data={content as detailsType} />
+          </CardDetails>
+        ),
       )}
     </ScrollView>
   );

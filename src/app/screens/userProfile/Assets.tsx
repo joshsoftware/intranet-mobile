@@ -19,11 +19,11 @@ type Props = {
 const Asset = ({data}: Props) => {
   return (
     <ScrollView>
-      <DetailsCard title="Current Assets" key={0}>
+      <DetailsCard title="Current Assets">
         <AssetView labels={currentAssetsLabels} assets={data.currentAssets} />
       </DetailsCard>
 
-      <DetailsCard title="Previous Assets" key={1}>
+      <DetailsCard title="Previous Assets">
         <AssetView labels={previousAssetsLabels} assets={data.previousAssets} />
       </DetailsCard>
     </ScrollView>
