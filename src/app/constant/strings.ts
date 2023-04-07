@@ -10,4 +10,6 @@ export default {
   LEAVES: 'Leaves',
   NOT_ALLOWED: 'Not Allowed',
   DUBLICATE_ENTRY_ERROR: 'You have previous same timesheet entry',
+  EMPTY_TIMESHEET: 'Empty Timesheet',
+  EMPTY_TIMESHEET_MSG: 'Add timesheet before saving',
 };

@@ -1,21 +1,26 @@
 import React, {memo} from 'react';
-import {TextStyle, ViewStyle, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  TextStyle,
+  ViewStyle,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableOpacityProps,
+} from 'react-native';
 
 import Typography from '../typography';
 
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
 
-type Props = {
+type Props = TouchableOpacityProps & {
   style?: ViewStyle;
   textStyle?: TextStyle;
   title: string;
-  onPress?: () => void;
 };
 
-const Button = ({style, textStyle, title, onPress}: Props) => {
+const Button = ({style, textStyle, title, ...props}: Props) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.btn, style]}>
+    <TouchableOpacity {...props} style={[styles.btn, style]}>
       <Typography style={{...styles.txt, ...textStyle}} type="title">
         {title}
       </Typography>
