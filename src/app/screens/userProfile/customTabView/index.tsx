@@ -38,14 +38,13 @@ const CustomTabView = () => {
   });
 
   if (data) {
-    console.log('Data', data.record);
     const renderScene = SceneMap({
       publicProfile: () => <PublicProfile data={data.publicProfile} />,
-      personalDetails: () => <PersonalDetails data={data.personalDetails} />,
+      personalDetails: () => <PersonalDetails data={data.privateProfile} />,
       skills: () => <Skills data={data.skills} />,
-      employeeDetails: () => <EmployeeDetails data={data.employeeDetails} />,
+      employeeDetails: () => <EmployeeDetails data={data.employeeDetail} />,
       assets: () => <Asset data={data.assets} />,
-      deployment: () => <Deployment data={data.deploymentDetails} />,
+      deployment: () => <Deployment data={data.deployment} />,
     });
 
     const renderTabBar = (

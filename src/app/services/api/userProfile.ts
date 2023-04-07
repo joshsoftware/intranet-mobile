@@ -13,5 +13,5 @@ export const getUserRequest = async (payload: GetUserRequestBody) => {
     data: payload,
   });
 
-  return response.data as any;
+  return response.data.record as any;
 };
