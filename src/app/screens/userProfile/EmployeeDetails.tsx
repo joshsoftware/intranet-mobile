@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {ScrollView} from 'react-native';
 
 import DetailsView from '../../components/profile/cardDetails/detailsView';
 import CardDetails from '../../components/profile/cardDetails';
 import CustomAccordian from '../../components/customAccordian';
 
-import labelFormatter from '../../utils/labelFormatter';
+import labelFormatter from '../../utils/userProfile/labelFormatter';
 
 import {
   assessmentDetailsType,
@@ -14,7 +14,6 @@ import {
   otherDetailsType,
   projectType,
 } from '../../types';
-
 import colors from '../../constant/colors';
 
 type dataType = {
@@ -30,19 +29,27 @@ type Props = {
   data: dataType;
 };
 const EmployeeDetails = ({data}: Props) => {
-  const keys: (keyof dataType)[] = Object.keys(data) as (keyof dataType)[];
+  const dataArray = Object.entries(data);
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
-      {keys.map((key: keyof dataType, index: number) => {
-        return Array.isArray(data[key]) ? (
-          <CardDetails title={labelFormatter(key)} key={index}>
-            <CustomAccordian data={data[key]} />
-          </CardDetails>
-        ) : (
-          <CardDetails title={labelFormatter(key)} key={index}>
-            <DetailsView data={data[key]} />
-          </CardDetails>
-        );
+      {dataArray.map(([key, content], index: number) => {
+        return key === 'currentProjects' || key === 'previousProjects'
+          ? useMemo(
+              () => (
+                <CardDetails title={labelFormatter(key)} key={index}>
+                  <CustomAccordian data={content as projectType[]} />
+                </CardDetails>
+              ),
+              [key, content],
+            )
+          : useMemo(
+              () => (
+                <CardDetails title={labelFormatter(key)} key={index}>
+                  <DetailsView data={content} />
+                </CardDetails>
+              ),
+              [key, content],
+            );
       })}
     </ScrollView>
   );

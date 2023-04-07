@@ -23,6 +23,7 @@ const renderSvg = (type: string) => {
       return <Blog />;
   }
 };
+
 const CircleView = ({
   uri,
   circleViewStyle,
@@ -30,10 +31,9 @@ const CircleView = ({
   handlePress,
   data,
 }: Props) => {
+  const checkPress = () => handlePress(uri);
   return (
-    <TouchableOpacity
-      style={[circleViewStyle]}
-      onPress={() => handlePress(uri)}>
+    <TouchableOpacity style={[circleViewStyle]} onPress={checkPress}>
       {renderSvg(data.name)}
     </TouchableOpacity>
   );

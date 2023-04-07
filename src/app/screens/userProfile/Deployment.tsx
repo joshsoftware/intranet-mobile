@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {ScrollView} from 'react-native';
 
 import CardDetails from '../../components/profile/cardDetails';
@@ -15,9 +15,14 @@ type Props = {
 const Deployment = ({data}: Props) => {
   return (
     <ScrollView>
-      <CardDetails title="Deployment Details">
-        <DetailsView data={data.deploymentDetails} />
-      </CardDetails>
+      {useMemo(
+        () => (
+          <CardDetails title="Deployment Details">
+            <DetailsView data={data.deploymentDetails} />
+          </CardDetails>
+        ),
+        [],
+      )}
     </ScrollView>
   );
 };

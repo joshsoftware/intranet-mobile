@@ -1,20 +1,13 @@
 import React from 'react';
-import {View, StyleSheet, Linking, Alert} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 import CircleView from '../../views/circleView';
 
+import urlHandler from '../../../utils/userProfile/urlHandler';
+
 import {socialDetailsType} from '../../../types';
 
-const handlePress = async (uri: string) => {
-  const supported = await Linking.canOpenURL(uri);
-
-  if (supported) {
-    console.log(uri);
-    await Linking.openURL(uri);
-  } else {
-    Alert.alert(`This url ${uri} is not found !`);
-  }
-};
+const handlePress = (uri: string) => urlHandler(uri);
 
 type Props = {
   data: socialDetailsType;
@@ -23,15 +16,16 @@ type Props = {
 const ProfileView = ({data}: Props) => {
   return (
     <View style={styles.profileContainer}>
-      {data.map((item, index) =>
-        item.uri ? (
-          <CircleView
-            key={index}
-            data={{name: item.name}}
-            uri={item.uri}
-            handlePress={handlePress}
-          />
-        ) : undefined,
+      {data.map(
+        (item, index) =>
+          item.uri && (
+            <CircleView
+              key={index}
+              data={{name: item.name}}
+              uri={item.uri}
+              handlePress={handlePress}
+            />
+          ),
       )}
     </View>
   );

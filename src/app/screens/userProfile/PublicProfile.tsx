@@ -1,28 +1,42 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {ScrollView} from 'react-native';
 
 import CardDetails from '../../components/profile/cardDetails';
 import DetailsView from '../../components/profile/cardDetails/detailsView';
 import ProfileView from '../../components/profile/cardDetails/profileView';
 
-import {ProfileDetailsType, socialDetailsType} from '../../types';
+import labelFormatter from '../../utils/userProfile/labelFormatter';
 
+import {profileDetailsType, detailsType, socialDetailsType} from '../../types';
 import colors from '../../constant/colors';
 
 type Props = {
-  profileDetails: ProfileDetailsType;
-  socialDetails: socialDetailsType;
+  data: {profileDetails: profileDetailsType; socialDetails: socialDetailsType};
 };
 
-const PublicProfile = ({profileDetails, socialDetails}: Props) => {
+const PublicProfile = ({data}: Props) => {
+  const dataArray = Object.entries(data);
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
-      <CardDetails title="profile Details">
-        <DetailsView data={profileDetails} />
-      </CardDetails>
-      <CardDetails title="Social Media Links">
-        <ProfileView data={socialDetails} />
-      </CardDetails>
+      {dataArray.map(([key, content], index: number) =>
+        key === 'socialDetails'
+          ? useMemo(
+              () => (
+                <CardDetails key={index} title={labelFormatter(key)}>
+                  <ProfileView data={content as socialDetailsType} />
+                </CardDetails>
+              ),
+              [key, content],
+            )
+          : useMemo(
+              () => (
+                <CardDetails key={index} title={labelFormatter(key)}>
+                  <DetailsView data={content as detailsType} />
+                </CardDetails>
+              ),
+              [key, content],
+            ),
+      )}
     </ScrollView>
   );
 };

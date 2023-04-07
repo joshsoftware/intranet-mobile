@@ -11,7 +11,7 @@ import Search from '../../assets/svg/searchIcon.svg';
 import RightArrow from '../../assets/svg/rightArrow.svg';
 import ArrowUp from '../../assets/svg/arrowUp.svg';
 import ArrowDown from '../../assets/svg/arrowDown.svg';
-import Cross from '../../assets/svg/cross1.svg';
+import Cross from '../../assets/svg/cross.svg';
 import Linkdin from '../../assets/svg/linkedin.svg';
 import Facebook from '../../assets/svg/facebook.svg';
 import Github from '../../assets/svg/github.svg';

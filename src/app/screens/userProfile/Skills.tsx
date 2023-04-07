@@ -23,7 +23,12 @@ const Skills = ({data}: Props) => {
       <CardDetails title="Other Skills">
         <View style={styles.containerStyle}>
           {data.others.map((skill: string, index: number) => (
-            <CustomChip label={skill} style={styles.chipStyle} mode="view" />
+            <CustomChip
+              key={index}
+              label={skill}
+              style={styles.chipStyle}
+              mode="view"
+            />
           ))}
         </View>
       </CardDetails>

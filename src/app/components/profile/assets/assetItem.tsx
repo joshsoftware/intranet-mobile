@@ -20,6 +20,7 @@ const AssetItem = ({asset, count}: Props) => {
           color: colors.TERNARY_TEXT_COLOR,
           flexBasis: '25%',
         }}
+        key={0}
         type="header">
         {asset.name ? asset.name : '-'}
       </Typography>
@@ -30,6 +31,7 @@ const AssetItem = ({asset, count}: Props) => {
           flexBasis: `${55 / (count - 2)}%`,
           textAlign: 'center',
         }}
+        key={1}
         type="header">
         {asset.startDate ? asset.startDate : '-'}
       </Typography>
@@ -40,6 +42,7 @@ const AssetItem = ({asset, count}: Props) => {
             flexBasis: `${55 / (count - 2)}%`,
             textAlign: 'center',
           }}
+          key={2}
           type="header">
           {asset.endDate ? asset.endDate : '-'}
         </Typography>
@@ -49,7 +52,8 @@ const AssetItem = ({asset, count}: Props) => {
           color: colors.TERNARY_TEXT_COLOR,
           flexBasis: '20%',
           textAlign: 'center',
-        }}>
+        }}
+        key={3}>
         {asset.isActive ? 'Yes' : asset.isActive == false ? 'No' : '-'}
       </Typography>
     </View>
