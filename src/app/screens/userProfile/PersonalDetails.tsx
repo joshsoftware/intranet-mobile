@@ -27,16 +27,11 @@ const PersonalDetails = ({data}: Props) => {
   const dataArray = Object.entries(data);
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
-      {dataArray.map(([key, content], index: number) =>
-        useMemo(
-          () => (
-            <CardDetails key={index} title={labelFormatter(key)}>
-              <DetailsView data={content} />
-            </CardDetails>
-          ),
-          [key, content],
-        ),
-      )}
+      {dataArray.map(([key, content], index: number) => (
+        <CardDetails key={index} title={labelFormatter(key)}>
+          <DetailsView data={content} />
+        </CardDetails>
+      ))}
     </ScrollView>
   );
 };

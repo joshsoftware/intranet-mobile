@@ -8,16 +8,16 @@ import Typography from '../../typography';
 
 type Props = {
   label: string;
-  data: string;
+  data: string | string[];
 };
 
 const CardDetailsRow = ({label, data}: Props) => {
   return (
     <View style={styles.detailsData}>
-      <Typography key={0} style={styles.labelFlex} type="label">
+      <Typography style={styles.labelFlex} type="label">
         {labelFormatter(label)}
       </Typography>
-      <Typography key={1} style={styles.contentStyle} type="header">
+      <Typography style={styles.contentStyle} type="header">
         {dataFormatter(data)}
       </Typography>
     </View>

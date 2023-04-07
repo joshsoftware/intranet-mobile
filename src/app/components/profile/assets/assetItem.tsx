@@ -15,45 +15,23 @@ type Props = {
 const AssetItem = ({asset, count}: Props) => {
   return (
     <View style={styles.assetContainer}>
-      <Typography
-        style={{
-          color: colors.TERNARY_TEXT_COLOR,
-          flexBasis: '25%',
-        }}
-        key={0}
-        type="header">
+      <Typography style={[styles.leftText, {flexBasis: '25%'}]} type="header">
         {asset.name ? asset.name : '-'}
       </Typography>
 
       <Typography
-        style={{
-          color: colors.TERNARY_TEXT_COLOR,
-          flexBasis: `${55 / (count - 2)}%`,
-          textAlign: 'center',
-        }}
-        key={1}
+        style={[styles.text, {flexBasis: `${55 / (count - 2)}%`}]}
         type="header">
         {asset.startDate ? asset.startDate : '-'}
       </Typography>
       {asset.endDate != undefined && (
         <Typography
-          style={{
-            color: colors.TERNARY_TEXT_COLOR,
-            flexBasis: `${55 / (count - 2)}%`,
-            textAlign: 'center',
-          }}
-          key={2}
+          style={[styles.text, {flexBasis: `${55 / (count - 2)}%`}]}
           type="header">
           {asset.endDate ? asset.endDate : '-'}
         </Typography>
       )}
-      <Typography
-        style={{
-          color: colors.TERNARY_TEXT_COLOR,
-          flexBasis: '20%',
-          textAlign: 'center',
-        }}
-        key={3}>
+      <Typography style={[styles.text, {flexBasis: '20%'}]}>
         {asset.isActive ? 'Yes' : asset.isActive == false ? 'No' : '-'}
       </Typography>
     </View>
@@ -61,12 +39,19 @@ const AssetItem = ({asset, count}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  leftText: {
+    color: colors.TERNARY_TEXT_COLOR,
+  },
   assetContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
     flex: 1,
+  },
+  text: {
+    color: colors.TERNARY_TEXT_COLOR,
+    textAlign: 'center',
   },
 });
 

@@ -33,23 +33,15 @@ const EmployeeDetails = ({data}: Props) => {
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
       {dataArray.map(([key, content], index: number) => {
-        return key === 'currentProjects' || key === 'previousProjects'
-          ? useMemo(
-              () => (
-                <CardDetails title={labelFormatter(key)} key={index}>
-                  <CustomAccordian data={content as projectType[]} />
-                </CardDetails>
-              ),
-              [key, content],
-            )
-          : useMemo(
-              () => (
-                <CardDetails title={labelFormatter(key)} key={index}>
-                  <DetailsView data={content} />
-                </CardDetails>
-              ),
-              [key, content],
-            );
+        return key === 'currentProjects' || key === 'previousProjects' ? (
+          <CardDetails title={labelFormatter(key)} key={index}>
+            <CustomAccordian data={content as projectType[]} />
+          </CardDetails>
+        ) : (
+          <CardDetails title={labelFormatter(key)} key={index}>
+            <DetailsView data={content} />
+          </CardDetails>
+        );
       })}
     </ScrollView>
   );

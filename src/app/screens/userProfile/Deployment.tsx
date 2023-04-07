@@ -15,14 +15,9 @@ type Props = {
 const Deployment = ({data}: Props) => {
   return (
     <ScrollView>
-      {useMemo(
-        () => (
-          <CardDetails title="Deployment Details">
-            <DetailsView data={data.deploymentDetails} />
-          </CardDetails>
-        ),
-        [],
-      )}
+      <CardDetails title="Deployment Details">
+        <DetailsView data={data.deploymentDetails} />
+      </CardDetails>
     </ScrollView>
   );
 };
