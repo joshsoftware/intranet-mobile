@@ -24,6 +24,7 @@ export const googleSignIn = async () => {
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
       Alert.alert('', 'play services not available or outdated');
     } else {
+      console.log(error);
       Alert.alert('', 'Something went wrong');
     }
   }

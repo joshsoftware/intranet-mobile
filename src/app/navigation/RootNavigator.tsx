@@ -13,7 +13,12 @@ import AsyncStore from '../services/asyncStorage';
 import {initNotificationService} from '../services/firebase/messaging';
 
 import {RootStackParamList} from './types';
-import {LOGIN_SCREEN, MAIN_SCREEN} from '../constant/screenNames';
+import {
+  LOGIN_SCREEN,
+  MAIN_SCREEN,
+  USER_PROFILE_SCREEN,
+} from '../constant/screenNames';
+import UserProfile from '../screens/userProfile';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -53,7 +58,13 @@ const RootNavigator = () => {
   return (
     <RootStack.Navigator screenOptions={screenOptions}>
       {user ? (
-        <RootStack.Screen name={MAIN_SCREEN} component={MainScreen} />
+        <>
+          <RootStack.Screen name={MAIN_SCREEN} component={MainScreen} />
+          <RootStack.Screen
+            name={USER_PROFILE_SCREEN}
+            component={UserProfile}
+          />
+        </>
       ) : (
         <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
       )}

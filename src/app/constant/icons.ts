@@ -15,6 +15,7 @@ import Linkdin from '../../assets/svg/linkedin.svg';
 import Facebook from '../../assets/svg/facebook.svg';
 import Github from '../../assets/svg/github.svg';
 import Blog from '../../assets/svg/blog.svg';
+import Profile from '../../assets/svg/profile.svg';
 
 export {
   Calendar,
@@ -34,4 +35,5 @@ export {
   Github,
   Linkdin,
   Facebook,
+  Profile,
 };
