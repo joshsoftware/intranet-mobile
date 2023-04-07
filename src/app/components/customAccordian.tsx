@@ -68,7 +68,7 @@ const CustomAccordian = ({data}: Props) => {
 
 const styles = StyleSheet.create({
   header: {
-    height: 30,
+    minHeight: 30,
     padding: 5,
     borderRadius: 5,
     backgroundColor: '#E6EDFF',

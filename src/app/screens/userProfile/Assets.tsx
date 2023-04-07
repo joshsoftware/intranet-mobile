@@ -11,8 +11,8 @@ const previousAssetsLabels = ['Name', 'Start Date', 'End Date', 'Is Active'];
 
 type Props = {
   data: {
-    currentAssets: AssetType[];
-    previousAssets: AssetType[];
+    currentAsset: AssetType[];
+    previousAsset: AssetType[];
   };
 };
 
@@ -20,11 +20,11 @@ const Asset = ({data}: Props) => {
   return (
     <ScrollView>
       <DetailsCard title="Current Assets">
-        <AssetView labels={currentAssetsLabels} assets={data.currentAssets} />
+        <AssetView labels={currentAssetsLabels} assets={data.currentAsset} />
       </DetailsCard>
 
       <DetailsCard title="Previous Assets">
-        <AssetView labels={previousAssetsLabels} assets={data.previousAssets} />
+        <AssetView labels={previousAssetsLabels} assets={data.previousAsset} />
       </DetailsCard>
     </ScrollView>
   );

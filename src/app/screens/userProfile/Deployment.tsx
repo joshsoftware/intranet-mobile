@@ -7,16 +7,14 @@ import DetailsView from '../../components/profile/cardDetails/detailsView';
 import {deploymentDetailsType} from '../../types';
 
 type Props = {
-  data: {
-    deploymentDetails: deploymentDetailsType;
-  };
+  data: deploymentDetailsType;
 };
 
 const Deployment = ({data}: Props) => {
   return (
     <ScrollView>
       <CardDetails title="Deployment Details">
-        <DetailsView data={data.deploymentDetails} />
+        <DetailsView data={data} />
       </CardDetails>
     </ScrollView>
   );

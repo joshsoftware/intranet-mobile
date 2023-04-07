@@ -9,14 +9,25 @@ type Props = {
   data: detailsType;
 };
 
+// const modify = (data: Object[]) => {
+//   return data.reduce((refdata: [], data: Object) => {
+//     console.log(data, Object.entries(data));
+//     return [...refdata, ...Object.entries(data)];
+//   }, []);
+// };
+
 const DetailsView = ({data}: Props) => {
+  console.log(data);
   const dataArray = Object.entries(data);
 
   return (
     <View style={styles.detailsContainer}>
       {dataArray.map(([key, content], index: number) =>
         useMemo(
-          () => <CardDetailsRow key={index} label={key} data={content} />,
+          () =>
+            key !== 'typeOfAddress' && (
+              <CardDetailsRow key={index} label={key} data={content} />
+            ),
           [key, content],
         ),
       )}
