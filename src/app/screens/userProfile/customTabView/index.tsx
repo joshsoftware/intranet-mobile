@@ -1,7 +1,12 @@
 import React from 'react';
 import {useWindowDimensions, StyleSheet} from 'react-native';
-
-import {TabView, SceneMap, TabBar, TabBarProps} from 'react-native-tab-view';
+import {
+  TabView,
+  SceneMap,
+  TabBar,
+  SceneRendererProps,
+  NavigationState,
+} from 'react-native-tab-view';
 
 import Deployment from '../Deployment';
 import EmployeeDetails from '../EmployeeDetails';
@@ -17,15 +22,10 @@ import fonts from '../../../constant/fonts';
 
 const CustomTabView = () => {
   const layout = useWindowDimensions();
-  console.log(Data);
+
   const [index, setIndex] = React.useState(0);
   const renderScene = SceneMap({
-    publicProfile: () => (
-      <PublicProfile
-        profileDetails={Data.publicProfile.profileDetails}
-        socialDetails={Data.publicProfile.socialDetails}
-      />
-    ),
+    publicProfile: () => <PublicProfile data={Data.publicProfile} />,
     personalDetails: () => <PersonalDetails data={Data.personalDetails} />,
     skills: () => <Skills data={Data.skills} />,
     employeeDetails: () => <EmployeeDetails data={Data.employeeDetails} />,
@@ -42,7 +42,11 @@ const CustomTabView = () => {
     {key: 'deployment', title: 'Deployment'},
   ]);
 
-  const renderTabBar = (props: TabBarProps) => {
+  const renderTabBar = (
+    props: SceneRendererProps & {
+      navigationState: NavigationState<{key: string; title: string}>;
+    },
+  ) => {
     return (
       <TabBar
         {...props}

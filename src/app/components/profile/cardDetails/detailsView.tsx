@@ -1,23 +1,25 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import CardDetailsRow from './cardDetailsRow';
 
-import {detailsKeyType, detailsType} from '../../../types';
+import {detailsType} from '../../../types';
 
 type Props = {
   data: detailsType;
 };
 
 const DetailsView = ({data}: Props) => {
-  console.log(data);
-  const keys: detailsKeyType[] = Object.keys(data) as detailsKeyType[];
+  const dataArray = Object.entries(data);
 
   return (
     <View style={styles.detailsContainer}>
-      {keys.map((key: detailsKeyType, index: number) => (
-        <CardDetailsRow key={index} label={key} data={data[key]} />
-      ))}
+      {dataArray.map(([key, content], index: number) =>
+        useMemo(
+          () => <CardDetailsRow key={index} label={key} data={content} />,
+          [key, content],
+        ),
+      )}
     </View>
   );
 };

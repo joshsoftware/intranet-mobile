@@ -6,8 +6,8 @@ import AssetView from '../../components/profile/assets/assetView';
 
 import {AssetType} from '../../types';
 
-const labels1 = ['Name', 'Start Date', 'is active'];
-const labels2 = ['Name', 'Start Date', 'End Date', 'is active'];
+const currentAssetsLabels = ['Name', 'Start Date', 'Is Active'];
+const previousAssetsLabels = ['Name', 'Start Date', 'End Date', 'Is Active'];
 
 type Props = {
   data: {
@@ -19,12 +19,12 @@ type Props = {
 const Asset = ({data}: Props) => {
   return (
     <ScrollView>
-      <DetailsCard title="Current Assets">
-        <AssetView labels={labels1} assets={data.currentAssets} />
+      <DetailsCard title="Current Assets" key={0}>
+        <AssetView labels={currentAssetsLabels} assets={data.currentAssets} />
       </DetailsCard>
 
-      <DetailsCard title="Previous Assets">
-        <AssetView labels={labels2} assets={data.previousAssets} />
+      <DetailsCard title="Previous Assets" key={1}>
+        <AssetView labels={previousAssetsLabels} assets={data.previousAssets} />
       </DetailsCard>
     </ScrollView>
   );

@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, useMemo} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
 
 import Typography from '../../typography';
@@ -20,7 +20,7 @@ const CardDetails = ({children, title, cardStyle}: Props) => {
         fontFamily={fonts.ARIAL_AND_BOLD}>
         {title}
       </Typography>
-      {children}
+      {useMemo(() => children, [])}
     </View>
   );
 };

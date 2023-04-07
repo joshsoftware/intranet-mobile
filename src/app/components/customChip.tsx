@@ -13,14 +13,14 @@ type Props = {
 const CustomChip = ({label, mode, style}: Props) => {
   return (
     <View style={[styles.containerStyle, style]}>
-      {mode == 'edit' ? (
-        <View style={styles.iconStyle}>
-          <Cross />
-        </View>
-      ) : undefined}
       <Typography type="header" style={styles.textStyle}>
         {label}
       </Typography>
+      {mode === 'edit' && (
+        <View style={styles.iconStyle}>
+          <Cross />
+        </View>
+      )}
     </View>
   );
 };
@@ -28,8 +28,10 @@ const CustomChip = ({label, mode, style}: Props) => {
 const styles = StyleSheet.create({
   containerStyle: {
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 10,
+
     alignItems: 'center',
+    flexDirection: 'row',
     justifyContent: 'center',
     borderRadius: 5,
     backgroundColor: '#D0DDFF',
@@ -38,8 +40,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   iconStyle: {
-    alignSelf: 'flex-end',
-    marginBottom: 3,
+    marginLeft: 6,
   },
 });
 

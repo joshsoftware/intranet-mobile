@@ -1,17 +1,16 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {ScrollView} from 'react-native';
 
 import CardDetails from '../../components/profile/cardDetails';
 import DetailsView from '../../components/profile/cardDetails/detailsView';
 
-import labelFormatter from '../../utils/labelFormatter';
+import labelFormatter from '../../utils/userProfile/labelFormatter';
 
 import {
   emergencyContactDetailsType,
   personalDetailsType,
   addressType,
 } from '../../types';
-
 import colors from '../../constant/colors';
 
 type dataType = {
@@ -25,14 +24,19 @@ type Props = {
   data: dataType;
 };
 const PersonalDetails = ({data}: Props) => {
-  const keys: (keyof dataType)[] = Object.keys(data) as (keyof dataType)[];
+  const dataArray = Object.entries(data);
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
-      {keys.map((key: keyof dataType, index: number) => (
-        <CardDetails title={labelFormatter(key)}>
-          <DetailsView data={data[key]} />
-        </CardDetails>
-      ))}
+      {dataArray.map(([key, content], index: number) =>
+        useMemo(
+          () => (
+            <CardDetails key={index} title={labelFormatter(key)}>
+              <DetailsView data={content} />
+            </CardDetails>
+          ),
+          [key, content],
+        ),
+      )}
     </ScrollView>
   );
 };

@@ -8,7 +8,6 @@ import DetailsView from './profile/cardDetails/detailsView';
 import Typography from './typography';
 
 import {projectType} from '../types';
-
 import colors from '../constant/colors';
 import {ArrowDown, ArrowUp} from '../constant/icons';
 
@@ -16,13 +15,10 @@ type Props = {
   data: projectType[];
 };
 const CustomAccordian = ({data}: Props) => {
-  const [activeProjects, setActiveProjects]: [
-    activeProjects: (number | undefined)[],
-    setActiveProjects: (sections: (number | undefined)[]) => {},
-  ] = useState([]);
+  const [activeProjects, setActiveProjects] = useState<number[]>([]);
 
-  const setProjects = (sections: (number | undefined)[]) => {
-    setActiveProjects(sections.includes(undefined) ? [] : sections);
+  const setProjects = (sections: number[]) => {
+    setActiveProjects(sections ? sections : []);
   };
 
   const renderHeader = (

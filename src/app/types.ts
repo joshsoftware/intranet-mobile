@@ -5,7 +5,7 @@ export type AssetType = {
   isActive?: boolean;
 };
 
-export type ProfileDetailsType = {
+export type profileDetailsType = {
   firstName: string;
   lastName: string;
   Gender: string;
@@ -13,8 +13,6 @@ export type ProfileDetailsType = {
   bloodGroup: string;
   dateOfBirth: string;
 };
-
-export type ProfileDetailskeyType = keyof ProfileDetailsType;
 
 export type socialDetailsType = {
   name: string;
@@ -104,7 +102,7 @@ export type deploymentDetailsType = {
 };
 
 export type detailsType =
-  | ProfileDetailsType
+  | profileDetailsType
   | personalDetailsType
   | emergencyContactDetailsType
   | addressType
@@ -112,12 +110,7 @@ export type detailsType =
   | designationDetailsType
   | assessmentDetailsType
   | otherDetailsType
+  | projectType
   | projectType[]
   | deploymentDetailsType
   | {primary: string; secondary: string};
-
-export type detailsKeyType =
-  | ProfileDetailskeyType
-  | keyof addressType
-  | keyof emergencyContactDetailsType
-  | keyof personalDetailsType;

@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import labelFormatter from '../../../utils/labelFormatter';
-import dataFormatter from '../../../utils/dataFormatter';
+import labelFormatter from '../../../utils/userProfile/labelFormatter';
+import dataFormatter from '../../../utils/userProfile/dataFormatter';
 
 import Typography from '../../typography';
 
@@ -14,10 +14,10 @@ type Props = {
 const CardDetailsRow = ({label, data}: Props) => {
   return (
     <View style={styles.detailsData}>
-      <Typography style={styles.labelFlex} type="label">
+      <Typography key={0} style={styles.labelFlex} type="label">
         {labelFormatter(label)}
       </Typography>
-      <Typography style={styles.contentStyle} type="header">
+      <Typography key={1} style={styles.contentStyle} type="header">
         {dataFormatter(data)}
       </Typography>
     </View>
