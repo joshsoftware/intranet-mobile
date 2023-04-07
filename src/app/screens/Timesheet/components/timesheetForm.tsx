@@ -29,10 +29,18 @@ const timesheetFormSchema = yup.object().shape({
 type Props = {
   defaultData?: TimesheetFormData;
   onSubmit: (data?: TimesheetFormData, resetField?: Function) => void;
-  isHidden: boolean;
+  onCancel?: () => void;
+  isFormVisible?: boolean;
+  isAddButtonVisible?: boolean;
 };
 
-const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
+const TimesheetForm = ({
+  defaultData,
+  onSubmit,
+  onCancel,
+  isFormVisible = true,
+  isAddButtonVisible = true,
+}: Props) => {
   const {
     handleSubmit,
     control,
@@ -51,9 +59,11 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
     resolver: yupResolver(timesheetFormSchema),
   });
 
+  const todayDate = new Date();
+
   return (
     <>
-      {!isHidden && (
+      {isFormVisible && (
         <>
           <View>
             <Typography type="header" style={styles.labelText}>
@@ -91,13 +101,13 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
                 control={control}
                 render={({field: {onChange, value}}) => (
                   <DatePicker
-                    value={value ? value : new Date()}
+                    value={value ? value : todayDate}
                     onDateChange={onChange}
                     hideIcon={false}
                     selectedDate={value}
                     style={[styles.item, styles.date]}
                     placeholder={strings.SELECT}
-                    maximumDate={new Date()}
+                    maximumDate={todayDate}
                     textStyle={{...styles.descText, ...styles.dateText}}
                   />
                 )}
@@ -165,11 +175,26 @@ const TimesheetForm = ({defaultData, onSubmit, isHidden}: Props) => {
           </View>
         </>
       )}
-
-      <Button
-        title="Add"
-        onPress={handleSubmit(data => onSubmit(data, resetField))}
-      />
+      {isAddButtonVisible ? (
+        <Button
+          title="Add"
+          onPress={handleSubmit(data => onSubmit(data, resetField))}
+        />
+      ) : (
+        <View style={[flexStyles.horizontal, styles.btns]}>
+          <Button
+            title="Cancel"
+            onPress={onCancel}
+            textStyle={styles.btnText}
+            style={styles.cancel}
+          />
+          <Button
+            title="Update"
+            onPress={handleSubmit(data => onSubmit(data, resetField))}
+            style={styles.save}
+          />
+        </View>
+      )}
     </>
   );
 };
@@ -208,8 +233,24 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   error: {
-    color: colors.ERROR,
+    color: colors.ERROR_RED,
     marginTop: 5,
+  },
+  btns: {
+    alignSelf: 'flex-end',
+    justifyContent: 'space-around',
+    paddingVertical: 20,
+  },
+  btnText: {
+    color: colors.PRIMARY,
+  },
+  cancel: {
+    backgroundColor: colors.WHITE,
+    borderWidth: 2,
+    width: '45%',
+  },
+  save: {
+    width: '45%',
   },
 });
 

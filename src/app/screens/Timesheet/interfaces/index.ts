@@ -9,6 +9,7 @@ export interface Timesheet {
 
 export interface TimesheetFormData {
   project: string;
+  project_id?: string;
   date: Date;
   workHours: string;
   description: string;

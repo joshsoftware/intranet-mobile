@@ -4,8 +4,9 @@ import {StyleSheet, View} from 'react-native';
 import DateRange from '../../../components/pickers/dateRange';
 import TimesheetHeader from '../components/listHeader';
 import SectionListTimesheet from '../components/sectionListTimesheet';
+import EditTimesheetModal from '../components/editTimesheetModal';
 
-import {Timesheet} from '../interfaces';
+import {Timesheet, TimesheetFormData} from '../interfaces';
 
 import {timesheetListData} from '../../../constant/timesheet';
 import strings from '../../../constant/strings';
@@ -13,6 +14,16 @@ import strings from '../../../constant/strings';
 const TimesheetList = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [editTimesheetData, setEditTimesheetData] =
+    useState<TimesheetFormData>();
+
+  const toggleModal = () => setIsModalVisible(v => !v);
+
+  const onEditSave = (data?: TimesheetFormData) => {
+    console.log(data);
+    toggleModal();
+  };
 
   const onChangeStart = useCallback((date?: Date) => setStartDate(date), []);
 
@@ -36,8 +47,15 @@ const TimesheetList = () => {
   };
 
   const timesheetEditCall = (timesheetData: Timesheet) => {
-    console.log(timesheetData);
-    console.log('Timesheet edit call');
+    setEditTimesheetData({
+      project: timesheetData.project ? timesheetData.project : strings.SELECT,
+      project_id: timesheetData.project_id,
+      date: new Date(timesheetData.date),
+      workHours: timesheetData.work_in_hours,
+      description: timesheetData.description,
+    });
+
+    toggleModal();
   };
 
   return (
@@ -55,6 +73,17 @@ const TimesheetList = () => {
         onDelete={timesheetDeleteCall}
         onEdit={timesheetEditCall}
       />
+
+      {isModalVisible ? (
+        <EditTimesheetModal
+          isVisible={isModalVisible}
+          toggleModal={toggleModal}
+          formData={editTimesheetData}
+          onSave={onEditSave}
+        />
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
