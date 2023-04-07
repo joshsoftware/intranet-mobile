@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {ReactNode, useMemo} from 'react';
 import {ScrollView} from 'react-native';
 
 import CardDetails from '../../components/profile/cardDetails';
@@ -10,28 +10,51 @@ import {
   emergencyContactDetailsType,
   personalDetailsType,
   addressType,
+  detailsType,
 } from '../../types';
+
 import colors from '../../constant/colors';
 
 type dataType = {
-  personalDetails: personalDetailsType;
-  emergencyContactDetails: emergencyContactDetailsType;
-  temporaryAddress: addressType;
-  permanentAddress: addressType;
+  personalDetail: personalDetailsType;
+  emergencyContactDetails: emergencyContactDetailsType[];
+  address: addressType[];
 };
 
 type Props = {
   data: dataType;
 };
+const renderData = (data: dataType): ReactNode => {
+  return Object.entries(data).map(([key, content], index: number) => {
+    if (Array.isArray(content)) {
+      return content.map(
+        (ele: addressType | emergencyContactDetailsType, index) => {
+          return (
+            <CardDetails
+              key={index}
+              title={labelFormatter(
+                key === 'address'
+                  ? ((ele as addressType).typeOfAddress as string)
+                  : key,
+              )}>
+              <DetailsView data={ele} />
+            </CardDetails>
+          );
+        },
+      );
+    }
+
+    return (
+      <CardDetails key={index} title={labelFormatter(key)}>
+        <DetailsView data={content} />
+      </CardDetails>
+    );
+  });
+};
 const PersonalDetails = ({data}: Props) => {
-  const dataArray = Object.entries(data);
   return (
     <ScrollView style={{backgroundColor: colors.WHITE}}>
-      {dataArray.map(([key, content], index: number) => (
-        <CardDetails key={index} title={labelFormatter(key)}>
-          <DetailsView data={content} />
-        </CardDetails>
-      ))}
+      {renderData(data)}
     </ScrollView>
   );
 };

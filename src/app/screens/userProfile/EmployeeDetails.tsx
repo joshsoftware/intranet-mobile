@@ -17,7 +17,7 @@ import {
 import colors from '../../constant/colors';
 
 type dataType = {
-  employeeDetails: employeeDetailsType;
+  employeeDetail: employeeDetailsType;
   designationDetails: designationDetailsType;
   assessmentDetails: assessmentDetailsType;
   otherDetails: otherDetailsType;

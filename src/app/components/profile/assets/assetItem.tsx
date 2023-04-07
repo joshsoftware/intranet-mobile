@@ -24,7 +24,7 @@ const AssetItem = ({asset, count}: Props) => {
         type="header">
         {asset.startDate ? asset.startDate : '-'}
       </Typography>
-      {asset.endDate != undefined && (
+      {count === 4 && (
         <Typography
           style={[styles.text, {flexBasis: `${55 / (count - 2)}%`}]}
           type="header">

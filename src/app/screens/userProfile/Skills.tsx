@@ -12,24 +12,28 @@ import {skillsType} from '../../types';
 type Props = {
   data: skillsType;
 };
+const skillsFormatter = (skills: string): string[] => skills.split(',');
+
 const Skills = ({data}: Props) => {
   return (
     <ScrollView>
       <CardDetails title="Details">
         <DetailsView
-          data={{primary: data.primary, secondary: data.secondary}}
+          data={{primary: data.primarySkill, secondary: data.secondarySkill}}
         />
       </CardDetails>
       <CardDetails title="Other Skills">
         <View style={styles.containerStyle}>
-          {data.others.map((skill: string, index: number) => (
-            <CustomChip
-              key={index}
-              label={skill}
-              style={styles.chipStyle}
-              mode="view"
-            />
-          ))}
+          {skillsFormatter(data.otherSkills as string).map(
+            (skill: string, index: number) => (
+              <CustomChip
+                key={index}
+                label={skill}
+                style={styles.chipStyle}
+                mode="view"
+              />
+            ),
+          )}
         </View>
       </CardDetails>
     </ScrollView>
