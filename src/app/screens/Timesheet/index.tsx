@@ -13,7 +13,9 @@ const TimesheetScreen = () => {
 
   const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
-  const toggleModal = useCallback(() => setShouldShowModal(v => !v), []);
+  const toggleModal = useCallback(() => {
+    setShouldShowModal(v => !v);
+  }, []);
 
   return (
     <>

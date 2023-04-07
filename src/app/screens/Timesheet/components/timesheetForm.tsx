@@ -160,6 +160,7 @@ const TimesheetForm = ({
                   onChangeText={onChange}
                   value={value}
                   multiline={true}
+                  numberOfLines={4}
                   placeholder={strings.DESCRIPTION_PLACEHOLDER}
                   style={styles.description}
                   textStyle={styles.descText}
@@ -177,8 +178,8 @@ const TimesheetForm = ({
       )}
       {isAddButtonVisible ? (
         <Button
-          title="Add"
-          onPress={handleSubmit(data => onSubmit(data, resetField))}
+          title="Add Timesheet"
+          onPress={handleSubmit((data: any) => onSubmit(data, resetField))}
         />
       ) : (
         <View style={[flexStyles.horizontal, styles.btns]}>
@@ -190,7 +191,7 @@ const TimesheetForm = ({
           />
           <Button
             title="Update"
-            onPress={handleSubmit(data => onSubmit(data, resetField))}
+            onPress={handleSubmit((data: any) => onSubmit(data, resetField))}
             style={styles.save}
           />
         </View>
@@ -205,13 +206,14 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   description: {
-    height: 80,
+    height: 100,
     alignItems: 'flex-start',
   },
   descText: {
     lineHeight: 20,
     fontSize: 16,
     textAlign: 'left',
+    textAlignVertical: 'top',
   },
   row: {
     justifyContent: 'space-between',

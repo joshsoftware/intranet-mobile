@@ -36,11 +36,18 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
       data: Timesheet[];
     }>
   >([]);
-  const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
 
   const [keyboardIsVisible, setKeyboardIsVisible] = useState<boolean>(false);
 
   const [formDefaultData, setFormDefaultData] = useState<TimesheetFormData>();
+
+  const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
+
+  const handlePress = useCallback(
+    (value?: boolean) =>
+      value ? setIsFormVisible(value) : setIsFormVisible(v => !v),
+    [],
+  );
 
   useEffect(() => {
     const showListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -66,6 +73,7 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
         resetField('workHours');
         resetField('description');
       }
+      handlePress(true);
 
       Keyboard.dismiss();
     };
@@ -170,11 +178,8 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
     toggleModal();
   };
 
-  const handlePress = useCallback(
-    (value?: boolean) =>
-      value ? setIsFormVisible(value) : setIsFormVisible(v => !v),
-    [],
-  );
+  const saveButtonStyle =
+    addedTimesheet.length === 0 ? styles.disabled : styles.save;
 
   return (
     <Modal
@@ -217,7 +222,12 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
               textStyle={styles.btnText}
               style={styles.cancel}
             />
-            <Button title="Save" onPress={onSave} style={styles.save} />
+            <Button
+              title="Save"
+              onPress={onSave}
+              disabled={addedTimesheet.length === 0}
+              style={saveButtonStyle}
+            />
           </View>
         )}
       </View>
@@ -272,6 +282,10 @@ const styles = StyleSheet.create({
   },
   save: {
     width: '45%',
+  },
+  disabled: {
+    width: '45%',
+    backgroundColor: colors.SHADOW,
   },
 });
 
