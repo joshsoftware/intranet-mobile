@@ -11,7 +11,7 @@ import {profileDetailsType, detailsType, socialDetailsType} from '../../types';
 import colors from '../../constant/colors';
 
 type Props = {
-  data: {profileDetails: profileDetailsType; socialDetails: socialDetailsType};
+  data: {publicProfile: profileDetailsType; socialDetails: socialDetailsType};
 };
 
 const PublicProfile = ({data}: Props) => {

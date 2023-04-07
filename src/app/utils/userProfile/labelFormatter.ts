@@ -1,7 +1,9 @@
 const labelFormatter = (label: string) => {
-  return label.split(/(?=[A-Z])/).length == label.length
+  const req: string[] = label.split(/(?=[A-Z])/);
+
+  return req.length == label.length
     ? label
-    : label.split(/(?=[A-Z])/).reduce((prev, curr) => {
+    : req.reduce((prev, curr) => {
         return prev + ' ' + curr;
       });
 };

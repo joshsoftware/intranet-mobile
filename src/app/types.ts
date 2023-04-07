@@ -1,104 +1,107 @@
 export type AssetType = {
-  name: string;
-  startDate: string;
-  endDate?: string;
+  name: string | null;
+  startDate: string | null;
+  endDate?: string | null;
   isActive?: boolean;
 };
 
 export type profileDetailsType = {
-  firstName: string;
-  lastName: string;
-  Gender: string;
-  mobileNumber: string;
-  bloodGroup: string;
-  dateOfBirth: string;
+  firstName: string | null;
+  lastName: string | null;
+  gender: string | null;
+  mobileNumber: string | null;
+  bloodGroup: string | null;
+  dateOfBirth: string | null;
 };
 
 export type socialDetailsType = {
-  name: string;
-  uri: string;
-}[];
+  github: string | null;
+  linkdin: string | null;
+  facebook: string | null;
+  blog: string | null;
+};
 
 export type personalDetailsType = {
-  panNumber: string;
-  personalEmail: string;
-  passportNumber: string;
-  qualification: string;
-  dateOfJoining: string;
+  panNumber: string | null;
+  personalEmail: string | null;
+  passportNumber: string | null;
+  qualification: string | null;
+  dateOfJoining: string | null;
   workExprience: number;
-  previousCompany: string;
-  bonuslyAuthToken: string;
-  tshirtSize: string;
+  previousCompany: string | null;
+  tshirtSize: string | null;
 };
 
 export type emergencyContactDetailsType = {
-  name: string;
-  relation: string;
-  phoneNumber: string;
+  name: string | null;
+  relation: string | null;
+  phoneNumber: string | null;
 };
 
 export type addressType = {
-  address: string;
-  city: string;
-  pinCode: string;
-  state: string;
-  mobileNumber: string;
+  typeOfAddress: string | null;
+  address: string | null;
+  city: string | null;
+  pinCode: string | null;
+  state: string | null;
+  mobileNumber: string | null;
 };
 
 export type employeeDetailsType = {
-  employeeId: string;
-  emailId: string;
-  employeeLocation: string;
+  employeeId: string | null;
+  emailId: string | null;
+  employeeLocation: string | null;
 };
 export type designationDetailsType = {
-  Designation: string;
-  designationTrack: string;
+  designation: string | null;
+  designationTrack: string | null;
 };
 
 export type assessmentDetailsType = {
-  assessmentPlatform: string;
-  assessmentMonth: number;
+  assessmentPlatform: string | null;
+  assessmentMonth: string[];
 };
 
 export type otherDetailsType = {
-  grade: string;
-  company: string;
-  businessUnit: string;
-  subBusinessUnit: string;
-  function: string;
-  dateOfReleaving: string;
-  notificationEmail: string;
-  defaultLeaveApprover: string;
-  source: string;
-  project: string;
+  grade: string | null;
+  company: string | null;
+  businessUnit: string | null;
+  subBusinessUnit: string | null;
+  function: string | null;
+  dateOfRelieving: string | null;
+  notificationEmails: string[] | null;
+  defaultLeaveApprover: string | null;
+  source: string | null;
+  project: string | null;
 };
 
 export type projectType = {
-  projectName: string;
-  type: string;
-  startDate: string;
-  endDate: string;
+  projectName: string | null;
+  type: string | null;
+  startDate: string | null;
+  endDate: string | null;
   isTimesheetRequired: boolean;
   billable: boolean;
   allocation: number;
 };
 
 export type skillsType = {
-  primary: string;
-  secondary: string;
-  others: string[];
+  primarySkill: string | null;
+  secondarySkill: string | null;
+  ternarySkill: string | null;
+  otherSkills: string | null;
 };
 export type deploymentDetailsType = {
-  availableForm: string;
-  cvLink: string;
-  deploymentOwnerEmail: string;
-  ownedByEmails: string;
-  OETA: string;
-  NETA: string;
+  availableForm: string | null;
+  cvLink: string | null;
+  deploymentOwnerEmail: string | null;
+  ownedByEmails: string | null;
+  OETA: string | null;
+  NETA: string | null;
   availableHours: number;
-  interviewRejected: string;
-  deploymentNote: string;
-  remark: string;
+  interviewRejected: string | null;
+  deploymentNote: string | null;
+  remark: string | null;
 };
 
 export type detailsType =
@@ -113,4 +116,4 @@ export type detailsType =
   | projectType
   | projectType[]
   | deploymentDetailsType
-  | {primary: string; secondary: string};
+  | {primary: string | null; secondary: string | null};

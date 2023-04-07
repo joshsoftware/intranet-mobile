@@ -26,11 +26,11 @@ const CustomTabView = () => {
   const [index, setIndex] = React.useState(0);
   const renderScene = SceneMap({
     publicProfile: () => <PublicProfile data={Data.publicProfile} />,
-    personalDetails: () => <PersonalDetails data={Data.personalDetails} />,
+    personalDetails: () => <PersonalDetails data={Data.privateProfile} />,
     skills: () => <Skills data={Data.skills} />,
-    employeeDetails: () => <EmployeeDetails data={Data.employeeDetails} />,
+    employeeDetails: () => <EmployeeDetails data={Data.employeeDetail} />,
     assets: () => <Asset data={Data.assets} />,
-    deployment: () => <Deployment data={Data.deploymentDetails} />,
+    deployment: () => <Deployment data={Data.deployment} />,
   });
 
   const [routes] = React.useState([

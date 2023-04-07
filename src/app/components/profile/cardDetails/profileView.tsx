@@ -14,15 +14,16 @@ type Props = {
 };
 
 const ProfileView = ({data}: Props) => {
+  const dataArray = Object.entries(data);
   return (
     <View style={styles.profileContainer}>
-      {data.map(
-        (item, index) =>
-          item.uri && (
+      {dataArray.map(
+        ([name, uri], index) =>
+          uri && (
             <CircleView
               key={index}
-              data={{name: item.name}}
-              uri={item.uri}
+              data={{name: name}}
+              uri={uri}
               handlePress={handlePress}
             />
           ),

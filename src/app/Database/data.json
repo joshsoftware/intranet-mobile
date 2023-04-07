@@ -1,199 +1,163 @@
 {
   "publicProfile": {
-    "profileDetails": {
-      "firstName": "Sushant",
-      "lastName": "Patil",
-      "Gender": "Male",
-      "mobileNumber": "9075674610",
-      "bloodGroup": "B+",
-      "dateOfBirth": "16/12/2001"
+    "publicProfile": {
+      "firstName": "Rohit",
+      "lastName": "Nale",
+      "gender": "Male",
+      "mobileNumber": "000000000000000",
+      "bloodGroup": "B +ve",
+      "dateOfBirth": "1997-04-08"
     },
-
-    "socialDetails": [
+    "socialDetails": {
+      "github": "RohitNalePUCSD",
+      "linkdin": "https://www.linkedin.com/in/rohit-nale-1111a715a/",
+      "facebook": "https://www.facebook.com/profile.php?id=100010014845384",
+      "blog": ""
+    }
+  },
+  "privateProfile": {
+    "personalDetail": {
+      "panNumber": "BNIPN9095G",
+      "personalEmail": "rohitnale738@gmail.com",
+      "passportNumber": "",
+      "qualification": null,
+      "dateOfJoining": "2020-09-21",
+      "workExprience": 0,
+      "previousCompany": "Non",
+      "tshirtSize": "L"
+    },
+    "emergencyContactDetails": [
       {
-        "name": "linkdin",
-        "uri": "https://www.linkedin.com/in/sushant-patil-b280ba1ba/"
+        "name": "Narayan Nale",
+        "relation": "Brother",
+        "phoneNumber": "+919503320331"
       },
-
       {
-        "name": "facebook",
-        "uri": "https://instagram.com/sushant_patil_2512?igshid=ZDdkNTZiNTM="
+        "name": "Shashikant Nale",
+        "relation": "Father",
+        "phoneNumber": "+919890975621"
+      }
+    ],
+    "address": [
+      {
+        "typeOfAddress": "Temporary Address",
+        "address": " Vidnyan Nagar, Onkar appartement, plat no :204 ",
+        "city": "Pune",
+        "pinCode": "411021",
+        "state": "Maharashtra",
+        "mobileNumber": "8625946477"
       },
       {
-        "name": "blog",
-        "uri": "https://instagram.com/sushant_patil_2512?igshid=ZDdkNTZiNTM="
-      },
-      {
-        "name": "github",
-        "uri": "https://instagram.com/sushant_patil_2512?igshid=ZDdkNTZiNTM="
+        "typeOfAddress": "Permanent Address",
+        "address": "Omar apartment Vidnyan Nagar",
+        "city": "Solapur",
+        "pinCode": "411021",
+        "state": "MAHARASHTRA",
+        "mobileNumber": "9834753047"
       }
     ]
   },
-
-  "personalDetails": {
-    "personalDetails": {
-      "panNumber": "133 333 544",
-      "personalEmail": "patilsushant518@gmail.com",
-      "passportNumber": "112 223 444",
-      "qualification": "B Tech",
-      "dateOfJoining": "1/1/2012",
-      "workExprience": 15,
-      "previousCompany": "",
-      "bonuslyAuthToken": "",
-      "tshirtSize": "L"
-    },
-
-    "emergencyContactDetails": {
-      "name": "Saurabh",
-      "relation": "friend",
-      "phoneNumber": "99332343"
-    },
-
-    "temporaryAddress": {
-      "address": "A/p pune Near Mahalunge 4261178",
-      "city": "Pune",
-      "pinCode": "416118",
-      "state": "Maharshtra",
-      "mobileNumber": "9075674610"
-    },
-
-    "permanentAddress": {
-      "address": "A/p pune Near Mahalunge 4261178",
-      "city": "Pune",
-      "pinCode": "416118",
-      "state": "Maharshtra",
-      "mobileNumber": "9075674610"
-    }
-  },
-
-  "skills": {
-    "primary": "Data Strcture and algorithms",
-    "secondary": "React Native",
-    "others": ["C", "Node", "React"]
-  },
-
-  "employeeDetails": {
-    "employeeDetails": {
-      "employeeId": "1223344",
-      "emailId": "patilsushant223@gmail.com",
-      "employeeLocation": "Kolhapur"
+  "employeeDetail": {
+    "employeeDetail": {
+      "employeeId": "242",
+      "emailId": "rohit.nale@joshsoftware.com",
+      "employeeLocation": "Pune"
     },
     "designationDetails": {
-      "Designation": "Software Engineer",
-      "designationTrack": "Stuent-Software Engineer"
+      "designation": "Software Engineer",
+      "designationTrack": "Not Applicable"
     },
-
     "assessmentDetails": {
-      "assessmentPlatform": "LMS",
-      "assessmentMonth": 6
+      "assessmentMonth": ["March", "September"],
+      "assessmentPlatform": "Snowflake"
     },
     "otherDetails": {
-      "grade": "A+",
-      "company": "",
-      "businessUnit": "Intrnal",
-      "subBusinessUnit": "INtranet",
-      "function": "",
-      "dateOfReleaving": "1/12/2023",
-      "notificationEmail": "",
-      "defaultLeaveApprover": "",
+      "status": "approved",
+      "role": "Employee",
+      "grade": "J11",
+      "company": "Josh Software Private Limited",
+      "businessUnit": "Internal IT",
+      "startDateOfNoticePeriod": null,
+      "dateOfRelieving": null,
+      "notificationEmails": [],
+      "defaultLeaveApprover": "pallavi.harapanahalli@joshsoftware.com",
+      "reasonOfResignation": "",
+      "availableLeaves": 20,
+      "description": "",
+      "isBillable": false,
+      "skipUnassignedProjectTsMail": false,
       "source": "",
-      "project": "Intranet"
+      "division": "Technical",
+      "joiningBonusPaid": false,
+      "subBusinessUnit": "Application Support"
     },
     "currentProjects": [
       {
-        "projectName": "intanet",
-        "type": "Internal",
-        "startDate": "1/1/2001",
-        "endDate": "2/12/2023",
+        "projectName": "Intranet",
+        "type": "Investment",
+        "startDate": "2021-03-08",
+        "endDate": "2023-03-31",
         "isTimesheetRequired": true,
-        "billable": true,
-        "allocation": 5
+        "billable": false,
+        "allocation": 160
       },
       {
-        "projectName": "intanet",
-        "type": "Internal",
-        "startDate": "1/1/2001",
-        "endDate": "5/12/2023",
+        "projectName": "21Nuatica-V2",
+        "type": "Maintenance",
+        "startDate": "2021-07-01",
+        "endDate": "2023-03-31",
         "isTimesheetRequired": true,
         "billable": true,
-        "allocation": 300
+        "allocation": 0
+      },
+      {
+        "projectName": "60 Decibels Platform Development and Enhancement",
+        "type": "T&M",
+        "startDate": "2023-03-29",
+        "endDate": "2023-07-31",
+        "isTimesheetRequired": false,
+        "billable": true,
+        "allocation": 160
       }
     ],
-
     "previousProjects": [
       {
-        "projectName": "intanet",
-        "type": "Internal",
-        "startDate": "1/1/2001",
-        "endDate": "2/12/2023",
+        "projectName": "Flip.id",
+        "type": "T&M",
+        "startDate": "2020-10-19",
+        "endDate": "2021-02-03",
         "isTimesheetRequired": true,
         "billable": true,
-        "allocation": 5
-      },
-      {
-        "projectName": "intanet",
-        "type": "Internal",
-        "startDate": "1/1/2001",
-        "endDate": "2/12/2023",
-        "isTimesheetRequired": true,
-        "billable": true,
-        "allocation": 5
+        "allocation": 160
       }
     ]
   },
-
+  "skills": {
+    "primarySkill": "Ruby",
+    "secondarySkill": null,
+    "ternarySkill": null,
+    "otherSkills": "MySQL,C,Data Structure,Git,GO"
+  },
   "assets": {
-    "currentAssets": [
+    "currentAsset": [],
+    "previousAsset": [
       {
-        "name": "Iphone",
-        "startDate": "4/4/2023",
-        "isActive": true
-      },
-      {
-        "name": "Iphone",
-        "startDate": "4/4/2023",
-        "isActive": true
-      },
-      {
-        "name": "Iphone",
-        "startDate": "4/4/2023",
-        "isActive": true
-      }
-    ],
-    "previousAssets": [
-      {
-        "name": "Iphone",
-        "startDate": "4/4/2023",
-        "endDate": "",
-        "isActive": true
-      },
-      {
-        "name": "Iphone",
-        "startDate": "4/4/2023",
-        "endDate": "",
-        "isActive": true
-      },
-      {
-        "name": "Iphone",
-        "startDate": "4/4/2023",
-        "endDate": "",
-        "isActive": true
+        "name": "Macbook Pro A1707",
+        "startDate": "2023-04-05",
+        "endDate": null
       }
     ]
   },
-
-  "deploymentDetails": {
-    "deploymentDetails": {
-      "availableForm": "",
-      "cvLink": "",
-      "deploymentOwnerEmail": "",
-      "ownedByEmails": "",
-      "OETA": "",
-      "NETA": "",
-      "availableHours": 30,
-      "interviewRejected": "",
-      "deploymentNote": "",
-      "remark": "Excellent"
-    }
+  "deployment": {
+    "availableFrom": "2023-08-01",
+    "cvLink": null,
+    "interviewRejected": null,
+    "deploymentOwnerEmail": null,
+    "deploymentNote": null,
+    "remark": null,
+    "OETA": null,
+    "NETA": null,
+    "availableHours": null,
+    "ownedByEmails": null
   }
 }

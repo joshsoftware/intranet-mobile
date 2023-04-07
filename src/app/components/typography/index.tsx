@@ -5,7 +5,7 @@ import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
 
 type Props = PropsWithChildren & {
-  style?: TextStyle;
+  style?: TextStyle | TextStyle[];
   type?: 'title' | 'header' | 'subheader' | 'description' | 'label';
   size?: number;
   alignment?: 'center' | 'left' | 'right' | 'justify';

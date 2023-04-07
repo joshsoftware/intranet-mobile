@@ -1,4 +1,8 @@
-const dataFormatter = (data: string | string[]) =>
-  data === '' ? '-' : typeof data == 'boolean' ? (data ? 'Yes' : 'No') : data;
+const dataFormatter = (data: string | string[]) => {
+  if (data === '' || data === null) return '-';
+  else if (typeof data === 'boolean') return data ? 'Yes' : 'No';
+  else if (Array.isArray(data)) return data.toString();
+  else return data;
+};
 
 export default dataFormatter;
