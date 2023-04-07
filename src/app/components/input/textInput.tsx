@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo, useMemo} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -17,20 +17,27 @@ type Props = TextInputProps & {
   style?: ViewStyle;
   textStyle?: TextStyle;
   startIcon?: SVGElement;
-  value: string | undefined;
 };
 
-const Input = ({style, textStyle, startIcon, value, ...props}: Props) => (
-  <View
-    style={[borderStyles.thinBorder, flexStyles.horizontal, styles.box, style]}>
-    <>{startIcon}</>
-    <TextInput
-      style={[value ? styles.text : styles.placeholder, textStyle]}
-      value={value}
-      {...props}
-    />
-  </View>
-);
+const Input = ({style, textStyle, startIcon, value, ...props}: Props) => {
+  const selectedStyle = useMemo(
+    () => (value ? styles.text : styles.placeholder),
+    [value],
+  );
+
+  return (
+    <View
+      style={[
+        borderStyles.thinBorder,
+        flexStyles.horizontal,
+        styles.box,
+        style,
+      ]}>
+      <>{startIcon}</>
+      <TextInput style={[selectedStyle, textStyle]} value={value} {...props} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   box: {
@@ -57,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Input;
+export default memo(Input);

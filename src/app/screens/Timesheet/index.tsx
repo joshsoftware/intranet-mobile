@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import ManagerScreen from './views/managerView';
@@ -13,14 +13,14 @@ const TimesheetScreen = () => {
 
   const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
-  const toggleModal = (value: boolean) => setShouldShowModal(value);
+  const toggleModal = useCallback(() => setShouldShowModal(v => !v), []);
 
   return (
     <>
       <View style={styles.container}>
         {isManager ? <ManagerScreen /> : <TimesheetList />}
       </View>
-      <FloatingActionButton onPress={() => toggleModal(true)} />
+      <FloatingActionButton onPress={toggleModal} />
 
       <CreateTimesheet toggleModal={toggleModal} isVisible={shouldShowModal} />
     </>

@@ -10,7 +10,7 @@ type Props = {
   style?: ViewStyle;
   textStyle?: TextStyle;
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 const Button = ({style, textStyle, title, onPress}: Props) => {

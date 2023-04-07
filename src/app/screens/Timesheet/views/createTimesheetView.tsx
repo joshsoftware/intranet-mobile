@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   Keyboard,
@@ -26,7 +26,7 @@ import {flexStyles} from '../../../../styles';
 
 type Props = {
   isVisible: boolean;
-  toggleModal: (value: boolean) => void;
+  toggleModal: () => void;
 };
 
 const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
@@ -36,7 +36,7 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
       data: Timesheet[];
     }>
   >([]);
-  const [isHidden, setIsHidden] = useState<boolean>(false);
+  const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
 
   const [keyboardIsVisible, setKeyboardIsVisible] = useState<boolean>(false);
 
@@ -66,6 +66,8 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
         resetField('workHours');
         resetField('description');
       }
+
+      Keyboard.dismiss();
     };
 
     if (data) {
@@ -137,6 +139,7 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
 
   const onEdit = (timesheetData: Timesheet) => {
     const list: {title: string; data: Timesheet[]}[] = [];
+
     setAddedTimesheet(sections =>
       sections.reduce((prevVal, currVal) => {
         const data = currVal.data.filter(item => {
@@ -149,6 +152,7 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
               workHours: item.work_in_hours,
               description: item.description,
             });
+            handlePress(true);
             return false;
           }
         });
@@ -163,10 +167,14 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
 
   const onSave = () => {
     setAddedTimesheet([]);
-    toggleModal(false);
+    toggleModal();
   };
 
-  const handlePress = () => setIsHidden(v => !v);
+  const handlePress = useCallback(
+    (value?: boolean) =>
+      value ? setIsFormVisible(value) : setIsFormVisible(v => !v),
+    [],
+  );
 
   return (
     <Modal
@@ -184,11 +192,11 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
 
           <TimesheetForm
             onSubmit={onAdd}
-            isHidden={isHidden}
+            isFormVisible={isFormVisible}
             defaultData={formDefaultData}
           />
 
-          <TouchableOpacity onPress={handlePress} style={styles.arrow}>
+          <TouchableOpacity onPress={() => handlePress()} style={styles.arrow}>
             <View>
               <RightArrow />
             </View>
@@ -205,7 +213,7 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
           <View style={[flexStyles.horizontal, styles.btns]}>
             <Button
               title="Cancel"
-              onPress={() => toggleModal(false)}
+              onPress={toggleModal}
               textStyle={styles.btnText}
               style={styles.cancel}
             />
@@ -244,7 +252,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 48,
     height: 48,
-    elevation: 4,
+    elevation: 2,
     backgroundColor: colors.WHITE,
     borderRadius: 24,
   },
@@ -254,17 +262,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingBottom: 20,
   },
+  btnText: {
+    color: colors.PRIMARY,
+  },
   cancel: {
     backgroundColor: colors.WHITE,
     borderWidth: 2,
     width: '45%',
-  },
-  btnText: {
-    color: colors.PRIMARY,
   },
   save: {
     width: '45%',
   },
 });
 
-export default CreateTimesheet;
+export default memo(CreateTimesheet);

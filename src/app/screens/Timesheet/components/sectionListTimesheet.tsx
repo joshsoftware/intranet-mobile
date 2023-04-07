@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo, useCallback} from 'react';
 import {SectionList, StyleSheet, ViewStyle} from 'react-native';
 
 import Typography from '../../../components/typography';
@@ -31,19 +31,16 @@ const SectionListTimesheet = ({
   onDelete,
   style,
 }: Props) => {
-  const renderItem = ({
-    item,
-    section,
-  }: {
-    item: Timesheet;
-    section: {title: string};
-  }) => (
-    <TimesheetItem
-      timesheetData={item}
-      onEdit={onEdit}
-      onDelete={onDelete}
-      title={section.title}
-    />
+  const renderItem = useCallback(
+    ({item, section}: {item: Timesheet; section: {title: string}}) => (
+      <TimesheetItem
+        timesheetData={item}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        title={section.title}
+      />
+    ),
+    [onDelete, onEdit],
   );
 
   return (
@@ -57,6 +54,7 @@ const SectionListTimesheet = ({
       style={style}
       ItemSeparatorComponent={seperator}
       ListFooterComponent={footer}
+      showsVerticalScrollIndicator={false}
     />
   );
 };
@@ -72,4 +70,4 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
-export default SectionListTimesheet;
+export default memo(SectionListTimesheet);

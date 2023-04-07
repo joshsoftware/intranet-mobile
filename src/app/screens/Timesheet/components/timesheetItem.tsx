@@ -21,29 +21,33 @@ const TimesheetItem = ({
   onEdit,
   onDelete,
   style,
-}: Props) => (
-  <View style={[style]}>
-    <Typography type="header">{timesheetData.date}</Typography>
-    <Typography type="subheader" style={styles.workedHours}>
-      {timesheetData.work_in_hours}
-    </Typography>
-    <Typography type="description">{timesheetData.description}</Typography>
-    <View style={styles.buttons}>
-      {onDelete && (
-        <TouchableOpacity
-          onPress={() => onDelete({...timesheetData, project: title})}>
-          <Delete />
-        </TouchableOpacity>
-      )}
-      {onEdit && (
-        <TouchableOpacity
-          onPress={() => onEdit({...timesheetData, project: title})}>
-          <Edit />
-        </TouchableOpacity>
-      )}
+}: Props) => {
+  const handleEdit = () => onEdit?.({...timesheetData, project: title});
+
+  const handleDelete = () => onDelete?.({...timesheetData, project: title});
+
+  return (
+    <View style={style}>
+      <Typography type="header">{timesheetData.date}</Typography>
+      <Typography type="subheader" style={styles.workedHours}>
+        {timesheetData.work_in_hours}
+      </Typography>
+      <Typography type="description">{timesheetData.description}</Typography>
+      <View style={styles.buttons}>
+        {onEdit && (
+          <TouchableOpacity onPress={handleEdit}>
+            <Edit />
+          </TouchableOpacity>
+        )}
+        {onDelete && (
+          <TouchableOpacity onPress={handleDelete}>
+            <Delete />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   workedHours: {

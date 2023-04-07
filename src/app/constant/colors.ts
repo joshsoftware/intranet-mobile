@@ -11,5 +11,5 @@ export default {
   SHADOW: '#00000055',
   BORDER: '#D6D6D6',
   BACKGROUND: '#F4F4F4',
-  ERROR: '#B00020',
+  ERROR_RED: '#dc3545',
 };

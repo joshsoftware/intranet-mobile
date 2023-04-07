@@ -21,27 +21,29 @@ const DateRange = ({
   onChangeStart,
   onChangeEnd,
 }: Props) => {
+  const todayDate = new Date();
+
   return (
     <View style={[styles.main, style]}>
       <DatePicker
-        value={startDate ? startDate : new Date()}
+        value={startDate ? startDate : todayDate}
         selectedDate={startDate}
         placeholder={strings.FROM}
         onDateChange={onChangeStart}
-        maximumDate={endDate ? endDate : new Date()}
+        maximumDate={endDate ? endDate : todayDate}
         style={styles.leftDatePicker}
       />
 
       <Linear />
 
       <DatePicker
-        value={endDate ? endDate : new Date()}
+        value={endDate ? endDate : todayDate}
         selectedDate={endDate}
         placeholder={strings.TO}
         onDateChange={onChangeEnd}
         hideIcon={false}
         minimumDate={startDate}
-        maximumDate={new Date()}
+        maximumDate={todayDate}
         style={styles.rightDatePicker}
       />
     </View>
