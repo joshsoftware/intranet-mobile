@@ -1,16 +1,17 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {NavigationHelpers, TabNavigationState} from '@react-navigation/native';
 import {
   BottomTabBarProps,
   BottomTabNavigationEventMap,
 } from '@react-navigation/bottom-tabs';
+import {SvgProps} from 'react-native-svg';
+
+import TabBarButton from './button/TabBarButton';
 
 import {Home, Calendar, Clock, Menu as MenuIcon} from '../constant/icons';
-
 import {MainTabParamList} from '../navigation/types';
 import colors from '../constant/colors';
-import {SvgProps} from 'react-native-svg';
 
 // Defining specific types because
 // ButtonTabBarProps is not generic in the library
@@ -49,13 +50,13 @@ const TabBar = (props: BottomTabBarProps) => {
     const Icon = screenIcons[route.name];
 
     return (
-      <TouchableOpacity
+      <TabBarButton
         key={route.name}
-        style={styles.buttonContainer}
-        onPress={onPress}>
-        <Icon />
-        <Text style={styles.buttonTitle}>{label}</Text>
-      </TouchableOpacity>
+        icon={Icon}
+        title={label}
+        active={isFocused}
+        onPress={onPress}
+      />
     );
   });
 
@@ -67,34 +68,26 @@ const TabBar = (props: BottomTabBarProps) => {
     <View style={styles.container}>
       {tabButtons}
 
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={handleMenuButtonPress}>
-        <MenuIcon />
-        <Text style={styles.buttonTitle}>Menu</Text>
-      </TouchableOpacity>
+      <TabBarButton
+        icon={MenuIcon}
+        title="Menu"
+        active={false}
+        onPress={handleMenuButtonPress}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: 56,
+    height: 64,
     flexDirection: 'row',
     backgroundColor: colors.SECONDARY_BACKGROUND,
-
-    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.GREY_BORDER_COLOR,
-
-    paddingVertical: 9,
-  },
-  buttonContainer: {
-    flex: 1,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  buttonTitle: {
-    color: colors.SECONDARY,
+    borderBottomWidth: 0,
   },
 });
 
