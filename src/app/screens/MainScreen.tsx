@@ -7,7 +7,7 @@ import Header from '../components/Header';
 const MainScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      <Header onMainScreen={true} />
       <MainNavigator />
     </SafeAreaView>
   );
