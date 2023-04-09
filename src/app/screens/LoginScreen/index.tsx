@@ -25,7 +25,7 @@ const LoginScreen = () => {
           <JoshLogo />
         </View>
 
-        <Text style={styles.loginText}>Login</Text>
+        <Text style={styles.loginText}>LOGIN</Text>
 
         <LoginForm signIn={emailPasswordSignInHandler} isLoading={isLoading} />
 
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
 
   googleSigninButton: {
     backgroundColor: colors.WHITE,
-    padding: 9,
-    borderRadius: 4,
+    padding: 12,
+    borderRadius: 22,
     alignItems: 'center',
     borderColor: colors.PRIMARY,
     borderWidth: 2,

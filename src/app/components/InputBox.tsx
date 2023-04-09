@@ -20,16 +20,18 @@ const InputBox = ({error, ...props}: Props) => {
 
 const styles = StyleSheet.create({
   textInput: {
-    height: 40,
-    marginVertical: 9,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: colors.BORDER,
-    paddingHorizontal: 20,
+    fontSize: 16,
+    marginBottom: 9,
+    paddingHorizontal: 8,
     color: colors.TERTIARY_TEXT,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.TEXT_INPUT_BORDER,
   },
   errorStyle: {
-    borderColor: colors.ERROR_RED,
+    borderBottomColor: colors.ERROR_RED,
   },
   errorText: {
     color: colors.ERROR_RED,
