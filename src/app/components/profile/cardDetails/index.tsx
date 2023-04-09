@@ -17,7 +17,7 @@ const CardDetails = ({children, title, cardStyle}: Props) => {
       <Typography
         style={styles.title}
         type="header"
-        fontFamily={fonts.ARIAL_AND_BOLD}>
+        fontFamily={fonts.ARIAL_BOLD}>
         {title}
       </Typography>
       {useMemo(() => children, [])}

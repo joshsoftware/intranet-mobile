@@ -17,7 +17,7 @@ type Props = {
 // };
 
 const DetailsView = ({data}: Props) => {
-  console.log(data);
+  // console.log(data);
   const dataArray = Object.entries(data);
 
   return (

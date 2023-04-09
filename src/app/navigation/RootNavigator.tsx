@@ -57,9 +57,9 @@ const RootNavigator = () => {
 
   return (
     <RootStack.Navigator screenOptions={screenOptions}>
-      {user ? (
+      {!user ? (
         <>
-          <RootStack.Screen name={MAIN_SCREEN} component={MainScreen} />
+          {/* <RootStack.Screen name={MAIN_SCREEN} component={MainScreen} /> */}
           <RootStack.Screen
             name={USER_PROFILE_SCREEN}
             component={UserProfile}

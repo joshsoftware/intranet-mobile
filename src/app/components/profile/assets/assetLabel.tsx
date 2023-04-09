@@ -28,8 +28,8 @@ const AssetLabel = ({containerStyle, labels, textColor}: Props) => {
               color: colors.LABEL_COLOR_SECONDARY,
               ...textColor,
               flexBasis: `${value}%`,
+              textAlign: textAlign,
             }}
-            alignment={textAlign}
             key={index}>
             {label}
           </Typography>

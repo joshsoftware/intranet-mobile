@@ -10,4 +10,5 @@ export default {
   LEAVES: 'Leaves',
   NOT_ALLOWED: 'Not Allowed',
   DUBLICATE_ENTRY_ERROR: 'You have previous same timesheet entry',
+  OTHER_SKILL_PLACEHOLDER: 'Type other skills here',
 };
