@@ -61,7 +61,7 @@
     "employeeDetail": {
       "employeeId": "242",
       "emailId": "rohit.nale@joshsoftware.com",
-      "employeeLocation": "Pune"
+      "location": "Pune"
     },
     "designationDetails": {
       "designation": "Software Engineer",
@@ -134,8 +134,8 @@
   },
   "skills": {
     "primarySkill": "Ruby",
-    "secondarySkill": null,
-    "ternarySkill": null,
+    "secondrySkill": null,
+    "ternaryTechnical": null,
     "otherSkills": "MySQL,C,Data Structure,Git,GO"
   },
   "assets": {
@@ -155,9 +155,8 @@
     "deploymentOwnerEmail": null,
     "deploymentNote": null,
     "remark": null,
-    "OETA": null,
-    "NETA": null,
-    "availableHours": null,
-    "ownedByEmails": null
+    "oeta": null,
+    "neta": null,
+    "availableHours": null
   }
 }

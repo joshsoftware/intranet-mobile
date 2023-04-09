@@ -12,4 +12,5 @@ export default {
   DUBLICATE_ENTRY_ERROR: 'You have previous same timesheet entry',
   EMPTY_TIMESHEET: 'Empty Timesheet',
   EMPTY_TIMESHEET_MSG: 'Add timesheet before saving',
+  OTHER_SKILL_PLACEHOLDER: 'Type other skills here',
 };

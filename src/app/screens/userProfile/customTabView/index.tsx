@@ -7,7 +7,9 @@ import {
   SceneRendererProps,
   NavigationState,
 } from 'react-native-tab-view';
-import {useQuery} from 'react-query';
+// import {useQuery} from 'react-query';
+
+import data from '../../../Database/data.json';
 
 import Deployment from '../Deployment';
 import EmployeeDetails from '../EmployeeDetails';
@@ -32,10 +34,10 @@ const CustomTabView = () => {
     {key: 'assets', title: 'Asset'},
     {key: 'deployment', title: 'Deployment'},
   ]);
-  const {data} = useQuery({
-    queryKey: ['user'],
-    queryFn: getUserRequest,
-  });
+  // const {data} = useQuery({
+  //   queryKey: ['user'],
+  //   queryFn: getUserRequest,
+  // });
 
   if (data) {
     const renderScene = SceneMap({

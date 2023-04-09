@@ -104,6 +104,12 @@ export type deploymentDetailsType = {
   remark: string | null;
 };
 
+export interface updateSkillFormDataType {
+  primaryTechnicalSkill?: string;
+  secondaryTechnicalSkill?: string;
+  ternaryTechnicalSkill?: string;
+  otherSkills?: string;
+}
 export type detailsType =
   | profileDetailsType
   | personalDetailsType
