@@ -31,11 +31,10 @@ const Button = ({style, textStyle, title, ...props}: Props) => {
 const styles = StyleSheet.create({
   btn: {
     height: 40,
-    borderRadius: 5,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.PRIMARY,
-    width: '100%',
     marginVertical: 10,
     borderColor: colors.PRIMARY,
   },

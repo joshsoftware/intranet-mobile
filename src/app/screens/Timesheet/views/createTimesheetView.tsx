@@ -2,6 +2,7 @@ import React, {memo, useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   Keyboard,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -182,56 +183,63 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
     addedTimesheet.length === 0 ? styles.disabled : styles.save;
 
   return (
-    <Modal
-      isVisible={isVisible}
-      animationIn={'slideInUp'}
-      animationOut={'slideOutDown'}
-      animationInTiming={500}
-      animationOutTiming={500}
-      contentStyle={styles.modal}>
-      <View style={styles.main}>
-        <View>
-          <Typography type="title" style={styles.title}>
-            Add Timesheet
-          </Typography>
+    <ScrollView>
+      <Modal
+        isVisible={isVisible}
+        animationIn={'slideInUp'}
+        animationOut={'slideOutDown'}
+        animationInTiming={500}
+        animationOutTiming={500}
+        contentStyle={styles.modal}>
+        <View style={styles.main}>
+          <View style={[styles.horizontalPad, styles.form]}>
+            <Typography type="title" style={styles.title}>
+              Add Timesheet
+            </Typography>
 
-          <TimesheetForm
-            onSubmit={onAdd}
-            isFormVisible={isFormVisible}
-            defaultData={formDefaultData}
-          />
-
+            <TimesheetForm
+              onSubmit={onAdd}
+              isFormVisible={isFormVisible}
+              defaultData={formDefaultData}
+            />
+          </View>
           <TouchableOpacity onPress={() => handlePress()} style={styles.arrow}>
             <View>
               <RightArrow />
             </View>
           </TouchableOpacity>
+
+          <SectionListTimesheet
+            timesheetListData={addedTimesheet}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            style={styles.horizontalPad}
+          />
+
+          {!keyboardIsVisible && (
+            <View
+              style={[
+                flexStyles.horizontal,
+                styles.btns,
+                styles.horizontalPad,
+              ]}>
+              <Button
+                title="Cancel"
+                onPress={toggleModal}
+                textStyle={styles.btnText}
+                style={styles.cancel}
+              />
+              <Button
+                title="Save"
+                onPress={onSave}
+                disabled={addedTimesheet.length === 0}
+                style={saveButtonStyle}
+              />
+            </View>
+          )}
         </View>
-
-        <SectionListTimesheet
-          timesheetListData={addedTimesheet}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-
-        {!keyboardIsVisible && (
-          <View style={[flexStyles.horizontal, styles.btns]}>
-            <Button
-              title="Cancel"
-              onPress={toggleModal}
-              textStyle={styles.btnText}
-              style={styles.cancel}
-            />
-            <Button
-              title="Save"
-              onPress={onSave}
-              disabled={addedTimesheet.length === 0}
-              style={saveButtonStyle}
-            />
-          </View>
-        )}
-      </View>
-    </Modal>
+      </Modal>
+    </ScrollView>
   );
 };
 
@@ -242,13 +250,11 @@ const styles = StyleSheet.create({
   },
   main: {
     width: '100%',
-    backgroundColor: colors.WHITE,
-    borderTopEndRadius: 30,
-    borderTopStartRadius: 30,
-    paddingHorizontal: 16,
     marginTop: '10%',
     height: '95%',
-    justifyContent: 'space-between',
+    backgroundColor: colors.WHITE,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
   title: {
     color: colors.SECONDARY,
@@ -262,15 +268,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 48,
     height: 48,
-    elevation: 2,
+    elevation: 6,
     backgroundColor: colors.WHITE,
     borderRadius: 24,
+    zIndex: 1,
+    position: 'relative',
+    top: -24,
+  },
+  form: {
+    elevation: 6,
+    borderRadius: 30,
+    zIndex: 1,
+    backgroundColor: colors.WHITE,
+    paddingBottom: 24,
   },
   btns: {
     height: '5%',
     alignSelf: 'flex-end',
-    justifyContent: 'space-around',
-    paddingBottom: 20,
+    marginBottom: 10,
   },
   btnText: {
     color: colors.PRIMARY,
@@ -285,7 +300,10 @@ const styles = StyleSheet.create({
   },
   disabled: {
     width: '45%',
-    backgroundColor: colors.SHADOW,
+    opacity: 0.5,
+  },
+  horizontalPad: {
+    paddingHorizontal: 16,
   },
 });
 

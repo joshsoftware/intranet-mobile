@@ -160,7 +160,6 @@ const TimesheetForm = ({
                   onChangeText={onChange}
                   value={value}
                   multiline={true}
-                  numberOfLines={4}
                   placeholder={strings.DESCRIPTION_PLACEHOLDER}
                   style={styles.description}
                   textStyle={styles.descText}
@@ -180,6 +179,7 @@ const TimesheetForm = ({
         <Button
           title="Add Timesheet"
           onPress={handleSubmit((data: any) => onSubmit(data, resetField))}
+          style={styles.addButton}
         />
       ) : (
         <View style={[flexStyles.horizontal, styles.btns]}>
@@ -206,8 +206,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   description: {
-    height: 100,
     alignItems: 'flex-start',
+    maxHeight: 100,
   },
   descText: {
     lineHeight: 20,
@@ -237,6 +237,12 @@ const styles = StyleSheet.create({
   error: {
     color: colors.ERROR_RED,
     marginTop: 5,
+    textTransform: 'capitalize',
+  },
+  addButton: {
+    width: '50%',
+    alignSelf: 'center',
+    backgroundColor: colors.TERTIARY,
   },
   btns: {
     alignSelf: 'flex-end',

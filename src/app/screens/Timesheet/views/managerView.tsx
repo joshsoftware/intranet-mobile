@@ -5,9 +5,11 @@ import Card from '../../../components/card';
 import Input from '../../../components/input/textInput';
 import DateRange from '../../../components/pickers/dateRange';
 import EmployeeCard from '../components/employeeCard';
+import Linear from '../../../components/seperator/linear';
 
 import {Search} from '../../../constant/icons';
 import {employeeList} from '../../../constant/timesheet';
+import colors from '../../../constant/colors';
 
 type Props = {
   item: {
@@ -18,10 +20,14 @@ type Props = {
 };
 
 const renderItem = ({item}: Props) => (
-  <Card key={item.name} onPress={() => undefined}>
+  <Card key={item.name} style={styles.card} onPress={() => undefined}>
     <EmployeeCard name={item.name} email={item.email} />
   </Card>
 );
+
+const seperator = () => <Linear />;
+
+const footer = () => <Linear style={styles.footer} />;
 
 const ManagerScreen = () => {
   const [startDate, setStartDate] = useState<Date>();
@@ -54,6 +60,8 @@ const ManagerScreen = () => {
         data={employeeList}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.employee_id + index}
+        ItemSeparatorComponent={seperator}
+        ListFooterComponent={footer}
       />
     </View>
   );
@@ -62,6 +70,15 @@ const ManagerScreen = () => {
 const styles = StyleSheet.create({
   main: {
     height: '100%',
+  },
+  card: {
+    backgroundColor: colors.WHITE,
+    elevation: 0,
+  },
+  footer: {
+    paddingBottom: 100,
+    borderWidth: 0,
+    borderTopWidth: 1,
   },
 });
 

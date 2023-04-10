@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     borderWidth: 0,
+    paddingBottom: 100,
   },
   seperator: {
     marginVertical: 10,
