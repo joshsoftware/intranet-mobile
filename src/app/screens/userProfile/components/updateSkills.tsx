@@ -8,15 +8,16 @@ import UpdateSkillForm from '../../../components/profile/cardDetails/updateSkill
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
 
-import {skillsType, updateSkillFormDataType} from '../../../types';
+import {skillsType} from '../../../types';
 
 type Props = {
   isVisible: boolean;
   toggleModal: (value: boolean) => void;
   data: skillsType;
+  refresh: () => void;
 };
 
-const UpdateSkills = ({toggleModal, isVisible, data}: Props) => {
+const UpdateSkills = ({toggleModal, isVisible, data, refresh}: Props) => {
   return (
     <Modal
       isVisible={isVisible}
@@ -31,7 +32,11 @@ const UpdateSkills = ({toggleModal, isVisible, data}: Props) => {
             Update Skills
           </Typography>
 
-          <UpdateSkillForm toggleModal={toggleModal} defaultData={data} />
+          <UpdateSkillForm
+            toggleModal={toggleModal}
+            defaultData={data}
+            refresh={refresh}
+          />
         </View>
       </View>
     </Modal>

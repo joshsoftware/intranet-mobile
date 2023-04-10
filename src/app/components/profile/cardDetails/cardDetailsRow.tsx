@@ -21,10 +21,7 @@ const CardDetailsRow = ({label, data}: Props) => {
         {labelFormatter(label)}
       </Typography>
       <Typography
-        style={[
-          styles.contentStyle,
-          isEmail ? {textTransform: 'lowercase'} : {},
-        ]}
+        style={[styles.contentStyle, isEmail ? styles.emailText : {}]}
         type="header">
         {formattedData}
       </Typography>
@@ -37,15 +34,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     paddingBottom: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   labelFlex: {
-    flexBasis: '50%',
     textTransform: 'capitalize',
+    paddingRight: 20,
   },
   contentStyle: {
-    flexBasis: '50%',
     lineHeight: 20,
+    flex: 1,
+    flexWrap: 'wrap',
     textAlign: 'right',
   },
+  emailText: {
+    textTransform: 'lowercase',
+  },
 });
+
 export default CardDetailsRow;

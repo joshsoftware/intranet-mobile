@@ -9,17 +9,18 @@ import CustomChip from '../../components/customChip';
 
 import {skillsType} from '../../types';
 import UpdateSkills from './components/updateSkills';
-import FloatingActionButton from '../../components/button/floatingActionButton';
 import Button from '../../components/button/button';
 import skillsFormatter from '../../utils/userProfile/skillsFormatter';
 
 type Props = {
   data: skillsType;
+  refresh: () => void;
 };
 
-const Skills = ({data}: Props) => {
+const Skills = ({data, refresh}: Props) => {
   const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
   const toggleModal = (value: boolean) => setShouldShowModal(value);
+
   return (
     <>
       <ScrollView>
@@ -31,9 +32,10 @@ const Skills = ({data}: Props) => {
         <CardDetails title="Other Skills">
           <View style={styles.containerStyle}>
             {skillsFormatter(data.otherSkills as string).map(
-              (skill: string, index: number) => (
-                <CustomChip key={index} label={skill} mode="view" />
-              ),
+              (skill: string, index: number) =>
+                skill !== '' ? (
+                  <CustomChip key={index} label={skill} mode="view" />
+                ) : null,
             )}
           </View>
         </CardDetails>
@@ -49,6 +51,7 @@ const Skills = ({data}: Props) => {
           data={data}
           toggleModal={toggleModal}
           isVisible={shouldShowModal}
+          refresh={refresh}
         />
       </View>
     </>

@@ -1,9 +1,9 @@
 import React, {memo, useEffect, useState} from 'react';
 import {Keyboard, StyleSheet, View} from 'react-native';
-
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {useMutation, useQuery} from 'react-query';
 
 import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
@@ -12,24 +12,51 @@ import Button from '../../../components/button/button';
 
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
-import {skillsListData} from '../../../constant/userProfile';
+// import {skillsListData} from '../../../constant/userProfile';
 import {skillsType, updateSkillFormDataType} from '../../../types';
 import {flexStyles} from '../../../../styles';
 import CustomChip from '../../customChip';
 import skillsFormatter from '../../../utils/userProfile/skillsFormatter';
+import {
+  getAllSkillRequest,
+  updateSkillRequest,
+} from '../../../services/api/userProfile';
 
 const skills = ['p', 's', 't'];
 
 type Props = {
   defaultData?: skillsType;
   toggleModal: (value: boolean) => void;
+  refresh: () => void;
 };
 
 type setType = Set<string>;
 
-const UpdateSkillForm = ({defaultData, toggleModal}: Props) => {
+const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
   const [keyboardIsVisible, setKeyboardIsVisible] = useState<boolean>(false);
   const [otherSkillsStore, setOtherSkillsStore] = useState(new Set());
+  const {data} = useQuery({
+    queryKey: ['getskills'],
+    queryFn: getAllSkillRequest,
+    initialData: [],
+  });
+  const mutation = useMutation(updateSkillRequest, {
+    onSuccess: () => {
+      toggleModal(false);
+      resetField('primaryTechnicalSkill');
+      resetField('secondaryTechnicalSkill');
+      resetField('ternaryTechnicalSkill');
+      resetField('otherSkills');
+
+      refresh();
+    },
+    onError: () => {},
+  });
+
+  const skillsListData = data.map((item: string) => ({
+    label: item,
+    value: item,
+  }));
 
   useEffect(() => {
     if (defaultData) {
@@ -37,14 +64,19 @@ const UpdateSkillForm = ({defaultData, toggleModal}: Props) => {
         new Set(skillsFormatter(defaultData.otherSkills as string)),
       );
     }
-  }, []);
+  }, [defaultData]);
+
   const checkDuplicateSkill = (index: number) => {
     let flg: boolean = true;
 
-    if (otherSkillsStore.has(skills[index])) flg = false;
+    if (otherSkillsStore.has(skills[index])) {
+      flg = false;
+    }
 
     skills.forEach((skill: string, ind: number) => {
-      if (index !== ind && skill === skills[index]) flg = false;
+      if (index !== ind && skill === skills[index]) {
+        flg = false;
+      }
     });
 
     return flg;
@@ -144,11 +176,7 @@ const UpdateSkillForm = ({defaultData, toggleModal}: Props) => {
       otherSkills: otherSkills,
     };
 
-    toggleModal(false);
-    resetField('primaryTechnicalSkill');
-    resetField('secondaryTechnicalSkill');
-    resetField('ternaryTechnicalSkill');
-    resetField('otherSkills');
+    mutation.mutate(resData);
   };
 
   const handleOnSubmitEditing = (value: string | undefined) => {
@@ -348,7 +376,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#D0DDFF',
   },
   error: {
-    color: colors.ERROR,
+    color: colors.ERROR_RED,
     marginTop: 5,
   },
   btns: {

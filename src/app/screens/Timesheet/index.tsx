@@ -31,6 +31,7 @@ const TimesheetScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 20,
     marginHorizontal: sizes.CONTAINER_HORIZONTAL_MARGIN,
   },
 });
