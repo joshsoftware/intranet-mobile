@@ -47,7 +47,7 @@ export type UpdateSkillResponseBody = {};
 
 export const updateSkillRequest = async (payload: UpdateSkillRequestBody) => {
   const response = await apiCall<any, any>({
-    method: 'PUT',
+    method: 'POST',
     url: UPDATE_SKILL_ROUTE,
     data: payload,
   });
