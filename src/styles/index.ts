@@ -17,9 +17,8 @@ const flexStyles = StyleSheet.create({
 
 const borderStyles = StyleSheet.create({
   thinBorder: {
-    borderColor: colors.BORDER,
-    borderWidth: 1,
-    borderRadius: 5,
+    borderColor: colors.PRIMARY_DIVIDER,
+    borderBottomWidth: 1,
   },
 });
 
