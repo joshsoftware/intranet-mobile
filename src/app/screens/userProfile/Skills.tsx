@@ -6,11 +6,12 @@ import {View} from 'react-native-animatable';
 import CardDetails from '../../components/profile/cardDetails';
 import DetailsView from '../../components/profile/cardDetails/detailsView';
 import CustomChip from '../../components/customChip';
+import UpdateSkills from './components/updateSkills';
+import {SecondaryButton} from '../../components/button';
+
+import skillsFormatter from '../../utils/userProfile/skillsFormatter';
 
 import {skillsType} from '../../types';
-import UpdateSkills from './components/updateSkills';
-import Button from '../../components/button/button';
-import skillsFormatter from '../../utils/userProfile/skillsFormatter';
 
 type Props = {
   data: skillsType;
@@ -41,11 +42,10 @@ const Skills = ({data, refresh}: Props) => {
         </CardDetails>
       </ScrollView>
       <View style={styles.updateContainer}>
-        <Button
+        <SecondaryButton
           title="Update skills"
+          isLoading={false}
           onPress={() => toggleModal(true)}
-          style={styles.update}
-          textStyle={styles.updateTextStyle}
         />
         <UpdateSkills
           data={data}
@@ -62,17 +62,6 @@ const styles = StyleSheet.create({
   containerStyle: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  update: {
-    width: '50%',
-    alignSelf: 'center',
-    backgroundColor: '#FFFFFF',
-    borderColor: '#3069F6',
-    borderWidth: 1,
-    borderRadius: 20,
-  },
-  updateTextStyle: {
-    color: '#3069F6',
   },
   updateContainer: {
     flexDirection: 'column',

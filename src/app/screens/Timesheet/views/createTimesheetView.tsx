@@ -12,7 +12,7 @@ import Modal from '../../../components/modal';
 import TimesheetForm from '../components/timesheetForm';
 import Typography from '../../../components/typography';
 import SectionListTimesheet from '../components/sectionListTimesheet';
-import Button from '../../../components/button/button';
+import {PrimaryButton, SecondaryButton} from '../../../components/button';
 
 import {dateFormater} from '../../../utils/dateFormater';
 
@@ -179,9 +179,6 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
     toggleModal();
   };
 
-  const saveButtonStyle =
-    addedTimesheet.length === 0 ? styles.disabled : styles.save;
-
   return (
     <ScrollView>
       <Modal
@@ -223,17 +220,11 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
                 styles.btns,
                 styles.horizontalPad,
               ]}>
-              <Button
-                title="Cancel"
-                onPress={toggleModal}
-                textStyle={styles.btnText}
-                style={styles.cancel}
-              />
-              <Button
+              <SecondaryButton title="Cancel" onPress={toggleModal} />
+              <PrimaryButton
                 title="Save"
                 onPress={onSave}
                 disabled={addedTimesheet.length === 0}
-                style={saveButtonStyle}
               />
             </View>
           )}
@@ -283,7 +274,6 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   btns: {
-    height: '5%',
     alignSelf: 'flex-end',
     marginBottom: 10,
   },

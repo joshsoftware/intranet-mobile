@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
 
 import LoginForm from './LoginForm';
 import {useLogin} from './login.hooks';
 
 import colors from '../../constant/colors';
 import {JoshLogo} from '../../constant/icons';
+import {SecondaryButton} from '../../components/button';
 
 const LoginScreen = () => {
   const {googleSignInHandler, emailPasswordSignInHandler, isLoading} =
@@ -31,13 +25,11 @@ const LoginScreen = () => {
 
         <Text style={styles.orText}>Or</Text>
 
-        <TouchableOpacity
-          style={styles.googleSigninButton}
-          activeOpacity={0.5}
+        <SecondaryButton
+          title="Login With Google"
+          isLoading={isLoading}
           onPress={googleSignInHandler}
-          disabled={isLoading}>
-          <Text style={styles.googleSigninButtonText}>Login With Google</Text>
-        </TouchableOpacity>
+        />
       </ScrollView>
     </SafeAreaView>
   );

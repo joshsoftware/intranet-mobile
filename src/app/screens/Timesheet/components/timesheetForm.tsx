@@ -9,7 +9,11 @@ import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
 import DatePicker from '../../../components/pickers/datePicker';
 import Input from '../../../components/input';
-import Button from '../../../components/button/button';
+import {
+  PrimaryButton,
+  SecondaryButton,
+  TertiaryButton,
+} from '../../../components/button';
 
 import {TimesheetFormData} from '../interfaces';
 
@@ -175,23 +179,22 @@ const TimesheetForm = ({
         </>
       )}
       {isAddButtonVisible ? (
-        <Button
+        <TertiaryButton
           title="Add Timesheet"
+          isLoading={false}
           onPress={handleSubmit((data: any) => onSubmit(data, resetField))}
-          style={styles.addButton}
         />
       ) : (
         <View style={[flexStyles.horizontal, styles.btns]}>
-          <Button
+          <SecondaryButton
             title="Cancel"
             onPress={onCancel}
-            textStyle={styles.btnText}
-            style={styles.cancel}
+            isLoading={false}
           />
-          <Button
+          <PrimaryButton
             title="Update"
+            isLoading={false}
             onPress={handleSubmit((data: any) => onSubmit(data, resetField))}
-            style={styles.save}
           />
         </View>
       )}

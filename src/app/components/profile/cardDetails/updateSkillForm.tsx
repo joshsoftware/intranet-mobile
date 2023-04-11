@@ -8,7 +8,7 @@ import {useMutation, useQuery} from 'react-query';
 import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
 import Input from '../../input';
-import Button from '../../../components/button/button';
+import {PrimaryButton, SecondaryButton} from '../../button';
 
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
@@ -326,18 +326,12 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
 
       {!keyboardIsVisible && (
         <View style={[flexStyles.horizontal, styles.btns]}>
-          <Button
-            title="Cancel"
-            onPress={() => toggleModal(false)}
-            textStyle={styles.btnText}
-            style={styles.cancel}
-          />
-          <Button
+          <SecondaryButton title="Cancel" onPress={() => toggleModal(false)} />
+          <PrimaryButton
             title="save"
             onPress={handleSubmit((data: updateSkillFormDataType) =>
               onSave(data),
             )}
-            style={styles.save}
           />
         </View>
       )}

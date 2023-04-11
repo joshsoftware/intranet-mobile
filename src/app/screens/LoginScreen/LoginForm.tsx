@@ -1,16 +1,11 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import Input from '../../components/input';
+import {PrimaryButton} from '../../components/button';
 
 import {CHECK_EMAIL, CHECK_JOSHSOFTWARE_EMAIL} from '../../constant/regex';
 import {
@@ -100,20 +95,11 @@ const LoginForm = ({signIn, isLoading}: Props) => {
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        disabled={isLoading}
-        style={[
-          styles.loginButton,
-          isLoading ? styles.loginButtonDisabled : {},
-        ]}
-        activeOpacity={0.5}
-        onPress={handleSubmit(onSubmitHandler)}>
-        {isLoading ? (
-          <ActivityIndicator color="#ffffff" />
-        ) : (
-          <Text style={styles.loginButtonText}>Login</Text>
-        )}
-      </TouchableOpacity>
+      <PrimaryButton
+        title="Login"
+        isLoading={isLoading}
+        onPress={handleSubmit(onSubmitHandler)}
+      />
     </View>
   );
 };
@@ -131,20 +117,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 24,
     alignSelf: 'flex-end',
-  },
-  loginButton: {
-    backgroundColor: colors.PRIMARY,
-    padding: 12,
-    borderRadius: 22,
-    alignItems: 'center',
-  },
-  loginButtonText: {
-    color: colors.WHITE,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  loginButtonDisabled: {
-    opacity: 0.7,
   },
 });
 
