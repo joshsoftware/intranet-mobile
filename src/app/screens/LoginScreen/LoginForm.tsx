@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import Input from '../../components/input';
-import Button, {ButtonType} from '../../components/button';
+import Button from '../../components/button';
 
 import {CHECK_EMAIL, CHECK_JOSHSOFTWARE_EMAIL} from '../../constant/regex';
 import {
@@ -96,7 +96,7 @@ const LoginForm = ({signIn, isLoading}: Props) => {
       </TouchableOpacity>
 
       <Button
-        type={ButtonType.Primary}
+        type="primary"
         title="LOGIN"
         isLoading={isLoading}
         onPress={handleSubmit(onSubmitHandler)}

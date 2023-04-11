@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
 
 import LoginForm from './LoginForm';
-import Button, {ButtonType} from '../../components/button';
+import Button from '../../components/button';
 import {useLogin} from './login.hooks';
 
 import colors from '../../constant/colors';
@@ -26,7 +26,7 @@ const LoginScreen = () => {
         <Text style={styles.orText}>Or</Text>
 
         <Button
-          type={ButtonType.Secondary}
+          type="secondary"
           title="Login With Google"
           disabled={isLoading}
           onPress={googleSignInHandler}

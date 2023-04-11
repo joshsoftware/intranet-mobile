@@ -13,11 +13,7 @@ import {
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
 
-export enum ButtonType {
-  Primary = 'primary',
-  Secondary = 'secondary',
-  Tertiary = 'tertiary',
-}
+type ButtonType = 'primary' | 'secondary' | 'tertiary';
 
 interface Props {
   title: string;
@@ -36,12 +32,12 @@ const getButtonStyle = (
   let textStyle: StyleProp<TextStyle> = [styles.text];
 
   switch (type) {
-    case ButtonType.Secondary:
+    case 'secondary':
       style.push(styles.secondary);
       textStyle.push(styles.secondaryText);
       break;
 
-    case ButtonType.Tertiary:
+    case 'tertiary':
       style.push(styles.tertiary);
       break;
 
