@@ -11,20 +11,18 @@ interface Props {
   onPress: () => void;
 }
 
-const TabBarButton = (props: Props) => {
-  const Icon = props.icon;
-
+const TabBarButton = ({active, title, icon: Icon, onPress}: Props) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={props.onPress}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View
         style={[
           styles.iconContainer,
-          props.active ? styles.iconContainerActive : {},
+          active ? styles.iconContainerActive : {},
         ]}>
-        <Icon fill={props.active ? colors.WHITE : colors.SECONDARY} />
+        <Icon fill={active ? colors.WHITE : colors.SECONDARY} />
       </View>
-      <Text style={[styles.title, props.active ? styles.titleActive : {}]}>
-        {props.title}
+      <Text style={[styles.title, active ? styles.titleActive : {}]}>
+        {title}
       </Text>
     </TouchableOpacity>
   );
