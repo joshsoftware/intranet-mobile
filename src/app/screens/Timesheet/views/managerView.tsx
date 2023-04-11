@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 
 import Card from '../../../components/card';
-import Input from '../../../components/input/textInput';
+import InputBox from '../../../components/input';
 import DateRange from '../../../components/pickers/dateRange';
 import EmployeeCard from '../components/employeeCard';
 import Linear from '../../../components/seperator/linear';
@@ -49,9 +49,10 @@ const ManagerScreen = () => {
         startDate={startDate}
         endDate={endDate}
       />
-      <Input
+
+      <InputBox
         onChangeText={onTextChange}
-        startIcon={<Search />}
+        StartIcon={Search}
         value={input}
         placeholder="Search"
       />

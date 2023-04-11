@@ -10,7 +10,7 @@ import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import InputBox from '../../components/InputBox';
+import InputBox from '../../components/input';
 
 import {CHECK_EMAIL, CHECK_JOSHSOFTWARE_EMAIL} from '../../constant/regex';
 import {

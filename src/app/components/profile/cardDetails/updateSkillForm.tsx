@@ -7,7 +7,7 @@ import {useMutation, useQuery} from 'react-query';
 
 import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
-import Input from '../../../components/input/textInput';
+import InputBox from '../../input';
 import Button from '../../../components/button/button';
 
 import colors from '../../../constant/colors';
@@ -298,7 +298,7 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
           <Controller
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
-              <Input
+              <InputBox
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -307,7 +307,6 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
                 }}
                 placeholder="Type other skills here"
                 style={styles.item}
-                textStyle={styles.descText}
               />
             )}
             name="otherSkills"
@@ -354,12 +353,6 @@ const styles = StyleSheet.create({
   fieldStyle: {
     marginBottom: 15,
   },
-
-  descText: {
-    lineHeight: 20,
-    fontSize: 16,
-    textAlign: 'left',
-  },
   row: {
     justifyContent: 'space-between',
   },
@@ -374,6 +367,9 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderBottomWidth: 1,
     borderBottomColor: '#D0DDFF',
+    lineHeight: 20,
+    fontSize: 16,
+    textAlign: 'left',
   },
   error: {
     color: colors.ERROR_RED,

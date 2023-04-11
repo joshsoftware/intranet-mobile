@@ -9,7 +9,7 @@ import CreateTimesheet from './views/createTimesheetView';
 import sizes from '../../constant/sizes';
 
 const TimesheetScreen = () => {
-  const isManager = false;
+  const isManager = true;
 
   const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
