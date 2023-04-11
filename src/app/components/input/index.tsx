@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, Text, TextInput, TextInputProps, View} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Input;
+export default memo(Input);

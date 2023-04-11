@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo, useMemo} from 'react';
 import {
   TouchableOpacity,
   StyleSheet,
@@ -27,6 +27,37 @@ interface Props {
   onPress: ((event: GestureResponderEvent) => void) | undefined;
 }
 
+const getButtonStyle = (
+  type: ButtonType,
+  isLoading: boolean,
+  disabled: boolean,
+) => {
+  let style: StyleProp<ViewStyle> = [styles.button];
+  let textStyle: StyleProp<TextStyle> = [styles.text];
+
+  switch (type) {
+    case ButtonType.Secondary:
+      style.push(styles.secondary);
+      textStyle.push(styles.secondaryText);
+      break;
+
+    case ButtonType.Tertiary:
+      style.push(styles.tertiary);
+      break;
+
+    default:
+      // Default is primary
+      style.push(styles.primary);
+      break;
+  }
+
+  if (isLoading || disabled) {
+    style.push(styles.buttonDisabled);
+  }
+
+  return {style, textStyle};
+};
+
 const Button = ({
   title,
   type,
@@ -34,25 +65,10 @@ const Button = ({
   disabled = false,
   onPress,
 }: Props) => {
-  let style: StyleProp<ViewStyle> = [styles.button];
-  let textStyle: StyleProp<TextStyle> = [styles.text];
-
-  if (type === ButtonType.Primary) {
-    style.push(styles.primary);
-  }
-
-  if (type === ButtonType.Secondary) {
-    style.push(styles.secondary);
-    textStyle.push(styles.secondaryText);
-  }
-
-  if (type === ButtonType.Tertiary) {
-    style.push(styles.tertiary);
-  }
-
-  if (isLoading || disabled) {
-    style.push(styles.buttonDisabled);
-  }
+  const {style, textStyle} = useMemo(
+    () => getButtonStyle(type, isLoading, disabled),
+    [type, isLoading, disabled],
+  );
 
   return (
     <TouchableOpacity
@@ -102,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Button;
+export default memo(Button);
