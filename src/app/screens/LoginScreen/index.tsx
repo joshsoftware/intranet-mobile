@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
 
 import LoginForm from './LoginForm';
+import Button, {ButtonType} from '../../components/button';
 import {useLogin} from './login.hooks';
 
 import colors from '../../constant/colors';
@@ -31,13 +25,12 @@ const LoginScreen = () => {
 
         <Text style={styles.orText}>Or</Text>
 
-        <TouchableOpacity
-          style={styles.googleSigninButton}
-          activeOpacity={0.5}
+        <Button
+          type={ButtonType.Secondary}
+          title="Login With Google"
+          disabled={isLoading}
           onPress={googleSignInHandler}
-          disabled={isLoading}>
-          <Text style={styles.googleSigninButtonText}>Login With Google</Text>
-        </TouchableOpacity>
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -62,20 +55,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.TERTIARY_TEXT,
     paddingVertical: 20,
-  },
-
-  googleSigninButton: {
-    backgroundColor: colors.WHITE,
-    padding: 12,
-    borderRadius: 22,
-    alignItems: 'center',
-    borderColor: colors.PRIMARY,
-    borderWidth: 2,
-  },
-  googleSigninButtonText: {
-    color: colors.PRIMARY,
-    fontSize: 14,
-    fontWeight: '600',
   },
   orText: {
     fontSize: 12,

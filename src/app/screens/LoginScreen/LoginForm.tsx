@@ -1,16 +1,11 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import InputBox from '../../components/InputBox';
+import Input from '../../components/input';
+import Button, {ButtonType} from '../../components/button';
 
 import {CHECK_EMAIL, CHECK_JOSHSOFTWARE_EMAIL} from '../../constant/regex';
 import {
@@ -66,7 +61,7 @@ const LoginForm = ({signIn, isLoading}: Props) => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-          <InputBox
+          <Input
             placeholder="Email"
             onChangeText={onChange}
             onBlur={onBlur}
@@ -81,7 +76,7 @@ const LoginForm = ({signIn, isLoading}: Props) => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-          <InputBox
+          <Input
             placeholder="Password"
             onChangeText={onChange}
             onBlur={onBlur}
@@ -100,20 +95,12 @@ const LoginForm = ({signIn, isLoading}: Props) => {
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        disabled={isLoading}
-        style={[
-          styles.loginButton,
-          isLoading ? styles.loginButtonDisabled : {},
-        ]}
-        activeOpacity={0.5}
-        onPress={handleSubmit(onSubmitHandler)}>
-        {isLoading ? (
-          <ActivityIndicator color="#ffffff" />
-        ) : (
-          <Text style={styles.loginButtonText}>Login</Text>
-        )}
-      </TouchableOpacity>
+      <Button
+        type={ButtonType.Primary}
+        title="LOGIN"
+        isLoading={isLoading}
+        onPress={handleSubmit(onSubmitHandler)}
+      />
     </View>
   );
 };
