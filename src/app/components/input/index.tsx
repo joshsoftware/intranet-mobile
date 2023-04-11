@@ -7,23 +7,17 @@ import colors from '../../constant/colors';
 type Props = TextInputProps & {error?: string; StartIcon?: React.FC<SvgProps>};
 
 const Input = ({error, StartIcon, ...props}: Props) => {
-  let style = props.style;
-
-  if (style) {
-    if (Array.isArray(style)) {
-      style.push(styles.textInput);
-    } else {
-      style = [style, styles.textInput];
-    }
-  }
-
   return (
     <>
       <View style={[styles.container, error ? styles.errorStyle : {}]}>
         {StartIcon && (
           <StartIcon style={styles.startIcon} height={12} width={12} />
         )}
-        <TextInput {...props} style={style} placeholderTextColor="#C7C6C6" />
+        <TextInput
+          {...props}
+          style={StyleSheet.compose(props.style, styles.textInput)}
+          placeholderTextColor="#C7C6C6"
+        />
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}
     </>
