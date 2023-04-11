@@ -7,7 +7,7 @@ import {useMutation, useQuery} from 'react-query';
 
 import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
-import InputBox from '../../input';
+import Input from '../../input';
 import Button from '../../../components/button/button';
 
 import colors from '../../../constant/colors';
@@ -298,7 +298,7 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
           <Controller
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
-              <InputBox
+              <Input
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}

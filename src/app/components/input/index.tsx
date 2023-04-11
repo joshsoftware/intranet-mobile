@@ -1,12 +1,12 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, TextInputProps, View} from 'react-native';
+import {SvgProps} from 'react-native-svg';
 
 import colors from '../../constant/colors';
-import {SvgProps} from 'react-native-svg';
 
 type Props = TextInputProps & {error?: string; StartIcon?: React.FC<SvgProps>};
 
-const InputBox = ({error, StartIcon, ...props}: Props) => {
+const Input = ({error, StartIcon, ...props}: Props) => {
   let style = props.style;
 
   if (style) {
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InputBox;
+export default Input;

@@ -8,7 +8,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
 import DatePicker from '../../../components/pickers/datePicker';
-import InputBox from '../../../components/input';
+import Input from '../../../components/input';
 import Button from '../../../components/button/button';
 
 import {TimesheetFormData} from '../interfaces';
@@ -155,7 +155,7 @@ const TimesheetForm = ({
             <Controller
               control={control}
               render={({field: {onChange, onBlur, value}}) => (
-                <InputBox
+                <Input
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}

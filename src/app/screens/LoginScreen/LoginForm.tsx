@@ -10,7 +10,7 @@ import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import InputBox from '../../components/input';
+import Input from '../../components/input';
 
 import {CHECK_EMAIL, CHECK_JOSHSOFTWARE_EMAIL} from '../../constant/regex';
 import {
@@ -66,7 +66,7 @@ const LoginForm = ({signIn, isLoading}: Props) => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-          <InputBox
+          <Input
             placeholder="Email"
             onChangeText={onChange}
             onBlur={onBlur}
@@ -81,7 +81,7 @@ const LoginForm = ({signIn, isLoading}: Props) => {
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
-          <InputBox
+          <Input
             placeholder="Password"
             onChangeText={onChange}
             onBlur={onBlur}
