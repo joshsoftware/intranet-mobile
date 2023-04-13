@@ -2,6 +2,7 @@ import React from 'react';
 import {
   createBottomTabNavigator,
   BottomTabNavigationOptions,
+  BottomTabBarProps,
 } from '@react-navigation/bottom-tabs';
 import {StyleProp, ViewStyle} from 'react-native';
 
@@ -22,6 +23,7 @@ const MainTab = createBottomTabNavigator<MainTabParamList>();
 
 const screenOptions: BottomTabNavigationOptions = {
   header: () => <Header type="primary" />,
+  tabBarHideOnKeyboard: true,
 };
 
 const sceneContainerStyle: StyleProp<ViewStyle> = {
@@ -29,11 +31,13 @@ const sceneContainerStyle: StyleProp<ViewStyle> = {
   flex: 1,
 };
 
+const getTabBar = (props: BottomTabBarProps) => <TabBar {...props} />;
+
 const MainNavigator = () => {
   return (
     <MainTab.Navigator
       screenOptions={screenOptions}
-      tabBar={TabBar}
+      tabBar={getTabBar}
       sceneContainerStyle={sceneContainerStyle}>
       <MainTab.Screen name={HOME_SCREEN} component={HomeScreen} />
       <MainTab.Screen name={LEAVE_SCREEN} component={LeaveScreen} />
