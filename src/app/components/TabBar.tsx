@@ -6,7 +6,6 @@ import {
   BottomTabNavigationEventMap,
 } from '@react-navigation/bottom-tabs';
 import {SvgProps} from 'react-native-svg';
-import {type BottomTabDescriptorMap} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 
 import TabBarButton from './button/TabBarButton';
 import {useIsKeyboardShown} from '../hooks/useIsKeyboardShown';
@@ -29,12 +28,12 @@ const screenIcons: Record<keyof MainTabParamList, React.FC<SvgProps>> = {
   Timesheet: Clock,
 };
 
-function TabBar(props: BottomTabBarProps) {
+const TabBar = (props: BottomTabBarProps) => {
   const isKeyboardShown = useIsKeyboardShown();
 
   const state = props.state as StateType;
   const navigation = props.navigation as NavigationType;
-  const descriptors = props.descriptors as BottomTabDescriptorMap;
+  const descriptors = props.descriptors;
 
   const focusedRoute = state.routes[state.index];
   const focusedDescriptor = descriptors[focusedRoute.key];
@@ -92,7 +91,7 @@ function TabBar(props: BottomTabBarProps) {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
