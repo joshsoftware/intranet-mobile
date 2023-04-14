@@ -4,21 +4,21 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 
 import RootNavigator from './app/navigation/RootNavigator';
 
-import UserContext, {UserData} from './app/context/user.context';
+import GlobalContext, {GlobalContextData} from './app/context/global.context';
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const user = useState<UserData | null>(null);
+  const globalContextValue = useState<GlobalContextData | null>(null);
 
   return (
-    <UserContext.Provider value={user}>
+    <GlobalContext.Provider value={globalContextValue}>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
           <RootNavigator />
         </NavigationContainer>
       </QueryClientProvider>
-    </UserContext.Provider>
+    </GlobalContext.Provider>
   );
 };
 
