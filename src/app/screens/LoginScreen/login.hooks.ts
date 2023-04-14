@@ -3,13 +3,13 @@ import {Alert} from 'react-native';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 
-import GlobalContext, {UserData} from '../../context/global.context';
+import UserContext, {UserData} from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
 
 export const useLogin = () => {
-  const [, setGlobalData] = useContext(GlobalContext);
+  const [, setUserContextData] = useContext(UserContext);
 
   const mutation = useMutation(sendLoginRequest, {
     onSuccess: async response => {
@@ -24,7 +24,7 @@ export const useLogin = () => {
       await AsyncStore.setItem(AsyncStore.AUTH_TOKEN_KEY, authToken);
       await AsyncStore.setItem(AsyncStore.USER_DATA, JSON.stringify(userData));
 
-      setGlobalData({authToken, userData});
+      setUserContextData({authToken, userData});
     },
     onError: async (error: AxiosError<LoginResponseBody>) => {
       await googleSignOut();

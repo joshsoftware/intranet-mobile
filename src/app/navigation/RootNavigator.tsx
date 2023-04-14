@@ -9,7 +9,7 @@ import SplashScreen from '../screens/SplashScreen';
 import UserProfile from '../screens/userProfile';
 import MainNavigator from './MainNavigator';
 
-import GlobalContext from '../context/global.context';
+import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
 import {initNotificationService} from '../services/firebase/messaging';
 
@@ -27,7 +27,7 @@ const screenOptions: NativeStackNavigationOptions = {
 };
 
 const RootNavigator = () => {
-  const [globalData, setGlobalData] = useContext(GlobalContext);
+  const [userContextData, setUserContextData] = useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,9 +39,9 @@ const RootNavigator = () => {
       const userData = await AsyncStore.getItem(AsyncStore.USER_DATA);
 
       if (authToken === null || authToken === '' || userData === null) {
-        setGlobalData(null);
+        setUserContextData(null);
       } else {
-        setGlobalData({authToken, userData: JSON.parse(userData)});
+        setUserContextData({authToken, userData: JSON.parse(userData)});
       }
 
       await new Promise<void>(resolve => setTimeout(resolve, 1000));
@@ -50,7 +50,7 @@ const RootNavigator = () => {
     };
 
     run();
-  }, [setGlobalData]);
+  }, [setUserContextData]);
 
   if (loading) {
     return <SplashScreen />;
@@ -58,7 +58,7 @@ const RootNavigator = () => {
 
   return (
     <RootStack.Navigator screenOptions={screenOptions}>
-      {globalData ? (
+      {userContextData ? (
         <>
           <RootStack.Screen name={MAIN_SCREEN} component={MainNavigator} />
           <RootStack.Screen

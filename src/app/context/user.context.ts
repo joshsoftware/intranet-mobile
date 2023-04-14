@@ -7,18 +7,18 @@ export interface UserData {
   userId: string;
 }
 
-export interface GlobalContextData {
+export interface UserContextData {
   authToken: string;
   userData: UserData;
 }
 
 type ContextValue = [
-  GlobalContextData | null,
-  React.Dispatch<React.SetStateAction<GlobalContextData | null>>,
+  UserContextData | null,
+  React.Dispatch<React.SetStateAction<UserContextData | null>>,
 ];
 
 const defaultValue: ContextValue = [null, () => {}];
 
-const GlobalContext = React.createContext<ContextValue>(defaultValue);
+const UserContext = React.createContext<ContextValue>(defaultValue);
 
-export default GlobalContext;
+export default UserContext;

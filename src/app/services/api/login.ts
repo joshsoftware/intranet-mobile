@@ -4,7 +4,7 @@ import {AxiosResponse} from 'axios';
 import {apiCall} from '.';
 import {LOGIN_ROUTE} from '../../constant/apiRoutes';
 import {getNotificationToken} from '../firebase/messaging';
-import {UserRole} from '../../context/global.context';
+import {UserRole} from '../../context/user.context';
 
 type PayloadType = User | {email: string; password: string};
 
