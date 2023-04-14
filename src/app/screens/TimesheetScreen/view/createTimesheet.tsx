@@ -63,73 +63,76 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
     };
   }, []);
 
-  const onAdd = (data?: TimesheetFormData, resetField?: Function) => {
-    const reset = () => {
-      setFormDefaultData(undefined);
+  const onAdd = useCallback(
+    (data?: TimesheetFormData, resetField?: Function) => {
+      const reset = () => {
+        setFormDefaultData(undefined);
 
-      if (typeof resetField !== 'undefined') {
-        resetField('project');
-        resetField('date');
-        resetField('workHours');
-        resetField('description');
-      }
-      handlePress(false);
+        if (typeof resetField !== 'undefined') {
+          resetField('project');
+          resetField('date');
+          resetField('workHours');
+          resetField('description');
+        }
+        handlePress(false);
 
-      Keyboard.dismiss();
-    };
+        Keyboard.dismiss();
+      };
 
-    if (data) {
-      let isCategoryFound = false;
-      setAddedTimesheet(sections => {
-        sections.forEach(section => {
-          if (section.title === data.project) {
-            let isPresent = false;
-            isCategoryFound = true;
+      if (data) {
+        let isCategoryFound = false;
+        setAddedTimesheet(sections => {
+          sections.forEach(section => {
+            if (section.title === data.project) {
+              let isPresent = false;
+              isCategoryFound = true;
 
-            section.data.forEach(item => {
-              if (
-                item.timesheet_id ===
-                data.project + dateFormater(data.date)
-              ) {
-                isPresent = true;
-              }
-            });
-            if (isPresent) {
-              Alert.alert(strings.NOT_ALLOWED, strings.DUBLICATE_ENTRY_ERROR);
-            } else {
-              section.data.push({
-                timesheet_id: data.project + dateFormater(data.date),
-                date: dateFormater(data.date),
-                work_in_hours: data.workHours,
-                description: data.description,
+              section.data.forEach(item => {
+                if (
+                  item.timesheet_id ===
+                  data.project + dateFormater(data.date)
+                ) {
+                  isPresent = true;
+                }
               });
+              if (isPresent) {
+                Alert.alert(strings.NOT_ALLOWED, strings.DUBLICATE_ENTRY_ERROR);
+              } else {
+                section.data.push({
+                  timesheet_id: data.project + dateFormater(data.date),
+                  date: dateFormater(data.date),
+                  work_in_hours: data.workHours,
+                  description: data.description,
+                });
 
-              reset();
+                reset();
+              }
             }
-          }
-        });
-
-        if (!isCategoryFound) {
-          sections.push({
-            title: data.project,
-            data: [
-              {
-                timesheet_id: data.project + dateFormater(data.date),
-                date: dateFormater(data.date),
-                work_in_hours: data.workHours,
-                description: data.description,
-              },
-            ],
           });
 
-          reset();
-        }
-        return sections;
-      });
-    }
-  };
+          if (!isCategoryFound) {
+            sections.push({
+              title: data.project,
+              data: [
+                {
+                  timesheet_id: data.project + dateFormater(data.date),
+                  date: dateFormater(data.date),
+                  work_in_hours: data.workHours,
+                  description: data.description,
+                },
+              ],
+            });
 
-  const onDelete = (timesheetData: Timesheet) => {
+            reset();
+          }
+          return sections;
+        });
+      }
+    },
+    [handlePress],
+  );
+
+  const onDelete = useCallback((timesheetData: Timesheet) => {
     const list: {title: string; data: Timesheet[]}[] = [];
     setAddedTimesheet(sections =>
       sections.reduce((prevVal, currVal) => {
@@ -143,35 +146,38 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
         return prevVal;
       }, list),
     );
-  };
+  }, []);
 
-  const onEdit = (timesheetData: Timesheet) => {
-    const list: {title: string; data: Timesheet[]}[] = [];
+  const onEdit = useCallback(
+    (timesheetData: Timesheet) => {
+      const list: {title: string; data: Timesheet[]}[] = [];
 
-    setAddedTimesheet(sections =>
-      sections.reduce((prevVal, currVal) => {
-        const data = currVal.data.filter(item => {
-          if (item.timesheet_id !== timesheetData.timesheet_id) {
-            return true;
-          } else {
-            setFormDefaultData({
-              project: currVal.title,
-              date: new Date(item.date),
-              workHours: item.work_in_hours,
-              description: item.description,
-            });
-            handlePress(true);
-            return false;
+      setAddedTimesheet(sections =>
+        sections.reduce((prevVal, currVal) => {
+          const data = currVal.data.filter(item => {
+            if (item.timesheet_id !== timesheetData.timesheet_id) {
+              return true;
+            } else {
+              setFormDefaultData({
+                project: currVal.title,
+                date: new Date(item.date),
+                workHours: item.work_in_hours,
+                description: item.description,
+              });
+              handlePress(true);
+              return false;
+            }
+          });
+
+          if (data.length !== 0) {
+            prevVal.push({title: currVal.title, data: data});
           }
-        });
-
-        if (data.length !== 0) {
-          prevVal.push({title: currVal.title, data: data});
-        }
-        return prevVal;
-      }, list),
-    );
-  };
+          return prevVal;
+        }, list),
+      );
+    },
+    [handlePress],
+  );
 
   const onSave = () => {
     // TO DO API CALL
