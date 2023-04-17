@@ -87,13 +87,11 @@ const CreateTimesheet = ({toggleModal, isVisible}: Props) => {
               let isPresent = false;
               isCategoryFound = true;
 
-              section.data.forEach(item => {
-                if (
+              const isTimesheetPresent = section.data.find(item => {
+                return (
                   item.timesheet_id ===
                   data.project + dateFormater(data.date)
-                ) {
-                  isPresent = true;
-                }
+                )
               });
               if (isPresent) {
                 Alert.alert(strings.NOT_ALLOWED, strings.DUBLICATE_ENTRY_ERROR);
