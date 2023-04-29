@@ -1,4 +1,4 @@
-package com.intranet;
+package com.joshsoftware.intranet;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

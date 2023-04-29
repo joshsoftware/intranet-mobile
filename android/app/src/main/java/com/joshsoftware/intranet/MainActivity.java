@@ -1,4 +1,4 @@
-package com.intranet;
+package com.joshsoftware.intranet;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

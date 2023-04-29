@@ -3,6 +3,8 @@ import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 import {API_BASE_URL} from '@env';
 import AsyncStore from '../asyncStorage';
 
+console.log(API_BASE_URL);
+
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
