@@ -1,9 +1,6 @@
 apply plugin: "com.android.application"
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 apply plugin: "com.facebook.react"
 apply plugin: "com.google.gms.google-services"
-
-import com.android.build.OutputFile
 
 project.ext.envConfigFiles = [
     proddebug: ".env.prod",
@@ -13,6 +10,11 @@ project.ext.envConfigFiles = [
     stagerelease: ".env.stage",
     stagedebug: ".env.stage"
 ]
+
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
+import com.android.build.OutputFile
+
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -153,7 +155,6 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
-            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
