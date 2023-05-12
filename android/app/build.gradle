@@ -1,8 +1,18 @@
 apply plugin: "com.android.application"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 apply plugin: "com.facebook.react"
 apply plugin: "com.google.gms.google-services"
 
 import com.android.build.OutputFile
+
+project.ext.envConfigFiles = [
+    proddebug: ".env.prod",
+    prodrelease: ".env.prod",
+    devrelease: ".env.dev",
+    devdebug: ".env.dev",
+    stagerelease: ".env.stage",
+    stagedebug: ".env.stage"
+]
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -94,6 +104,27 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            minSdkVersion rootProject.ext.minSdkVersion
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.intranet"
+        }
+        stage {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationIdSuffix ".stage"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.intranet"
+        }
+        dev {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationIdSuffix ".dev"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.intranet"
+        }
+    }
+
     namespace "com.intranet"
     defaultConfig {
         applicationId "com.intranet"
@@ -122,6 +153,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.

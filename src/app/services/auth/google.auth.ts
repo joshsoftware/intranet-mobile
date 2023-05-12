@@ -4,10 +4,10 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 
-import {WEB_CLIENT_ID} from '@env';
+import Config from 'react-native-config';
 
 GoogleSignin.configure({
-  webClientId: WEB_CLIENT_ID,
+  webClientId: Config.WEB_CLIENT_ID,
 });
 
 export const googleSignIn = async () => {
