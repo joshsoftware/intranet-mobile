@@ -111,25 +111,25 @@ android {
         prod {
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "com.intranet"
+            resValue "string", "build_config_package", "com.joshsoftware.intranet"
         }
         stage {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationIdSuffix ".stage"
             targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "com.intranet"
+            resValue "string", "build_config_package", "com.joshsoftware.intranet"
         }
         dev {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationIdSuffix ".dev"
             targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "com.intranet"
+            resValue "string", "build_config_package", "com.joshsoftware.intranet"
         }
     }
 
-    namespace "com.intranet"
+    namespace "com.joshsoftware.intranet"
     defaultConfig {
-        applicationId "com.intranet"
+        applicationId "com.joshsoftware.intranet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
