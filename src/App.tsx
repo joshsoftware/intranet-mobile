@@ -5,6 +5,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import RootNavigator from './app/navigation/RootNavigator';
 
 import UserContext, {UserContextData} from './app/context/user.context';
+import {navigationRef} from './app/navigation';
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,7 @@ const App = () => {
   return (
     <UserContext.Provider value={userContextValue}>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           <RootNavigator />
         </NavigationContainer>
       </QueryClientProvider>
