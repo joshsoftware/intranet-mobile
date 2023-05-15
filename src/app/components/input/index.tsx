@@ -14,9 +14,9 @@ const Input = ({error, StartIcon, ...props}: Props) => {
           <StartIcon style={styles.startIcon} height={12} width={12} />
         )}
         <TextInput
+          style={StyleSheet.compose(styles.textInput, props.style)}
+          placeholderTextColor={colors.PLACEHOLDER_TEXT}
           {...props}
-          style={StyleSheet.compose(props.style, styles.textInput)}
-          placeholderTextColor="#C7C6C6"
         />
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -30,11 +30,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: 16,
     marginBottom: 9,
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     color: colors.TERTIARY_TEXT,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
     borderBottomWidth: 1,
     borderBottomColor: colors.TEXT_INPUT_BORDER,
   },
