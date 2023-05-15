@@ -1,49 +1,48 @@
 import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
 
+import Touchable from '../../../components/touchable';
 import Typography from '../../../components/typography';
 
-import {Arrow} from '../../../constant/icons';
+import {navigate} from '../../../navigation';
 
-import {flexStyles} from '../../../../styles';
+import {Arrow} from '../../../constant/icons';
+import {USER_TIMESHEET} from '../../../constant/screenNames';
 
 type Props = {
   name: string;
   email: string;
-  isArrowVisible?: boolean;
+  userId: string;
 };
 
-const EmployeeCard = ({name, email, isArrowVisible = true}: Props) => (
-  <View style={[flexStyles.horizontal, styles.main]}>
-    <View>
-      <Typography type="header" style={styles.empName}>
-        {name}
-      </Typography>
-      <Typography type="description" style={styles.empEmail}>
-        {email}
-      </Typography>
-    </View>
-    {isArrowVisible ? <Arrow style={styles.arrow} /> : <></>}
-  </View>
-);
+const EmployeeCard = ({name, email, userId}: Props) => {
+  const handleNavigation = () =>
+    navigate(USER_TIMESHEET, {name, email, user_id: userId});
+
+  return (
+    <Touchable type="native" onPress={handleNavigation}>
+      <View style={styles.main}>
+        <View>
+          <Typography type="header" style={styles.empName}>
+            {name}
+          </Typography>
+          <Typography type="description">{email}</Typography>
+        </View>
+        <Arrow />
+      </View>
+    </Touchable>
+  );
+};
 
 const styles = StyleSheet.create({
   empName: {
-    margin: 12,
-    marginBottom: 6,
-  },
-  empEmail: {
-    marginStart: 12,
-    marginBottom: 12,
-  },
-  arrow: {
-    marginEnd: 10,
+    paddingBottom: 7,
   },
   main: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 5,
+    padding: 16,
   },
 });
 

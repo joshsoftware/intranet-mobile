@@ -1,128 +1,100 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useQuery} from 'react-query';
-import {useNavigation} from '@react-navigation/native';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import EmployeeCard from '../component/employeeCard';
 import Input from '../../../components/input';
 import DateRange from '../../../components/pickers/dateRange';
 import Linear from '../../../components/seperator/linear';
 import EmptyList from '../component/emptyList';
-import ErrorMessage from '../../../components/errorMessage';
+import {useEmployees} from '../timesheet.hooks';
 
-import {getEmployeeListRequest} from '../../../services/timesheet/getEmployeeList';
-import {dateFormater} from '../../../utils/dateFormater';
-
-import {Employee} from '../interface';
-import {MainScreenNavigationProp} from '../../../navigation/types';
+import {startOfMonth, todaysDate} from '../../../utils/date';
 
 import {Calendar, Search} from '../../../constant/icons';
-import sizes from '../../../constant/sizes';
-import {USER_TIMESHEET} from '../../../constant/screenNames';
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
 
-import {flexStyles} from '../../../../styles';
-
-type Props = {
-  item: Employee;
+type DateRangeProps = {
+  startDate: Date;
+  endDate: Date;
 };
 
-const seperator = () => <Linear />;
-const footer = () => <Linear />;
+type RenderItemProps = {
+  name: string;
+  email: string;
+  user_id: string;
+};
+
 const emptyComponent = () => (
   <EmptyList message={strings.EMPLOYEE_LIST_ERROR} />
 );
+
 const searchIcon = () => <Search style={styles.icon} />;
 
 const EmployeeList = () => {
-  const newDate = useMemo(() => new Date(), []);
-  const startOfMonth = useMemo(
-    () => new Date(newDate.getFullYear(), newDate.getMonth(), 1),
-    [newDate],
-  );
-  const [dateRange, setDateRange] = useState<{
-    start_date: string;
-    end_date: string;
-  }>({start_date: dateFormater(startOfMonth), end_date: dateFormater(newDate)});
-
-  const {data, isFetching, refetch, isRefetching} = useQuery(
-    ['employee', dateRange],
-    () =>
-      getEmployeeListRequest({
-        from_date: dateRange.start_date,
-        to_date: dateRange.end_date,
-      }),
-  );
-
   const [isDateRangeApplied, setIsDateRangeApplied] = useState(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [filterData, setFilterData] = useState<Employee[]>();
-  const navigation = useNavigation<MainScreenNavigationProp>();
+  const [searchText, setSearchText] = useState<string>('');
+  const [dateRange, setDateRange] = useState<DateRangeProps>({
+    startDate: startOfMonth,
+    endDate: todaysDate,
+  });
 
-  const toggelDatePicker = useCallback(() => setIsVisible(v => !v), []);
-
-  const onDateRangeSubmit = useCallback(
-    (startDate?: Date, endDate?: Date) => {
-      if (startDate && endDate) {
-        setIsDateRangeApplied(true);
-        setDateRange({
-          start_date: dateFormater(startDate),
-          end_date: dateFormater(endDate),
-        });
-      } else {
-        setIsDateRangeApplied(false);
-        setDateRange({
-          start_date: dateFormater(startOfMonth),
-          end_date: dateFormater(newDate),
-        });
-      }
-    },
-    [newDate, startOfMonth],
+  const {data, isLoading, refetch} = useEmployees(
+    dateRange.startDate,
+    dateRange.endDate,
   );
 
-  const filterEmployee = useCallback(
-    (text: string) => {
-      const newData = data?.data.data.filter(
-        value =>
-          value.email.toLowerCase().startsWith(text.toLowerCase()) ||
-          value.name.toLowerCase().startsWith(text.toLowerCase()),
-      );
-      setFilterData(newData);
-    },
-    [data?.data],
-  );
+  const toggelDatePicker = () => setIsVisible(v => !v);
+
+  // on date range change
+  const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
+    if (startDate && endDate) {
+      setIsDateRangeApplied(true);
+      setDateRange({startDate, endDate});
+    } else {
+      setIsDateRangeApplied(false);
+      setDateRange({
+        startDate: startOfMonth,
+        endDate: todaysDate,
+      });
+    }
+  }, []);
+
+  // filter out employee list basis of searched text
+  const employeeList = useMemo(() => {
+    if (searchText) {
+      const text = searchText.toLowerCase();
+      return data?.filter(({name}) => name.toLowerCase().includes(text));
+    }
+    return data;
+  }, [data, searchText]);
 
   const renderItem = useCallback(
-    ({item}: Props) => {
-      const handleNavigation = () => {
-        navigation.navigate(USER_TIMESHEET, item);
-      };
-      return (
-        <TouchableOpacity key={item.name} onPress={handleNavigation}>
-          <EmployeeCard name={item.name} email={item.email} />
-        </TouchableOpacity>
-      );
+    ({item: {name, email, user_id}}: ListRenderItemInfo<RenderItemProps>) => {
+      return <EmployeeCard name={name} email={email} userId={user_id} />;
     },
-    [navigation],
+    [],
   );
 
-  return data?.data.code === 401 ? (
-    <View style={flexStyles.center}>
-      <ErrorMessage message={data?.data.message} />
-    </View>
-  ) : (
+  return (
     <View style={styles.main}>
       <DateRange
         onSubmit={onDateRangeSubmit}
         isVisible={isVisible}
         toggleModal={toggelDatePicker}
         initialStartDateValue={startOfMonth}
-        initialEndDateValue={newDate}
+        initialEndDateValue={todaysDate}
       />
       <View style={styles.filter}>
         <Input
-          onChangeText={filterEmployee}
+          onChangeText={setSearchText}
           StartIcon={searchIcon}
           placeholder="Search"
           style={styles.input}
@@ -138,13 +110,13 @@ const EmployeeList = () => {
       </View>
 
       <FlatList
-        data={filterData ? filterData : data?.data.data}
+        data={employeeList}
         renderItem={renderItem}
         keyExtractor={item => item.user_id}
-        ItemSeparatorComponent={seperator}
-        refreshing={isFetching || isRefetching}
+        ItemSeparatorComponent={Linear}
+        refreshing={isLoading}
         onRefresh={refetch}
-        ListFooterComponent={footer}
+        ListFooterComponent={Linear}
         ListEmptyComponent={emptyComponent}
       />
     </View>
@@ -153,8 +125,7 @@ const EmployeeList = () => {
 
 const styles = StyleSheet.create({
   main: {
-    marginHorizontal: sizes.CONTAINER_HORIZONTAL_MARGIN,
-    height: '100%',
+    flex: 1,
   },
   footer: {
     marginBottom: 100,
@@ -163,13 +134,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
   input: {
-    width: '85%',
     textAlignVertical: 'center',
+    width: '85%',
   },
   icon: {
-    margin: 6,
+    marginRight: 6,
   },
 });
 

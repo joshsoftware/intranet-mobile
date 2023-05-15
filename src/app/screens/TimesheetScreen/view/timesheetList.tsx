@@ -11,11 +11,8 @@ import {useMutation, useQuery} from 'react-query';
 import DateRange from '../../../components/pickers/dateRange';
 import SectionListTimesheet from '../component/sectionListTimesheet';
 import EditTimesheetModal from '../component/editTimesheetModal';
-import EmployeeCard from '../component/employeeCard';
 import Typography from '../../../components/typography';
 import Header from '../../../components/header';
-import CreateTimesheet from './createTimesheet';
-import FloatingActionButton from '../../../components/button/floatingActionButton';
 import ErrorMessage from '../../../components/errorMessage';
 
 import {dateFormater} from '../../../utils/dateFormater';
@@ -53,12 +50,10 @@ const TimesheetList = ({route}: Props) => {
   const [isDateRangeApplied, setIsDateRangeApplied] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editTimesheetData, setEditTimesheetData] = useState<Timesheet>();
-  const [isCreateModalvisible, setisCreateModalvisible] = useState(false);
   const [dateRange, setDateRange] = useState<{
     start_date: string;
     end_date: string;
   }>({start_date: dateFormater(startOfMonth), end_date: dateFormater(newDate)});
-  // const [page, setPage] = useState(0);
 
   const {data, isFetching, refetch, isRefetching} = useQuery(
     [
@@ -72,7 +67,6 @@ const TimesheetList = ({route}: Props) => {
         user_id: route
           ? route.params.user_id
           : userContextData?.userData.userId + '',
-        // page_number: 1,
         from_date: dateRange.start_date,
         to_date: dateRange.end_date,
       }),
@@ -102,17 +96,7 @@ const TimesheetList = ({route}: Props) => {
     () => setIsDateRangeVisible(v => !v),
     [],
   );
-  const toggleCreateModal = useCallback(() => {
-    setisCreateModalvisible(v => !v);
-    refetch();
-  }, [refetch]);
 
-  // const increasePage = () => {
-  //   setPage(p => p + 1);
-  // };
-  // const decreasePage = () => {
-  //   setPage(p => p - 1);
-  // };
   const onDateRangeSubmit = useCallback(
     (startDate?: Date, endDate?: Date) => {
       if (startDate && endDate) {
@@ -204,11 +188,12 @@ const TimesheetList = ({route}: Props) => {
           />
         </TouchableOpacity>
         {route ? (
-          <EmployeeCard
-            name={route?.params?.name + ''}
-            email={route?.params?.email + ''}
-            isArrowVisible={false}
-          />
+          <View style={{paddingHorizontal: 16, paddingVertical: 8}}>
+            <Typography type="header" style={{paddingBottom: 6}}>
+              {route?.params?.name}
+            </Typography>
+            <Typography type="description">{route?.params?.email}</Typography>
+          </View>
         ) : (
           <></>
         )}
@@ -246,7 +231,6 @@ const TimesheetList = ({route}: Props) => {
           onRefresh={refetch}
           emptyListMessage={strings.NO_TIMESHEET_PRESENT}
           isDeleteVisible={userContextData?.userData.role === 'Manager'}
-          // onEndReached={increasePage}
         />
 
         {data?.data.message && <ErrorMessage message={data?.data.message} />}
@@ -266,18 +250,6 @@ const TimesheetList = ({route}: Props) => {
         ) : (
           <></>
         )}
-
-        <FloatingActionButton onPress={toggleCreateModal} />
-
-        <CreateTimesheet
-          toggleModal={toggleCreateModal}
-          isVisible={isCreateModalvisible}
-          userId={
-            route ? route.params.user_id : userContextData?.userData.userId + ''
-          }
-          current_user={userContextData?.userData.userId + ''}
-          dateRange={dateRange}
-        />
       </View>
     </Fragment>
   );

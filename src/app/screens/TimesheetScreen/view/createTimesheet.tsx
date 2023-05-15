@@ -33,10 +33,6 @@ type Props = {
   toggleModal: () => void;
   userId: string;
   current_user: string;
-  dateRange: {
-    start_date: string;
-    end_date: string;
-  };
 };
 
 type CreateTimesheetDataprop = {
@@ -49,7 +45,6 @@ const CreateTimesheet = ({
   isVisible,
   userId,
   current_user,
-  dateRange,
 }: Props) => {
   const [addedTimesheet, setAddedTimesheet] = useState<
     Array<{
@@ -89,12 +84,10 @@ const CreateTimesheet = ({
           time_sheets_attributes: time_sheets_data,
           user_id: userId,
           current_user: current_user,
-          from_date: dateRange.start_date,
-          to_date: dateRange.end_date,
         },
       });
     },
-    [current_user, dateRange.end_date, dateRange.start_date, userId],
+    [current_user, userId],
   );
 
   const mutation = useMutation({
@@ -303,7 +296,6 @@ const styles = StyleSheet.create({
   },
   horizontalPad: {
     paddingHorizontal: 16,
-    // flex: 1
     width: '100%',
   },
 });

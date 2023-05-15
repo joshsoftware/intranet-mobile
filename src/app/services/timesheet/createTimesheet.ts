@@ -17,8 +17,6 @@ export type CreateTimesheetRequestBody = {
     time_sheets_attributes: any;
     user_id: string;
     current_user: string;
-    from_date: string;
-    to_date: string;
   };
 };
 
