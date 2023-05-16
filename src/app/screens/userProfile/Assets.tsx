@@ -1,9 +1,9 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
 
 import DetailsCard from '../../components/profile/cardDetails';
 import AssetView from '../../components/profile/assets/assetView';
 import ErrorMessage from '../../components/errorMessage';
+import ScreenWrapper from './components/ScreenWrapper';
 
 import {AssetType} from '../../types';
 import {NO_CURRENT_ASSETS, NO_PREVIOUS_ASSETS} from '../../constant/message';
@@ -20,7 +20,7 @@ type Props = {
 
 const Asset = ({data}: Props) => {
   return (
-    <ScrollView>
+    <ScreenWrapper>
       <DetailsCard title="Current Assets">
         {data.currentAsset?.length ? (
           <AssetView labels={currentAssetsLabels} assets={data.currentAsset} />
@@ -39,7 +39,7 @@ const Asset = ({data}: Props) => {
           <ErrorMessage message={NO_PREVIOUS_ASSETS} />
         )}
       </DetailsCard>
-    </ScrollView>
+    </ScreenWrapper>
   );
 };
 

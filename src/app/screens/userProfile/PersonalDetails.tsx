@@ -1,8 +1,8 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
 
 import CardDetails from '../../components/profile/cardDetails';
 import DetailsView from '../../components/profile/cardDetails/detailsView';
+import ScreenWrapper from './components/ScreenWrapper';
 
 import labelFormatter from '../../utils/userProfile/labelFormatter';
 
@@ -11,20 +11,20 @@ import {
   emergencyContactDetailsType,
   personalDetailsType,
 } from '../../types';
-import colors from '../../constant/colors';
 
 type dataType = {
   personalDetail: personalDetailsType;
   emergencyContactDetails: emergencyContactDetailsType[];
   address: addressType[];
 };
+
 type Props = {
   data: dataType;
 };
 
 const PersonalDetails = ({data}: Props) => {
   return (
-    <ScrollView style={{backgroundColor: colors.WHITE}}>
+    <ScreenWrapper>
       {Object.entries(data).map(([key, content], index: number) => {
         if (key === 'address') {
           return (content as addressType[])?.map(
@@ -50,7 +50,7 @@ const PersonalDetails = ({data}: Props) => {
           </CardDetails>
         );
       })}
-    </ScrollView>
+    </ScreenWrapper>
   );
 };
 

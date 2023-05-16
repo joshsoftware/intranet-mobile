@@ -1,11 +1,12 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 
 import DetailsView from '../../components/profile/cardDetails/detailsView';
 import CardDetails from '../../components/profile/cardDetails';
 import CustomAccordian from '../../components/customAccordian';
 import Typography from '../../components/typography';
 import ErrorMessage from '../../components/errorMessage';
+import ScreenWrapper from './components/ScreenWrapper';
 
 import labelFormatter from '../../utils/userProfile/labelFormatter';
 
@@ -16,7 +17,6 @@ import {
   otherDetailsType,
   projectType,
 } from '../../types';
-import colors from '../../constant/colors';
 import {NO_DETAILS_FOUND} from '../../constant/message';
 
 type dataType = {
@@ -33,8 +33,9 @@ type Props = {
 };
 const EmployeeDetails = ({data}: Props) => {
   const dataArray = Object.entries(data);
+
   return (
-    <ScrollView style={{backgroundColor: colors.WHITE}}>
+    <ScreenWrapper>
       {dataArray.map(([key, content], index: number) => {
         return key === 'currentProjects' || key === 'previousProjects' ? (
           <CardDetails title={labelFormatter(key)} key={index}>
@@ -61,7 +62,7 @@ const EmployeeDetails = ({data}: Props) => {
           </View>
         );
       })}
-    </ScrollView>
+    </ScreenWrapper>
   );
 };
 

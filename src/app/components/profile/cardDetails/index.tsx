@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.TERNARY_BACKGROUND,
     flexDirection: 'column',
     padding: 16,
+    elevation: 5,
   },
   title: {
     fontFamily: fonts.ARIAL_BOLD,
