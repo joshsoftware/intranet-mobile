@@ -1,10 +1,11 @@
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Employee} from '../../app/screens/TimesheetScreen/interface';
 
-export type RootStackParamList = {
+export type RootDrawerParamList = {
   Login: undefined;
   UserTimesheet: Employee;
-  Drawer: undefined;
+  Dashboard: undefined;
+  Profile: undefined;
 };
 
 export type MainTabParamList = {
@@ -18,9 +19,9 @@ export type DrawerParamList = {
   UserProfile: undefined;
 };
 
-export type MainScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'Drawer'
+export type MainScreenNavigationProp = DrawerNavigationProp<
+  RootDrawerParamList,
+  'Dashboard'
 >;
 
 export type Navigation = {

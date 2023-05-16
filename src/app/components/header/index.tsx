@@ -6,6 +6,7 @@ import {MainScreenNavigationProp} from '../../navigation/types';
 
 import {Arrow, JoshLogo, Profile} from '../../constant/icons';
 import colors from '../../constant/colors';
+import {USER_PROFILE_SCREEN} from '../../constant/screenNames';
 
 interface Props {
   type: 'primary' | 'secondary';
@@ -16,10 +17,6 @@ interface Props {
 const Header = ({type, title, isRightButtonVisible}: Props) => {
   const navigation = useNavigation<MainScreenNavigationProp>();
 
-  const toggleDrawer = () => {
-    navigation.dispatch(DrawerActions.toggleDrawer());
-  };
-
   const goBack = () => {
     navigation.goBack();
   };
@@ -29,7 +26,9 @@ const Header = ({type, title, isRightButtonVisible}: Props) => {
       return (
         <View style={styles.container}>
           <JoshLogo height={18} width={85} fill={colors.WHITE} />
-          <TouchableOpacity activeOpacity={0.5} onPress={toggleDrawer}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => navigation.navigate(USER_PROFILE_SCREEN)}>
             <Profile height={18} width={18} fill={colors.WHITE} />
           </TouchableOpacity>
         </View>
@@ -49,7 +48,9 @@ const Header = ({type, title, isRightButtonVisible}: Props) => {
             <Text style={styles.backText}>{title}</Text>
           </View>
           {isRightButtonVisible ? (
-            <TouchableOpacity activeOpacity={0.5} onPress={toggleDrawer}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate(USER_PROFILE_SCREEN)}>
               <Profile height={18} width={18} fill={colors.WHITE} />
             </TouchableOpacity>
           ) : (
