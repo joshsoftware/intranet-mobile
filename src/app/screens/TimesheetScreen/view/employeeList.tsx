@@ -11,14 +11,12 @@ import EmployeeCard from '../component/employeeCard';
 import Input from '../../../components/input';
 import DateRange from '../../../components/pickers/dateRange';
 import Linear from '../../../components/seperator/linear';
-import EmptyList from '../component/emptyList';
 import {useEmployees} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
 
 import {Calendar, Search} from '../../../constant/icons';
 import colors from '../../../constant/colors';
-import strings from '../../../constant/strings';
 
 type DateRangeProps = {
   startDate: Date;
@@ -30,10 +28,6 @@ type RenderItemProps = {
   email: string;
   user_id: string;
 };
-
-const emptyComponent = () => (
-  <EmptyList message={strings.EMPLOYEE_LIST_ERROR} />
-);
 
 const searchIcon = () => <Search style={styles.icon} />;
 
@@ -117,7 +111,6 @@ const EmployeeList = () => {
         refreshing={isLoading}
         onRefresh={refetch}
         ListFooterComponent={Linear}
-        ListEmptyComponent={emptyComponent}
       />
     </View>
   );
