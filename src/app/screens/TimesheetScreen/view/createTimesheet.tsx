@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   Keyboard,
@@ -46,6 +46,8 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
   const isKeyboardVisible = useIsKeyboardShown();
 
+  const {mutate, isSuccess, isLoading} = useAddTimesheet();
+
   // This logic need to more optimize with changing API structure
   const mutationFunc = useCallback((data: CreateTimesheetDataprop[]) => {
     const time_sheets_data: any = {};
@@ -62,8 +64,6 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
 
     return time_sheets_data;
   }, []);
-
-  const {mutate, isLoading} = useAddTimesheet();
 
   const onSave = () => {
     mutate(mutationFunc(addedTimesheet));
@@ -152,6 +152,19 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
     });
   };
 
+  const resetStates = useCallback(() => {
+    setAddedTimesheet([]);
+    setFormDefaultData(undefined);
+    setIsFormVisible(true);
+    toggleModal();
+  }, [toggleModal]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetStates();
+    }
+  }, [isSuccess, resetStates]);
+
   return (
     <Modal
       isVisible={isVisible}
@@ -190,13 +203,13 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
 
       {!isKeyboardVisible && (
         <View style={styles.btns}>
-          <Button title="Cancel" type="secondary" onPress={toggleModal} />
+          <Button title="Cancel" type="secondary" onPress={resetStates} />
           <Button
             title="Save"
             type="primary"
             onPress={onSave}
             isLoading={isLoading}
-            disabled={addedTimesheet.length === 0}
+            disabled={!addedTimesheet.length}
           />
         </View>
       )}
