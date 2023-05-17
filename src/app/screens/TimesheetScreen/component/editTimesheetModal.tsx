@@ -1,24 +1,22 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useMutation} from 'react-query';
 
 import Modal from '../../../components/modal';
 import TimesheetForm from '../component/timesheetForm';
 import Typography from '../../../components/typography';
+import {useEditTimesheet} from '../timesheet.hooks';
 
-import {updateTimesheetRequest} from '../../../services/timesheet/updateTimesheet';
+import {convertToMins, dateFormate} from '../../../utils/date';
 
 import {Timesheet} from '../interface';
-
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
-import {timeConversion} from '../../../constant/timesheet';
-import strings from '../../../constant/strings';
-import bottomToast from '../../../utils/toast';
+import {ISO_DATE_FROMAT} from '../../../constant/date';
 
 type Props = {
   isVisible: boolean;
   toggleModal: () => void;
+  refetch: Function;
   userId: string;
   current_user: string;
   formData?: Timesheet;
@@ -26,44 +24,40 @@ type Props = {
 
 const EditTimesheetModal = ({
   toggleModal,
+  refetch,
   formData,
   isVisible,
   userId,
   current_user,
 }: Props) => {
-  const mutationFunc = (data: Timesheet) =>
-    updateTimesheetRequest({
+  const {mutate, isLoading, isSuccess} = useEditTimesheet();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toggleModal();
+      refetch();
+    }
+  }, [isSuccess, refetch, toggleModal]);
+
+  const onEditSave = (data: Timesheet) => {
+    console.log(1);
+
+    mutate({
       user: {
         time_sheets_attributes: {
           1: {
             project_id: parseInt(data?.project + '', 10),
-            date: data.date,
-            duration:
-              timeConversion[data.work_in_hours as keyof typeof timeConversion],
+            date: dateFormate(data.date, ISO_DATE_FROMAT),
+            duration: convertToMins(data.work_in_hours),
             description: data.description,
             id: data.timesheet_id,
           },
         },
       },
-
       user_id: userId,
       current_user: current_user,
       time_sheet_date: formData?.date + '',
     });
-
-  const mutation = useMutation({
-    mutationFn: mutationFunc,
-    onSuccess: data => {
-      toggleModal();
-      bottomToast(data.data.message);
-    },
-    onError: () => {
-      bottomToast(strings.EDIT_ERROR, true);
-    },
-  });
-
-  const onEditSave = (data: Timesheet) => {
-    mutation.mutate(data);
   };
 
   return (
@@ -80,15 +74,14 @@ const EditTimesheetModal = ({
         <Typography type="title" style={styles.title}>
           Edit Timesheet
         </Typography>
-
         <TimesheetForm
           onSubmit={onEditSave}
           onCancel={toggleModal}
-          isFormVisible={true}
           defaultData={formData}
-          isAddButtonVisible={false}
           userId={userId}
-          isLoading={mutation.isLoading}
+          isLoading={isLoading}
+          isFormVisible
+          isEditForm
         />
       </View>
     </Modal>

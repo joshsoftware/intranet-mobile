@@ -1,10 +1,11 @@
 import React, {memo, useCallback} from 'react';
 import {
   SectionList,
+  SectionListData,
   SectionListProps,
+  SectionListRenderItemInfo,
   StyleSheet,
   View,
-  ViewStyle,
 } from 'react-native';
 
 import Typography from '../../../components/typography';
@@ -15,7 +16,6 @@ import EmptyList from './emptyList';
 import {Timesheet} from '../interface';
 
 type Props = SectionListProps<any, any> & {
-  style?: ViewStyle;
   timesheetListData: Array<{
     title: string;
     data: Timesheet[];
@@ -26,25 +26,24 @@ type Props = SectionListProps<any, any> & {
   isDeleteVisible?: boolean;
 };
 
-const seperator = () => <Linear style={styles.seperator} />;
-
 const footer = () => <View style={styles.footer} />;
 
-const sectionHeader = ({section}: {section: {title: string}}) => (
-  <Typography style={styles.title}>{section.title}</Typography>
-);
+const sectionHeader = ({
+  section,
+}: {
+  section: SectionListData<Timesheet, {title: string}>;
+}) => <Typography style={styles.title}>{section.title}</Typography>;
 
 const SectionListTimesheet = ({
   timesheetListData,
   onEdit,
   onDelete,
-  style,
   isDeleteVisible = true,
   emptyListMessage,
   ...props
 }: Props) => {
   const renderItem = useCallback(
-    ({item, section}: {item: Timesheet; section: {title: string}}) => (
+    ({item, section}: SectionListRenderItemInfo<Timesheet>) => (
       <TimesheetItem
         timesheetData={item}
         onEdit={onEdit}
@@ -68,11 +67,9 @@ const SectionListTimesheet = ({
       keyExtractor={(item, index) => item.timesheet_id + index}
       renderItem={renderItem}
       renderSectionHeader={sectionHeader}
-      renderSectionFooter={seperator}
-      extraData={timesheetListData}
-      style={style}
+      style={styles.list}
       ListFooterComponent={footer}
-      ItemSeparatorComponent={seperator}
+      ItemSeparatorComponent={Linear}
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={listEmptyComponent}
     />
@@ -80,14 +77,16 @@ const SectionListTimesheet = ({
 };
 
 const styles = StyleSheet.create({
+  list: {
+    paddingHorizontal: 16,
+  },
   title: {
-    marginVertical: 10,
+    marginTop: 20,
+    marginBottom: 4,
   },
   footer: {
     paddingBottom: 100,
   },
-  seperator: {
-    marginVertical: 10,
-  },
 });
+
 export default memo(SectionListTimesheet);

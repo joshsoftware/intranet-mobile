@@ -47,8 +47,7 @@ const TimesheetList = () => {
 
   const toggleEditModal = useCallback(() => {
     setIsEditModalVisible(v => !v);
-    refetch();
-  }, [refetch]);
+  }, []);
 
   const toggelDatePicker = () => setIsDateRangeVisible(v => !v);
 
@@ -71,10 +70,6 @@ const TimesheetList = () => {
 
   const timesheetDeleteCall = useCallback(
     (timesheetData: Timesheet) => {
-      console.log(
-        '🚀 ~ file: timesheetList.tsx:74 ~ TimesheetList ~ timesheetData:',
-        timesheetData,
-      );
       Alert.alert(
         'Delete Timesheet',
         `Do you want to delete timesheet for ${params?.name} of date ${timesheetData.date}?`,
@@ -143,10 +138,8 @@ const TimesheetList = () => {
           <Calendar height={17} width={17} />
         </Touchable>
         {params && (
-          <View style={{paddingHorizontal: 16, paddingVertical: 8}}>
-            <Typography type="header" style={{paddingBottom: 6}}>
-              {params?.name}
-            </Typography>
+          <View style={styles.userInfo}>
+            <Typography type="header">{params?.name}</Typography>
             <Typography type="description">{params?.email}</Typography>
           </View>
         )}
@@ -185,6 +178,7 @@ const TimesheetList = () => {
           <EditTimesheetModal
             isVisible={isEditModalVisible}
             toggleModal={toggleEditModal}
+            refetch={refetch}
             formData={editTimesheetData}
             userId={userId}
             current_user={userContextData?.userData.userId + ''}
@@ -197,10 +191,10 @@ const TimesheetList = () => {
 
 const styles = StyleSheet.create({
   view: {
-    paddingHorizontal: 16,
     flex: 1,
   },
   headerData: {
+    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -226,6 +220,12 @@ const styles = StyleSheet.create({
   filterText: {
     fontSize: 14,
     padding: 5,
+  },
+  userInfo: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    flexDirection: 'column',
+    gap: 6,
   },
 });
 

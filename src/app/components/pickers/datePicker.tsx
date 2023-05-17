@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-
 import DateTimePicker, {
   DatePickerOptions,
   DateTimePickerEvent,
@@ -17,13 +16,11 @@ import DateTimePicker, {
 
 import Typography from '../typography';
 
-import {dateFormater} from '../../utils/dateFormater';
+import {dateFormate} from '../../utils/date';
 
 import fonts from '../../constant/fonts';
 import colors from '../../constant/colors';
 import {Calendar} from '../../constant/icons';
-
-import {borderStyles} from '../../../styles';
 
 type Props = (BaseProps &
   IOSNativeProps &
@@ -35,6 +32,7 @@ type Props = (BaseProps &
   placeholder?: string;
   onDateChange: (date?: Date) => void;
   hideIcon?: boolean;
+  error?: string;
 };
 const DatePicker = ({
   style,
@@ -43,6 +41,7 @@ const DatePicker = ({
   placeholder,
   onDateChange,
   hideIcon = true,
+  error,
   ...props
 }: Props) => {
   const [isVisible, setIsVisible] = useState<Boolean>(false);
@@ -60,28 +59,35 @@ const DatePicker = ({
   );
 
   return (
-    <TouchableOpacity
-      onPress={handleVisibility}
-      style={[borderStyles.thinBorder, styles.picker, style]}>
-      <View>
-        <Typography
-          type={'header'}
-          style={{
-            ...(selectedDate ? styles.date : styles.placeholder),
-            ...textStyle,
-          }}>
-          {selectedDate ? dateFormater(selectedDate) : placeholder}
+    <>
+      <TouchableOpacity
+        onPress={handleVisibility}
+        style={[styles.picker, error ? styles.error : {}, style]}>
+        <View>
+          <Typography
+            type="header"
+            style={{
+              ...(selectedDate ? styles.date : styles.placeholder),
+              ...textStyle,
+            }}>
+            {selectedDate ? dateFormate(selectedDate) : placeholder}
+          </Typography>
+          {!hideIcon && <Calendar style={styles.icon} height={20} width={20} />}
+          {isVisible && (
+            <DateTimePicker
+              onChange={handleDateChange}
+              neutralButton={{label: 'Clear', textColor: 'grey'}}
+              {...props}
+            />
+          )}
+        </View>
+      </TouchableOpacity>
+      {error && (
+        <Typography style={styles.errorText} type="description">
+          {error}
         </Typography>
-        {!hideIcon && <Calendar style={styles.icon} height={20} width={20} />}
-        {isVisible && (
-          <DateTimePicker
-            onChange={handleDateChange}
-            neutralButton={{label: 'Clear', textColor: 'grey'}}
-            {...props}
-          />
-        )}
-      </View>
-    </TouchableOpacity>
+      )}
+    </>
   );
 };
 
@@ -107,6 +113,15 @@ const styles = StyleSheet.create({
   picker: {
     paddingVertical: 10,
     justifyContent: 'flex-end',
+    borderBottomColor: colors.TEXT_INPUT_BORDER,
+    borderBottomWidth: 1,
+    marginBottom: 3,
+  },
+  errorText: {
+    color: colors.ERROR_RED,
+  },
+  error: {
+    borderBottomColor: colors.ERROR_RED,
   },
 });
 

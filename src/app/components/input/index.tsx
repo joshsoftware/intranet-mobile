@@ -1,6 +1,8 @@
 import React, {memo} from 'react';
-import {StyleSheet, Text, TextInput, TextInputProps, View} from 'react-native';
+import {StyleSheet, TextInput, TextInputProps, View} from 'react-native';
 import {SvgProps} from 'react-native-svg';
+
+import Typography from '../typography';
 
 import colors from '../../constant/colors';
 
@@ -19,7 +21,11 @@ const Input = ({error, StartIcon, ...props}: Props) => {
           {...props}
         />
       </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && (
+        <Typography style={styles.errorText} type="description">
+          {error}
+        </Typography>
+      )}
     </>
   );
 };

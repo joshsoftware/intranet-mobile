@@ -266,7 +266,6 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
                 onValueChange={onChange}
                 value={value ? value : strings.SELECT}
                 items={skillsListData}
-                style={styles.item}
               />
             )}
             name="primaryTechnicalSkill"
@@ -294,7 +293,6 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
                 onValueChange={onChange}
                 value={value ? value : strings.SELECT}
                 items={skillsListData}
-                style={styles.item}
               />
             )}
             name="secondaryTechnicalSkill"
@@ -322,7 +320,6 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
                 onValueChange={onChange}
                 value={value ? value : strings.SELECT}
                 items={skillsListData}
-                style={styles.item}
               />
             )}
             name="ternaryTechnicalSkill"

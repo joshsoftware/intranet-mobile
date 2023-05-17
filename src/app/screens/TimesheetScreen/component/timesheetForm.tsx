@@ -1,9 +1,7 @@
 import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
-
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
-import {useQuery} from 'react-query';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import Typography from '../../../components/typography';
@@ -11,30 +9,32 @@ import PickerSelect from '../../../components/pickers/pickerSelect';
 import DatePicker from '../../../components/pickers/datePicker';
 import Input from '../../../components/input';
 import Button from '../../../components/button';
+import {useAssignedProjects} from '../timesheet.hooks';
 
+import {todaysDate} from '../../../utils/date';
 import {dateFormater} from '../../../utils/dateFormater';
-import {getProjectListRequest} from '../../../services/timesheet/getProjectList';
 import {Timesheet} from '../interface';
 
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
 import {workHoursData} from '../../../constant/timesheet';
 
-import {flexStyles} from '../../../../styles';
-
 const timesheetFormSchema = yup.object().shape({
-  project: yup.string().required(),
-  date: yup.date().required(),
-  work_in_hours: yup.string().required(),
-  description: yup.string().required().min(3),
+  project: yup.string().required('Project is a required field'),
+  date: yup.date().required('Date is a required field'),
+  work_in_hours: yup.string().required('Work hours is a required field'),
+  description: yup
+    .string()
+    .required('Description is a required field')
+    .min(3, 'Description must be at least 3 characters long'),
 });
 
 type Props = {
   defaultData?: Timesheet;
-  onSubmit: (data: Timesheet, resetField?: Function) => void;
+  onSubmit: (data: any) => void;
   onCancel?: () => void;
+  isEditForm?: boolean;
   isFormVisible?: boolean;
-  isAddButtonVisible?: boolean;
   isLoading?: boolean;
   userId: string;
   toggleForm?: (value: boolean) => void;
@@ -44,8 +44,8 @@ const TimesheetForm = ({
   defaultData,
   onSubmit,
   onCancel,
+  isEditForm = false,
   isFormVisible = true,
-  isAddButtonVisible = true,
   isLoading,
   userId,
   toggleForm,
@@ -53,55 +53,39 @@ const TimesheetForm = ({
   const {
     handleSubmit,
     control,
-    resetField,
+    reset,
     formState: {errors},
   } = useForm({
     mode: 'onSubmit',
-    values: defaultData
-      ? defaultData
-      : {
-          project: undefined,
-          date: undefined,
-          work_in_hours: undefined,
-          description: undefined,
-        },
+    values: defaultData ?? {
+      project: undefined,
+      date: undefined,
+      work_in_hours: undefined,
+      description: undefined,
+    },
     resolver: yupResolver(timesheetFormSchema),
   });
 
-  const newDate = new Date();
-
-  const {data: queryData} = useQuery(['timesheet/projectList', userId], () =>
-    getProjectListRequest({
-      user_id: userId,
-    }),
-  );
+  const {data: projects} = useAssignedProjects(userId);
 
   const addTimesheet = () => {
     toggleForm?.(true);
     handleSubmit((data: any) => {
-      let label = queryData?.data.data.find(value => {
+      let label = projects?.find(value => {
         return data.project === value.value;
       });
-      onSubmit(
-        {
-          ...data,
-          timesheet_id: data.project + dateFormater(data.date),
-          project: label?.label + '',
-          project_id: data.project,
-          date: dateFormater(data.date),
-        },
-        resetField,
-      );
+      onSubmit({
+        ...data,
+        timesheet_id: data.project + dateFormater(data.date),
+        project: label?.label + '',
+        project_id: data.project,
+        date: dateFormater(data.date),
+      });
+      reset();
     })();
   };
 
-  const updateTimesheet = () =>
-    handleSubmit((data: any) =>
-      onSubmit({
-        ...data,
-        date: dateFormater(data.date),
-      }),
-    )();
+  const updateTimesheet = handleSubmit(onSubmit);
 
   return (
     <>
@@ -115,26 +99,17 @@ const TimesheetForm = ({
               control={control}
               render={({field: {onChange, value}}) => (
                 <PickerSelect
-                  placeholder={{
-                    label: strings.SELECT,
-                    value: '',
-                  }}
                   onValueChange={onChange}
-                  value={value ? value : strings.SELECT}
-                  items={queryData ? queryData.data.data : []}
-                  style={styles.item}
+                  value={value}
+                  items={projects}
+                  error={errors?.project?.message}
                 />
               )}
               name="project"
             />
-            {errors.project && (
-              <Typography style={styles.error} type="description">
-                {errors.project.message}
-              </Typography>
-            )}
           </View>
 
-          <View style={[flexStyles.horizontal, styles.row]}>
+          <View style={styles.row}>
             <View style={styles.rowItem}>
               <Typography type="header" style={styles.labelText}>
                 Select Date
@@ -143,21 +118,17 @@ const TimesheetForm = ({
                 control={control}
                 render={({field: {onChange, value}}) => (
                   <DatePicker
-                    value={value ? new Date(value) : newDate}
+                    value={value ? new Date(value) : todaysDate}
                     onDateChange={onChange}
                     hideIcon={false}
                     selectedDate={value ? new Date(value) : undefined}
-                    placeholder={strings.SELECT}
-                    maximumDate={newDate}
+                    placeholder="Select date"
+                    maximumDate={todaysDate}
+                    error={errors?.date?.message}
                   />
                 )}
                 name="date"
               />
-              {errors.date && (
-                <Typography style={styles.error} type="description">
-                  {errors.date.message}
-                </Typography>
-              )}
             </View>
 
             <View style={styles.rowItem}>
@@ -168,23 +139,14 @@ const TimesheetForm = ({
                 control={control}
                 render={({field: {onChange, value}}) => (
                   <PickerSelect
-                    placeholder={{
-                      label: strings.SELECT,
-                      value: '',
-                    }}
                     onValueChange={onChange}
                     value={value ? value : strings.SELECT}
                     items={workHoursData}
-                    style={styles.item}
+                    error={errors?.work_in_hours?.message}
                   />
                 )}
                 name="work_in_hours"
               />
-              {errors.work_in_hours && (
-                <Typography style={styles.error} type="description">
-                  {strings.WORK_HOURS_ERROR}
-                </Typography>
-              )}
             </View>
           </View>
 
@@ -202,19 +164,15 @@ const TimesheetForm = ({
                   multiline={true}
                   placeholder={strings.DESCRIPTION_PLACEHOLDER}
                   style={styles.description}
+                  error={errors?.description?.message}
                 />
               )}
               name="description"
             />
-            {errors.description && (
-              <Typography style={styles.error} type="description">
-                {errors.description.message}
-              </Typography>
-            )}
           </View>
         </>
       )}
-      {isAddButtonVisible ? (
+      {!isEditForm ? (
         <View style={styles.addButton}>
           <Button
             type="tertiary"
@@ -223,7 +181,7 @@ const TimesheetForm = ({
           />
         </View>
       ) : (
-        <View style={[flexStyles.horizontal, styles.btns]}>
+        <View style={styles.btns}>
           <Button title="Cancel" type="secondary" onPress={onCancel} />
           <Button
             title="Update"
@@ -248,6 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   row: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   rowItem: {
@@ -269,7 +228,6 @@ const styles = StyleSheet.create({
   error: {
     color: colors.ERROR_RED,
     marginTop: 5,
-    textTransform: 'capitalize',
   },
   addButton: {
     alignSelf: 'center',
@@ -278,6 +236,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   btns: {
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'flex-end',
     justifyContent: 'space-around',
     paddingVertical: 20,

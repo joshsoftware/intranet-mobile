@@ -1,14 +1,15 @@
 import React, {memo} from 'react';
-import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import Typography from '../../../components/typography';
+import Touchable from '../../../components/touchable';
 
-import {Timesheet} from '../interface';
+import {dateFormate} from '../../../utils/date';
 
 import {Delete, Edit} from '../../../constant/icons';
+import {Timesheet} from '../interface';
 
 type Props = {
-  style?: ViewStyle;
   timesheetData: Timesheet;
   title: string;
   onEdit?: Function;
@@ -22,7 +23,6 @@ const TimesheetItem = ({
   onEdit,
   onDelete,
   isDeleteVisible = true,
-  style,
 }: Props) => {
   const handleEdit = () =>
     onEdit?.({
@@ -37,39 +37,51 @@ const TimesheetItem = ({
     });
 
   return (
-    <View style={style}>
-      <Typography type="header">{timesheetData.date}</Typography>
-      <Typography type="subheader" style={styles.workedHours}>
-        {timesheetData.work_in_hours}
-      </Typography>
-      <Typography type="description">{timesheetData.description}</Typography>
-      <View style={styles.buttons}>
-        {onEdit && (
-          <TouchableOpacity onPress={handleEdit}>
-            <Edit width={20} height={20} />
-          </TouchableOpacity>
-        )}
-        {onDelete && isDeleteVisible && (
-          <TouchableOpacity onPress={handleDelete}>
-            <Delete width={20} height={20} />
-          </TouchableOpacity>
-        )}
+    <View style={styles.container}>
+      <View style={styles.titleContent}>
+        <View>
+          <Typography type="header">
+            {dateFormate(timesheetData.date)}
+          </Typography>
+          <Typography type="subheader" style={styles.workedHours}>
+            {timesheetData.work_in_hours}
+          </Typography>
+        </View>
+        <View style={styles.buttons}>
+          {onEdit && (
+            <Touchable type="opacity" onPress={handleEdit}>
+              <Edit width={20} height={20} />
+            </Touchable>
+          )}
+          {onDelete && isDeleteVisible && (
+            <Touchable type="opacity" onPress={handleDelete}>
+              <Delete width={20} height={20} />
+            </Touchable>
+          )}
+        </View>
       </View>
+      <Typography type="description">{timesheetData.description}</Typography>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 12,
+  },
+  titleContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   workedHours: {
     marginTop: 4,
-    marginBottom: 8,
   },
   buttons: {
-    width: '20%',
-    position: 'absolute',
-    right: 10,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    gap: 12,
+    right: 6,
   },
 });
+
 export default memo(TimesheetItem);

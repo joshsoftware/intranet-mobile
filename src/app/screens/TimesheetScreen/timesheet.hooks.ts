@@ -5,9 +5,11 @@ import {dateFormate} from '../../utils/date';
 import {getEmployeeListRequest} from '../../services/timesheet/getEmployeeList';
 import {getTimesheetRequest} from '../../services/timesheet/getTimesheet';
 import {deleteTimesheetRequest} from '../../services/timesheet/deleteTimesheet';
+import {getProjectListRequest} from '../../services/timesheet/getProjectList';
 
 import {ISO_DATE_FROMAT} from '../../constant/date';
 import strings from '../../constant/strings';
+import {updateTimesheetRequest} from '../../services/timesheet/updateTimesheet';
 
 export const useEmployees = (startDate: Date, endDate: Date) => {
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
@@ -60,4 +62,24 @@ export const useDeleteTimesheet = () => {
   );
 
   return {mutate, isLoading};
+};
+
+export const useAssignedProjects = (userId: string) => {
+  const {data, isLoading} = useQuery(['assigned-projects', userId], () =>
+    getProjectListRequest({user_id: userId}),
+  );
+  return {data: data?.data?.data ?? [], isLoading};
+};
+
+export const useEditTimesheet = () => {
+  const {mutate, isLoading, isSuccess} = useMutation(
+    (payload: any) => updateTimesheetRequest(payload),
+    {
+      onSuccess: data => {
+        bottomToast(data.data.message);
+      },
+      onError: () => bottomToast(strings.EDIT_ERROR, true),
+    },
+  );
+  return {mutate, isLoading, isSuccess};
 };
