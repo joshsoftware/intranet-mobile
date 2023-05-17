@@ -15,12 +15,22 @@ type Props = PickerSelectProps & {
   textStyle?: PickerStyle;
 };
 
-const PickerSelect = ({containerStyle, error, textStyle, ...props}: Props) => {
+const PickerSelect = ({
+  containerStyle,
+  value,
+  error,
+  textStyle,
+  ...props
+}: Props) => {
   return (
     <>
       <View
         style={[styles.container, error ? styles.error : {}, containerStyle]}>
-        <RNPickerSelect style={{...textStyle}} {...props} />
+        <RNPickerSelect
+          value={value ? value : undefined}
+          style={{...textStyle}}
+          {...props}
+        />
       </View>
       {error && (
         <Typography style={styles.errorText} type="description">

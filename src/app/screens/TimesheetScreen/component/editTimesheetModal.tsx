@@ -40,8 +40,6 @@ const EditTimesheetModal = ({
   }, [isSuccess, refetch, toggleModal]);
 
   const onEditSave = (data: Timesheet) => {
-    console.log(1);
-
     mutate({
       user: {
         time_sheets_attributes: {

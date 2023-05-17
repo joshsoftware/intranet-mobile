@@ -23,7 +23,6 @@ const TimesheetScreen = () => {
         toggleModal={toggleModal}
         isVisible={isModalOpen}
         userId={userContextData?.userData.userId + ''}
-        current_user={userContextData?.userData.userId + ''}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
@@ -31,13 +31,13 @@ const timesheetFormSchema = yup.object().shape({
 
 type Props = {
   defaultData?: Timesheet;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: any, reset?: Function) => void;
   onCancel?: () => void;
   isEditForm?: boolean;
   isFormVisible?: boolean;
   isLoading?: boolean;
   userId: string;
-  toggleForm?: (value: boolean) => void;
+  toggleForm?: Function;
 };
 
 const TimesheetForm = ({
@@ -68,24 +68,34 @@ const TimesheetForm = ({
 
   const {data: projects} = useAssignedProjects(userId);
 
-  const addTimesheet = () => {
-    toggleForm?.(true);
-    handleSubmit((data: any) => {
-      let label = projects?.find(value => {
-        return data.project === value.value;
-      });
-      onSubmit({
-        ...data,
-        timesheet_id: data.project + dateFormater(data.date),
-        project: label?.label + '',
-        project_id: data.project,
-        date: dateFormater(data.date),
-      });
-      reset();
-    })();
+  const addTimesheet = useMemo(
+    () =>
+      handleSubmit((data: any) => {
+        let project = projects?.find(value => {
+          return data.project === value.value;
+        });
+        onSubmit(
+          {
+            ...data,
+            timesheet_id: data.project + dateFormater(data.date),
+            project: project?.label,
+            project_id: data.project,
+          },
+          reset,
+        );
+      }),
+    [handleSubmit, onSubmit, projects, reset],
+  );
+
+  const handleAddTimesheet = (...args: any[]) => {
+    if (isFormVisible) {
+      addTimesheet(...args);
+    } else {
+      toggleForm?.();
+    }
   };
 
-  const updateTimesheet = handleSubmit(onSubmit);
+  const updateTimesheet = handleSubmit(data => onSubmit(data));
 
   return (
     <>
@@ -140,7 +150,7 @@ const TimesheetForm = ({
                 render={({field: {onChange, value}}) => (
                   <PickerSelect
                     onValueChange={onChange}
-                    value={value ? value : strings.SELECT}
+                    value={value}
                     items={workHoursData}
                     error={errors?.work_in_hours?.message}
                   />
@@ -177,7 +187,7 @@ const TimesheetForm = ({
           <Button
             type="tertiary"
             title="Add Timesheet"
-            onPress={addTimesheet}
+            onPress={handleAddTimesheet}
           />
         </View>
       ) : (

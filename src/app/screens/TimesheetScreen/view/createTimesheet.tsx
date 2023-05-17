@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useMutation} from 'react-query';
 
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import Modal from '../../../components/modal';
@@ -14,38 +13,29 @@ import TimesheetForm from '../component/timesheetForm';
 import Typography from '../../../components/typography';
 import SectionListTimesheet from '../component/sectionListTimesheet';
 import Button from '../../../components/button';
+import {useAddTimesheet} from '../timesheet.hooks';
 
-import {createTimesheetRequest} from '../../../services/timesheet/createTimesheet';
-import bottomToast from '../../../utils/toast';
+import {convertToMins, dateFormate} from '../../../utils/date';
 
 import {Timesheet} from '../interface';
-
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
 import strings from '../../../constant/strings';
 import {Arrow} from '../../../constant/icons';
-import {timeConversion} from '../../../constant/timesheet';
-
-import {flexStyles} from '../../../../styles';
+import {ISO_DATE_FROMAT} from '../../../constant/date';
 
 type Props = {
   isVisible: boolean;
   toggleModal: () => void;
   userId: string;
-  current_user: string;
 };
 
 type CreateTimesheetDataprop = {
   title: string;
   data: Timesheet[];
-}[];
+};
 
-const CreateTimesheet = ({
-  toggleModal,
-  isVisible,
-  userId,
-  current_user,
-}: Props) => {
+const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
   const [addedTimesheet, setAddedTimesheet] = useState<
     Array<{
       title: string;
@@ -56,147 +46,110 @@ const CreateTimesheet = ({
   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
   const isKeyboardVisible = useIsKeyboardShown();
 
-  const handlePress = useCallback(
-    (value?: boolean) =>
-      value ? setIsFormVisible(value) : setIsFormVisible(v => !v),
-    [],
-  );
+  // This logic need to more optimize with changing API structure
+  const mutationFunc = useCallback((data: CreateTimesheetDataprop[]) => {
+    const time_sheets_data: any = {};
+    data.forEach(section =>
+      section.data.map((value, index) => {
+        time_sheets_data[index + value.project_id] = {
+          project_id: value.project_id,
+          date: dateFormate(value.date, ISO_DATE_FROMAT),
+          duration: convertToMins(value.work_in_hours),
+          description: value.description,
+        };
+      }),
+    );
 
-  const mutationFunc = useCallback(
-    (data: CreateTimesheetDataprop) => {
-      const time_sheets_data: any = {};
-      data.forEach(section =>
-        section.data.map((value, index) => {
-          time_sheets_data[index + value.project_id] = {
-            project_id: value.project_id,
-            date: value.date,
-            duration:
-              timeConversion[
-                value.work_in_hours as keyof typeof timeConversion
-              ],
-            description: value.description,
-          };
-        }),
-      );
+    return time_sheets_data;
+  }, []);
 
-      return createTimesheetRequest({
-        user: {
-          time_sheets_attributes: time_sheets_data,
-          user_id: userId,
-          current_user: current_user,
-        },
-      });
-    },
-    [current_user, userId],
-  );
-
-  const mutation = useMutation({
-    mutationFn: mutationFunc,
-    onSuccess: data => {
-      bottomToast(data.data.message);
-      setAddedTimesheet(data.data.data ? data.data.data : []);
-      if (!data.data.data) {
-        toggleModal();
-      }
-    },
-    onError: () => bottomToast(strings.CREATE_ERROR, true),
-  });
+  const {mutate, isLoading} = useAddTimesheet();
 
   const onSave = () => {
-    mutation.mutate(addedTimesheet);
+    mutate(mutationFunc(addedTimesheet));
   };
 
-  const onAdd = useCallback(
-    (data: Timesheet, resetField?: Function) => {
-      const reset = () => {
-        setFormDefaultData(undefined);
+  const toggleForm = useCallback(() => setIsFormVisible(v => !v), []);
 
-        if (typeof resetField !== 'undefined') {
-          resetField('project');
-          resetField('date');
-          resetField('work_in_hours');
-          resetField('description');
-        }
-        handlePress(false);
+  const onAddTimesheet = useCallback((data: Timesheet, reset?: Function) => {
+    const isDuplicateEntry = (section: CreateTimesheetDataprop) => {
+      return section.data.some(item => item.timesheet_id === data.timesheet_id);
+    };
 
-        Keyboard.dismiss();
-      };
-      if (data) {
-        let isCategoryFound = false;
-        setAddedTimesheet(sections => {
-          sections.forEach(section => {
-            if (section.title === data.project) {
-              isCategoryFound = true;
+    const updateSections = (sections: CreateTimesheetDataprop[]) => {
+      const foundSection = sections.find(
+        section => section.title === data.project,
+      );
 
-              const isPresent = section.data.find(
-                item => item.timesheet_id === data.timesheet_id,
-              );
-              if (isPresent) {
-                Alert.alert(strings.NOT_ALLOWED, strings.DUBLICATE_ENTRY_ERROR);
-              } else {
-                section.data.push(data);
-                reset();
-              }
-            }
-          });
-
-          if (!isCategoryFound) {
-            sections.push({
-              title: data.project + '',
-              data: [data],
-            });
-            reset();
-          }
+      if (foundSection) {
+        if (isDuplicateEntry(foundSection)) {
+          Alert.alert(strings.NOT_ALLOWED, strings.DUBLICATE_ENTRY_ERROR);
           return sections;
+        } else {
+          foundSection.data.push(data);
+        }
+      } else {
+        sections.push({
+          title: data.project + '',
+          data: [data],
         });
       }
-    },
-    [handlePress],
-  );
+      setIsFormVisible(v => !v);
+      reset?.();
+      return sections;
+    };
+    Keyboard.dismiss();
+    setFormDefaultData(undefined);
+    setAddedTimesheet(sections => updateSections([...sections]));
+  }, []);
 
   const onDelete = useCallback((timesheetData: Timesheet) => {
-    const list: {title: string; data: Timesheet[]}[] = [];
-    setAddedTimesheet(sections =>
-      sections.reduce((prevVal, currVal) => {
+    setAddedTimesheet(sections => {
+      const updatedSections = sections.reduce((prevVal, currVal) => {
         const data = currVal.data.filter(
           item => item.timesheet_id !== timesheetData.timesheet_id,
         );
-
         if (data.length !== 0) {
           prevVal.push({title: currVal.title, data: data});
         }
         return prevVal;
-      }, list),
-    );
+      }, []);
+
+      return updatedSections;
+    });
   }, []);
 
   const onEdit = (timesheetData: Timesheet) => {
-    const list: {title: string; data: Timesheet[]}[] = [];
-
-    setAddedTimesheet(sections =>
-      sections.reduce((prevVal, currVal) => {
-        const data = currVal.data.filter(item => {
-          if (item.timesheet_id !== timesheetData.timesheet_id) {
-            return true;
-          } else {
-            setFormDefaultData({
-              ...item,
-              project: item.project_id,
-              work_in_hours: item.work_in_hours,
-              description: item.description,
-              date: item.date,
-            });
-            handlePress(true);
-            return false;
-          }
-        });
-
+    setAddedTimesheet(sections => {
+      const updatedSections = sections.reduce((prevVal, currVal) => {
+        const data = currVal.data.filter(
+          item => item.timesheet_id !== timesheetData.timesheet_id,
+        );
         if (data.length !== 0) {
           prevVal.push({title: currVal.title, data: data});
         }
         return prevVal;
-      }, list),
-    );
+      }, []);
+
+      const updatedTimesheet = sections.find(section =>
+        section.data.some(
+          item => item.timesheet_id === timesheetData.timesheet_id,
+        ),
+      );
+
+      if (updatedTimesheet) {
+        setFormDefaultData({
+          ...timesheetData,
+          project: timesheetData.project_id,
+          work_in_hours: timesheetData.work_in_hours,
+          description: timesheetData.description,
+          date: timesheetData.date,
+        });
+        !isFormVisible && toggleForm();
+      }
+
+      return updatedSections;
+    });
   };
 
   return (
@@ -209,42 +162,40 @@ const CreateTimesheet = ({
       onBackButtonPress={toggleModal}
       onBackdropPress={toggleModal}
       contentStyle={styles.main}>
-      <View style={[styles.horizontalPad, styles.form]}>
+      <View style={styles.form}>
         <Typography type="title" style={styles.title}>
           Add Timesheet
         </Typography>
 
         <TimesheetForm
-          onSubmit={onAdd}
+          onSubmit={onAddTimesheet}
           isFormVisible={isFormVisible}
-          toggleForm={handlePress}
           defaultData={formDefaultData}
+          toggleForm={toggleForm}
           userId={userId}
         />
       </View>
-      <TouchableOpacity onPress={() => handlePress()} style={styles.arrow}>
+      <TouchableOpacity onPress={toggleForm} style={styles.arrow}>
         <Arrow width={22} height={22} />
       </TouchableOpacity>
 
-      <SectionListTimesheet
-        sections={addedTimesheet}
-        timesheetListData={addedTimesheet}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        style={styles.horizontalPad}
-        emptyListMessage={strings.NO_TIMESHEET_ADDED}
-      />
+      <View style={styles.list}>
+        <SectionListTimesheet
+          sections={addedTimesheet}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          emptyListMessage={strings.NO_TIMESHEET_ADDED}
+        />
+      </View>
 
       {!isKeyboardVisible && (
-        <View
-          style={[flexStyles.horizontal, styles.btns, styles.horizontalPad]}>
+        <View style={styles.btns}>
           <Button title="Cancel" type="secondary" onPress={toggleModal} />
-
           <Button
             title="Save"
             type="primary"
             onPress={onSave}
-            isLoading={mutation.isLoading}
+            isLoading={isLoading}
             disabled={addedTimesheet.length === 0}
           />
         </View>
@@ -286,16 +237,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     paddingBottom: 40,
     width: '100%',
+    paddingHorizontal: 16,
   },
   btns: {
+    gap: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'flex-end',
     marginBottom: 10,
+    paddingHorizontal: 16,
+    width: '100%',
   },
   btnText: {
     color: colors.PRIMARY,
   },
-  horizontalPad: {
-    paddingHorizontal: 16,
+  list: {
+    flex: 1,
     width: '100%',
   },
 });

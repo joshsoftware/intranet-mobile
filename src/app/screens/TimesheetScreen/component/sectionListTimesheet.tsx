@@ -16,10 +16,6 @@ import EmptyList from './emptyList';
 import {Timesheet} from '../interface';
 
 type Props = SectionListProps<any, any> & {
-  timesheetListData: Array<{
-    title: string;
-    data: Timesheet[];
-  }>;
   onEdit: Function;
   onDelete: Function;
   emptyListMessage?: string;
@@ -35,7 +31,6 @@ const sectionHeader = ({
 }) => <Typography style={styles.title}>{section.title}</Typography>;
 
 const SectionListTimesheet = ({
-  timesheetListData,
   onEdit,
   onDelete,
   isDeleteVisible = true,
@@ -63,7 +58,6 @@ const SectionListTimesheet = ({
   return (
     <SectionList
       {...props}
-      sections={timesheetListData}
       keyExtractor={(item, index) => item.timesheet_id + index}
       renderItem={renderItem}
       renderSectionHeader={sectionHeader}

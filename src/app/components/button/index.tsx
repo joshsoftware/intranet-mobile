@@ -83,7 +83,6 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    margin: 4,
     flexGrow: 1,
     padding: 12,
     borderRadius: 22,

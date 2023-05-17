@@ -165,7 +165,6 @@ const TimesheetList = () => {
 
         <SectionListTimesheet
           sections={data?.data ?? []}
-          timesheetListData={data?.data ?? []}
           onDelete={timesheetDeleteCall}
           onEdit={timesheetEditCall}
           refreshing={isFetching}
