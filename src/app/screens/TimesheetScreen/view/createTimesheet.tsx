@@ -37,33 +37,40 @@ type CreateTimesheetDataprop = {
 
 const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
   const [addedTimesheet, setAddedTimesheet] = useState<
-    Array<{
-      title: string;
-      data: Timesheet[];
-    }>
+    CreateTimesheetDataprop[]
   >([]);
-  const [formDefaultData, setFormDefaultData] = useState<Timesheet>();
+  const [formDefaultData, setFormDefaultData] = useState<Timesheet | undefined>(
+    undefined,
+  );
   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
   const isKeyboardVisible = useIsKeyboardShown();
 
   const {mutate, isSuccess, isLoading} = useAddTimesheet();
 
   // This logic need to more optimize with changing API structure
-  const mutationFunc = useCallback((data: CreateTimesheetDataprop[]) => {
-    const time_sheets_data: any = {};
-    data.forEach(section =>
-      section.data.map((value, index) => {
-        time_sheets_data[index + value.project_id] = {
-          project_id: value.project_id,
-          date: dateFormate(value.date, ISO_DATE_FROMAT),
-          duration: convertToMins(value.work_in_hours),
-          description: value.description,
-        };
-      }),
-    );
+  const mutationFunc = useCallback(
+    (data: CreateTimesheetDataprop[]) => {
+      const time_sheets_data: any = {};
+      data.forEach(section =>
+        section.data.map((value, index) => {
+          time_sheets_data[index + 1] = {
+            project_id: value.project_id,
+            date: dateFormate(value.date, ISO_DATE_FROMAT),
+            duration: convertToMins(value.work_in_hours),
+            description: value.description,
+          };
+        }),
+      );
 
-    return time_sheets_data;
-  }, []);
+      return {
+        user: {
+          time_sheets_attributes: time_sheets_data,
+          user_id: userId,
+        },
+      };
+    },
+    [userId],
+  );
 
   const onSave = () => {
     mutate(mutationFunc(addedTimesheet));
@@ -96,40 +103,45 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
       }
       setIsFormVisible(v => !v);
       reset?.();
+      setFormDefaultData(undefined);
       return sections;
     };
     Keyboard.dismiss();
-    setFormDefaultData(undefined);
     setAddedTimesheet(sections => updateSections([...sections]));
   }, []);
 
   const onDelete = useCallback((timesheetData: Timesheet) => {
     setAddedTimesheet(sections => {
-      const updatedSections = sections.reduce((prevVal, currVal) => {
-        const data = currVal.data.filter(
-          item => item.timesheet_id !== timesheetData.timesheet_id,
-        );
-        if (data.length !== 0) {
-          prevVal.push({title: currVal.title, data: data});
-        }
-        return prevVal;
-      }, []);
-
+      const updatedSections = sections.reduce(
+        (prevVal: CreateTimesheetDataprop[], currVal) => {
+          const data = currVal.data.filter(
+            item => item.timesheet_id !== timesheetData.timesheet_id,
+          );
+          if (data.length !== 0) {
+            prevVal.push({title: currVal.title, data: data});
+          }
+          return prevVal;
+        },
+        [],
+      );
       return updatedSections;
     });
   }, []);
 
   const onEdit = (timesheetData: Timesheet) => {
     setAddedTimesheet(sections => {
-      const updatedSections = sections.reduce((prevVal, currVal) => {
-        const data = currVal.data.filter(
-          item => item.timesheet_id !== timesheetData.timesheet_id,
-        );
-        if (data.length !== 0) {
-          prevVal.push({title: currVal.title, data: data});
-        }
-        return prevVal;
-      }, []);
+      const updatedSections = sections.reduce(
+        (prevVal: CreateTimesheetDataprop[], currVal) => {
+          const data = currVal.data.filter(
+            item => item.timesheet_id !== timesheetData.timesheet_id,
+          );
+          if (data.length !== 0) {
+            prevVal.push({title: currVal.title, data: data});
+          }
+          return prevVal;
+        },
+        [],
+      );
 
       const updatedTimesheet = sections.find(section =>
         section.data.some(

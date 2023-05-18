@@ -251,6 +251,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     justifyContent: 'space-around',
     paddingVertical: 20,
+    gap: 10,
   },
   btnText: {
     color: colors.PRIMARY,
