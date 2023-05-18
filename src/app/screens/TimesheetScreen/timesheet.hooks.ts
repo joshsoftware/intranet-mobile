@@ -2,13 +2,19 @@ import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 import bottomToast from '../../utils/toast';
 import {dateFormate} from '../../utils/date';
-import {getEmployeeListRequest} from '../../services/timesheet/getEmployeeList';
-import {getTimesheetRequest} from '../../services/timesheet/getTimesheet';
-import {deleteTimesheetRequest} from '../../services/timesheet/deleteTimesheet';
-import {getProjectListRequest} from '../../services/timesheet/getProjectList';
-import {updateTimesheetRequest} from '../../services/timesheet/updateTimesheet';
-import {createTimesheetRequest} from '../../services/timesheet/createTimesheet';
+import {
+  createTimesheetRequest,
+  deleteTimesheetRequest,
+  getEmployeeListRequest,
+  getProjectListRequest,
+  getTimesheetRequest,
+  updateTimesheetRequest,
+} from '../../services/timesheet';
 
+import {
+  TDeleteTimesheetRequest,
+  TimesheetRequestBody,
+} from '../../services/timesheet/types';
 import {ISO_DATE_FROMAT} from '../../constant/date';
 import strings from '../../constant/strings';
 
@@ -52,7 +58,7 @@ export const useDeleteTimesheet = () => {
   const queryClient = useQueryClient();
 
   const {mutate, isLoading} = useMutation(
-    (payload: any) => deleteTimesheetRequest(payload),
+    (payload: TDeleteTimesheetRequest) => deleteTimesheetRequest(payload),
     {
       onSuccess: successData => {
         bottomToast(successData.data.message);
@@ -77,7 +83,7 @@ export const useAssignedProjects = (userId: string) => {
 
 export const useEditTimesheet = () => {
   const {mutate, isLoading, isSuccess} = useMutation(
-    (payload: any) => updateTimesheetRequest(payload),
+    (payload: TimesheetRequestBody) => updateTimesheetRequest(payload),
     {
       onSuccess: data => {
         bottomToast(data.data.message);
@@ -90,7 +96,7 @@ export const useEditTimesheet = () => {
 
 export const useAddTimesheet = () => {
   const {mutate, isLoading, isSuccess} = useMutation(
-    (payload: any) => createTimesheetRequest(payload),
+    (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
     {
       onSuccess: data => {
         bottomToast(data?.data?.message);
