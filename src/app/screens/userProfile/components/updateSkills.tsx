@@ -29,7 +29,7 @@ const UpdateSkills = ({toggleModal, isVisible, data, refresh}: Props) => {
       contentStyle={styles.modal}
       onBackButtonPress={toggleModal}
       onBackdropPress={toggleModal}>
-      <ScrollView>
+      <ScrollView style={{}}>
         <Typography type="title" style={styles.title}>
           Update Skills
         </Typography>
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 30,
     paddingHorizontal: 16,
     paddingVertical: 16,
+    flexDirection: 'row',
   },
   main: {
     backgroundColor: colors.PRIMARY,

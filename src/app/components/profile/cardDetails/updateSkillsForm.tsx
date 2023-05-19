@@ -1,5 +1,5 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
-import {Keyboard, StyleSheet, View} from 'react-native';
+import React, {memo, useCallback, useEffect, useState} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -23,6 +23,7 @@ import strings from '../../../constant/strings';
 import {skillsType, updateSkillFormDataType} from '../../../types';
 
 import {flexStyles} from '../../../../styles';
+import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 
 type Props = {
   defaultData?: skillsType;
@@ -33,98 +34,82 @@ type Props = {
 type setType = Set<string>;
 
 const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
-  const [keyboardIsVisible, setKeyboardIsVisible] = useState<boolean>(false);
+  const keyboardIsVisible = useIsKeyboardShown();
   const [otherSkillsStore, setOtherSkillsStore] = useState(new Set());
 
-  const updateSkillFormSchema = useMemo(
-    () =>
-      yup.object().shape({
-        primaryTechnicalSkill: yup
-          .string()
-          .required()
-          .test(
-            'unique',
-            'Unique Skills required.',
-            value => !value || !otherSkillsStore.has(value),
-          ),
-        secondaryTechnicalSkill: yup
-          .string()
-          .when(
-            ['primaryTechnicalSkill'],
-            ([primaryTechnicalSkill], schema) => {
-              return schema
-
-                .test('unique', 'Unique skills required.', value => {
-                  return (
-                    !value ||
-                    (!otherSkillsStore.has(value) &&
-                      value !== primaryTechnicalSkill)
-                  );
-                })
-                .test(
-                  'priamary skill exist',
-                  'Please fill primary skills first.',
-                  value => primaryTechnicalSkill || !value,
-                );
-            },
-          ),
-        ternaryTechnicalSkill: yup
-          .string()
-          .when(
-            ['secondaryTechnicalSkill', 'primaryTechnicalSkill'],
-            ([secondaryTechnicalSkill, primaryTechnicalSkill], schema) => {
-              return schema
-                .test('unique', 'Unique skills required.', value => {
-                  return (
-                    !value ||
-                    (value !== primaryTechnicalSkill &&
-                      value !== secondaryTechnicalSkill &&
-                      !otherSkillsStore.has(value))
-                  );
-                })
-                .test(
-                  'ternary must exist',
-                  'Please fill secondary skills first.',
-                  value => secondaryTechnicalSkill || !value,
-                );
-            },
-          ),
-        otherSkills: yup
-          .string()
-          .when(
-            [
-              'secondaryTechnicalSkill',
-              'ternaryTechnicalSkill',
-              'primaryTechnicalSkill',
-            ],
-            (
-              [
-                secondaryTechnicalSkill,
-                ternaryTechnicalSkill,
-                primaryTechnicalSkill,
-              ],
-              schema,
-            ) => {
-              return schema
-                .test('unique', 'Unique skills required.', value => {
-                  return (
-                    !value ||
-                    (!otherSkillsStore.has(value) &&
-                      value !== primaryTechnicalSkill &&
-                      value !== secondaryTechnicalSkill &&
-                      value !== ternaryTechnicalSkill)
-                  );
-                })
-                .test(
-                  'ternary must exist',
-                  'Please fill ternary skills first.',
-                  () => ternaryTechnicalSkill || !otherSkillsStore.size,
-                );
-            },
-          ),
+  const updateSkillFormSchema = yup.object().shape({
+    primaryTechnicalSkill: yup.string().required(),
+    secondaryTechnicalSkill: yup
+      .string()
+      .when(['primaryTechnicalSkill'], ([primaryTechnicalSkill], schema) => {
+        return schema.test(
+          'primary must exist',
+          'Primary skill must be filled!',
+          value => !value || primaryTechnicalSkill,
+        );
+      })
+      .when(['primaryTechnicalSkill'], ([primaryTechnicalSkill], schema) => {
+        return schema.test(
+          'secondary skill unique',
+          'Secondary skill must be unique!',
+          value => !value || value !== primaryTechnicalSkill,
+        );
       }),
-    [otherSkillsStore],
-  );
+    ternaryTechnicalSkill: yup
+      .string()
+      .when(
+        ['primaryTechnicalSkill', 'secondaryTechnicalSkill'],
+        ([primaryTechnicalSkill, secondaryTechnicalSkill], schema) => {
+          return schema.test(
+            'primary and secondary must exist',
+            'Primary skill and Secondary skill must be filled!',
+            value =>
+              !value || (primaryTechnicalSkill && secondaryTechnicalSkill),
+          );
+        },
+      )
+      .when(
+        ['primaryTechnicalSkill', 'secondaryTechnicalSkill'],
+        ([primaryTechnicalSkill, secondaryTechnicalSkill], schema) => {
+          return schema.test(
+            'primary and secondary must exist',
+            'Ternary skill must be unique!',
+            value =>
+              !value ||
+              (value !== primaryTechnicalSkill &&
+                value !== secondaryTechnicalSkill),
+          );
+        },
+      ),
+    otherSkills: yup
+      .string()
+      .when(
+        [
+          'primaryTechnicalSkill',
+          'secondaryTechnicalSkill',
+          'ternaryTechnicalSkill',
+        ],
+        (
+          [
+            primaryTechnicalSkill,
+            secondaryTechnicalSkill,
+            ternaryTechnicalSkill,
+          ],
+          schema,
+        ) => {
+          return schema.test(
+            'skills must be unique',
+            'Skills must be unique!',
+            _ =>
+              !(
+                otherSkillsStore.has(primaryTechnicalSkill) ||
+                otherSkillsStore.has(secondaryTechnicalSkill) ||
+                otherSkillsStore.has(ternaryTechnicalSkill)
+              ),
+          );
+        },
+      ),
+  });
 
   const {data} = useQuery({
     queryKey: ['getskills'],
@@ -173,15 +158,9 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
     mode: 'onSubmit',
     defaultValues: defaultData
       ? {
-          primaryTechnicalSkill: defaultData.primarySkill
-            ? defaultData.primarySkill
-            : '',
-          secondaryTechnicalSkill: defaultData.secondarySkill
-            ? defaultData.secondarySkill
-            : '',
-          ternaryTechnicalSkill: defaultData.ternarySkill
-            ? defaultData.ternarySkill
-            : '',
+          primaryTechnicalSkill: defaultData.primarySkill || '',
+          secondaryTechnicalSkill: defaultData.secondarySkill || '',
+          ternaryTechnicalSkill: defaultData.ternarySkill || '',
           otherSkills: '',
         }
       : {
@@ -192,20 +171,6 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
         },
     resolver: yupResolver(updateSkillFormSchema),
   });
-
-  useEffect(() => {
-    const showListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardIsVisible(true);
-    });
-    const hideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardIsVisible(false);
-    });
-
-    return () => {
-      showListener.remove();
-      hideListener.remove();
-    };
-  }, []);
 
   const onDeleteOtherSkills = useCallback((skill: string) => {
     setOtherSkillsStore(otherSkillsStoreInstance => {
@@ -371,6 +336,10 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
             </Typography>
           )}
         </View>
+
+        <Text style={styles.otherSkillNoteText}>
+          (Note: Mention your skills which are not covered in technical skills)
+        </Text>
       </>
 
       {!keyboardIsVisible && (
@@ -442,6 +411,10 @@ const styles = StyleSheet.create({
     width: '45%',
   },
   otherSkillsStyle: {flexDirection: 'row', flexWrap: 'wrap'},
+  otherSkillNoteText: {
+    color: colors.SECONDARY_TEXT,
+    paddingBottom: 20,
+  },
 });
 
 export default memo(UpdateSkillForm);
