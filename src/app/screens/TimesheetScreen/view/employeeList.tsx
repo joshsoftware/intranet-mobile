@@ -1,16 +1,11 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {
-  FlatList,
-  ListRenderItemInfo,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, ListRenderItemInfo, StyleSheet, View} from 'react-native';
 
 import EmployeeCard from '../component/employeeCard';
 import Input from '../../../components/input';
 import DateRange from '../../../components/pickers/dateRange';
 import Linear from '../../../components/seperator/linear';
+import Touchable from '../../../components/touchable';
 import {useEmployees} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
@@ -93,14 +88,14 @@ const EmployeeList = () => {
           placeholder="Search"
           style={styles.input}
         />
-        <TouchableOpacity onPress={toggelDatePicker}>
+        <Touchable type="opacity" onPress={toggelDatePicker}>
           <Calendar
             width={18}
             height={18}
             style={styles.icon}
             fill={isDateRangeApplied ? colors.PRIMARY : colors.SECONDARY}
           />
-        </TouchableOpacity>
+        </Touchable>
       </View>
 
       <FlatList

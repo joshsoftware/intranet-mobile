@@ -1,11 +1,5 @@
 import React, {memo, useCallback, useState} from 'react';
-import {
-  StyleSheet,
-  TextStyle,
-  View,
-  TouchableOpacity,
-  ViewStyle,
-} from 'react-native';
+import {StyleSheet, TextStyle, View, ViewStyle} from 'react-native';
 import DateTimePicker, {
   DatePickerOptions,
   DateTimePickerEvent,
@@ -14,6 +8,7 @@ import DateTimePicker, {
   AndroidNativeProps,
 } from '@react-native-community/datetimepicker';
 
+import Touchable from '../touchable';
 import Typography from '../typography';
 
 import {dateFormate} from '../../utils/date';
@@ -60,7 +55,8 @@ const DatePicker = ({
 
   return (
     <>
-      <TouchableOpacity
+      <Touchable
+        type="opacity"
         onPress={handleVisibility}
         style={[styles.picker, error ? styles.error : {}, style]}>
         <View>
@@ -81,7 +77,7 @@ const DatePicker = ({
             />
           )}
         </View>
-      </TouchableOpacity>
+      </Touchable>
       {error && (
         <Typography style={styles.errorText} type="description">
           {error}

@@ -1,11 +1,5 @@
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {
-  Alert,
-  Keyboard,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Alert, Keyboard, StyleSheet, View} from 'react-native';
 
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import Modal from '../../../components/modal';
@@ -13,6 +7,7 @@ import TimesheetForm from '../component/timesheetForm';
 import Typography from '../../../components/typography';
 import SectionListTimesheet from '../component/sectionListTimesheet';
 import Button from '../../../components/button';
+import Touchable from '../../../components/touchable';
 import {useAddTimesheet} from '../timesheet.hooks';
 
 import {convertToMins, dateFormate} from '../../../utils/date';
@@ -200,9 +195,9 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
           userId={userId}
         />
       </View>
-      <TouchableOpacity onPress={toggleForm} style={styles.arrow}>
+      <Touchable type="opacity" onPress={toggleForm} style={styles.arrow}>
         <Arrow width={22} height={22} />
-      </TouchableOpacity>
+      </Touchable>
 
       <View style={styles.list}>
         <SectionListTimesheet
