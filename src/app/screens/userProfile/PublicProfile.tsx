@@ -1,14 +1,13 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
 
 import CardDetails from '../../components/profile/cardDetails';
 import DetailsView from '../../components/profile/cardDetails/detailsView';
 import ProfileView from '../../components/profile/cardDetails/profileView';
+import ScreenWrapper from './components/ScreenWrapper';
 
 import labelFormatter from '../../utils/userProfile/labelFormatter';
 
 import {profileDetailsType, detailsType, socialDetailsType} from '../../types';
-import colors from '../../constant/colors';
 
 type Props = {
   data: {publicProfile: profileDetailsType; socialDetails: socialDetailsType};
@@ -17,7 +16,7 @@ type Props = {
 const PublicProfile = ({data}: Props) => {
   const dataArray = Object.entries(data);
   return (
-    <ScrollView style={{backgroundColor: colors.WHITE}}>
+    <ScreenWrapper>
       {dataArray.map(([key, content], index: number) =>
         key === 'socialDetails' ? (
           <CardDetails key={index} title={labelFormatter(key)}>
@@ -29,7 +28,7 @@ const PublicProfile = ({data}: Props) => {
           </CardDetails>
         ),
       )}
-    </ScrollView>
+    </ScreenWrapper>
   );
 };
 

@@ -179,11 +179,10 @@ const styles = StyleSheet.create({
   tabBarContainer: {
     backgroundColor: colors.WHITE,
     marginBottom: 28,
-    height: 40,
+    height: 45,
   },
   indicatorStyle: {backgroundColor: colors.PRIMARY},
   sceneContainerStyle: {
-    paddingHorizontal: 16,
     flex: 1,
     backgroundColor: colors.WHITE,
   },

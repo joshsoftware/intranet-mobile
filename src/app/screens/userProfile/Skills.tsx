@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import CardDetails from '../../components/profile/cardDetails';
 import DetailsView from '../../components/profile/cardDetails/detailsView';
 import CustomChip from '../../components/customChip';
 import ErrorMessage from '../../components/errorMessage';
+import UpdateSkills from './components/updateSkills';
+import Button from '../../components/button';
+import ScreenWrapper from './components/ScreenWrapper';
 
 import {skillsType} from '../../types';
 import {NO_OTHER_SKILLS} from '../../constant/message';
-import UpdateSkills from './components/updateSkills';
-import Button from '../../components/button';
 
 type Props = {
   data: skillsType;
@@ -23,7 +24,7 @@ const Skills = ({data, refresh}: Props) => {
   const toggleModal = () => setShouldShowModal(v => !v);
   return (
     <>
-      <ScrollView>
+      <ScreenWrapper>
         <CardDetails title="Details">
           <DetailsView
             data={{
@@ -51,7 +52,7 @@ const Skills = ({data, refresh}: Props) => {
             )}
           </View>
         </CardDetails>
-      </ScrollView>
+      </ScreenWrapper>
       <View style={styles.updateContainer}>
         <View style={styles.update}>
           <Button
