@@ -22,7 +22,9 @@ export const getUserRequest = async (payload: GetUserRequestBody) => {
 
 export type GetAllSkillRequestBody = {};
 
-export type GetAllSkillResponseBody = {};
+export type GetAllSkillResponseBody = {
+  data: string[];
+};
 
 export const getAllSkillRequest = async (payload: GetAllSkillRequestBody) => {
   const response = await apiCall<any, any>({
@@ -31,7 +33,9 @@ export const getAllSkillRequest = async (payload: GetAllSkillRequestBody) => {
     data: payload,
   });
 
-  return response.data.data as any;
+  const responseData = response.data as GetAllSkillResponseBody;
+
+  return responseData.data;
 };
 
 export type UpdateSkillRequestBody = {

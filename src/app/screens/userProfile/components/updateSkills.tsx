@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 
 import Modal from '../../../components/modal';
 import Typography from '../../../components/typography';
-import UpdateSkillForm from '../../../components/profile/cardDetails/updateSkillsForm';
+import UpdateSkillForm from './updateSkillsForm';
 
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
@@ -36,7 +36,7 @@ const UpdateSkills = ({toggleModal, isVisible, data, refresh}: Props) => {
 
         <UpdateSkillForm
           toggleModal={toggleModal}
-          defaultData={data}
+          userSkills={data}
           refresh={refresh}
         />
       </ScrollView>
