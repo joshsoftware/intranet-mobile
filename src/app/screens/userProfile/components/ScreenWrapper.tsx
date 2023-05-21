@@ -7,7 +7,9 @@ interface Props {
 }
 
 function ScreenWrapper({children}: Props) {
-  return <ScrollView contentContainerStyle={styles.container}>{children}</ScrollView>;
+  return (
+    <ScrollView contentContainerStyle={styles.container}>{children}</ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({

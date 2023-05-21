@@ -5,9 +5,9 @@ export interface Employee {
 }
 
 export type Timesheet = {
-  project_id: string;
+  project_id: string | number;
   date: string;
-  duration: string;
+  duration: string | number;
   description: string;
   timesheet_id?: string;
   id?: string;
@@ -29,12 +29,13 @@ export interface ITimesheetSectionList {
 }
 
 export type TimesheetRequestBody = {
-  user: {
-    time_sheets_attributes: {
-      [key: string]: Timesheet;
-    };
-    user_id: string;
-  };
+  time_sheets_attributes: Timesheet[];
+  user_id: string;
+};
+
+export type TEditTimesheetRquestBody = {
+  time_sheets_attributes: Timesheet;
+  user_id: string;
 };
 
 export type TDeleteTimesheetRequest = {

@@ -13,6 +13,7 @@ import {
 
 import {
   TDeleteTimesheetRequest,
+  TEditTimesheetRquestBody,
   TimesheetRequestBody,
 } from '../../services/timesheet/types';
 import {ISO_DATE_FROMAT} from '../../constant/date';
@@ -82,11 +83,14 @@ export const useAssignedProjects = (userId: string) => {
 };
 
 export const useEditTimesheet = () => {
+  const queryClient = useQueryClient();
+
   const {mutate, isLoading, isSuccess} = useMutation(
-    (payload: TimesheetRequestBody) => updateTimesheetRequest(payload),
+    (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
     {
       onSuccess: data => {
         bottomToast(data.data.message);
+        queryClient.invalidateQueries(['timesheet']);
       },
       onError: () => bottomToast(strings.EDIT_ERROR, true),
     },
@@ -95,11 +99,14 @@ export const useEditTimesheet = () => {
 };
 
 export const useAddTimesheet = () => {
+  const queryClient = useQueryClient();
+
   const {mutate, isLoading, isSuccess} = useMutation(
     (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
     {
       onSuccess: data => {
         bottomToast(data?.data?.message);
+        queryClient.invalidateQueries(['timesheet']);
       },
       onError: () => bottomToast(strings.CREATE_ERROR, true),
     },

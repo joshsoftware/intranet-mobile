@@ -82,15 +82,13 @@ const TimesheetList = () => {
             text: 'Confirm',
             onPress: () =>
               mutate({
-                time_sheet_date: timesheetData.date,
-                project_id: timesheetData.project,
-                user_id: userId,
+                timesheet_id: timesheetData?.timesheet_id,
               }),
           },
         ],
       );
     },
-    [mutate, userId, params?.name],
+    [mutate, params?.name],
   );
 
   const timesheetEditCall = useCallback(
@@ -180,7 +178,6 @@ const TimesheetList = () => {
             refetch={refetch}
             formData={editTimesheetData}
             userId={userId}
-            current_user={userContextData?.userData.userId + ''}
           />
         )}
       </View>

@@ -18,7 +18,6 @@ type Props = {
   toggleModal: () => void;
   refetch: Function;
   userId: string;
-  current_user: string;
   formData?: Timesheet;
 };
 
@@ -28,7 +27,6 @@ const EditTimesheetModal = ({
   formData,
   isVisible,
   userId,
-  current_user,
 }: Props) => {
   const {mutate, isLoading, isSuccess} = useEditTimesheet();
 
@@ -41,20 +39,14 @@ const EditTimesheetModal = ({
 
   const onEditSave = (data: Timesheet) => {
     mutate({
-      user: {
-        time_sheets_attributes: {
-          1: {
-            project_id: parseInt(data?.project + '', 10),
-            date: dateFormate(data.date, ISO_DATE_FROMAT),
-            duration: convertToMins(data.work_in_hours),
-            description: data.description,
-            id: data.timesheet_id,
-          },
-        },
+      time_sheets_attributes: {
+        project_id: parseInt(data?.project + '', 10),
+        date: dateFormate(data.date, ISO_DATE_FROMAT),
+        duration: convertToMins(data.work_in_hours),
+        description: data.description,
+        id: data.timesheet_id,
       },
       user_id: userId,
-      current_user: current_user,
-      time_sheet_date: formData?.date + '',
     });
   };
 

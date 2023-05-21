@@ -15,6 +15,7 @@ import {
   TCerateTimsheetResponse,
   TDateRange,
   TDeleteTimesheetRequest,
+  TEditTimesheetRquestBody,
   TEmpListTSResponse,
   TimesheetRequestBody,
 } from './types';
@@ -78,8 +79,10 @@ export const getTimesheetRequest = async (
   return response;
 };
 
-export const updateTimesheetRequest = async (payload: TimesheetRequestBody) => {
-  const response = await apiCall<TimesheetRequestBody, ITimesheetResponse>({
+export const updateTimesheetRequest = async (
+  payload: TEditTimesheetRquestBody,
+) => {
+  const response = await apiCall<TEditTimesheetRquestBody, ITimesheetResponse>({
     method: 'PUT',
     url: PUT_TIMESHEET_ROUTE,
     data: payload,

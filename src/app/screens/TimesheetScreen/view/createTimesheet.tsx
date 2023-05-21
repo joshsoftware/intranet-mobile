@@ -42,37 +42,34 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
 
   const {mutate, isSuccess, isLoading} = useAddTimesheet();
 
-  // This logic need to more optimize with changing API structure
+  // mutation function
   const mutationFunc = useCallback(
     (data: CreateTimesheetDataprop[]) => {
-      const time_sheets_data: any = {};
-      data.forEach(section =>
-        section.data.map((value, index) => {
-          time_sheets_data[index + 1] = {
-            project_id: value.project_id,
-            date: dateFormate(value.date, ISO_DATE_FROMAT),
-            duration: convertToMins(value.work_in_hours),
-            description: value.description,
-          };
-        }),
+      const timesheetsData = data.flatMap(section =>
+        section.data.map(value => ({
+          project_id: value.project_id,
+          date: dateFormate(value.date, ISO_DATE_FROMAT),
+          duration: convertToMins(value.work_in_hours),
+          description: value.description,
+        })),
       );
 
       return {
-        user: {
-          time_sheets_attributes: time_sheets_data,
-          user_id: userId,
-        },
+        time_sheets_attributes: timesheetsData,
+        user_id: userId,
       };
     },
     [userId],
   );
 
+  // handle on save action and request to create timesheet
   const onSave = () => {
     mutate(mutationFunc(addedTimesheet));
   };
 
   const toggleForm = useCallback(() => setIsFormVisible(v => !v), []);
 
+  // helps to add a timesheet item to addedTimesheet state
   const onAddTimesheet = useCallback((data: Timesheet, reset?: Function) => {
     const isDuplicateEntry = (section: CreateTimesheetDataprop) => {
       return section.data.some(item => item.timesheet_id === data.timesheet_id);
@@ -105,6 +102,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
     setAddedTimesheet(sections => updateSections([...sections]));
   }, []);
 
+  // handles the delete timesheet
   const onDelete = useCallback((timesheetData: Timesheet) => {
     setAddedTimesheet(sections => {
       const updatedSections = sections.reduce(
@@ -123,6 +121,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
     });
   }, []);
 
+  // handles edit a timesheet by removing from addedTimesheet to formDefaultData
   const onEdit = (timesheetData: Timesheet) => {
     setAddedTimesheet(sections => {
       const updatedSections = sections.reduce(
@@ -159,6 +158,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
     });
   };
 
+  // resets all the states
   const resetStates = useCallback(() => {
     setAddedTimesheet([]);
     setFormDefaultData(undefined);
@@ -166,6 +166,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
     toggleModal();
   }, [toggleModal]);
 
+  // if add timesheet is succeed then reset all the states
   useEffect(() => {
     if (isSuccess) {
       resetStates();
