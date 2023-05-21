@@ -1,7 +1,9 @@
 import React, {memo, PropsWithChildren} from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
-
 import ReactNativeModal, {ModalProps} from 'react-native-modal';
+
+import Toast from '../toast';
+
 import colors from '../../constant/colors';
 
 type Props = (PropsWithChildren | ModalProps) & {
@@ -12,6 +14,7 @@ type Props = (PropsWithChildren | ModalProps) & {
 const BottomModal = ({children, style, contentStyle, ...props}: Props) => (
   <ReactNativeModal style={[styles.main, style]} {...props}>
     <View style={[styles.contentStyle, contentStyle]}>{children}</View>
+    <Toast />
   </ReactNativeModal>
 );
 

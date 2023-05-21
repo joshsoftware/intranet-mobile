@@ -71,3 +71,9 @@ type GetTimesheetAPIData = {
 export type IGetTimesheetsResponse = ITimesheetResponse & {
   data: GetTimesheetAPIData[];
 };
+
+export type TimesheetError = {
+  status: string;
+  code: number | string;
+  message: string;
+};

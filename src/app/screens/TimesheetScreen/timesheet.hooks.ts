@@ -1,6 +1,7 @@
+import {AxiosError} from 'axios';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 
-import bottomToast from '../../utils/toast';
+import toast from '../../utils/toast';
 import {dateFormate} from '../../utils/date';
 import {
   createTimesheetRequest,
@@ -14,10 +15,10 @@ import {
 import {
   TDeleteTimesheetRequest,
   TEditTimesheetRquestBody,
+  TimesheetError,
   TimesheetRequestBody,
 } from '../../services/timesheet/types';
 import {ISO_DATE_FROMAT} from '../../constant/date';
-import strings from '../../constant/strings';
 
 export const useEmployees = (startDate: Date, endDate: Date) => {
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
@@ -62,10 +63,13 @@ export const useDeleteTimesheet = () => {
     (payload: TDeleteTimesheetRequest) => deleteTimesheetRequest(payload),
     {
       onSuccess: successData => {
-        bottomToast(successData.data.message);
+        toast(successData.data.message);
         queryClient.invalidateQueries(['timesheet']);
       },
-      onError: () => bottomToast(strings.DELETE_ERROR, true),
+      onError: (err: AxiosError) => {
+        const error = err.response?.data as TimesheetError;
+        toast(error.message || 'Failed to delete timesheet.', 'error');
+      },
     },
   );
 
@@ -73,9 +77,17 @@ export const useDeleteTimesheet = () => {
 };
 
 export const useAssignedProjects = (userId: string) => {
-  const {data, isLoading} = useQuery(['assigned-projects', userId], () =>
-    getProjectListRequest({user_id: userId}),
+  const {data, isLoading} = useQuery(
+    ['assigned-projects', userId],
+    () => getProjectListRequest({user_id: userId}),
+    {
+      onError: (err: AxiosError) => {
+        const error = err.response?.data as TimesheetError;
+        toast(error.message || 'Failed to fetch the projects.', 'error');
+      },
+    },
   );
+
   return {
     data: data?.data?.data ?? [],
     isLoading,
@@ -89,10 +101,13 @@ export const useEditTimesheet = () => {
     (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
     {
       onSuccess: data => {
-        bottomToast(data.data.message);
+        toast(data.data.message);
         queryClient.invalidateQueries(['timesheet']);
       },
-      onError: () => bottomToast(strings.EDIT_ERROR, true),
+      onError: (err: AxiosError) => {
+        const error = err.response?.data as TimesheetError;
+        toast(error.message || 'Failed to edit the timesheet.', 'error');
+      },
     },
   );
   return {mutate, isLoading, isSuccess};
@@ -105,10 +120,13 @@ export const useAddTimesheet = () => {
     (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
     {
       onSuccess: data => {
-        bottomToast(data?.data?.message);
+        toast(data?.data?.message);
         queryClient.invalidateQueries(['timesheet']);
       },
-      onError: () => bottomToast(strings.CREATE_ERROR, true),
+      onError: (err: AxiosError) => {
+        const error = err.response?.data as TimesheetError;
+        toast(error.message || 'Failed to add the timesheet.', 'error');
+      },
     },
   );
   return {mutate, isLoading, isSuccess};

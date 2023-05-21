@@ -11,7 +11,7 @@ import Input from '../../../components/input';
 import CustomChip from '../../customChip';
 import Button from '../../../components/button';
 
-import bottomToast from '../../../utils/toast';
+import toast from '../../../utils/toast';
 import skillsFormatter from '../../../utils/userProfile/skillsFormatter';
 import {
   getAllSkillRequest,
@@ -140,13 +140,13 @@ const UpdateSkillForm = ({defaultData, toggleModal, refresh}: Props) => {
       resetField('ternaryTechnicalSkill');
       resetField('otherSkills');
       refresh();
-      bottomToast(strings.UPDATE_SKILLS_SUCCESS);
+      toast(strings.UPDATE_SKILLS_SUCCESS);
     },
     retry: false,
     onError: error => {
       if (error) {
         toggleModal();
-        bottomToast(strings.UPDATE_SKILLS_ERROR, true);
+        toast(strings.UPDATE_SKILLS_ERROR, 'error');
       }
     },
   });
