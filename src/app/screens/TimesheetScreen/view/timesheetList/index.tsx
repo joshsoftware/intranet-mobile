@@ -1,24 +1,25 @@
 import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
-import DateRange from '../../../components/pickers/dateRange';
-import SectionListTimesheet from '../component/sectionListTimesheet';
-import EditTimesheetModal from '../component/editTimesheetModal';
-import Typography from '../../../components/typography';
-import Header from '../../../components/header';
-import Touchable from '../../../components/touchable';
-import {useDeleteTimesheet, useTimesheets} from '../timesheet.hooks';
+import DateRange from '../../../../components/pickers/dateRange';
+import SectionListTimesheet from '../../component/sectionListTimesheet';
+import EditTimesheetModal from '../../component/editTimesheetModal';
+import Typography from '../../../../components/typography';
+import Header from '../../../../components/header';
+import Touchable from '../../../../components/touchable';
+import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
 
-import {getParams} from '../../../navigation';
-import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
-import UserContext from '../../../context/user.context';
+import {getParams} from '../../../../navigation';
+import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
+import UserContext from '../../../../context/user.context';
 
-import {Timesheet} from '../interface';
-import {TDateRange} from '../../../../types';
-import strings from '../../../constant/strings';
-import {TIMESHEET_SCREEN} from '../../../constant/screenNames';
-import {Calendar} from '../../../constant/icons';
-import colors from '../../../constant/colors';
+import {Timesheet} from '../../interface';
+import {TDateRange} from '../../../../../types';
+import strings from '../../../../constant/strings';
+import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
+import {Calendar} from '../../../../constant/icons';
+import colors from '../../../../constant/colors';
+import CreateTimesheetButton from './createTimesheetButton';
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -179,6 +180,9 @@ const TimesheetList = () => {
             formData={editTimesheetData}
             userId={userId}
           />
+        )}
+        {params?.user_id && (
+          <CreateTimesheetButton userId={params?.user_id} name={params?.name} />
         )}
       </View>
     </>

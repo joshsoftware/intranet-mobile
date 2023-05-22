@@ -70,7 +70,7 @@ const Button = ({
     <TouchableOpacity
       disabled={disabled}
       style={style}
-      activeOpacity={0.5}
+      activeOpacity={0.8}
       onPress={onPress}>
       {isLoading ? (
         <ActivityIndicator color={colors.WHITE} />

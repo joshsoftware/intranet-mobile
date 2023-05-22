@@ -23,6 +23,7 @@ type Props = {
   isVisible: boolean;
   toggleModal: () => void;
   userId: string;
+  userName?: string;
 };
 
 type CreateTimesheetDataprop = {
@@ -30,7 +31,7 @@ type CreateTimesheetDataprop = {
   data: Timesheet[];
 };
 
-const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
+const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   const [addedTimesheet, setAddedTimesheet] = useState<
     CreateTimesheetDataprop[]
   >([]);
@@ -185,7 +186,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId}: Props) => {
       contentStyle={styles.main}>
       <View style={styles.form}>
         <Typography type="title" style={styles.title}>
-          Add Timesheet
+          Add Timesheet {userName && `for ${userName}`}
         </Typography>
 
         <TimesheetForm
