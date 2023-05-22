@@ -4,10 +4,12 @@ import {StyleSheet, View} from 'react-native';
 import Button from '../../../../components/button';
 import CreateTimesheet from '../createTimesheet';
 
-const CreateTimesheetButton: React.FC<{name: string; userId: string}> = ({
-  name,
-  userId,
-}) => {
+type Props = {
+  name: string;
+  userId: string;
+};
+
+const CreateTimesheetButton: React.FC<Props> = ({name, userId}) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleModal = useCallback(() => setIsVisible(v => !v), []);
