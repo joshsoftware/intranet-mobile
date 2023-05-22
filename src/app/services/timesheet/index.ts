@@ -1,4 +1,5 @@
 import {apiCall} from '../api';
+import {buildRoute} from '../../utils/apis';
 
 import {
   DELETE_TIMESHEET_ROUTE,
@@ -57,8 +58,7 @@ export const getEmployeeListRequest = async (payload: TDateRange) => {
 export const getProjectListRequest = async (payload: {user_id: string}) => {
   const response = await apiCall<{user_id: string}, TAssignedProjectList>({
     method: 'GET',
-    url: GET_PROJECT_LIST_ROUTE,
-    params: payload,
+    url: buildRoute(GET_PROJECT_LIST_ROUTE, payload),
   });
 
   return response;
