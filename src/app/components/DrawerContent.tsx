@@ -8,13 +8,15 @@ import {
 
 import AsyncStore from '../services/asyncStorage';
 import UserContext from '../context/user.context';
+import {googleSignOut} from '../services/auth/google.auth';
 
 import {Cross} from '../constant/icons';
 import colors from '../constant/colors';
 
 const DrawerContent = (props: any) => {
   const [, setUserContextData] = React.useContext(UserContext);
-  const logout = () => {
+  const logout = async () => {
+    await googleSignOut();
     AsyncStore.removeItem('authToken');
     AsyncStore.removeItem('user_data');
     setUserContextData(null);
