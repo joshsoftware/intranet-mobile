@@ -30,8 +30,12 @@ export const useLogin = () => {
       await googleSignOut();
 
       if (error.response) {
-        const responseData = error.response.data;
-        Alert.alert('', responseData.message);
+        if (error.response.status >= 500) {
+          Alert.alert('', 'Server Error: Please try again later.');
+        } else {
+          const responseData = error.response.data;
+          Alert.alert('', responseData.message);
+        }
       } else {
         Alert.alert('', error.message);
       }

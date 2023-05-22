@@ -1,10 +1,28 @@
 import {useMutation, useQuery} from 'react-query';
-import strings from '../../constant/strings';
+
 import {
   getAllSkillRequest,
+  getUserRequest,
   updateSkillRequest,
 } from '../../services/api/userProfile';
 import bottomToast from '../../utils/toast';
+
+import strings from '../../constant/strings';
+
+function useProfileData() {
+  const {data, refetch, isError, isRefetchError, isLoading} = useQuery({
+    queryKey: ['user'],
+    queryFn: getUserRequest,
+  });
+
+  return {
+    data,
+    refetch,
+    isError,
+    isRefetchError,
+    isLoading,
+  };
+}
 
 export function useSkillList() {
   const {data} = useQuery({
@@ -43,3 +61,5 @@ export function useUpdateSkills(toggleModal: () => void, refresh: () => void) {
     isLoading: mutation.isLoading,
   };
 }
+
+export default useProfileData;
