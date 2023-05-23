@@ -5,10 +5,10 @@ import {
   NavigationContainerRef,
   StackActions,
 } from '@react-navigation/native';
-import {RootStackParamList} from './types';
+import {RootDrawerParamList} from './types';
 
 export const navigationRef =
-  React.createRef<NavigationContainerRef<RootStackParamList>>();
+  React.createRef<NavigationContainerRef<RootDrawerParamList>>();
 
 // helps to navigate between screens
 export const navigate = (name: string, params?: any) => {

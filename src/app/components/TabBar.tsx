@@ -1,6 +1,10 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {NavigationHelpers, TabNavigationState} from '@react-navigation/native';
+import {
+  DrawerActions,
+  NavigationHelpers,
+  TabNavigationState,
+} from '@react-navigation/native';
 import {
   BottomTabBarProps,
   BottomTabNavigationEventMap,
@@ -76,7 +80,7 @@ const TabBar = (props: BottomTabBarProps) => {
   });
 
   const handleMenuButtonPress = () => {
-    // TODO
+    navigation.dispatch(DrawerActions.toggleDrawer());
   };
 
   return (

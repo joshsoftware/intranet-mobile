@@ -1,10 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-} from '@react-navigation/drawer';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 
 import AsyncStore from '../services/asyncStorage';
 import UserContext from '../context/user.context';
@@ -12,6 +8,7 @@ import {googleSignOut} from '../services/auth/google.auth';
 
 import {Cross} from '../constant/icons';
 import colors from '../constant/colors';
+import {USER_PROFILE_SCREEN} from '../constant/screenNames';
 
 const DrawerContent = (props: any) => {
   const [, setUserContextData] = React.useContext(UserContext);
@@ -20,6 +17,8 @@ const DrawerContent = (props: any) => {
     AsyncStore.removeItem('authToken');
     AsyncStore.removeItem('user_data');
     setUserContextData(null);
+
+    closeDrawer();
   };
 
   const closeDrawer = () => {
@@ -31,7 +30,12 @@ const DrawerContent = (props: any) => {
       <TouchableOpacity onPress={closeDrawer} style={styles.closeBtn}>
         <Cross width={26} height={26} fill={colors.PRIMARY} />
       </TouchableOpacity>
-      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Profile"
+        labelStyle={styles.label}
+        onPress={() => props.navigation.navigate(USER_PROFILE_SCREEN)}
+        style={styles.border}
+      />
       <DrawerItem
         label="Logout"
         labelStyle={styles.label}
@@ -56,4 +60,5 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
+
 export default DrawerContent;

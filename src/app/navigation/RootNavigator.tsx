@@ -1,26 +1,52 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  createNativeStackNavigator,
-  NativeStackNavigationOptions,
-} from '@react-navigation/native-stack';
+  createDrawerNavigator,
+  DrawerNavigationOptions,
+} from '@react-navigation/drawer';
 
 import LoginScreen from '../screens/LoginScreen';
 import SplashScreen from '../screens/SplashScreen';
+import DrawerContent from '../components/DrawerContent';
+import ProfileScreen from '../screens/ProfileScreen';
+import MainNavigator from './MainNavigator';
+import TimesheetList from '../screens/TimesheetScreen/view/timesheetList';
 
 import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
 import {initNotificationService} from '../services/firebase/messaging';
-import DrawerNavigator from './DrawerNavigation';
 
-import {RootStackParamList} from './types';
-import {DRAWER, LOGIN_SCREEN, USER_TIMESHEET} from '../constant/screenNames';
-import TimesheetList from '../screens/TimesheetScreen/view/timesheetList';
+import {RootDrawerParamList} from './types';
+import {
+  LOGIN_SCREEN,
+  MAIN_SCREEN,
+  USER_PROFILE_SCREEN,
+  USER_TIMESHEET,
+} from '../constant/screenNames';
+import colors from '../constant/colors';
 
-const RootStack = createNativeStackNavigator<RootStackParamList>();
+const RootDrawer = createDrawerNavigator<RootDrawerParamList>();
 
-const screenOptions: NativeStackNavigationOptions = {
+const screenOptions: DrawerNavigationOptions = {
   headerShown: false,
+  drawerPosition: 'right',
+  drawerStyle: {
+    borderTopLeftRadius: 16,
+    borderBottomLeftRadius: 16,
+    flex: 1,
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    backgroundColor: colors.WHITE,
+  },
+  drawerItemStyle: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.TEXT_INPUT_BORDER,
+  },
+  drawerLabelStyle: {
+    textAlign: 'right',
+  },
 };
+
+const renderDrawerContent = (props: any) => <DrawerContent {...props} />;
 
 const RootNavigator = () => {
   const [userContextData, setUserContextData] = useContext(UserContext);
@@ -51,19 +77,24 @@ const RootNavigator = () => {
   }
 
   return (
-    <RootStack.Navigator
+    <RootDrawer.Navigator
       screenOptions={screenOptions}
-      initialRouteName={DRAWER}>
+      initialRouteName={MAIN_SCREEN}
+      useLegacyImplementation
+      drawerContent={renderDrawerContent}>
       {userContextData ? (
         <>
-          <RootStack.Screen name={DRAWER} component={DrawerNavigator} />
-
-          <RootStack.Screen name={USER_TIMESHEET} component={TimesheetList} />
+          <RootDrawer.Screen name={MAIN_SCREEN} component={MainNavigator} />
+          <RootDrawer.Screen
+            name={USER_PROFILE_SCREEN}
+            component={ProfileScreen}
+          />
+          <RootDrawer.Screen name={USER_TIMESHEET} component={TimesheetList} />
         </>
       ) : (
-        <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
+        <RootDrawer.Screen name={LOGIN_SCREEN} component={LoginScreen} />
       )}
-    </RootStack.Navigator>
+    </RootDrawer.Navigator>
   );
 };
 
