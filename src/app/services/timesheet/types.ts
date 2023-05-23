@@ -46,13 +46,11 @@ export type TDeleteTimesheetRequest = {
 };
 
 export interface ITimesheetResponse {
-  code: number;
   message: string;
-  status: string;
 }
 
 export type TCerateTimsheetResponse = ITimesheetResponse & {
-  data: ITimesheetSectionList[];
+  data: {[key: string]: string[]};
 };
 
 export type TEmpListTSResponse = ITimesheetResponse & {

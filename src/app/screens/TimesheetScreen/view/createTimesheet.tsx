@@ -11,8 +11,9 @@ import Touchable from '../../../components/touchable';
 import {useAddTimesheet} from '../timesheet.hooks';
 
 import {convertToMins, dateFormate} from '../../../utils/date';
+import {convertFailedTimesheetsResponse} from '../../../utils/timesheet';
 
-import {Timesheet} from '../interface';
+import {ITimesheetSectionListItem, Timesheet} from '../interface';
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
 import strings from '../../../constant/strings';
@@ -26,14 +27,9 @@ type Props = {
   userName?: string;
 };
 
-type CreateTimesheetDataprop = {
-  title: string;
-  data: Timesheet[];
-};
-
 const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   const [addedTimesheet, setAddedTimesheet] = useState<
-    CreateTimesheetDataprop[]
+    ITimesheetSectionListItem[]
   >([]);
   const [formDefaultData, setFormDefaultData] = useState<Timesheet | undefined>(
     undefined,
@@ -41,11 +37,18 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
   const isKeyboardVisible = useIsKeyboardShown();
 
-  const {mutate, isSuccess, isLoading} = useAddTimesheet();
+  const {
+    mutate,
+    isSuccess,
+    isLoading,
+    isPartiallyFailed,
+    failedTimesheets,
+    errorMessage,
+  } = useAddTimesheet();
 
   // mutation function
   const mutationFunc = useCallback(
-    (data: CreateTimesheetDataprop[]) => {
+    (data: ITimesheetSectionListItem[]) => {
       const timesheetsData = data.flatMap(section =>
         section.data.map(value => ({
           project_id: value.project_id,
@@ -72,11 +75,11 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
 
   // helps to add a timesheet item to addedTimesheet state
   const onAddTimesheet = useCallback((data: Timesheet, reset?: Function) => {
-    const isDuplicateEntry = (section: CreateTimesheetDataprop) => {
+    const isDuplicateEntry = (section: ITimesheetSectionListItem) => {
       return section.data.some(item => item.timesheet_id === data.timesheet_id);
     };
 
-    const updateSections = (sections: CreateTimesheetDataprop[]) => {
+    const updateSections = (sections: ITimesheetSectionListItem[]) => {
       const foundSection = sections.find(
         section => section.title === data.project,
       );
@@ -107,7 +110,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   const onDelete = useCallback((timesheetData: Timesheet) => {
     setAddedTimesheet(sections => {
       const updatedSections = sections.reduce(
-        (prevVal: CreateTimesheetDataprop[], currVal) => {
+        (prevVal: ITimesheetSectionListItem[], currVal) => {
           const data = currVal.data.filter(
             item => item.timesheet_id !== timesheetData.timesheet_id,
           );
@@ -126,7 +129,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   const onEdit = (timesheetData: Timesheet) => {
     setAddedTimesheet(sections => {
       const updatedSections = sections.reduce(
-        (prevVal: CreateTimesheetDataprop[], currVal) => {
+        (prevVal: ITimesheetSectionListItem[], currVal) => {
           const data = currVal.data.filter(
             item => item.timesheet_id !== timesheetData.timesheet_id,
           );
@@ -174,6 +177,14 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
     }
   }, [isSuccess, resetStates]);
 
+  useEffect(() => {
+    if (isPartiallyFailed && failedTimesheets) {
+      setAddedTimesheet(sections =>
+        convertFailedTimesheetsResponse(sections, failedTimesheets),
+      );
+    }
+  }, [isPartiallyFailed, failedTimesheets]);
+
   return (
     <Modal
       isVisible={isVisible}
@@ -200,6 +211,10 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
       <Touchable type="opacity" onPress={toggleForm} style={styles.arrow}>
         <Arrow width={22} height={22} />
       </Touchable>
+
+      {isPartiallyFailed && (
+        <Typography type="error">{errorMessage}</Typography>
+      )}
 
       <View style={styles.list}>
         <SectionListTimesheet

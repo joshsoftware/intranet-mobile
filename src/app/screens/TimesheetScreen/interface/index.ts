@@ -12,3 +12,8 @@ export interface Timesheet {
   project?: string;
   project_id: string;
 }
+
+export interface ITimesheetSectionListItem {
+  title: string;
+  data: Timesheet[];
+}

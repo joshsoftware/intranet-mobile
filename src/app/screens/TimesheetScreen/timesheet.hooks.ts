@@ -116,11 +116,11 @@ export const useEditTimesheet = () => {
 export const useAddTimesheet = () => {
   const queryClient = useQueryClient();
 
-  const {mutate, isLoading, isSuccess} = useMutation(
+  const {mutate, data, isLoading, isSuccess} = useMutation(
     (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
     {
-      onSuccess: data => {
-        toast(data?.data?.message);
+      onSuccess: successData => {
+        toast(successData?.data?.message);
         queryClient.invalidateQueries(['timesheet']);
       },
       onError: (err: AxiosError) => {
@@ -129,5 +129,15 @@ export const useAddTimesheet = () => {
       },
     },
   );
-  return {mutate, isLoading, isSuccess};
+
+  const isPartiallyFailed = isSuccess && Boolean(data?.data.data.length);
+
+  return {
+    mutate,
+    isLoading,
+    isSuccess: isSuccess && !data?.data.data.length,
+    isPartiallyFailed,
+    failedTimesheets: data?.data.data,
+    errorMessage: data?.data.message,
+  };
 };
