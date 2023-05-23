@@ -1,23 +1,19 @@
 import React from 'react';
-import {Alert, Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {SvgProps} from 'react-native-svg';
+import {StyleSheet, View} from 'react-native';
 
 import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
 import DetailRow from '../component/DetailRow';
+import IconButton from '../component/IconButton';
 
 import {IPublicProfileData} from '../interface/publicProfile';
 import {Facebook, Github, Linkdin, Blog} from '../../../constant/icons';
 
-interface Props {
-  data: IPublicProfileData;
-}
-
-const PublicProfile = ({data}: Props) => {
+const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
   const {firstName, lastName, gender, mobileNumber, bloodGroup, dateOfBirth} =
-    data.publicProfile;
+    publicProfile;
 
-  const {linkedin, github, facebook, blog} = data.socialDetails;
+  const {linkedin, github, facebook, blog} = socialDetails;
 
   return (
     <ScreenWrapper>
@@ -45,39 +41,9 @@ const PublicProfile = ({data}: Props) => {
   );
 };
 
-interface IconButtonProps {
-  icon: React.FC<SvgProps>;
-  link: string | null;
-}
-
-const IconButton = ({icon: Icon, link}: IconButtonProps) => {
-  const handlePress = async () => {
-    if (link === null) {
-      return;
-    }
-
-    const supported = await Linking.canOpenURL(link);
-
-    if (supported) {
-      await Linking.openURL(link);
-    } else {
-      Alert.alert(`Could not open URL: \n${link} `);
-    }
-  };
-
-  return (
-    <TouchableOpacity style={styles.iconContainer} onPress={handlePress}>
-      <Icon />
-    </TouchableOpacity>
-  );
-};
-
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-  },
-  iconContainer: {
-    paddingHorizontal: 20,
   },
 });
 

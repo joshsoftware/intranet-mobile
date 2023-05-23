@@ -1,5 +1,4 @@
 import {useContext} from 'react';
-import {Alert} from 'react-native';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 
@@ -7,6 +6,7 @@ import UserContext, {UserData} from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
+import toast from '../../utils/toast';
 
 export const useLogin = () => {
   const [, setUserContextData] = useContext(UserContext);
@@ -31,13 +31,13 @@ export const useLogin = () => {
 
       if (error.response) {
         if (error.response.status >= 500) {
-          Alert.alert('', 'Server Error: Please try again later.');
+          toast('Server Error: Please try again later.', 'error');
         } else {
           const responseData = error.response.data;
-          Alert.alert('', responseData.message);
+          toast(responseData.message, 'error');
         }
       } else {
-        Alert.alert('', error.message);
+        toast(error.message, 'error');
       }
     },
   });

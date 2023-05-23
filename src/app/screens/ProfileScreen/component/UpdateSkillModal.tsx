@@ -1,43 +1,35 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import * as yup from 'yup';
+import {yupResolver} from '@hookform/resolvers/yup';
 
 import Modal from '../../../components/modal';
+import Button from '../../../components/button';
+import Input from '../../../components/input';
+import CustomChip from '../../../components/customChip';
+import PickerSelect from '../../../components/pickers/pickerSelect';
 
 import {useSkillList, useUpdateSkills} from '../profile.hooks';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 
 import {ISkillsData} from '../interface/skills';
-import {yupResolver} from '@hookform/resolvers/yup';
-import Button from '../../../components/button';
 import colors from '../../../constant/colors';
-import Input from '../../../components/input';
-import CustomChip from '../../../components/customChip';
-import PickerSelect from '../../../components/pickers/pickerSelect';
 import strings from '../../../constant/strings';
-import {ScrollView} from 'react-native-gesture-handler';
 import fonts from '../../../constant/fonts';
+import Typography from '../../../components/typography';
 
 interface Props {
   isVisible: boolean;
   closeModal: () => void;
   skillsData: ISkillsData;
-  refresh: () => void;
 }
 
 const updateSkillFormSchema = yup.object().shape({
-  primarySkill: yup.string().required(),
+  primarySkill: yup.string().required('Primary Technical Skill is a requried'),
   secondarySkill: yup
     .string()
     .nullable()
-    .when(['primarySkill'], ([primarySkill], schema) => {
-      return schema.test(
-        'primary must exist',
-        'Primary skill must be filled!',
-        value => !value || primarySkill,
-      );
-    })
     .when(['primarySkill'], ([primarySkill], schema) => {
       return schema.test(
         'secondary skill unique',
@@ -48,16 +40,13 @@ const updateSkillFormSchema = yup.object().shape({
   ternarySkill: yup
     .string()
     .nullable()
-    .when(
-      ['primarySkill', 'secondarySkill'],
-      ([primarySkill, secondarySkill], schema) => {
-        return schema.test(
-          'primary and secondary must exist',
-          'Primary skill and Secondary skill must be filled!',
-          value => !value || (primarySkill && secondarySkill),
-        );
-      },
-    )
+    .when(['secondarySkill'], ([secondarySkill], schema) => {
+      return schema.test(
+        'primary and secondary must exist',
+        'Primary skill and Secondary skill must be filled!',
+        value => !value || secondarySkill,
+      );
+    })
     .when(
       ['primarySkill', 'secondarySkill'],
       ([primarySkill, secondarySkill], schema) => {
@@ -93,12 +82,12 @@ const updateSkillFormSchema = yup.object().shape({
     ),
 });
 
-function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
+function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
   const keyboardIsVisible = useIsKeyboardShown();
   const [otherSkillFieldValue, setOtherSkillFieldValue] = useState('');
 
   const skillsList = useSkillList();
-  const {updateSkills, isLoading} = useUpdateSkills(closeModal, refresh);
+  const {updateSkills, isLoading} = useUpdateSkills(closeModal);
 
   const {
     control,
@@ -111,8 +100,6 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
     defaultValues: skillsData,
     resolver: yupResolver(updateSkillFormSchema),
   });
-
-  console.log(getValues());
 
   const onSubmit = (formData: ISkillsData) => {
     updateSkills({
@@ -137,14 +124,17 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
     setOtherSkillFieldValue('');
   };
 
-  const onDeleteOtherSkills = (skill: string) => {
-    const {otherSkills} = getValues();
+  const onDeleteOtherSkills = useCallback(
+    (skill: string) => {
+      const {otherSkills} = getValues();
 
-    const skills =
-      otherSkills?.split(',').filter(e => e !== '' && e !== skill) || [];
+      const skills =
+        otherSkills?.split(',').filter(e => e !== '' && e !== skill) || [];
 
-    setValue('otherSkills', skills.join(','));
-  };
+      setValue('otherSkills', skills.join(','));
+    },
+    [getValues, setValue],
+  );
 
   return (
     <Modal
@@ -155,10 +145,12 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
       animationOutTiming={500}
       contentStyle={styles.contentStyle}>
       <ScrollView>
-        <Text style={styles.title}>Update Skills</Text>
+        <Typography style={styles.title}>Update Skills</Typography>
 
         <View style={styles.fieldStyle}>
-          <Text style={styles.labelText}>Primary Technical Skill</Text>
+          <Typography style={styles.labelText}>
+            Primary Technical Skill
+          </Typography>
           <Controller
             control={control}
             render={({field: {onChange, value}}) => (
@@ -179,7 +171,9 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
         </View>
 
         <View style={styles.fieldStyle}>
-          <Text style={styles.labelText}>Secondary Technical Skill</Text>
+          <Typography style={styles.labelText}>
+            Secondary Technical Skill
+          </Typography>
           <Controller
             control={control}
             render={({field: {onChange, value}}) => (
@@ -200,7 +194,9 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
         </View>
 
         <View style={styles.fieldStyle}>
-          <Text style={styles.labelText}>Ternary Technical Skill</Text>
+          <Typography style={styles.labelText}>
+            Ternary Technical Skill
+          </Typography>
           <Controller
             control={control}
             render={({field: {onChange, value}}) => (
@@ -221,7 +217,7 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
         </View>
 
         <View style={styles.fieldStyle}>
-          <Text style={styles.labelText}>Other Skills</Text>
+          <Typography style={styles.labelText}>Other Skills</Typography>
           <Controller
             control={control}
             render={({field: {value}}) => (
@@ -229,7 +225,7 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
                 <View style={styles.otherSkillChipContainer}>
                   {value
                     ?.split(',')
-                    .filter(e => e)
+                    .filter(e => e !== '')
                     .map((skill: string, index: number) => {
                       return (
                         <CustomChip
@@ -253,13 +249,15 @@ function UpdateSkillModal({isVisible, closeModal, refresh, skillsData}: Props) {
             name="otherSkills"
           />
           {errors.otherSkills && (
-            <Text style={styles.error}>{errors.otherSkills.message}</Text>
+            <Typography style={styles.error}>
+              {errors.otherSkills.message}
+            </Typography>
           )}
 
-          <Text style={styles.otherSkillNoteText}>
+          <Typography style={styles.otherSkillNoteText}>
             (Note: Mention your skills which are not covered in technical
             skills.)
-          </Text>
+          </Typography>
         </View>
 
         {!keyboardIsVisible && (
@@ -331,4 +329,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpdateSkillModal;
+export default React.memo(UpdateSkillModal);

@@ -20,7 +20,7 @@ export const getUserRequest = async (payload: GetUserRequestBody) => {
     data: payload,
   });
 
-  return response.data.data;
+  return response;
 };
 
 export type GetAllSkillRequestBody = {};
@@ -39,7 +39,7 @@ export const getAllSkillRequest = async (payload: GetAllSkillRequestBody) => {
     data: payload,
   });
 
-  return response.data.data;
+  return response;
 };
 
 export type UpdateSkillRequestBody = {
@@ -60,5 +60,5 @@ export const updateSkillRequest = async (payload: UpdateSkillRequestBody) => {
     data: payload,
   });
 
-  return response.data.message as any;
+  return response;
 };

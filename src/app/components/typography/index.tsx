@@ -6,7 +6,15 @@ import fonts from '../../constant/fonts';
 
 type Props = PropsWithChildren & {
   style?: TextStyle;
-  type?: 'title' | 'header' | 'subheader' | 'description' | 'label';
+  type?:
+    | 'title'
+    | 'header'
+    | 'subheader'
+    | 'description'
+    | 'label'
+    | 'text'
+    | 'secondaryText'
+    | 'secondaryLabel';
 };
 
 const Typography = ({children, type = 'title', style}: Props) => (
@@ -47,6 +55,21 @@ const styles = StyleSheet.create({
   label: {
     color: colors.LABEL_COLOR_PRIMARY,
     lineHeight: 16,
+    fontFamily: fonts.ARIAL,
+    fontSize: 14,
+  },
+  text: {
+    color: colors.SECONDARY,
+    fontFamily: fonts.ARIAL,
+    fontSize: 14,
+  },
+  secondaryText: {
+    color: colors.SECONDARY_TEXT,
+    fontFamily: fonts.ARIAL,
+    fontSize: 14,
+  },
+  secondaryLabel: {
+    color: colors.SECONDARY_TEXT,
     fontFamily: fonts.ARIAL,
     fontSize: 14,
   },

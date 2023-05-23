@@ -6,11 +6,11 @@ import DetailRow from '../component/DetailRow';
 
 import {IPersonalDetailsData} from '../interface/personalDetails';
 
-interface Props {
-  data: IPersonalDetailsData;
-}
-
-const PersonalDetails = ({data}: Props) => {
+const PersonalDetails = ({
+  personalDetail,
+  address,
+  emergencyContactDetails,
+}: IPersonalDetailsData) => {
   const {
     panNumber,
     personalEmail,
@@ -20,12 +20,19 @@ const PersonalDetails = ({data}: Props) => {
     workExperience,
     previousCompany,
     tshirtSize,
-  } = data.personalDetail;
+  } = personalDetail;
 
-  const addressCards = data.address.map(
-    ({typeOfAddress, address, city, pinCode, state, mobileNumber}) => (
+  const addressCards = address.map(
+    ({
+      typeOfAddress,
+      address: addressValue,
+      city,
+      pinCode,
+      state,
+      mobileNumber,
+    }) => (
       <Card key={typeOfAddress} title={typeOfAddress}>
-        <DetailRow label="Address" value={address} />
+        <DetailRow label="Address" value={addressValue} />
         <DetailRow label="City" value={city} />
         <DetailRow label="Pin Code" value={pinCode} />
         <DetailRow label="State" value={state} />
@@ -52,14 +59,14 @@ const PersonalDetails = ({data}: Props) => {
       </Card>
 
       <Card title="Emergency Contact Details">
-        <DetailRow label="Name" value={data.emergencyContactDetails[0]?.name} />
+        <DetailRow label="Name" value={emergencyContactDetails[0]?.name} />
         <DetailRow
           label="Relation"
-          value={data.emergencyContactDetails[0]?.relation}
+          value={emergencyContactDetails[0]?.relation}
         />
         <DetailRow
           label="Phone No"
-          value={data.emergencyContactDetails[0]?.phoneNumber}
+          value={emergencyContactDetails[0]?.phoneNumber}
         />
       </Card>
 

@@ -8,16 +8,12 @@ import DetailRow from '../component/DetailRow';
 import colors from '../../../constant/colors';
 import {IAssetData} from '../interface/assets';
 
-interface Props {
-  data: IAssetData;
-}
-
-const Assets = ({data}: Props) => {
-  const currentAssets = data.currentAsset.map(({name, startDate, isActive}) => (
+const Assets = ({currentAsset, previousAsset}: IAssetData) => {
+  const currentAssets = currentAsset.map(({name, startDate, isActive}) => (
     <DetailRow label={name} value={[startDate, isActive ? 'yes' : 'no']} />
   ));
 
-  const previousAssets = data.previousAsset.map(
+  const previousAssets = previousAsset.map(
     ({name, startDate, endDate, isActive}) => (
       <DetailRow
         label={name}

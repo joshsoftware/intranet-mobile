@@ -1,11 +1,12 @@
-import {useMutation, useQuery} from 'react-query';
+import {ToastAndroid} from 'react-native';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 import {
   getAllSkillRequest,
   getUserRequest,
   updateSkillRequest,
 } from '../../services/api/userProfile';
-import bottomToast from '../../utils/toast';
+import toast from '../../utils/toast';
 
 import strings from '../../constant/strings';
 
@@ -16,7 +17,7 @@ function useProfileData() {
   });
 
   return {
-    data,
+    data: data?.data?.data,
     refetch,
     isError,
     isRefetchError,
@@ -26,13 +27,12 @@ function useProfileData() {
 
 export function useSkillList() {
   const {data} = useQuery({
-    queryKey: ['getskills'],
+    queryKey: ['getSkills'],
     queryFn: getAllSkillRequest,
-    initialData: [],
   });
 
   const skillList =
-    data?.map(value => ({
+    data?.data.data?.map(value => ({
       label: value,
       value: value,
     })) || [];
@@ -40,25 +40,36 @@ export function useSkillList() {
   return skillList;
 }
 
-export function useUpdateSkills(toggleModal: () => void, refresh: () => void) {
-  const mutation = useMutation(updateSkillRequest, {
-    onSuccess: () => {
-      toggleModal();
-      refresh();
-      bottomToast(strings.UPDATE_SKILLS_SUCCESS);
+export function useUpdateSkills(closeModal: () => void) {
+  const queryClient = useQueryClient();
+
+  const {isSuccess, isLoading, mutate, isError} = useMutation(
+    updateSkillRequest,
+    {
+      onSuccess: () => {
+        closeModal();
+        ToastAndroid.showWithGravity(
+          strings.UPDATE_SKILLS_SUCCESS,
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+        );
+
+        queryClient.invalidateQueries(['user']);
+      },
+      retry: false,
+      onError: error => {
+        if (error) {
+          toast(strings.UPDATE_SKILLS_ERROR, 'error');
+        }
+      },
     },
-    retry: false,
-    onError: error => {
-      if (error) {
-        toggleModal();
-        bottomToast(strings.UPDATE_SKILLS_ERROR, true);
-      }
-    },
-  });
+  );
 
   return {
-    updateSkills: mutation.mutate,
-    isLoading: mutation.isLoading,
+    updateSkills: mutate,
+    isLoading,
+    isSuccess,
+    isError,
   };
 }
 

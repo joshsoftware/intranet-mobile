@@ -1,5 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+
+import Typography from '../../../components/typography';
+
 import colors from '../../../constant/colors';
 
 interface Props {
@@ -12,11 +15,11 @@ function DetailRow({label, value}: Props) {
     return (
       <View style={styles.container}>
         <View style={styles.flexStart}>
-          <Text>{label}</Text>
+          <Typography type="secondaryLabel">{label}</Typography>
         </View>
         {value.map(e => (
           <View style={styles.flexEnd}>
-            <Text style={styles.value}>{e || '-'}</Text>
+            <Typography type="text">{e || '-'}</Typography>
           </View>
         ))}
       </View>
@@ -26,10 +29,10 @@ function DetailRow({label, value}: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.flexStart}>
-        <Text>{label}</Text>
+        <Typography type="secondaryLabel">{label}</Typography>
       </View>
       <View style={styles.flexEnd}>
-        <Text style={styles.value}>{value || '-'}</Text>
+        <Typography type="text">{value || '-'}</Typography>
       </View>
     </View>
   );
@@ -40,12 +43,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 10,
   },
   label: {paddingVertical: 10, color: colors.SECONDARY_TEXT},
-  value: {
-    paddingVertical: 10,
-    color: colors.SECONDARY,
-  },
   flexStart: {
     flex: 1,
     alignContent: 'flex-start',

@@ -1,22 +1,26 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
 import DetailRow from '../component/DetailRow';
 import Button from '../../../components/button';
 import UpdateSkillModal from '../component/UpdateSkillModal';
+import CustomChip from '../../../components/customChip';
 
-import colors from '../../../constant/colors';
 import {ISkillsData} from '../interface/skills';
 
-interface Props {
-  data: ISkillsData;
-  refresh: () => void;
-}
-
-const Skills = ({data, refresh}: Props) => {
+const Skills = (data: ISkillsData) => {
   const [modalVisible, setModalVisible] = useState(false);
+
+  const otherSkills = data.otherSkills
+    ? data.otherSkills
+        .split(',')
+        .filter(e => e !== '')
+        .map(skill => <CustomChip label={skill} mode="view" />)
+    : [];
+
+  const toggleModal = () => setModalVisible(!modalVisible);
 
   return (
     <View style={styles.container}>
@@ -37,22 +41,17 @@ const Skills = ({data, refresh}: Props) => {
         </Card>
 
         <Card title="Other Skills">
-          <Text style={styles.otherSkillsText}>{data.otherSkills}</Text>
+          <View style={styles.otherSkillsContainer}>{otherSkills}</View>
         </Card>
       </ScreenWrapper>
 
       <View style={styles.buttonContainer}>
-        <Button
-          title="Update Skills"
-          type="secondary"
-          onPress={() => setModalVisible(true)}
-        />
+        <Button title="Update Skills" type="secondary" onPress={toggleModal} />
       </View>
 
       <UpdateSkillModal
         isVisible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-        refresh={refresh}
+        closeModal={toggleModal}
         skillsData={data}
       />
     </View>
@@ -63,8 +62,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  otherSkillsText: {
-    color: colors.SECONDARY,
+  otherSkillsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   buttonContainer: {
     padding: 16,

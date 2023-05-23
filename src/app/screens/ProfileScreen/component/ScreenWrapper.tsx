@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
+
 import colors from '../../../constant/colors';
 
 interface Props {

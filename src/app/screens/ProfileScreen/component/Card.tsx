@@ -1,5 +1,7 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+
+import Typography from '../../../components/typography';
 
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
@@ -12,7 +14,7 @@ interface Props {
 function Card({title, children}: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Typography style={styles.title}>{title}</Typography>
       {children}
     </View>
   );

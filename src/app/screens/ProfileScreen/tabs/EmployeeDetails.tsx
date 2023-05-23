@@ -1,22 +1,24 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
 
 import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
 import DetailRow from '../component/DetailRow';
 import ProjectAccordion from '../component/ProjectAccordion';
+import Typography from '../../../components/typography';
 
-import colors from '../../../constant/colors';
 import {IEmployeeDetailData} from '../interface/employeeDetail';
 
-interface Props {
-  data: IEmployeeDetailData;
-}
-
-const EmployeeDetails = ({data}: Props) => {
-  const {employeeId, emailId, employeeLocation} = data.employeeDetail;
-  const {designation, designationTrack} = data.designationDetails;
-  const {assessmentPlatform, assessmentMonths} = data.assessmentDetails;
+const EmployeeDetails = ({
+  employeeDetail,
+  designationDetails,
+  assessmentDetails,
+  otherDetails,
+  currentProjects,
+  previousProjects,
+}: IEmployeeDetailData) => {
+  const {employeeId, emailId, employeeLocation} = employeeDetail;
+  const {designation, designationTrack} = designationDetails;
+  const {assessmentPlatform, assessmentMonths} = assessmentDetails;
   const {
     grade,
     company,
@@ -28,7 +30,7 @@ const EmployeeDetails = ({data}: Props) => {
     source,
     project,
     description,
-  } = data.otherDetails;
+  } = otherDetails;
 
   return (
     <ScreenWrapper>
@@ -53,7 +55,7 @@ const EmployeeDetails = ({data}: Props) => {
         <DetailRow label="Company" value={company} />
         <DetailRow label="Business Unit" value={businessUnit} />
         <DetailRow label="Sub Business Unit" value={subBusinessUnit} />
-        <DetailRow label="Function" value={data.otherDetails.function} />
+        <DetailRow label="Function" value={otherDetails.function} />
         <DetailRow label="Date of Relieving" value={dateOfRelieving} />
         <DetailRow
           label="Notification Emails"
@@ -67,22 +69,16 @@ const EmployeeDetails = ({data}: Props) => {
         <DetailRow label="Project" value={project} />
       </Card>
       <Card title="Description">
-        <Text style={styles.descriptionText}>{description}</Text>
+        <Typography type="text">{description}</Typography>
       </Card>
       <Card title="Current Projects">
-        <ProjectAccordion data={data.currentProjects} />
+        <ProjectAccordion data={currentProjects} />
       </Card>
       <Card title="Previous Projects">
-        <ProjectAccordion data={data.previousProjects} />
+        <ProjectAccordion data={previousProjects} />
       </Card>
     </ScreenWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  descriptionText: {
-    color: colors.SECONDARY,
-  },
-});
 
 export default React.memo(EmployeeDetails);

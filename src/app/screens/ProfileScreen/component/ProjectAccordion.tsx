@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
 import * as Animatable from 'react-native-animatable';
+
+import Typography from '../../../components/typography';
+import DetailRow from './DetailRow';
 
 import {IProject} from '../interface/employeeDetail';
 import colors from '../../../constant/colors';
 import {ArrowDown, ArrowUp} from '../../../constant/icons';
-import DetailRow from './DetailRow';
 
 interface Props {
   data: IProject[];
@@ -22,7 +24,7 @@ function ProjectAccordion({data}: Props) {
   ) => {
     return (
       <Animatable.View duration={400} style={styles.header}>
-        <Text style={styles.headerText}>{content.projectName}</Text>
+        <Typography style={styles.headerText}>{content.projectName}</Typography>
         {isActive ? <ArrowUp /> : <ArrowDown />}
       </Animatable.View>
     );
@@ -48,7 +50,7 @@ function ProjectAccordion({data}: Props) {
   return (
     <>
       {!data || data.length === 0 ? (
-        <Text>No Projects Here!</Text>
+        <Typography type="secondaryText">No Projects Here!</Typography>
       ) : (
         <Accordion
           activeSections={activeSections}

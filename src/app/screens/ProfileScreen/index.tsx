@@ -1,11 +1,5 @@
-import React, {useContext} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native';
+import React, {useCallback, useContext} from 'react';
+import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
 import {
   TabBar,
   TabBarProps,
@@ -20,6 +14,7 @@ import Skills from './tabs/Skills';
 import Assets from './tabs/Assets';
 import Deployments from './tabs/Deployments';
 import EmployeeDetails from './tabs/EmployeeDetails';
+import Typography from '../../components/typography';
 
 import UserContext from '../../context/user.context';
 import useProfileData from './profile.hooks';
@@ -35,26 +30,25 @@ type RenderSceneProps = SceneRendererProps & {
   };
 };
 
-const _renderScene = (
+const renderSceneScreen = (
   data: IUserProfileData,
-  refetch: () => void,
   {route}: RenderSceneProps,
 ) => {
   switch (route.key) {
     case 'publicProfile':
-      return <PublicProfile data={data.publicProfile} />;
+      return <PublicProfile {...data.publicProfile} />;
     case 'personalDetails':
-      return <PersonalDetails data={data.privateProfile} />;
+      return <PersonalDetails {...data.privateProfile} />;
     case 'skills':
-      return <Skills data={data.skills} refresh={refetch} />;
+      return <Skills {...data.skills} />;
     case 'employeeDetails':
-      return <EmployeeDetails data={data.employeeDetail} />;
+      return <EmployeeDetails {...data.employeeDetail} />;
     case 'assets':
-      return <Assets data={data.assets} />;
+      return <Assets {...data.assets} />;
     case 'deployments':
-      return <Deployments data={data.deployment} />;
+      return <Deployments {...data.deployment} />;
     default:
-      return <PublicProfile data={data.publicProfile} />;
+      return <PublicProfile {...data.publicProfile} />;
   }
 };
 
@@ -87,19 +81,19 @@ const routesPerRole = {
 
 const ProfileScreen = () => {
   const [userContext] = useContext(UserContext);
+  const [sceneIndex, setSceneIndex] = React.useState(0);
+  const {data, isLoading, isError} = useProfileData();
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState(
-    routesPerRole[userContext?.userData.role || 'Employee'],
+  const routes = routesPerRole[userContext?.userData.role || 'Employee'];
+
+  const renderScene = useCallback(
+    (props: RenderSceneProps) => {
+      if (data) {
+        return renderSceneScreen(data, props);
+      }
+    },
+    [data],
   );
-
-  const {data, isLoading, isError, refetch} = useProfileData();
-
-  const renderScene = (props: RenderSceneProps) => {
-    if (data) {
-      return _renderScene(data, refetch, props);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,14 +106,14 @@ const ProfileScreen = () => {
         <>
           {isError ? (
             <View style={styles.flexCenter}>
-              <Text>Something went wrong!</Text>
+              <Typography type="description">Something went wrong!</Typography>
             </View>
           ) : (
             <TabView
-              navigationState={{index, routes}}
+              navigationState={{index: sceneIndex, routes}}
               renderScene={renderScene}
               renderTabBar={renderTabBar}
-              onIndexChange={setIndex}
+              onIndexChange={setSceneIndex}
             />
           )}
         </>

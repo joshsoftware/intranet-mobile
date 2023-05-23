@@ -1,32 +1,24 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
 
 import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
 import DetailRow from '../component/DetailRow';
+import Typography from '../../../components/typography';
 
 import {IDeploymentDetails} from '../interface/deployments';
 
-interface Props {
-  data: IDeploymentDetails;
-}
-
-const Deployments = ({data}: Props) => {
-  const {
-    availableFrom,
-    cvLink,
-    deploymentOwnerEmails,
-    ownedByEmails,
-    OETA: oeta,
-    NETA: neta,
-    availableHours,
-    interviewRejected,
-    remark,
-    deploymentNote,
-  } = data;
-
-  console.log(data);
-
+const Deployments = ({
+  availableFrom,
+  cvLink,
+  deploymentOwnerEmails,
+  ownedByEmails,
+  OETA: oeta,
+  NETA: neta,
+  availableHours,
+  interviewRejected,
+  remark,
+  deploymentNote,
+}: IDeploymentDetails) => {
   return (
     <ScreenWrapper>
       <Card title="Deployment Details">
@@ -44,19 +36,19 @@ const Deployments = ({data}: Props) => {
 
       {interviewRejected && (
         <Card title="Interview Rejected">
-          <Text>{interviewRejected}</Text>
+          <Typography type="text">{interviewRejected}</Typography>
         </Card>
       )}
 
       {deploymentNote && (
         <Card title="Deployment Note">
-          <Text>{deploymentNote}</Text>
+          <Typography type="text">{deploymentNote}</Typography>
         </Card>
       )}
 
       {remark && (
         <Card title="Remark">
-          <Text>{remark}</Text>
+          <Typography type="text">{remark}</Typography>
         </Card>
       )}
     </ScreenWrapper>
