@@ -12,6 +12,7 @@ import {useAddTimesheet} from '../timesheet.hooks';
 
 import {convertToMins, dateFormate} from '../../../utils/date';
 import {convertFailedTimesheetsResponse} from '../../../utils/timesheet';
+import toast from '../../../utils/toast';
 
 import {ITimesheetSectionListItem, Timesheet} from '../interface';
 import colors from '../../../constant/colors';
@@ -43,7 +44,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
     isLoading,
     isPartiallyFailed,
     failedTimesheets,
-    errorMessage,
+    message,
   } = useAddTimesheet();
 
   // mutation function
@@ -170,6 +171,12 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
     toggleModal();
   }, [toggleModal]);
 
+  const onModalHide = () => {
+    if (isSuccess) {
+      toast(message!);
+    }
+  };
+
   // if add timesheet is succeed then reset all the states
   useEffect(() => {
     if (isSuccess) {
@@ -192,8 +199,9 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
       animationOut={'slideOutDown'}
       animationInTiming={500}
       animationOutTiming={500}
-      onBackButtonPress={toggleModal}
-      onBackdropPress={toggleModal}
+      onBackButtonPress={resetStates}
+      onBackdropPress={resetStates}
+      onModalHide={onModalHide}
       contentStyle={styles.main}>
       <View style={styles.form}>
         <Typography type="title" style={styles.title}>
@@ -213,7 +221,9 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
       </Touchable>
 
       {isPartiallyFailed && (
-        <Typography type="error">{errorMessage}</Typography>
+        <Typography type="error" style={styles.errorText}>
+          {message}
+        </Typography>
       )}
 
       <View style={styles.list}>
@@ -291,6 +301,9 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     width: '100%',
+  },
+  errorText: {
+    paddingHorizontal: 16,
   },
 });
 
