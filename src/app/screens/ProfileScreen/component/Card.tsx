@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native';
 import Typography from '../../../components/typography';
 
 import colors from '../../../constant/colors';
-import fonts from '../../../constant/fonts';
 
 interface Props {
   title: string;
@@ -14,7 +13,9 @@ interface Props {
 function Card({title, children}: Props) {
   return (
     <View style={styles.container}>
-      <Typography style={styles.title}>{title}</Typography>
+      <Typography style={styles.title} type="header">
+        {title}
+      </Typography>
       {children}
     </View>
   );
@@ -30,10 +31,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   title: {
-    color: colors.SECONDARY,
-    fontFamily: fonts.ARIAL_BOLD,
     fontWeight: 'bold',
-    paddingBottom: 20,
+    paddingBottom: 10,
     textTransform: 'capitalize',
   },
 });

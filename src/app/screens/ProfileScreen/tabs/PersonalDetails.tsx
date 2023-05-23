@@ -6,11 +6,9 @@ import DetailRow from '../component/DetailRow';
 
 import {IPersonalDetailsData} from '../interface/personalDetails';
 
-const PersonalDetails = ({
-  personalDetail,
-  address,
-  emergencyContactDetails,
-}: IPersonalDetailsData) => {
+const PersonalDetails = (props: IPersonalDetailsData) => {
+  const {personalDetail, address, emergencyContactDetails} = props || {};
+
   const {
     panNumber,
     personalEmail,
@@ -20,26 +18,28 @@ const PersonalDetails = ({
     workExperience,
     previousCompany,
     tshirtSize,
-  } = personalDetail;
+  } = personalDetail || {};
 
-  const addressCards = address.map(
-    ({
-      typeOfAddress,
-      address: addressValue,
-      city,
-      pinCode,
-      state,
-      mobileNumber,
-    }) => (
-      <Card key={typeOfAddress} title={typeOfAddress}>
-        <DetailRow label="Address" value={addressValue} />
-        <DetailRow label="City" value={city} />
-        <DetailRow label="Pin Code" value={pinCode} />
-        <DetailRow label="State" value={state} />
-        <DetailRow label="Landline/Mobile No" value={mobileNumber} />
-      </Card>
-    ),
-  );
+  const addressCards = address
+    ? address.map(
+        ({
+          typeOfAddress,
+          address: addressValue,
+          city,
+          pinCode,
+          state,
+          mobileNumber,
+        }) => (
+          <Card key={typeOfAddress} title={typeOfAddress}>
+            <DetailRow label="Address" value={addressValue} />
+            <DetailRow label="City" value={city} />
+            <DetailRow label="Pin Code" value={pinCode} />
+            <DetailRow label="State" value={state} />
+            <DetailRow label="Landline/Mobile No" value={mobileNumber} />
+          </Card>
+        ),
+      )
+    : [];
 
   return (
     <ScreenWrapper>
@@ -52,7 +52,7 @@ const PersonalDetails = ({
           label="Date Of Joining"
           value={dateOfJoining?.split('-').reverse().join('-')}
         />
-        <DetailRow label="Work Experience" value={`${workExperience}`} />
+        <DetailRow label="Work Experience" value={workExperience} />
         <DetailRow label="Previous Company" value={previousCompany} />
         <DetailRow label="Bonusly Auth Token" value={'-'} />
         <DetailRow label="Tshirt Size" value={tshirtSize} />

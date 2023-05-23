@@ -8,17 +8,19 @@ import Typography from '../../../components/typography';
 
 import {IEmployeeDetailData} from '../interface/employeeDetail';
 
-const EmployeeDetails = ({
-  employeeDetail,
-  designationDetails,
-  assessmentDetails,
-  otherDetails,
-  currentProjects,
-  previousProjects,
-}: IEmployeeDetailData) => {
-  const {employeeId, emailId, employeeLocation} = employeeDetail;
-  const {designation, designationTrack} = designationDetails;
-  const {assessmentPlatform, assessmentMonths} = assessmentDetails;
+const EmployeeDetails = (props: IEmployeeDetailData) => {
+  const {
+    employeeDetail,
+    designationDetails,
+    assessmentDetails,
+    otherDetails,
+    currentProjects,
+    previousProjects,
+  } = props || {};
+
+  const {employeeId, emailId, employeeLocation} = employeeDetail || {};
+  const {designation, designationTrack} = designationDetails || {};
+  const {assessmentPlatform, assessmentMonths} = assessmentDetails || {};
   const {
     grade,
     company,
@@ -30,7 +32,7 @@ const EmployeeDetails = ({
     source,
     project,
     description,
-  } = otherDetails;
+  } = otherDetails || {};
 
   return (
     <ScreenWrapper>

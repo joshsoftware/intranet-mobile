@@ -14,7 +14,7 @@ type Props = PropsWithChildren & {
     | 'label'
     | 'text'
     | 'secondaryText'
-    | 'secondaryLabel';
+    | 'error';
 };
 
 const Typography = ({children, type = 'title', style}: Props) => (
@@ -68,10 +68,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.ARIAL,
     fontSize: 14,
   },
-  secondaryLabel: {
-    color: colors.SECONDARY_TEXT,
+  error: {
+    color: colors.ERROR_RED,
     fontFamily: fonts.ARIAL,
-    fontSize: 14,
+    fontSize: 12,
   },
 });
 export default memo(Typography);

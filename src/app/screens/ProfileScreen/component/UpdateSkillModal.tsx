@@ -9,6 +9,7 @@ import Button from '../../../components/button';
 import Input from '../../../components/input';
 import CustomChip from '../../../components/customChip';
 import PickerSelect from '../../../components/pickers/pickerSelect';
+import Typography from '../../../components/typography';
 
 import {useSkillList, useUpdateSkills} from '../profile.hooks';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
@@ -17,7 +18,6 @@ import {ISkillsData} from '../interface/skills';
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
 import fonts from '../../../constant/fonts';
-import Typography from '../../../components/typography';
 
 interface Props {
   isVisible: boolean;
@@ -145,10 +145,12 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
       animationOutTiming={500}
       contentStyle={styles.contentStyle}>
       <ScrollView>
-        <Typography style={styles.title}>Update Skills</Typography>
+        <Typography style={styles.title} type="header">
+          Update Skills
+        </Typography>
 
         <View style={styles.fieldStyle}>
-          <Typography style={styles.labelText}>
+          <Typography type="text" style={styles.labelText}>
             Primary Technical Skill
           </Typography>
           <Controller
@@ -171,7 +173,7 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
         </View>
 
         <View style={styles.fieldStyle}>
-          <Typography style={styles.labelText}>
+          <Typography type="text" style={styles.labelText}>
             Secondary Technical Skill
           </Typography>
           <Controller
@@ -194,7 +196,7 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
         </View>
 
         <View style={styles.fieldStyle}>
-          <Typography style={styles.labelText}>
+          <Typography type="text" style={styles.labelText}>
             Ternary Technical Skill
           </Typography>
           <Controller
@@ -217,7 +219,9 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
         </View>
 
         <View style={styles.fieldStyle}>
-          <Typography style={styles.labelText}>Other Skills</Typography>
+          <Typography type="text" style={styles.labelText}>
+            Other Skills
+          </Typography>
           <Controller
             control={control}
             render={({field: {value}}) => (
@@ -249,12 +253,10 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
             name="otherSkills"
           />
           {errors.otherSkills && (
-            <Typography style={styles.error}>
-              {errors.otherSkills.message}
-            </Typography>
+            <Typography type="error">{errors.otherSkills.message}</Typography>
           )}
 
-          <Typography style={styles.otherSkillNoteText}>
+          <Typography type="secondaryText" style={styles.otherSkillNoteText}>
             (Note: Mention your skills which are not covered in technical
             skills.)
           </Typography>
@@ -294,8 +296,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   title: {
-    color: colors.SECONDARY,
-    fontFamily: fonts.ARIAL_BOLD,
+    fontWeight: 'bold',
     marginVertical: 20,
   },
   buttonRow: {
@@ -309,13 +310,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   labelText: {
-    color: colors.SECONDARY,
-    textAlign: 'left',
     marginBottom: 15,
   },
   otherSkillChipContainer: {flexDirection: 'row', flexWrap: 'wrap'},
   otherSkillNoteText: {
-    color: colors.SECONDARY_TEXT,
     paddingBottom: 20,
   },
   descText: {

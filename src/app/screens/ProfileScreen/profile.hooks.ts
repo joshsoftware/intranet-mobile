@@ -17,7 +17,7 @@ function useProfileData() {
   });
 
   return {
-    data: data?.data?.data,
+    data: data?.data.data,
     refetch,
     isError,
     isRefetchError,

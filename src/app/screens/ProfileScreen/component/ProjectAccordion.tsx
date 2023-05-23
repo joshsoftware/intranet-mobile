@@ -7,7 +7,6 @@ import Typography from '../../../components/typography';
 import DetailRow from './DetailRow';
 
 import {IProject} from '../interface/employeeDetail';
-import colors from '../../../constant/colors';
 import {ArrowDown, ArrowUp} from '../../../constant/icons';
 
 interface Props {
@@ -24,14 +23,15 @@ function ProjectAccordion({data}: Props) {
   ) => {
     return (
       <Animatable.View duration={400} style={styles.header}>
-        <Typography style={styles.headerText}>{content.projectName}</Typography>
+        <Typography type="text" style={styles.headerText}>
+          {content.projectName}
+        </Typography>
         {isActive ? <ArrowUp /> : <ArrowDown />}
       </Animatable.View>
     );
   };
 
   const renderContent = (content: IProject) => {
-    // Accordion Content view
     return (
       <Animatable.View duration={400} style={styles.contentContainer}>
         <DetailRow label="Type" value={content.type} />
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    color: colors.LABEL_COLOR_SECONDARY,
     paddingLeft: 5,
   },
   contentContainer: {

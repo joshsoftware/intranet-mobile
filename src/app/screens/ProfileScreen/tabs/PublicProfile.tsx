@@ -5,15 +5,16 @@ import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
 import DetailRow from '../component/DetailRow';
 import IconButton from '../component/IconButton';
+import Typography from '../../../components/typography';
 
 import {IPublicProfileData} from '../interface/publicProfile';
 import {Facebook, Github, Linkdin, Blog} from '../../../constant/icons';
 
 const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
   const {firstName, lastName, gender, mobileNumber, bloodGroup, dateOfBirth} =
-    publicProfile;
+    publicProfile || {};
 
-  const {linkedin, github, facebook, blog} = socialDetails;
+  const {linkedin, github, facebook, blog} = socialDetails || {};
 
   return (
     <ScreenWrapper>
@@ -31,6 +32,9 @@ const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
 
       <Card title="Social Media Links">
         <View style={styles.row}>
+          {!github && !linkedin && !blog && !facebook && (
+            <Typography type="secondaryText">No social media links</Typography>
+          )}
           {github && <IconButton icon={Github} link={github} />}
           {linkedin && <IconButton icon={Linkdin} link={linkedin} />}
           {blog && <IconButton icon={Blog} link={blog} />}

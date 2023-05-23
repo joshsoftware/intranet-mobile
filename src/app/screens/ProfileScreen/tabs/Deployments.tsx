@@ -7,18 +7,20 @@ import Typography from '../../../components/typography';
 
 import {IDeploymentDetails} from '../interface/deployments';
 
-const Deployments = ({
-  availableFrom,
-  cvLink,
-  deploymentOwnerEmails,
-  ownedByEmails,
-  OETA: oeta,
-  NETA: neta,
-  availableHours,
-  interviewRejected,
-  remark,
-  deploymentNote,
-}: IDeploymentDetails) => {
+const Deployments = (data: IDeploymentDetails) => {
+  const {
+    availableFrom,
+    cvLink,
+    deploymentOwnerEmails,
+    ownedByEmails,
+    OETA: oeta,
+    NETA: neta,
+    availableHours,
+    interviewRejected,
+    remark,
+    deploymentNote,
+  } = data || {};
+
   return (
     <ScreenWrapper>
       <Card title="Deployment Details">

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import ScreenWrapper from '../component/ScreenWrapper';
@@ -13,12 +13,16 @@ import {ISkillsData} from '../interface/skills';
 const Skills = (data: ISkillsData) => {
   const [modalVisible, setModalVisible] = useState(false);
 
-  const otherSkills = data.otherSkills
-    ? data.otherSkills
-        .split(',')
-        .filter(e => e !== '')
-        .map(skill => <CustomChip label={skill} mode="view" />)
-    : [];
+  const otherSkills = useMemo(
+    () =>
+      data.otherSkills
+        ? data.otherSkills
+            .split(',')
+            .filter(e => e !== '')
+            .map(skill => <CustomChip label={skill} mode="view" />)
+        : [],
+    [data.otherSkills],
+  );
 
   const toggleModal = () => setModalVisible(!modalVisible);
 
