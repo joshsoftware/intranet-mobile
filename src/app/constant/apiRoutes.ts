@@ -14,3 +14,6 @@ export const PUT_TIMESHEET_ROUTE =
   '/api/mobile/v1/time_sheets/update_time_sheet';
 export const DELETE_TIMESHEET_ROUTE =
   '/api/mobile/v1/time_sheets/delete_time_sheet';
+
+export const LEAVE_LIST_ROUTE = '/api/mobile/v1/leaves/employee';
+export const LEAVE_DETAIL_ROUTE = '/api/mobile/v1/leaves/employee/details';

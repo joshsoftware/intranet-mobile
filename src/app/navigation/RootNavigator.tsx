@@ -15,12 +15,14 @@ import DrawerNavigator from './DrawerNavigation';
 import {RootStackParamList} from './types';
 import {
   DRAWER,
+  LEAVE_DETAIL_SCREEN,
   LOGIN_SCREEN,
   USER_PROFILE_SCREEN,
   USER_TIMESHEET,
 } from '../constant/screenNames';
 import TimesheetList from '../screens/TimesheetScreen/view/timesheetList';
 import ProfileScreen from '../screens/ProfileScreen';
+import LeaveDetailScreen from '../screens/LeaveDetailScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -68,6 +70,10 @@ const RootNavigator = () => {
           <RootStack.Screen
             name={USER_PROFILE_SCREEN}
             component={ProfileScreen}
+          />
+          <RootStack.Screen
+            name={LEAVE_DETAIL_SCREEN}
+            component={LeaveDetailScreen}
           />
         </>
       ) : (
