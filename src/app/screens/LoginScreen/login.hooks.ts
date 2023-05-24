@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useCallback, useContext} from 'react';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 
@@ -11,7 +11,7 @@ import toast from '../../utils/toast';
 export const useLogin = () => {
   const [, setUserContextData] = useContext(UserContext);
 
-  const mutation = useMutation(sendLoginRequest, {
+  const {mutate, isLoading} = useMutation(sendLoginRequest, {
     onSuccess: async response => {
       const responseData = response.data.data;
 
@@ -44,22 +44,22 @@ export const useLogin = () => {
 
   const emailPasswordSignInHandler = (email: string, password: string) => {
     // User login from backend
-    mutation.mutate({email, password});
+    mutate({email, password});
   };
 
-  const googleSignInHandler = async () => {
+  const googleSignInHandler = useCallback(async () => {
     const response = await googleSignIn();
 
     if (response) {
       // User login from backend
-      mutation.mutate(response);
+      mutate(response);
     }
-  };
+  }, [mutate]);
 
   return {
     googleSignInHandler,
     emailPasswordSignInHandler,
-    isLoading: mutation.isLoading,
-    mutate: mutation.mutate,
+    isLoading,
+    mutate,
   };
 };
