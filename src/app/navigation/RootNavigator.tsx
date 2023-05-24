@@ -13,8 +13,14 @@ import {initNotificationService} from '../services/firebase/messaging';
 import DrawerNavigator from './DrawerNavigation';
 
 import {RootStackParamList} from './types';
-import {DRAWER, LOGIN_SCREEN, USER_TIMESHEET} from '../constant/screenNames';
+import {
+  DRAWER,
+  LOGIN_SCREEN,
+  USER_PROFILE_SCREEN,
+  USER_TIMESHEET,
+} from '../constant/screenNames';
 import TimesheetList from '../screens/TimesheetScreen/view/timesheetList';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -59,6 +65,10 @@ const RootNavigator = () => {
           <RootStack.Screen name={DRAWER} component={DrawerNavigator} />
 
           <RootStack.Screen name={USER_TIMESHEET} component={TimesheetList} />
+          <RootStack.Screen
+            name={USER_PROFILE_SCREEN}
+            component={ProfileScreen}
+          />
         </>
       ) : (
         <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />

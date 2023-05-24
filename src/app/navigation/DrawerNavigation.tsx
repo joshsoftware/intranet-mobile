@@ -4,13 +4,11 @@ import {
   createDrawerNavigator,
 } from '@react-navigation/drawer';
 
-import UserProfile from '../screens/userProfile';
 import MainNavigator from './MainNavigator';
 import DrawerContent from '../components/DrawerContent';
 
 import colors from '../constant/colors';
-import {MAIN_SCREEN, USER_PROFILE_SCREEN} from '../constant/screenNames';
-import ProfileScreen from '../screens/ProfileScreen';
+import {MAIN_SCREEN} from '../constant/screenNames';
 
 const Drawer = createDrawerNavigator();
 
@@ -44,7 +42,6 @@ const DrawerNavigator = () => {
       screenOptions={screenOptions}
       drawerContent={renderDrawerContent}>
       <Drawer.Screen name={MAIN_SCREEN} component={MainNavigator} />
-      <Drawer.Screen name={USER_PROFILE_SCREEN} component={ProfileScreen} />
     </Drawer.Navigator>
   );
 };

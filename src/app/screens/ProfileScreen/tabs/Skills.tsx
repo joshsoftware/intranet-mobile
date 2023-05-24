@@ -19,7 +19,7 @@ const Skills = (data: ISkillsData) => {
         ? data.otherSkills
             .split(',')
             .filter(e => e !== '')
-            .map(skill => <CustomChip label={skill} mode="view" />)
+            .map(skill => <CustomChip key={skill} label={skill} mode="view" />)
         : [],
     [data.otherSkills],
   );

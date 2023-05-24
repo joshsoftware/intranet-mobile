@@ -38,7 +38,8 @@ const MainNavigator = () => {
     <MainTab.Navigator
       screenOptions={screenOptions}
       tabBar={getTabBar}
-      sceneContainerStyle={sceneContainerStyle}>
+      sceneContainerStyle={sceneContainerStyle}
+      initialRouteName={TIMESHEET_SCREEN}>
       <MainTab.Screen name={HOME_SCREEN} component={HomeScreen} />
       <MainTab.Screen name={LEAVE_SCREEN} component={LeaveScreen} />
       <MainTab.Screen name={TIMESHEET_SCREEN} component={TimesheetScreen} />

@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Login: undefined;
   UserTimesheet: Employee;
   Drawer: undefined;
+  Profile: undefined;
 };
 
 export type MainTabParamList = {
@@ -15,7 +16,6 @@ export type MainTabParamList = {
 
 export type DrawerParamList = {
   Main: undefined;
-  UserProfile: undefined;
 };
 
 export type MainScreenNavigationProp = NativeStackNavigationProp<
