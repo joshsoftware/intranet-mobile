@@ -12,6 +12,7 @@ import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
 import {getParams} from '../../../../navigation';
 import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
 import UserContext from '../../../../context/user.context';
+import {isManagement} from '../../../../utils/user';
 
 import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
@@ -25,6 +26,7 @@ const TimesheetList = () => {
   const params: any = getParams();
   const [userContextData] = useContext(UserContext);
 
+  const isManager = isManagement(userContextData?.userData.role);
   const userId = useMemo(
     () => params?.user_id ?? userContextData?.userData.userId ?? '',
     [params?.user_id, userContextData?.userData.userId],
@@ -169,7 +171,7 @@ const TimesheetList = () => {
           refreshing={isFetching}
           onRefresh={refetch}
           emptyListMessage={strings.NO_TIMESHEET_PRESENT}
-          isDeleteVisible={userContextData?.userData.role === 'Manager'}
+          isDeleteVisible={isManager}
         />
 
         {isEditModalVisible && (

@@ -18,7 +18,7 @@ export const googleSignIn = async () => {
     return userInfo;
   } catch (error: any) {
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      Alert.alert('', 'user cancelled the login flow');
+      return;
     } else if (error.code === statusCodes.IN_PROGRESS) {
       Alert.alert('', 'sign in is in progress already');
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
