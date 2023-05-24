@@ -5,6 +5,7 @@ import TimesheetList from './view/timesheetList';
 import FloatingActionButton from '../../components/button/floatingActionButton';
 import CreateTimesheet from './view/createTimesheet';
 
+import {isManagement} from '../../utils/user';
 import UserContext from '../../context/user.context';
 
 const TimesheetScreen = () => {
@@ -17,7 +18,7 @@ const TimesheetScreen = () => {
     [],
   );
 
-  const isManager = userContextData?.userData.role === 'Manager';
+  const isManager = isManagement(userContextData?.userData.role);
 
   return (
     <>
