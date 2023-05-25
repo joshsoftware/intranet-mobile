@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 
 import Header from '../components/header';
+import Typography from '../components/typography';
 import {useLeaveDetail} from './LeaveScreen/leave.hooks';
 
 import colors from '../constant/colors';
 import {LeaveDetailScreenNavigationProp} from '../navigation/types';
-import Typography from '../components/typography';
 
 function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
   const {leaveID} = route.params;
