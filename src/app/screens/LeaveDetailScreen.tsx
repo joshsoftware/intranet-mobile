@@ -13,6 +13,7 @@ import {useLeaveDetail} from './LeaveScreen/leave.hooks';
 
 import colors from '../constant/colors';
 import {LeaveDetailScreenNavigationProp} from '../navigation/types';
+import DetailRow from './ProfileScreen/component/DetailRow';
 
 function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
   const {leaveID} = route.params;
@@ -63,26 +64,11 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
         </View>
 
         <View style={styles.cardContainer}>
-          <View style={styles.row}>
-            <Typography type="secondaryText">Leave Approver </Typography>
-            <Typography type="text">{leave_approver}</Typography>
-          </View>
-          <View style={styles.row}>
-            <Typography type="secondaryText">Leave Type </Typography>
-            <Typography type="text">{leave_type}</Typography>
-          </View>
-          <View style={styles.row}>
-            <Typography type="secondaryText">Note </Typography>
-            <Typography type="text">{leave_note || '-'}</Typography>
-          </View>
-          <View style={styles.row}>
-            <Typography type="secondaryText">Status </Typography>
-            <Typography type="text">{leave_status || '-'}</Typography>
-          </View>
-          <View style={styles.row}>
-            <Typography type="secondaryText">Reason </Typography>
-            <Typography type="text">{leave_reason || '-'}</Typography>
-          </View>
+          <DetailRow label="Leave Approver" value={leave_approver} />
+          <DetailRow label="Leave Type" value={leave_type} />
+          <DetailRow label="Note" value={leave_note} />
+          <DetailRow label="Status" value={leave_status} />
+          <DetailRow label="Reason" value={leave_reason} />
         </View>
       </ScrollView>
     </SafeAreaView>
