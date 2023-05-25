@@ -11,6 +11,7 @@ import TabScreen from './component/TabScreen';
 
 import fonts from '../../constant/fonts';
 import colors from '../../constant/colors';
+import EmployeeTabScreen from './component/EmployeeTabScreen';
 
 type RenderSceneProps = SceneRendererProps & {
   route: {
@@ -20,6 +21,7 @@ type RenderSceneProps = SceneRendererProps & {
 };
 
 const renderScene = ({route}: RenderSceneProps) => {
+  return <EmployeeTabScreen route={route.key} />;
   return <TabScreen route={route.key} />;
 };
 
