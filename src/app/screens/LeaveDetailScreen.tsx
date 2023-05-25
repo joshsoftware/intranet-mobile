@@ -3,15 +3,16 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  Text,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 
 import Header from '../components/header';
+import {useLeaveDetail} from './LeaveScreen/leave.hooks';
+
 import colors from '../constant/colors';
 import {LeaveDetailScreenNavigationProp} from '../navigation/types';
-import {useLeaveDetail} from './LeaveScreen/leave.hooks';
+import Typography from '../components/typography';
 
 function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
   const {leaveID} = route.params;
@@ -46,37 +47,41 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
 
       <ScrollView style={styles.screenview}>
         <View style={styles.titleContainer}>
-          <Text style={styles.name}>{emp_name}</Text>
+          <Typography style={styles.name}>{emp_name}</Typography>
 
           <View style={styles.dateRow}>
-            <Text style={styles.textValue}>Date: </Text>
-            <Text style={[styles.textTitle, styles.paddingLeft]}>From </Text>
-            <Text style={styles.textValue}>{leave_from}</Text>
-            <Text style={[styles.textTitle, styles.paddingLeft]}>To </Text>
-            <Text style={styles.textValue}>{leave_to}</Text>
+            <Typography type="text">Date: </Typography>
+            <Typography type="secondaryText" style={styles.paddingLeft}>
+              From
+            </Typography>
+            <Typography type="text"> {leave_from}</Typography>
+            <Typography type="secondaryText" style={styles.paddingLeft}>
+              To
+            </Typography>
+            <Typography type="text"> {leave_to}</Typography>
           </View>
         </View>
 
         <View style={styles.cardContainer}>
           <View style={styles.row}>
-            <Text style={styles.textTitle}>Leave Approver </Text>
-            <Text style={styles.textValue}>{leave_approver}</Text>
+            <Typography type="secondaryText">Leave Approver </Typography>
+            <Typography type="text">{leave_approver}</Typography>
           </View>
           <View style={styles.row}>
-            <Text style={styles.textTitle}>Leave Type </Text>
-            <Text style={styles.textValue}>{leave_type}</Text>
+            <Typography type="secondaryText">Leave Type </Typography>
+            <Typography type="text">{leave_type}</Typography>
           </View>
           <View style={styles.row}>
-            <Text style={styles.textTitle}>Note </Text>
-            <Text style={styles.textValue}>{leave_note || '-'}</Text>
+            <Typography type="secondaryText">Note </Typography>
+            <Typography type="text">{leave_note || '-'}</Typography>
           </View>
           <View style={styles.row}>
-            <Text style={styles.textTitle}>Status </Text>
-            <Text style={styles.textValue}>{leave_status || '-'}</Text>
+            <Typography type="secondaryText">Status </Typography>
+            <Typography type="text">{leave_status || '-'}</Typography>
           </View>
           <View style={styles.row}>
-            <Text style={styles.textTitle}>Reason </Text>
-            <Text style={styles.textValue}>{leave_reason || '-'}</Text>
+            <Typography type="secondaryText">Reason </Typography>
+            <Typography type="text">{leave_reason || '-'}</Typography>
           </View>
         </View>
       </ScrollView>
@@ -103,13 +108,6 @@ const styles = StyleSheet.create({
     color: colors.SECONDARY,
     fontSize: 17,
     fontWeight: 'bold',
-  },
-  textTitle: {
-    color: colors.SECONDARY_TEXT,
-  },
-  textValue: {
-    color: colors.SECONDARY,
-    fontSize: 14,
   },
   paddingLeft: {
     paddingLeft: 10,

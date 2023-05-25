@@ -2,13 +2,13 @@ import React, {useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 
 import Input from '../../../components/input';
-import colors from '../../../constant/colors';
-import {Search} from '../../../constant/icons';
 import LeaveListItem from './LeaveListItem';
+import Typography from '../../../components/typography';
 import {useLeaveList} from '../leave.hooks';
 
+import colors from '../../../constant/colors';
+import {Search} from '../../../constant/icons';
 import {ILeaveFilters} from '../interface';
-import Typography from '../../../components/typography';
 
 interface Props {
   route: string;
@@ -20,7 +20,7 @@ function TabScreen({route}: Props) {
     pending_flag: route === 'pending' ? 'true' : 'false',
   });
 
-  let {data, isLoading} = useLeaveList(filters);
+  const {data, isLoading} = useLeaveList(filters);
 
   if (isLoading) {
     return (

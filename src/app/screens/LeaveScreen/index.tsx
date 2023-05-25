@@ -7,9 +7,10 @@ import {
   SceneRendererProps,
 } from 'react-native-tab-view';
 
+import TabScreen from './component/TabScreen';
+
 import fonts from '../../constant/fonts';
 import colors from '../../constant/colors';
-import TabScreen from './component/TabScreen';
 
 type RenderSceneProps = SceneRendererProps & {
   route: {
@@ -22,19 +23,20 @@ const renderScene = ({route}: RenderSceneProps) => {
   return <TabScreen route={route.key} />;
 };
 
+const routes = [
+  {key: 'pending', title: 'Pending'},
+  {key: 'history', title: 'Leave History'},
+];
+
 const LeaveScreen = () => {
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    {key: 'pending', title: 'Pending'},
-    {key: 'history', title: 'Leave History'},
-  ]);
+  const [screenIndex, setScreenIndex] = useState(0);
 
   return (
     <TabView
-      navigationState={{index, routes}}
+      navigationState={{index: screenIndex, routes}}
       renderTabBar={renderTabBar}
       renderScene={renderScene}
-      onIndexChange={setIndex}
+      onIndexChange={setScreenIndex}
     />
   );
 };

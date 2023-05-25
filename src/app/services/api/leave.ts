@@ -1,4 +1,5 @@
 import {apiCall} from '.';
+
 import {LEAVE_DETAIL_ROUTE, LEAVE_LIST_ROUTE} from '../../constant/apiRoutes';
 import {
   ILeaveDetailData,

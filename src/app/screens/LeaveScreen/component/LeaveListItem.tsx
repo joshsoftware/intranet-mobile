@@ -1,9 +1,11 @@
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
 import Touchable from '../../../components/touchable';
 import Typography from '../../../components/typography';
+
 import colors from '../../../constant/colors';
 import {Arrow} from '../../../constant/icons';
 import {LEAVE_DETAIL_SCREEN} from '../../../constant/screenNames';
