@@ -7,7 +7,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useQueryClient} from 'react-query';
 
 import LeaveListItem from './LeaveListItem';
 import FilterModal from './FilterModal';
@@ -17,7 +16,6 @@ import DateRange from '../../../components/pickers/dateRange';
 import {useLeaveList} from '../leave.hooks';
 
 import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
-import {dateFormater} from '../../../utils/dateFormater';
 
 import colors from '../../../constant/colors';
 import {Calendar, Search} from '../../../constant/icons';
@@ -28,14 +26,13 @@ interface Props {
 }
 
 function TabScreen({route}: Props) {
-  const queryClient = useQueryClient();
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filters, setFilters] = useState<ILeaveFilters>({
     leave_type: '',
     pending_flag: route === 'pending' ? 'true' : 'false',
     active_or_all_flags: 'active',
-    from: dateFormater(startOfMonth),
-    to: dateFormater(todaysDate),
+    from: startOfMonth,
+    to: todaysDate,
     page_no: 0,
   });
 
@@ -49,38 +46,44 @@ function TabScreen({route}: Props) {
     isRefetchError,
   } = useLeaveList(filters);
 
-  let content: React.ReactNode = null;
+  const renderContent = useCallback(() => {
+    if (isLoading) {
+      return (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={colors.PRIMARY} />
+        </View>
+      );
+    }
 
-  if (isLoading) {
-    content = (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={colors.PRIMARY} />
-      </View>
-    );
-  } else if (isError || isRefetchError) {
-    content = (
-      <ScrollView
-        contentContainerStyle={styles.centerContainer}
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-        }>
-        <Typography type="error">{error?.message}</Typography>
-      </ScrollView>
-    );
-  } else if (!data) {
-    content = (
-      <View style={styles.centerContainer}>
-        <Typography type="error">Could not get leaves!</Typography>
-      </View>
-    );
-  } else if (data.length === 0) {
-    content = (
-      <View style={styles.centerContainer}>
-        <Typography type="secondaryText">No Leaves!</Typography>
-      </View>
-    );
-  } else {
-    content = (
+    if (isError || isRefetchError) {
+      return (
+        <ScrollView
+          contentContainerStyle={styles.centerContainer}
+          refreshControl={
+            <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          }>
+          <Typography type="error">{error?.message}</Typography>
+        </ScrollView>
+      );
+    }
+
+    if (!data) {
+      return (
+        <View style={styles.centerContainer}>
+          <Typography type="error">Could not get leaves!</Typography>
+        </View>
+      );
+    }
+
+    if (data.length === 0) {
+      return (
+        <View style={styles.centerContainer}>
+          <Typography type="secondaryText">No Leaves!</Typography>
+        </View>
+      );
+    }
+
+    return (
       <FlatList
         data={data}
         refreshControl={
@@ -89,36 +92,33 @@ function TabScreen({route}: Props) {
         renderItem={({item}) => <LeaveListItem {...item} />}
       />
     );
-  }
+  }, [
+    data,
+    error?.message,
+    isError,
+    isRefetching,
+    isRefetchError,
+    isLoading,
+    refetch,
+  ]);
 
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
 
-  const updateFilters = useCallback(
-    (newFilters: ILeaveFilters) => {
-      setFilters(newFilters);
-      queryClient.invalidateQueries(['leave', filters]);
-    },
-    [filters, queryClient],
-  );
-
-  const onDateRangeSubmit = useCallback(
-    (startDate?: Date, endDate?: Date) => {
-      if (startDate && endDate) {
-        updateFilters({
-          ...filters,
-          from: dateFormater(startDate),
-          to: dateFormater(endDate),
-        });
-      } else {
-        updateFilters({
-          ...filters,
-          from: dateFormater(startOfMonth),
-          to: dateFormater(todaysDate),
-        });
-      }
-    },
-    [filters, updateFilters],
-  );
+  const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
+    if (startDate && endDate) {
+      setFilters(value => ({
+        ...value,
+        from: startDate,
+        to: endDate,
+      }));
+    } else {
+      setFilters(value => ({
+        ...value,
+        from: startOfMonth,
+        to: todaysDate,
+      }));
+    }
+  }, []);
 
   const toggelDatePicker = () => setIsDateRangeVisible(v => !v);
 
@@ -127,9 +127,9 @@ function TabScreen({route}: Props) {
     [filters.to, filters.from],
   );
 
-  const toggleFilterModal = () => {
-    setShowFilterModal(!showFilterModal);
-  };
+  const toggleFilterModal = useCallback(() => {
+    setShowFilterModal(value => !value);
+  }, [setShowFilterModal]);
 
   return (
     <View style={styles.container}>
@@ -161,13 +161,13 @@ function TabScreen({route}: Props) {
         </Touchable>
       </View>
 
-      {content}
+      {renderContent()}
 
       <FilterModal
         isVisible={showFilterModal}
         closeModal={toggleFilterModal}
         filters={filters}
-        setFilter={updateFilters}
+        setFilter={setFilters}
       />
     </View>
   );

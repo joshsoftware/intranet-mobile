@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CheckBoxField;
+export default React.memo(CheckBoxField);

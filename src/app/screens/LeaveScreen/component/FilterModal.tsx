@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {StyleSheet, Switch, View} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 
@@ -6,17 +6,11 @@ import Button from '../../../components/button';
 import Modal from '../../../components/modal';
 import PickerSelect from '../../../components/pickers/pickerSelect';
 import Typography from '../../../components/typography';
-import DateRange from '../../../components/pickers/dateRange';
-import Touchable from '../../../components/touchable';
 import CheckBoxField from './CheckBoxField';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {useProjectList, useUserList} from '../leave.hooks';
 
-import {startOfMonth, todaysDate} from '../../../utils/date';
-
 import strings from '../../../constant/strings';
-import {Calendar} from '../../../constant/icons';
-import colors from '../../../constant/colors';
 import {ILeaveFilters} from '../interface';
 
 interface Props {
@@ -72,23 +66,17 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
   const projects = useProjectList();
   const users = useUserList();
 
-  const toggleIsSelectAll = () => {
-    if (isSelectAll) {
-      setValue('leave', false);
-      setValue('wfh', false);
-      setValue('optionalHoliday', false);
-      setValue('spl', false);
-      setValue('unpaid', false);
-    } else {
-      setValue('leave', true);
-      setValue('wfh', true);
-      setValue('optionalHoliday', true);
-      setValue('spl', true);
-      setValue('unpaid', true);
-    }
+  const toggleIsSelectAll = useCallback(() => {
+    setIsSelectAll(value => {
+      setValue('leave', !value);
+      setValue('wfh', !value);
+      setValue('optionalHoliday', !value);
+      setValue('spl', !value);
+      setValue('unpaid', !value);
 
-    setIsSelectAll(!isSelectAll);
-  };
+      return !value;
+    });
+  }, [setIsSelectAll, setValue]);
 
   const onSave = (formValues: IFormValues) => {
     const {

@@ -26,11 +26,11 @@ export interface ILeaveFilters {
   project_id?: number;
   user_id?: number;
   active_or_all_flags: 'active' | 'all';
-  from: string;
+  from: Date;
   page_no: number;
   leave_type: string;
   pending_flag: string;
-  to: string;
+  to: Date;
 }
 
 export interface IProjectData {
