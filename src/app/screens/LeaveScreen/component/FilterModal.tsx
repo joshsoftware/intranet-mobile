@@ -21,6 +21,7 @@ import {
 import {ILeaveFilters} from '../interface';
 
 interface Props {
+  isManagement: boolean;
   isVisible: boolean;
   closeModal: () => void;
   filters: ILeaveFilters;
@@ -38,7 +39,13 @@ interface IFormValues {
   unpaid: boolean;
 }
 
-function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
+function FilterModal({
+  isManagement,
+  isVisible,
+  closeModal,
+  filters,
+  setFilter,
+}: Props) {
   const keyboardIsVisible = useIsKeyboardShown();
 
   const [isSelectAll, setIsSelectAll] = useState(false);
@@ -142,70 +149,74 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
       animationOutTiming={500}
       contentStyle={styles.contentStyle}>
       <View style={styles.container}>
-        <View style={styles.row}>
-          <Typography type="header" style={styles.header}>
-            Filter
-          </Typography>
-          <Typography type="title" style={styles.clearAll}>
-            Clear All
-          </Typography>
-        </View>
+        {isManagement && (
+          <>
+            <View style={styles.row}>
+              <Typography type="header" style={styles.header}>
+                Filter
+              </Typography>
+              <Typography type="title" style={styles.clearAll}>
+                Clear All
+              </Typography>
+            </View>
 
-        <View style={styles.fieldStyle}>
-          <Typography type="text" style={styles.labelText}>
-            Select Project
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <PickerSelect
-                placeholder={{
-                  label: strings.SELECT,
-                  value: null,
-                }}
-                error={errors.projectId?.message}
-                onValueChange={onChange}
-                value={value ? value : strings.SELECT}
-                items={projects}
+            <View style={styles.fieldStyle}>
+              <Typography type="text" style={styles.labelText}>
+                Select Project
+              </Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <PickerSelect
+                    placeholder={{
+                      label: strings.SELECT,
+                      value: null,
+                    }}
+                    error={errors.projectId?.message}
+                    onValueChange={onChange}
+                    value={value ? value : strings.SELECT}
+                    items={projects}
+                  />
+                )}
+                name="projectId"
               />
-            )}
-            name="projectId"
-          />
-        </View>
+            </View>
 
-        <View style={styles.fieldStyle}>
-          <Typography type="text" style={styles.labelText}>
-            Select User
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <PickerSelect
-                placeholder={{
-                  label: strings.SELECT,
-                  value: null,
-                }}
-                error={errors.userId?.message}
-                onValueChange={onChange}
-                value={value ? value : strings.SELECT}
-                items={users}
+            <View style={styles.fieldStyle}>
+              <Typography type="text" style={styles.labelText}>
+                Select User
+              </Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <PickerSelect
+                    placeholder={{
+                      label: strings.SELECT,
+                      value: null,
+                    }}
+                    error={errors.userId?.message}
+                    onValueChange={onChange}
+                    value={value ? value : strings.SELECT}
+                    items={users}
+                  />
+                )}
+                name="userId"
               />
-            )}
-            name="userId"
-          />
-        </View>
+            </View>
 
-        <View style={styles.row}>
-          <Typography type="text">Show Active User</Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Switch value={value} onValueChange={onChange} />
-            )}
-            name="userType"
-          />
-          <Typography type="text">Show All User</Typography>
-        </View>
+            <View style={styles.row}>
+              <Typography type="text">Show Active User</Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <Switch value={value} onValueChange={onChange} />
+                )}
+                name="userType"
+              />
+              <Typography type="text">Show All User</Typography>
+            </View>
+          </>
+        )}
 
         <View style={styles.row}>
           <Typography type="header" style={styles.header}>

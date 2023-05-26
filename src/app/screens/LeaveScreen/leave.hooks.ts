@@ -50,6 +50,63 @@ export function useLeaveDetail(leaveID: number) {
   };
 }
 
+export function useEmployeeLeaveList(filters: ILeaveFilters) {
+  /*
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+    isRefetchError,
+  } = useQuery({
+    queryKey: ['leaveList', filters],
+    queryFn: async () => getLeaveListRequest(filters),
+    onError: (err: AxiosError) => {
+      toast(err.message, 'error');
+    },
+  });
+  */
+
+  return {
+    data: [
+      {
+        leave_id: 17661,
+        emp_user_id: 929,
+        emp_name: 'Chetan Satpute',
+        leave_from: '2023-05-15',
+        leave_to: '2023-05-19',
+        leave_approver: 'Shailesh Kalekar',
+        days: 5,
+        leave_type: 'WFH',
+        leave_reason: 'Examination Leave.',
+        leave_note: null,
+        leave_status: 'Rejected',
+      },
+      {
+        leave_id: 17661,
+        emp_user_id: 929,
+        emp_name: 'Chetan Satpute',
+        leave_from: '2023-05-15',
+        leave_to: '2023-05-19',
+        leave_approver: 'Shailesh Kalekar',
+        days: 5,
+        leave_type: 'WFH',
+        leave_reason: 'Examination Leave.',
+        leave_note: null,
+        leave_status: 'Rejected',
+      },
+    ],
+    isLoading: false,
+    isError: false,
+    error: null,
+    refetch: () => {},
+    isRefetching: false,
+    isRefetchError: false,
+  };
+}
+
 export function useProjectList() {
   // TODO: Sample data
   const data: IProjectData[] = [
