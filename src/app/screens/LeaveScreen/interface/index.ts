@@ -25,10 +25,22 @@ export interface ILeaveDetailData {
 export interface ILeaveFilters {
   project_id?: number;
   user_id?: number;
-  active_or_all_flags?: string;
-  from?: string;
-  page_no?: string;
-  leave_type?: string;
-  pending_flag?: string;
-  to?: string;
+  active_or_all_flags: 'active' | 'all';
+  from: Date;
+  page_no: number;
+  leave_type: string;
+  pending_flag: boolean;
+  to: Date;
+}
+
+export interface IProjectData {
+  name: string;
+  project_id: number;
+}
+
+export interface IUserData {
+  name: string;
+  email: string;
+  user_id: number;
+  emp_id: string;
 }

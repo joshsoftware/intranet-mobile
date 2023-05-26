@@ -1,9 +1,11 @@
 import {apiCall} from '.';
+import {dateFormate} from '../../utils/date';
 
 import {
   LEAVE_DETAIL_ROUTE,
   LEAVE_LIST_EMPLOYEES_ROUTE,
 } from '../../constant/apiRoutes';
+import {ISO_DATE_FROMAT} from '../../constant/date';
 import {
   ILeaveDetailData,
   ILeaveFilters,
@@ -27,7 +29,11 @@ export const getLeaveListRequest = async (filters: ILeaveFilters) => {
   >({
     method: 'GET',
     url: LEAVE_LIST_EMPLOYEES_ROUTE,
-    params: filters,
+    params: {
+      ...filters,
+      from: dateFormate(filters.from, ISO_DATE_FROMAT),
+      to: dateFormate(filters.to, ISO_DATE_FROMAT),
+    },
   });
 
   return response;
