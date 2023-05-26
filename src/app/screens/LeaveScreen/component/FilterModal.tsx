@@ -11,6 +11,13 @@ import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {useProjectList, useUserList} from '../leave.hooks';
 
 import strings from '../../../constant/strings';
+import {
+  LEAVE,
+  OPTIONAL_HOLIDAY,
+  SPL,
+  UNPAID,
+  WFH,
+} from '../../../constant/leaveType';
 import {ILeaveFilters} from '../interface';
 
 interface Props {
@@ -76,7 +83,7 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
 
       return !value;
     });
-  }, [setIsSelectAll, setValue]);
+  }, [setValue]);
 
   const onSave = (formValues: IFormValues) => {
     const {
@@ -93,23 +100,23 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
     const leaveType: string[] = [];
 
     if (leave) {
-      leaveType.push('LEAVE');
+      leaveType.push(LEAVE);
     }
 
     if (wfh) {
-      leaveType.push('WFH');
+      leaveType.push(WFH);
     }
 
     if (spl) {
-      leaveType.push('SPL');
+      leaveType.push(SPL);
     }
 
     if (optionalHoliday) {
-      leaveType.push('OPTIONAL HOLIDAY');
+      leaveType.push(OPTIONAL_HOLIDAY);
     }
 
     if (unpaid) {
-      leaveType.push('UNPAID');
+      leaveType.push(UNPAID);
     }
 
     setFilter({

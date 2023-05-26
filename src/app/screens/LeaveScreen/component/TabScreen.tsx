@@ -27,9 +27,10 @@ interface Props {
 
 function TabScreen({route}: Props) {
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
   const [filters, setFilters] = useState<ILeaveFilters>({
     leave_type: '',
-    pending_flag: route === 'pending' ? 'true' : 'false',
+    pending_flag: route === 'pending' ? true : false,
     active_or_all_flags: 'active',
     from: startOfMonth,
     to: todaysDate,
@@ -46,7 +47,7 @@ function TabScreen({route}: Props) {
     isRefetchError,
   } = useLeaveList(filters);
 
-  const renderContent = useCallback(() => {
+  const renderContent = useMemo(() => {
     if (isLoading) {
       return (
         <View style={styles.centerContainer}>
@@ -101,8 +102,6 @@ function TabScreen({route}: Props) {
     isLoading,
     refetch,
   ]);
-
-  const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
 
   const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
     if (startDate && endDate) {
@@ -161,7 +160,7 @@ function TabScreen({route}: Props) {
         </Touchable>
       </View>
 
-      {renderContent()}
+      {renderContent}
 
       <FilterModal
         isVisible={showFilterModal}

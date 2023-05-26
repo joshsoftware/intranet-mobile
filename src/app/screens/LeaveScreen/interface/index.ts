@@ -29,7 +29,7 @@ export interface ILeaveFilters {
   from: Date;
   page_no: number;
   leave_type: string;
-  pending_flag: string;
+  pending_flag: boolean;
   to: Date;
 }
 
