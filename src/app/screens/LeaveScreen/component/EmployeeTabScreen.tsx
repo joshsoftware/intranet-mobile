@@ -1,53 +1,54 @@
-import React, {useState} from 'react';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {View, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
+import {useQueryClient} from 'react-query';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
+import TabScreen from './TabScreen';
 import Typography from '../../../components/typography';
-
-import colors from '../../../constant/colors';
-import {ArrowUp, ArrowDown, Search} from '../../../constant/icons';
 import DetailRow from '../../ProfileScreen/component/DetailRow';
-import {ILeaveDetailData} from '../interface';
+import {useEmployeeLeaveList} from '../leave.hooks';
+
+import {dateFormater} from '../../../utils/dateFormater';
+import {startOfMonth, todaysDate} from '../../../utils/date';
+
+import {ArrowDown, ArrowUp} from '../../../constant/icons';
+import colors from '../../../constant/colors';
+import {ILeaveDetailData, ILeaveFilters} from '../interface';
 
 interface Props {
   route: string;
 }
 
 function EmployeeTabScreen({route}: Props) {
+  const queryClient = useQueryClient();
   const [activeSections, setActiveSections] = useState<number[]>([]);
+  const [filters, setFilters] = useState<ILeaveFilters>({
+    leave_type: '',
+    pending_flag: route === 'pending' ? 'true' : 'false',
+    active_or_all_flags: 'active',
+    from: dateFormater(startOfMonth),
+    to: dateFormater(todaysDate),
+    page_no: 0,
+  });
 
-  const {data, isLoading} = {
-    data: [] as ILeaveDetailData[],
-    isLoading: false,
-  };
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+    isRefetchError,
+  } = useEmployeeLeaveList(filters);
 
-  if (isLoading) {
-    return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={colors.PRIMARY} />
-      </View>
-    );
-  }
-
-  if (data === undefined || data === null) {
-    return (
-      <View style={styles.centerContainer}>
-        <Typography type="error">Could not get leaves!</Typography>
-      </View>
-    );
-  }
-
-  if (data.length === 0) {
-    return (
-      <View style={styles.centerContainer}>
-        <Typography type="secondaryText">No Leaves!</Typography>
-      </View>
-    );
-  }
-
-  const name = data[0].emp_name;
+  const updateFilters = useCallback(
+    (newFilters: ILeaveFilters) => {
+      setFilters(newFilters);
+      queryClient.invalidateQueries(['employee_leave', filters]);
+    },
+    [filters, queryClient],
+  );
 
   const renderHeader = (
     content: ILeaveDetailData,
@@ -92,44 +93,48 @@ function EmployeeTabScreen({route}: Props) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <Typography style={styles.name}>{name}</Typography>
-        <View style={styles.centerContainer}>
-          <Search />
-        </View>
-      </View>
-      <Accordion
-        activeSections={activeSections}
-        sections={data}
-        renderHeader={renderHeader}
-        sectionContainerStyle={styles.accordionSectionContainer}
-        renderContent={renderContent}
-        onChange={setActiveSections}
-        underlayColor="#E6EDFF"
-        touchableComponent={TouchableOpacity}
-      />
-    </View>
+    <TabScreen
+      isManagement={false}
+      filters={filters}
+      isLoading={isLoading}
+      isError={isError}
+      error={error}
+      refetch={refetch}
+      isRefetching={isRefetching}
+      isRefetchError={isRefetchError}
+      updateFilters={updateFilters}
+      noLeaves={data?.length === 0}>
+      <ScrollView>
+        <Accordion
+          activeSections={activeSections}
+          sections={data}
+          renderHeader={renderHeader}
+          sectionContainerStyle={styles.accordionSectionContainer}
+          renderContent={renderContent}
+          onChange={setActiveSections}
+          underlayColor="#E6EDFF"
+          touchableComponent={TouchableOpacity}
+        />
+      </ScrollView>
+    </TabScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
+  accordionSectionContainer: {
+    backgroundColor: colors.WHITE,
+    elevation: 5,
+    marginBottom: 16,
+    borderRadius: 10,
+    marginHorizontal: 16,
+  },
+  contentContainer: {
+    paddingHorizontal: 10,
     paddingVertical: 9,
   },
-  name: {
-    flex: 9,
-    color: colors.SECONDARY,
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginVertical: 16,
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  paddingLeft: {
+    paddingLeft: 10,
+    fontSize: 14,
   },
   row: {
     flexDirection: 'row',
@@ -148,23 +153,6 @@ const styles = StyleSheet.create({
   inactiveHeader: {
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-  },
-  headerText: {
-    paddingLeft: 5,
-  },
-  contentContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 9,
-  },
-  accordionSectionContainer: {
-    backgroundColor: colors.WHITE,
-    elevation: 5,
-    marginBottom: 16,
-    borderRadius: 10,
-  },
-  paddingLeft: {
-    paddingLeft: 10,
-    fontSize: 14,
   },
 });
 

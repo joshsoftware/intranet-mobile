@@ -1,20 +1,16 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
-  FlatList,
   RefreshControl,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
-import {useQueryClient} from 'react-query';
 
-import LeaveListItem from './LeaveListItem';
 import FilterModal from './FilterModal';
 import Typography from '../../../components/typography';
 import Touchable from '../../../components/touchable';
 import DateRange from '../../../components/pickers/dateRange';
-import {useLeaveList} from '../leave.hooks';
 
 import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
 import {dateFormater} from '../../../utils/dateFormater';
@@ -22,32 +18,36 @@ import {dateFormater} from '../../../utils/dateFormater';
 import colors from '../../../constant/colors';
 import {Calendar, Search} from '../../../constant/icons';
 import {ILeaveFilters} from '../interface';
+import {AxiosError} from 'axios';
 
 interface Props {
-  route: string;
+  filters: ILeaveFilters;
+  children: React.ReactNode;
+  updateFilters: (x: ILeaveFilters) => void;
+  isLoading: boolean;
+  isError: boolean;
+  error: AxiosError | null;
+  refetch: () => void;
+  isRefetching: boolean;
+  isRefetchError: boolean;
+  noLeaves: boolean;
+  isManagement: boolean;
 }
 
-function TabScreen({route}: Props) {
-  const queryClient = useQueryClient();
+function TabScreen({
+  isManagement,
+  updateFilters,
+  isLoading,
+  isError,
+  error,
+  refetch,
+  isRefetching,
+  isRefetchError,
+  children,
+  noLeaves,
+  filters,
+}: Props) {
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filters, setFilters] = useState<ILeaveFilters>({
-    leave_type: '',
-    pending_flag: route === 'pending' ? 'true' : 'false',
-    active_or_all_flags: 'active',
-    from: dateFormater(startOfMonth),
-    to: dateFormater(todaysDate),
-    page_no: 0,
-  });
-
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-    isRefetchError,
-  } = useLeaveList(filters);
 
   let content: React.ReactNode = null;
 
@@ -67,39 +67,17 @@ function TabScreen({route}: Props) {
         <Typography type="error">{error?.message}</Typography>
       </ScrollView>
     );
-  } else if (!data) {
-    content = (
-      <View style={styles.centerContainer}>
-        <Typography type="error">Could not get leaves!</Typography>
-      </View>
-    );
-  } else if (data.length === 0) {
+  } else if (noLeaves) {
     content = (
       <View style={styles.centerContainer}>
         <Typography type="secondaryText">No Leaves!</Typography>
       </View>
     );
   } else {
-    content = (
-      <FlatList
-        data={data}
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-        }
-        renderItem={({item}) => <LeaveListItem {...item} />}
-      />
-    );
+    content = children;
   }
 
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
-
-  const updateFilters = useCallback(
-    (newFilters: ILeaveFilters) => {
-      setFilters(newFilters);
-      queryClient.invalidateQueries(['leave', filters]);
-    },
-    [filters, queryClient],
-  );
 
   const onDateRangeSubmit = useCallback(
     (startDate?: Date, endDate?: Date) => {
@@ -164,6 +142,7 @@ function TabScreen({route}: Props) {
       {content}
 
       <FilterModal
+        isManagement={isManagement}
         isVisible={showFilterModal}
         closeModal={toggleFilterModal}
         filters={filters}
