@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {StyleSheet, Switch, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, Switch, View} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 
 import Button from '../../../components/button';
@@ -7,10 +7,12 @@ import Modal from '../../../components/modal';
 import PickerSelect from '../../../components/pickers/pickerSelect';
 import Typography from '../../../components/typography';
 import CheckBoxField from './CheckBoxField';
+import Touchable from '../../../components/touchable';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {useProjectList, useUserList} from '../leave.hooks';
 
 import strings from '../../../constant/strings';
+import colors from '../../../constant/colors';
 import {
   LEAVE,
   OPTIONAL_HOLIDAY,
@@ -77,8 +79,18 @@ function FilterModal({
     defaultValues: defaultFormValues,
   });
 
-  const projects = useProjectList();
-  const users = useUserList();
+  const {
+    data: projects,
+    refetch: refetchProjects,
+    isLoading: isProjectsLoading,
+    isError: isProjectsError,
+  } = useProjectList();
+  const {
+    data: users,
+    refetch: refetchUsers,
+    isLoading: isUsersLoading,
+    isError: isUsersError,
+  } = useUserList();
 
   const toggleIsSelectAll = useCallback(() => {
     setIsSelectAll(value => {
@@ -140,14 +152,60 @@ function FilterModal({
     closeModal();
   };
 
-  return (
-    <Modal
-      isVisible={isVisible}
-      animationIn={'slideInUp'}
-      animationOut={'slideOutDown'}
-      animationInTiming={500}
-      animationOutTiming={500}
-      contentStyle={styles.contentStyle}>
+  const handleClearAll = () => {
+    setValue('projectId', undefined);
+    setValue('userId', undefined);
+    setValue('leave', false);
+    setValue('wfh', false);
+    setValue('optionalHoliday', false);
+    setValue('spl', false);
+    setValue('unpaid', false);
+    setIsSelectAll(false);
+  };
+
+  const onLeaveTypeChange = (
+    handleChange: (...event: any[]) => void,
+    ...event: any[]
+  ) => {
+    setIsSelectAll(false);
+    handleChange(...event);
+  };
+
+  const renderContent = () => {
+    if (isUsersLoading || isProjectsLoading) {
+      return (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={colors.PRIMARY} />
+        </View>
+      );
+    }
+
+    if (isUsersError || isProjectsError) {
+      return (
+        <View style={styles.centerContainer}>
+          <Typography type="error">
+            Could not get projects and users information
+          </Typography>
+          <View style={styles.row}>
+            <View style={styles.buttonContainer}>
+              <Button title="Cancel" onPress={closeModal} type="secondary" />
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Retry"
+                onPress={() => {
+                  refetchProjects();
+                  refetchUsers();
+                }}
+                type="primary"
+              />
+            </View>
+          </View>
+        </View>
+      );
+    }
+
+    return (
       <View style={styles.container}>
         {isManagement && (
           <>
@@ -155,9 +213,11 @@ function FilterModal({
               <Typography type="header" style={styles.header}>
                 Filter
               </Typography>
-              <Typography type="title" style={styles.clearAll}>
-                Clear All
-              </Typography>
+              <Touchable type="opacity" onPress={handleClearAll}>
+                <Typography type="title" style={styles.clearAll}>
+                  Clear All
+                </Typography>
+              </Touchable>
             </View>
 
             <View style={styles.fieldStyle}>
@@ -237,7 +297,9 @@ function FilterModal({
                 <CheckBoxField
                   label="Leave"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="leave"
@@ -248,7 +310,9 @@ function FilterModal({
                 <CheckBoxField
                   label="Work From Home"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="wfh"
@@ -259,7 +323,9 @@ function FilterModal({
                 <CheckBoxField
                   label="Optional Holiday"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="optionalHoliday"
@@ -272,7 +338,9 @@ function FilterModal({
                 <CheckBoxField
                   label="Special Leave"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="spl"
@@ -283,14 +351,15 @@ function FilterModal({
                 <CheckBoxField
                   label="Unpaid Leave"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="unpaid"
             />
           </View>
         </View>
-
         {!keyboardIsVisible && (
           <View style={styles.row}>
             <View style={styles.buttonContainer}>
@@ -306,6 +375,18 @@ function FilterModal({
           </View>
         )}
       </View>
+    );
+  };
+
+  return (
+    <Modal
+      isVisible={isVisible}
+      animationIn={'slideInUp'}
+      animationOut={'slideOutDown'}
+      animationInTiming={500}
+      animationOutTiming={500}
+      contentStyle={styles.contentStyle}>
+      {renderContent()}
     </Modal>
   );
 }
@@ -349,6 +430,11 @@ const styles = StyleSheet.create({
   leaveTypeColumn: {
     flex: 1,
     justifyContent: 'flex-start',
+  },
+  centerContainer: {
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

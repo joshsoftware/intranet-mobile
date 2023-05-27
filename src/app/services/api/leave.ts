@@ -4,12 +4,14 @@ import {dateFormate} from '../../utils/date';
 import {
   LEAVE_DETAIL_ROUTE,
   LEAVE_LIST_EMPLOYEES_ROUTE,
+  ALL_PROJECTS_ROUTE,
 } from '../../constant/apiRoutes';
 import {ISO_DATE_FROMAT} from '../../constant/date';
 import {
   ILeaveDetailData,
   ILeaveFilters,
   ILeaveListItemData,
+  IProjectData,
 } from '../../screens/LeaveScreen/interface';
 
 export type GetLeaveListRequestBody = {};
@@ -18,6 +20,7 @@ export type GetLeaveListResponseBody = {
   message: string;
   data: {
     page_no: number;
+    total_pages: number;
     leaves: ILeaveListItemData[];
   };
 };
@@ -54,6 +57,43 @@ export const getLeaveDetailRequest = async (leaveID: number) => {
     method: 'GET',
     url: LEAVE_DETAIL_ROUTE,
     params: {leave_id: leaveID},
+  });
+
+  return response;
+};
+
+export type GetAllProjectsRequestBody = {};
+
+export type GetAllProjectsResponseBody = {
+  message: string;
+  data: {
+    projects: IProjectData[];
+  };
+};
+
+export const getAllProjectsRequest = async () => {
+  const response = await apiCall<
+    GetAllProjectsRequestBody,
+    GetAllProjectsResponseBody
+  >({
+    method: 'GET',
+    url: ALL_PROJECTS_ROUTE,
+  });
+
+  return response;
+};
+
+export type GetUsersRequestBody = {};
+
+export type GetUsersResponseBody = {
+  message: string;
+  data: ILeaveDetailData;
+};
+
+export const getUsersRequest = async () => {
+  const response = await apiCall<GetUsersRequestBody, GetUsersResponseBody>({
+    method: 'GET',
+    url: ALL_PROJECTS_ROUTE,
   });
 
   return response;

@@ -7,8 +7,8 @@ import {
   SceneRendererProps,
 } from 'react-native-tab-view';
 
-import EmployeeTabScreen from './component/EmployeeTabScreen';
-// import ManagementTabScreen from './component/ManagementTabScreen';
+// import EmployeeTabScreen from './component/EmployeeTabScreen';
+import ManagementTabScreen from './component/ManagementTabScreen';
 
 import fonts from '../../constant/fonts';
 import colors from '../../constant/colors';
@@ -21,8 +21,8 @@ type RenderSceneProps = SceneRendererProps & {
 };
 
 const renderScene = ({route}: RenderSceneProps) => {
-  return <EmployeeTabScreen route={route.key} />;
-  // return <ManagementTabScreen route={route.key} />;
+  // return <EmployeeTabScreen route={route.key} />;
+  return <ManagementTabScreen route={route.key} />;
 };
 
 const routes = [

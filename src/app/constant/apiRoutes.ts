@@ -17,3 +17,6 @@ export const DELETE_TIMESHEET_ROUTE =
 
 export const LEAVE_LIST_EMPLOYEES_ROUTE = '/api/mobile/v1/leaves/employee';
 export const LEAVE_DETAIL_ROUTE = '/api/mobile/v1/leaves/employee/details';
+
+export const ALL_PROJECTS_ROUTE = '/api/mobile/v1/leaves/all_project_list';
+export const ALL_USERS_ROUTE = '';

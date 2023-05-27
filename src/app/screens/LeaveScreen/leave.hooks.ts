@@ -4,10 +4,11 @@ import {useQuery} from 'react-query';
 import {
   getLeaveDetailRequest,
   getLeaveListRequest,
+  getAllProjectsRequest,
 } from '../../services/api/leave';
 import toast from '../../utils/toast';
 
-import {ILeaveFilters, IProjectData, IUserData} from './interface';
+import {ILeaveFilters, IUserData} from './interface';
 
 export function useLeaveList(filters: ILeaveFilters) {
   const {
@@ -27,7 +28,7 @@ export function useLeaveList(filters: ILeaveFilters) {
   });
 
   return {
-    data: data?.data.data.leaves,
+    data: data?.data.data.leaves || [],
     isLoading,
     isError,
     error,
@@ -44,7 +45,7 @@ export function useLeaveDetail(leaveID: number) {
   });
 
   return {
-    data: data?.data.data,
+    data: data?.data.data || [],
     isLoading,
     isError,
   };
@@ -108,22 +109,23 @@ export function useEmployeeLeaveList(filters: ILeaveFilters) {
 }
 
 export function useProjectList() {
-  // TODO: Sample data
-  const data: IProjectData[] = [
-    {
-      name: 'Intranet',
-      project_id: 0,
-    },
-    {
-      name: 'Intern Training',
-      project_id: 1,
-    },
-  ];
+  const {data, refetch, isLoading, isError} = useQuery({
+    queryKey: ['allProjects'],
+    queryFn: async () => getAllProjectsRequest(),
+  });
 
-  return data.map(({name, project_id}) => ({
-    label: name,
-    value: project_id,
-  }));
+  const projects = data?.data.data.projects || [];
+
+  return {
+    data:
+      projects.map(({name, project_id}) => ({
+        label: name,
+        value: project_id,
+      })) || [],
+    refetch,
+    isLoading,
+    isError,
+  };
 }
 
 export function useUserList() {
@@ -137,8 +139,19 @@ export function useUserList() {
     },
   ];
 
-  return data.map(({name, user_id}) => ({
-    label: name,
-    value: user_id,
-  }));
+  const isLoading = false;
+  const isError = false;
+
+  const refetch = () => {};
+
+  return {
+    data:
+      data.map(({name, user_id}) => ({
+        label: name,
+        value: user_id,
+      })) || [],
+    refetch,
+    isLoading,
+    isError,
+  };
 }

@@ -26,7 +26,7 @@ function EmployeeTabScreen({route}: Props) {
     active_or_all_flags: 'active',
     from: startOfMonth,
     to: todaysDate,
-    page_no: 0,
+    page_no: 1,
   });
 
   const {
