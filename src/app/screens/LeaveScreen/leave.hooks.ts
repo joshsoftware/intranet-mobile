@@ -1,4 +1,5 @@
 import {AxiosError} from 'axios';
+import {useRef} from 'react';
 import {useInfiniteQuery, useQuery} from 'react-query';
 
 import {
@@ -115,5 +116,17 @@ export function useUserList() {
     refetch,
     isLoading,
     isError,
+  };
+}
+
+export function useLastCall(callback: (...args: any[]) => void, time: number) {
+  const timeoutRef = useRef<number | null>(null);
+
+  return () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(callback, time);
   };
 }
