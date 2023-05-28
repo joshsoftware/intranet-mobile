@@ -5,6 +5,7 @@ import FilterModal from './FilterModal';
 import Typography from '../../../components/typography';
 import Touchable from '../../../components/touchable';
 import DateRange from '../../../components/pickers/dateRange';
+import RenderScreenContent from './RenderScreenContent';
 import {useLeaveList} from '../leave.hooks';
 
 import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
@@ -12,7 +13,6 @@ import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
 import colors from '../../../constant/colors';
 import {Calendar, Search} from '../../../constant/icons';
 import {ILeaveFilters} from '../interface';
-import RenderScreenContent from './RenderScreenContent';
 
 interface Props {
   route: string;
@@ -38,6 +38,8 @@ function TabScreen({route}: Props) {
     refetch,
     isRefetching,
     isRefetchError,
+    fetchNextPage,
+    isFetchingNextPage,
   } = useLeaveList(filters);
 
   const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
@@ -104,6 +106,8 @@ function TabScreen({route}: Props) {
         error={error?.message}
         refetch={refetch}
         isRefetching={isRefetching}
+        fetchNextPage={fetchNextPage}
+        isFetchingNextPage={isFetchingNextPage}
       />
 
       <FilterModal

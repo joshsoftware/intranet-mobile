@@ -27,7 +27,7 @@ export type GetLeaveListResponseBody = {
   };
 };
 
-export const getLeaveListRequest = async (filters: ILeaveFilters) => {
+export const getLeaveListRequest = async (filters: ILeaveFilters, pageNumber?: number) => {
   const response = await apiCall<
     GetLeaveListRequestBody,
     GetLeaveListResponseBody
@@ -38,6 +38,7 @@ export const getLeaveListRequest = async (filters: ILeaveFilters) => {
       ...filters,
       from: dateFormate(filters.from, ISO_DATE_FROMAT),
       to: dateFormate(filters.to, ISO_DATE_FROMAT),
+      page_no: pageNumber || 1,
     },
   });
 

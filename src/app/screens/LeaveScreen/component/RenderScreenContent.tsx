@@ -9,15 +9,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
+import * as Animatable from 'react-native-animatable';
+
 import Typography from '../../../components/typography';
-import colors from '../../../constant/colors';
+import LeaveListItem from './LeaveListItem';
+import DetailRow from '../../ProfileScreen/component/DetailRow';
+
 import UserContext from '../../../context/user.context';
 import {isManagement} from '../../../utils/user';
-import {ILeaveDetailData, ILeaveListItemData} from '../interface';
-import LeaveListItem from './LeaveListItem';
-import * as Animatable from 'react-native-animatable';
-import DetailRow from '../../ProfileScreen/component/DetailRow';
+
+import colors from '../../../constant/colors';
 import {ArrowDown, ArrowUp} from '../../../constant/icons';
+import {ILeaveDetailData, ILeaveListItemData} from '../interface';
 
 interface Props {
   data: ILeaveListItemData[] | ILeaveDetailData[];
@@ -26,6 +29,8 @@ interface Props {
   refetch: () => void;
   isError: boolean;
   error?: string;
+  fetchNextPage: () => void;
+  isFetchingNextPage: boolean;
 }
 
 function RenderScreenContent({
@@ -35,6 +40,8 @@ function RenderScreenContent({
   error,
   refetch,
   isRefetching,
+  fetchNextPage,
+  isFetchingNextPage,
 }: Props) {
   const [activeSections, setActiveSections] = useState<number[]>([]);
 
@@ -86,6 +93,15 @@ function RenderScreenContent({
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
         }
+        onEndReached={fetchNextPage}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator
+              style={styles.paddingVertical}
+              color={colors.PRIMARY}
+            />
+          ) : null
+        }
         renderItem={({item}) => <LeaveListItem {...item} />}
       />
     );
@@ -135,6 +151,8 @@ function RenderScreenContent({
 
   const leavesList = data as ILeaveDetailData[];
 
+  // Extra Props to Accordion are passed to underlying flatlist
+  // when renderAsFlatList is true
   return (
     <ScrollView>
       <Accordion
@@ -146,6 +164,7 @@ function RenderScreenContent({
         onChange={setActiveSections}
         underlayColor="#E6EDFF"
         touchableComponent={TouchableOpacity}
+        renderAsFlatList={false}
       />
     </ScrollView>
   );
@@ -164,6 +183,9 @@ const styles = StyleSheet.create({
   paddingLeft: {
     paddingLeft: 10,
     fontSize: 14,
+  },
+  paddingVertical: {
+    paddingVertical: 10,
   },
   accordionSectionContainer: {
     backgroundColor: colors.WHITE,

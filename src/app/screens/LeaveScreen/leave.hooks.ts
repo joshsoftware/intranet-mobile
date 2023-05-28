@@ -1,5 +1,5 @@
 import {AxiosError} from 'axios';
-import {useQuery} from 'react-query';
+import {useInfiniteQuery, useQuery} from 'react-query';
 
 import {
   getLeaveDetailRequest,
@@ -9,12 +9,7 @@ import {
 } from '../../services/api/leave';
 import toast from '../../utils/toast';
 
-import {
-  ILeaveDetailData,
-  ILeaveFilters,
-  ILeaveListItemData,
-  IUserData,
-} from './interface';
+import {ILeaveDetailData, ILeaveFilters, ILeaveListItemData} from './interface';
 
 export function useLeaveList(filters: ILeaveFilters) {
   const {
@@ -22,26 +17,49 @@ export function useLeaveList(filters: ILeaveFilters) {
     isLoading,
     isError,
     error,
+    fetchNextPage,
+    isFetchingNextPage,
     refetch,
     isRefetching,
     isRefetchError,
-  } = useQuery({
+  } = useInfiniteQuery({
     queryKey: ['leaveList', filters],
-    queryFn: async () => getLeaveListRequest(filters),
+    queryFn: async ({pageParam}) => getLeaveListRequest(filters, pageParam),
+    getNextPageParam: lastPage => {
+      const totalPages = lastPage.data.data.total_pages;
+      const lastPageNumber = lastPage.data.data.page_no;
+
+      if (lastPageNumber < totalPages) {
+        return lastPageNumber + 1;
+      }
+
+      return undefined;
+    },
     onError: (err: AxiosError) => {
       toast(err.message, 'error');
     },
   });
 
-  const responseData: ILeaveListItemData[] | ILeaveDetailData[] =
-    data?.data.data.leaves || [];
+  let leaves: ILeaveListItemData[] | ILeaveDetailData[] = [];
+
+  const pages = data?.pages || [];
+  leaves =
+    pages.reduce((acc, group) => {
+      const groupLeaves = (group.data.data.leaves || []) as
+        | ILeaveListItemData[]
+        | ILeaveDetailData[];
+
+      return [...acc, ...groupLeaves];
+    }, leaves) || [];
 
   return {
-    data: responseData,
+    data: leaves,
     isLoading,
     isError,
     error,
     refetch,
+    fetchNextPage,
+    isFetchingNextPage,
     isRefetching,
     isRefetchError,
   };
@@ -57,63 +75,6 @@ export function useLeaveDetail(leaveID: number) {
     data: data?.data.data || [],
     isLoading,
     isError,
-  };
-}
-
-export function useEmployeeLeaveList(filters: ILeaveFilters) {
-  /*
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-    isRefetchError,
-  } = useQuery({
-    queryKey: ['leaveList', filters],
-    queryFn: async () => getLeaveListRequest(filters),
-    onError: (err: AxiosError) => {
-      toast(err.message, 'error');
-    },
-  });
-  */
-
-  return {
-    data: [
-      {
-        leave_id: 17661,
-        emp_user_id: 929,
-        emp_name: 'Chetan Satpute',
-        leave_from: '2023-05-15',
-        leave_to: '2023-05-19',
-        leave_approver: 'Shailesh Kalekar',
-        days: 5,
-        leave_type: 'WFH',
-        leave_reason: 'Examination Leave.',
-        leave_note: null,
-        leave_status: 'Rejected',
-      },
-      {
-        leave_id: 17661,
-        emp_user_id: 929,
-        emp_name: 'Chetan Satpute',
-        leave_from: '2023-05-15',
-        leave_to: '2023-05-19',
-        leave_approver: 'Shailesh Kalekar',
-        days: 5,
-        leave_type: 'WFH',
-        leave_reason: 'Examination Leave.',
-        leave_note: null,
-        leave_status: 'Rejected',
-      },
-    ],
-    isLoading: false,
-    isError: false,
-    error: null,
-    refetch: () => {},
-    isRefetching: false,
-    isRefetchError: false,
   };
 }
 
