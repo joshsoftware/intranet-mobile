@@ -1,60 +1,113 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import FilterModal from './FilterModal';
 import Typography from '../../../components/typography';
 import Touchable from '../../../components/touchable';
 import DateRange from '../../../components/pickers/dateRange';
-import {useLeaveList} from '../leave.hooks';
 
 import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
 
 import colors from '../../../constant/colors';
 import {Calendar, Search} from '../../../constant/icons';
 import {ILeaveFilters} from '../interface';
-import RenderScreenContent from './RenderScreenContent';
+import {AxiosError} from 'axios';
 
 interface Props {
-  route: string;
+  filters: ILeaveFilters;
+  children: React.ReactNode;
+  setFilters: React.Dispatch<React.SetStateAction<ILeaveFilters>>;
+  isLoading: boolean;
+  isError: boolean;
+  error: AxiosError | null;
+  refetch: () => void;
+  isRefetching: boolean;
+  isRefetchError: boolean;
+  noLeaves: boolean;
+  isManagement: boolean;
 }
 
-function TabScreen({route}: Props) {
+function TabScreen({
+  isManagement,
+  setFilters,
+  isLoading,
+  isError,
+  error,
+  refetch,
+  isRefetching,
+  isRefetchError,
+  children,
+  noLeaves,
+  filters,
+}: Props) {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
-  const [filters, setFilters] = useState<ILeaveFilters>({
-    leave_type: '',
-    pending_flag: route === 'pending' ? true : false,
-    active_or_all_flags: 'active',
-    from: startOfMonth,
-    to: todaysDate,
-    page_no: 1,
-  });
 
-  const {
-    data,
-    isLoading,
+  const renderContent = useMemo(() => {
+    if (isLoading) {
+      return (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={colors.PRIMARY} />
+        </View>
+      );
+    }
+
+    if (isError || isRefetchError) {
+      return (
+        <ScrollView
+          contentContainerStyle={styles.centerContainer}
+          refreshControl={
+            <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          }>
+          <Typography type="error">{error?.message}</Typography>
+        </ScrollView>
+      );
+    }
+
+    if (noLeaves) {
+      return (
+        <View style={styles.centerContainer}>
+          <Typography type="secondaryText">No Leaves!</Typography>
+        </View>
+      );
+    }
+
+    return children;
+  }, [
+    children,
+    noLeaves,
+    error?.message,
     isError,
-    error,
-    refetch,
     isRefetching,
     isRefetchError,
-  } = useLeaveList(filters);
+    isLoading,
+    refetch,
+  ]);
 
-  const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
-    if (startDate && endDate) {
-      setFilters(value => ({
-        ...value,
-        from: startDate,
-        to: endDate,
-      }));
-    } else {
-      setFilters(value => ({
-        ...value,
-        from: startOfMonth,
-        to: todaysDate,
-      }));
-    }
-  }, []);
+  const onDateRangeSubmit = useCallback(
+    (startDate?: Date, endDate?: Date) => {
+      if (startDate && endDate) {
+        setFilters(value => ({
+          ...value,
+          from: startDate,
+          to: endDate,
+        }));
+      } else {
+        setFilters(value => ({
+          ...value,
+          from: startOfMonth,
+          to: todaysDate,
+        }));
+      }
+    },
+    [setFilters],
+  );
 
   const toggelDatePicker = () => setIsDateRangeVisible(v => !v);
 
@@ -97,16 +150,10 @@ function TabScreen({route}: Props) {
         </Touchable>
       </View>
 
-      <RenderScreenContent
-        data={data}
-        isLoading={isLoading}
-        isError={isError || isRefetchError}
-        error={error?.message}
-        refetch={refetch}
-        isRefetching={isRefetching}
-      />
+      {renderContent}
 
       <FilterModal
+        isManagement={isManagement}
         isVisible={showFilterModal}
         closeModal={toggleFilterModal}
         filters={filters}

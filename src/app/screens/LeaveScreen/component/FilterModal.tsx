@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {ActivityIndicator, StyleSheet, Switch, View} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 
@@ -10,6 +10,9 @@ import CheckBoxField from './CheckBoxField';
 import Touchable from '../../../components/touchable';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {useProjectList, useUserList} from '../leave.hooks';
+
+import UserContext from '../../../context/user.context';
+import {isManagement} from '../../../utils/user';
 
 import strings from '../../../constant/strings';
 import colors from '../../../constant/colors';
@@ -23,7 +26,6 @@ import {
 import {ILeaveFilters} from '../interface';
 
 interface Props {
-  isManagement: boolean;
   isVisible: boolean;
   closeModal: () => void;
   filters: ILeaveFilters;
@@ -41,13 +43,10 @@ interface IFormValues {
   unpaid: boolean;
 }
 
-function FilterModal({
-  isManagement,
-  isVisible,
-  closeModal,
-  filters,
-  setFilter,
-}: Props) {
+function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
+  const [userContextValue] = useContext(UserContext);
+  const userRole = userContextValue?.userData.role || 'Employee';
+
   const keyboardIsVisible = useIsKeyboardShown();
 
   const [isSelectAll, setIsSelectAll] = useState(false);
@@ -207,7 +206,7 @@ function FilterModal({
 
     return (
       <View style={styles.container}>
-        {isManagement && (
+        {isManagement(userRole) && (
           <>
             <View style={styles.row}>
               <Typography type="header" style={styles.header}>

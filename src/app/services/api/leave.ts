@@ -5,6 +5,7 @@ import {
   LEAVE_DETAIL_ROUTE,
   LEAVE_LIST_EMPLOYEES_ROUTE,
   ALL_PROJECTS_ROUTE,
+  ALL_USERS_ROUTE,
 } from '../../constant/apiRoutes';
 import {ISO_DATE_FROMAT} from '../../constant/date';
 import {
@@ -12,6 +13,7 @@ import {
   ILeaveFilters,
   ILeaveListItemData,
   IProjectData,
+  IUserData,
 } from '../../screens/LeaveScreen/interface';
 
 export type GetLeaveListRequestBody = {};
@@ -87,13 +89,15 @@ export type GetUsersRequestBody = {};
 
 export type GetUsersResponseBody = {
   message: string;
-  data: ILeaveDetailData;
+  data: {
+    users: IUserData[];
+  };
 };
 
-export const getUsersRequest = async () => {
+export const getAllUsersRequest = async () => {
   const response = await apiCall<GetUsersRequestBody, GetUsersResponseBody>({
     method: 'GET',
-    url: ALL_PROJECTS_ROUTE,
+    url: ALL_USERS_ROUTE,
   });
 
   return response;

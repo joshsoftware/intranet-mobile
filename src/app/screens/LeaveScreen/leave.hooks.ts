@@ -5,10 +5,16 @@ import {
   getLeaveDetailRequest,
   getLeaveListRequest,
   getAllProjectsRequest,
+  getAllUsersRequest,
 } from '../../services/api/leave';
 import toast from '../../utils/toast';
 
-import {ILeaveFilters, IUserData} from './interface';
+import {
+  ILeaveDetailData,
+  ILeaveFilters,
+  ILeaveListItemData,
+  IUserData,
+} from './interface';
 
 export function useLeaveList(filters: ILeaveFilters) {
   const {
@@ -27,8 +33,11 @@ export function useLeaveList(filters: ILeaveFilters) {
     },
   });
 
+  const responseData: ILeaveListItemData[] | ILeaveDetailData[] =
+    data?.data.data.leaves || [];
+
   return {
-    data: data?.data.data.leaves || [],
+    data: responseData,
     isLoading,
     isError,
     error,
@@ -129,24 +138,16 @@ export function useProjectList() {
 }
 
 export function useUserList() {
-  // TODO: Sample data
-  const data: IUserData[] = [
-    {
-      name: 'Chetan Satpute',
-      email: 'chetan.satpute@joshsoftware.com',
-      user_id: 929,
-      emp_id: 'JIN0105',
-    },
-  ];
+  const {data, refetch, isLoading, isError} = useQuery({
+    queryKey: ['allUsers'],
+    queryFn: async () => getAllUsersRequest(),
+  });
 
-  const isLoading = false;
-  const isError = false;
-
-  const refetch = () => {};
+  const projects = data?.data.data.users || [];
 
   return {
     data:
-      data.map(({name, user_id}) => ({
+      projects.map(({name, user_id}) => ({
         label: name,
         value: user_id,
       })) || [],
