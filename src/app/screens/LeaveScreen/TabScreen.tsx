@@ -1,17 +1,18 @@
 import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import Typography from '../../components/typography';
-import Touchable from '../../components/touchable';
 import DateRange from '../../components/pickers/dateRange';
+import EmployeeLeaveScreen from './EmployeeLeaveScreen';
+import ManagementLeaveScreen from './ManagementLeaveScreen';
+import Touchable from '../../components/touchable';
+import Typography from '../../components/typography';
 
 import {dateFormate, startOfMonth, todaysDate} from '../../utils/date';
+import UserContext from '../../context/user.context';
+import {isManagement} from '../../utils/user';
 
 import colors from '../../constant/colors';
 import {Calendar, Filter} from '../../constant/icons';
-import {isManagement} from '../../utils/user';
-import UserContext from '../../context/user.context';
-import ManagementLeaveScreen from './ManagementLeaveScreen';
 import {TDateRange} from '../../../types';
 
 interface Props {
@@ -101,7 +102,11 @@ function TabScreen({route}: Props) {
           endDate={dateRange.endDate}
         />
       ) : (
-        <></>
+        <EmployeeLeaveScreen
+          isPendingRoute={route === 'pending'}
+          startDate={dateRange.startDate}
+          endDate={dateRange.endDate}
+        />
       )}
     </View>
   );

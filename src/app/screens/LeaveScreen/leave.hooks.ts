@@ -1,5 +1,4 @@
 import {AxiosError} from 'axios';
-import {useRef} from 'react';
 import {useInfiniteQuery, useQuery} from 'react-query';
 
 import {dateFormate} from '../../utils/date';
@@ -8,6 +7,7 @@ import {
   getLeaveDetailRequest,
   getAllProjectsRequest,
   getAllUsersRequest,
+  getEmployeeLeaves,
 } from '../../services/leaves';
 import toast from '../../utils/toast';
 
@@ -22,7 +22,6 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
     data,
     isLoading,
     isError,
-    error,
     fetchNextPage,
     isFetchingNextPage,
     refetch,
@@ -43,7 +42,7 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
       return undefined;
     },
     onError: (err: AxiosError) => {
-      const response = err.response?.data;
+      const response = err.response?.data as any;
       toast(response.message, 'error');
     },
   });
@@ -60,8 +59,8 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
   return {
     data: leaves,
     isLoading,
-    isError,
-    error: error?.response?.data.message || 'Failed to fetch leaves',
+    isError: isError && !leaves.length,
+    error: 'Failed to fetch leaves',
     refetch,
     fetchNextPage,
     isFetchingNextPage,
@@ -109,11 +108,11 @@ export function useUserList() {
     queryFn: async () => getAllUsersRequest(),
   });
 
-  const projects = data?.data.data.users || [];
+  const users = data?.data.data.users || [];
 
   return {
     data:
-      projects.map(({name, user_id}) => ({
+      users.map(({name, user_id}) => ({
         label: name,
         value: user_id,
       })) || [],
@@ -123,14 +122,25 @@ export function useUserList() {
   };
 }
 
-export function useLastCall(callback: (...args: any[]) => void, time: number) {
-  const timeoutRef = useRef<number | null>(null);
+export const useLeavesList = (
+  initialDate: Date,
+  endDate: Date,
+  isPendingLeaves: boolean,
+) => {
+  const from = dateFormate(initialDate, ISO_DATE_FROMAT);
+  const to = dateFormate(endDate, ISO_DATE_FROMAT);
 
-  return () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+  const {data, isLoading, refetch, isError, isRefetching} = useQuery(
+    ['employeeLeaves', from, to, isPendingLeaves ? 'pending' : 'history'],
+    () => getEmployeeLeaves({from, to, pending_flag: isPendingLeaves}),
+  );
 
-    timeoutRef.current = setTimeout(callback, time);
+  return {
+    data: data?.data?.data?.leaves || [],
+    isLoading,
+    refetch,
+    isError,
+    isRefetching,
+    error: data?.data.message,
   };
-}
+};

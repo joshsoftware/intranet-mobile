@@ -5,21 +5,24 @@ import {
   ALL_PROJECTS_ROUTE,
   ALL_USERS_ROUTE,
   MANAGER_LEAVE_LIST_ROUTE,
+  LEAVE_LIST_ROUTE,
 } from '../../constant/apiRoutes';
 import {
   GetAllProjectsResponseBody,
   GetLeaveDetailRequestBody,
   GetLeaveDetailResponseBody,
-  GetLeaveListRequestBody,
+  GetManagerLeaveListParams,
   GetLeaveListResponseBody,
   GetUsersResponseBody,
+  GetEmployeesLeaveParams,
+  GetEmployeesLeaveResponse,
 } from './types';
 
 export const getManagerLeaveListRequest = async (
-  payload: GetLeaveListRequestBody,
+  payload: GetManagerLeaveListParams,
 ) => {
   const response = await apiCall<
-    GetLeaveListRequestBody,
+    GetManagerLeaveListParams,
     GetLeaveListResponseBody
   >({
     method: 'GET',
@@ -58,6 +61,19 @@ export const getAllUsersRequest = async () => {
   const response = await apiCall<any, GetUsersResponseBody>({
     method: 'GET',
     url: ALL_USERS_ROUTE,
+  });
+
+  return response;
+};
+
+export const getEmployeeLeaves = async (payload: GetEmployeesLeaveParams) => {
+  const response = await apiCall<
+    GetEmployeesLeaveParams,
+    GetEmployeesLeaveResponse
+  >({
+    method: 'GET',
+    url: LEAVE_LIST_ROUTE,
+    params: payload,
   });
 
   return response;

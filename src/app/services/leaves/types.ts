@@ -5,7 +5,7 @@ import {
   IUserData,
 } from '../../screens/LeaveScreen/interface';
 
-export type GetLeaveListRequestBody = {
+export type GetManagerLeaveListParams = {
   project_id?: number;
   user_id?: number;
   active_or_all_flags: 'active' | 'all';
@@ -22,6 +22,19 @@ export type GetLeaveListResponseBody = {
     page_no: number;
     total_pages: number;
     leaves: ILeaveListItemData[];
+  };
+};
+
+export type GetEmployeesLeaveParams = {
+  from: string;
+  to: string;
+  pending_flag: boolean;
+};
+
+export type GetEmployeesLeaveResponse = {
+  message: string;
+  data: {
+    leaves: ILeaveDetailData[];
   };
 };
 
