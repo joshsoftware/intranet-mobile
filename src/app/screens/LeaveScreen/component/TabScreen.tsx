@@ -1,18 +1,11 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
-import LeaveListItem from './LeaveListItem';
 import FilterModal from './FilterModal';
 import Typography from '../../../components/typography';
 import Touchable from '../../../components/touchable';
 import DateRange from '../../../components/pickers/dateRange';
+import RenderScreenContent from './RenderScreenContent';
 import {useLeaveList} from '../leave.hooks';
 
 import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
@@ -34,7 +27,7 @@ function TabScreen({route}: Props) {
     active_or_all_flags: 'active',
     from: startOfMonth,
     to: todaysDate,
-    page_no: 0,
+    page_no: 1,
   });
 
   const {
@@ -45,63 +38,17 @@ function TabScreen({route}: Props) {
     refetch,
     isRefetching,
     isRefetchError,
-  } = useLeaveList(filters);
-
-  const renderContent = useMemo(() => {
-    if (isLoading) {
-      return (
-        <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={colors.PRIMARY} />
-        </View>
-      );
-    }
-
-    if (isError || isRefetchError) {
-      return (
-        <ScrollView
-          contentContainerStyle={styles.centerContainer}
-          refreshControl={
-            <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-          }>
-          <Typography type="error">{error?.message}</Typography>
-        </ScrollView>
-      );
-    }
-
-    if (!data) {
-      return (
-        <View style={styles.centerContainer}>
-          <Typography type="error">Could not get leaves!</Typography>
-        </View>
-      );
-    }
-
-    if (data.length === 0) {
-      return (
-        <View style={styles.centerContainer}>
-          <Typography type="secondaryText">No Leaves!</Typography>
-        </View>
-      );
-    }
-
-    return (
-      <FlatList
-        data={data}
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-        }
-        renderItem={({item}) => <LeaveListItem {...item} />}
-      />
-    );
-  }, [
-    data,
-    error?.message,
-    isError,
-    isRefetching,
-    isRefetchError,
-    isLoading,
-    refetch,
-  ]);
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useLeaveList(
+    filters.active_or_all_flags,
+    filters.from,
+    filters.leave_type,
+    filters.pending_flag,
+    filters.to,
+    filters.project_id,
+    filters.user_id,
+  );
 
   const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
     if (startDate && endDate) {
@@ -160,7 +107,16 @@ function TabScreen({route}: Props) {
         </Touchable>
       </View>
 
-      {renderContent}
+      <RenderScreenContent
+        data={data}
+        isLoading={isLoading}
+        isError={isError || isRefetchError}
+        error={error?.message}
+        refetch={refetch}
+        isRefetching={isRefetching}
+        fetchNextPage={fetchNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+      />
 
       <FilterModal
         isVisible={showFilterModal}
