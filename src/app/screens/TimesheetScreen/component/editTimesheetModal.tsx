@@ -7,6 +7,7 @@ import Typography from '../../../components/typography';
 import {useEditTimesheet} from '../timesheet.hooks';
 
 import {convertToMins, dateFormate} from '../../../utils/date';
+import toast from '../../../utils/toast';
 
 import {Timesheet} from '../interface';
 import colors from '../../../constant/colors';
@@ -16,26 +17,23 @@ import {ISO_DATE_FROMAT} from '../../../constant/date';
 type Props = {
   isVisible: boolean;
   toggleModal: () => void;
-  refetch: Function;
   userId: string;
   formData?: Timesheet;
 };
 
 const EditTimesheetModal = ({
   toggleModal,
-  refetch,
   formData,
   isVisible,
   userId,
 }: Props) => {
-  const {mutate, isLoading, isSuccess} = useEditTimesheet();
+  const {mutate, isLoading, isSuccess, message} = useEditTimesheet();
 
   useEffect(() => {
     if (isSuccess) {
       toggleModal();
-      refetch();
     }
-  }, [isSuccess, refetch, toggleModal]);
+  }, [isSuccess, toggleModal]);
 
   const onEditSave = (data: Timesheet) => {
     mutate({
@@ -50,6 +48,12 @@ const EditTimesheetModal = ({
     });
   };
 
+  const onModalHide = () => {
+    if (isSuccess) {
+      toast(message!);
+    }
+  };
+
   return (
     <Modal
       isVisible={isVisible}
@@ -59,6 +63,7 @@ const EditTimesheetModal = ({
       animationOutTiming={500}
       onBackButtonPress={toggleModal}
       onBackdropPress={toggleModal}
+      onModalHide={onModalHide}
       contentStyle={styles.main}>
       <View>
         <Typography type="title" style={styles.title}>

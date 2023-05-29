@@ -1,6 +1,7 @@
 import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
+import CreateTimesheetButton from './createTimesheetButton';
 import DateRange from '../../../../components/pickers/dateRange';
 import SectionListTimesheet from '../../component/sectionListTimesheet';
 import EditTimesheetModal from '../../component/editTimesheetModal';
@@ -12,6 +13,7 @@ import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
 import {getParams} from '../../../../navigation';
 import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
 import UserContext from '../../../../context/user.context';
+import {isManagement} from '../../../../utils/user';
 
 import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
@@ -19,12 +21,12 @@ import strings from '../../../../constant/strings';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import {Calendar} from '../../../../constant/icons';
 import colors from '../../../../constant/colors';
-import CreateTimesheetButton from './createTimesheetButton';
 
 const TimesheetList = () => {
   const params: any = getParams();
   const [userContextData] = useContext(UserContext);
 
+  const isManager = isManagement(userContextData?.userData.role);
   const userId = useMemo(
     () => params?.user_id ?? userContextData?.userData.userId ?? '',
     [params?.user_id, userContextData?.userData.userId],
@@ -169,18 +171,15 @@ const TimesheetList = () => {
           refreshing={isFetching}
           onRefresh={refetch}
           emptyListMessage={strings.NO_TIMESHEET_PRESENT}
-          isDeleteVisible={userContextData?.userData.role === 'Manager'}
+          isDeleteVisible={isManager}
         />
 
-        {isEditModalVisible && (
-          <EditTimesheetModal
-            isVisible={isEditModalVisible}
-            toggleModal={toggleEditModal}
-            refetch={refetch}
-            formData={editTimesheetData}
-            userId={userId}
-          />
-        )}
+        <EditTimesheetModal
+          isVisible={isEditModalVisible}
+          toggleModal={toggleEditModal}
+          formData={editTimesheetData}
+          userId={userId}
+        />
         {params?.user_id && (
           <CreateTimesheetButton userId={params?.user_id} name={params?.name} />
         )}

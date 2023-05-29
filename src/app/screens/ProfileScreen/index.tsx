@@ -16,8 +16,9 @@ import Deployments from './tabs/Deployments';
 import EmployeeDetails from './tabs/EmployeeDetails';
 import Typography from '../../components/typography';
 
-import UserContext from '../../context/user.context';
+import UserContext, {UserRole} from '../../context/user.context';
 import useProfileData from './profile.hooks';
+import {isDeployment, isManagement} from '../../utils/user';
 
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
@@ -52,31 +53,22 @@ const renderSceneScreen = (
   }
 };
 
-const routesPerRole = {
-  Manager: [
+const renderRoutesPerRole = (userRole: UserRole) => {
+  const profileTabs = [
     {key: 'publicProfile', title: 'Public Profile'},
     {key: 'personalDetails', title: 'Personal Details'},
     {key: 'skills', title: 'Skills'},
-    {key: 'employeeDetails', title: 'Employee Details'},
     {key: 'assets', title: 'Assets'},
-    {key: 'deployments', title: 'Deployments'},
-  ],
-  Employee: [
-    {key: 'publicProfile', title: 'Public Profile'},
-    {key: 'personalDetails', title: 'Personal Details'},
-    {key: 'skills', title: 'Skills'},
-    {key: 'employeeDetails', title: 'Employee Details'},
-    {key: 'assets', title: 'Assets'},
-    {key: 'deployments', title: 'Deployments'},
-  ],
-  Intern: [
-    {key: 'publicProfile', title: 'Public Profile'},
-    {key: 'personalDetails', title: 'Personal Details'},
-    {key: 'skills', title: 'Skills'},
-    {key: 'employeeDetails', title: 'Employee Details'},
-    {key: 'assets', title: 'Assets'},
-    {key: 'deployments', title: 'Deployments'},
-  ],
+  ];
+  if (isDeployment(userRole)) {
+    profileTabs.push(
+      {key: 'employeeDetails', title: 'Employee Details'},
+      {key: 'deployments', title: 'Deployments'},
+    );
+  } else if (isManagement(userRole)) {
+    profileTabs.push({key: 'employeeDetails', title: 'Employee Details'});
+  }
+  return profileTabs;
 };
 
 const ProfileScreen = () => {
@@ -84,7 +76,7 @@ const ProfileScreen = () => {
   const [sceneIndex, setSceneIndex] = React.useState(0);
   const {data, isLoading, isError} = useProfileData();
 
-  const routes = routesPerRole[userContext?.userData.role || 'Employee'];
+  const routes = renderRoutesPerRole(userContext?.userData.role || 'Employee');
 
   const renderScene = useCallback(
     (props: RenderSceneProps) => {

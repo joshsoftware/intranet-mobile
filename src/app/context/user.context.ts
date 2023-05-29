@@ -1,6 +1,15 @@
 import React from 'react';
 
-export type UserRole = 'Manager' | 'Employee';
+export type UserRole =
+  | 'Admin'
+  | 'Deployment'
+  | 'HR'
+  | 'Finance'
+  | 'Leader'
+  | 'Manager'
+  | 'Employee'
+  | 'Intern'
+  | 'Consultant';
 
 export interface UserData {
   role: UserRole;

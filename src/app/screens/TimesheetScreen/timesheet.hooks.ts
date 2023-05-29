@@ -97,11 +97,10 @@ export const useAssignedProjects = (userId: string) => {
 export const useEditTimesheet = () => {
   const queryClient = useQueryClient();
 
-  const {mutate, isLoading, isSuccess} = useMutation(
+  const {mutate, isLoading, isSuccess, data} = useMutation(
     (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
     {
-      onSuccess: data => {
-        toast(data.data.message);
+      onSuccess: () => {
         queryClient.invalidateQueries(['timesheet']);
       },
       onError: (err: AxiosError) => {
@@ -110,7 +109,7 @@ export const useEditTimesheet = () => {
       },
     },
   );
-  return {mutate, isLoading, isSuccess};
+  return {mutate, isLoading, isSuccess, message: data?.data.message};
 };
 
 export const useAddTimesheet = () => {

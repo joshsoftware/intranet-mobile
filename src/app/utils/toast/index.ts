@@ -12,6 +12,7 @@ const toast = (message: string, type: ToastType = 'success') => {
     type,
     text2: message,
     position: 'top',
+    visibilityTime: 5000,
   });
 };
 
