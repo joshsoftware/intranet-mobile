@@ -8,7 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SplashScreen from '../screens/SplashScreen';
 import TimesheetList from '../screens/TimesheetScreen/view/timesheetList';
 import ProfileScreen from '../screens/ProfileScreen';
-import LeaveDetailScreen from '../screens/LeaveDetailScreen';
+import LeaveDetailScreen from '../screens/LeaveScreen/ManagementLeaveScreen/LeaveDetailScreen';
 import DrawerNavigator from './DrawerNavigation';
 
 import UserContext from '../context/user.context';

@@ -27,7 +27,6 @@ export interface ILeaveFilters {
   user_id?: number;
   active_or_all_flags: 'active' | 'all';
   from: Date;
-  page_no: number;
   leave_type: string;
   pending_flag: boolean;
   to: Date;

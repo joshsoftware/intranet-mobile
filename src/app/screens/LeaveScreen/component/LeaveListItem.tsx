@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Touchable from '../../../components/touchable';
 import Typography from '../../../components/typography';
+
+import {dateFormate} from '../../../utils/date';
 
 import colors from '../../../constant/colors';
 import {Arrow} from '../../../constant/icons';
@@ -13,31 +15,31 @@ import {RootStackParamList} from '../../../navigation/types';
 import {ILeaveListItemData} from '../interface';
 
 function LeaveListItem({
-  emp_name,
-  leave_id,
-  leave_from,
-  leave_to,
-  leave_type,
+  emp_name: empName,
+  leave_id: leaveID,
+  leave_from: leaveFrom,
+  leave_to: leaveTo,
+  leave_type: leaveType,
   days,
 }: ILeaveListItemData) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const navigateToDetail = () => {
-    navigation.navigate(LEAVE_DETAIL_SCREEN, {leaveID: leave_id});
+    navigation.navigate(LEAVE_DETAIL_SCREEN, {leaveID});
   };
 
   return (
     <Touchable type="native" onPress={navigateToDetail}>
       <View style={styles.contanier}>
         <Typography type="header" style={styles.name}>
-          {emp_name}
+          {empName}
         </Typography>
 
         <View style={styles.row}>
           <View style={styles.column}>
             <Typography type="text" style={styles.font12}>
-              {leave_from}
+              {dateFormate(leaveFrom)}
             </Typography>
             <Typography type="secondaryText" style={styles.font12}>
               Leave From
@@ -46,7 +48,7 @@ function LeaveListItem({
 
           <View style={styles.column}>
             <Typography type="text" style={styles.font12}>
-              {leave_to}
+              {dateFormate(leaveTo)}
             </Typography>
             <Typography type="secondaryText" style={styles.font12}>
               Leave To
@@ -64,13 +66,12 @@ function LeaveListItem({
 
           <View style={styles.column}>
             <Typography type="text" style={styles.font12}>
-              {leave_type}
+              {leaveType}
             </Typography>
             <Typography type="secondaryText" style={styles.font12}>
               Leave Type
             </Typography>
           </View>
-
           <Arrow />
         </View>
       </View>
@@ -102,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LeaveListItem;
+export default memo(LeaveListItem);

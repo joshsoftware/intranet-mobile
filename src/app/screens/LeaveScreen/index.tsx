@@ -7,7 +7,7 @@ import {
   SceneRendererProps,
 } from 'react-native-tab-view';
 
-import TabScreen from './component/TabScreen';
+import TabScreen from './TabScreen';
 
 import fonts from '../../constant/fonts';
 import colors from '../../constant/colors';
@@ -28,19 +28,6 @@ const routes = [
   {key: 'history', title: 'Leave History'},
 ];
 
-const LeaveScreen = () => {
-  const [screenIndex, setScreenIndex] = useState(0);
-
-  return (
-    <TabView
-      navigationState={{index: screenIndex, routes}}
-      renderTabBar={renderTabBar}
-      renderScene={renderScene}
-      onIndexChange={setScreenIndex}
-    />
-  );
-};
-
 const renderTabBar = (props: TabBarProps<{key: string; title: string}>) => {
   return (
     <TabBar
@@ -50,6 +37,19 @@ const renderTabBar = (props: TabBarProps<{key: string; title: string}>) => {
       activeColor={colors.PRIMARY}
       indicatorStyle={styles.indicatorStyle}
       style={styles.tabBarContainer}
+    />
+  );
+};
+
+const LeaveScreen = () => {
+  const [screenIndex, setScreenIndex] = useState(0);
+
+  return (
+    <TabView
+      navigationState={{index: screenIndex, routes}}
+      renderTabBar={renderTabBar}
+      renderScene={renderScene}
+      onIndexChange={setScreenIndex}
     />
   );
 };

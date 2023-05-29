@@ -29,7 +29,7 @@ interface Props {
   isVisible: boolean;
   closeModal: () => void;
   filters: ILeaveFilters;
-  setFilter: (filters: ILeaveFilters) => void;
+  changeFilters: (filters: Partial<ILeaveFilters>) => void;
 }
 
 interface IFormValues {
@@ -43,15 +43,15 @@ interface IFormValues {
   unpaid: boolean;
 }
 
-function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
+function FilterModal({isVisible, closeModal, filters, changeFilters}: Props) {
   const [userContextValue] = useContext(UserContext);
-  const userRole = userContextValue?.userData.role || 'Employee';
-
   const keyboardIsVisible = useIsKeyboardShown();
+
+  const isManager = isManagement(userContextValue?.userData?.role);
 
   const [isSelectAll, setIsSelectAll] = useState(false);
 
-  const defaultFormValues = useMemo((): IFormValues => {
+  const defaultFormValues = useMemo(() => {
     const leaveType = new Set(
       filters.leave_type.split(',').filter(e => e !== '') || [],
     );
@@ -60,11 +60,11 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
       projectId: filters.project_id,
       userId: filters.user_id,
       userType: filters.active_or_all_flags === 'all',
-      leave: leaveType.has('LEAVE'),
-      wfh: leaveType.has('WFH'),
-      optionalHoliday: leaveType.has('OPTIONAL HOLIDAY'),
-      spl: leaveType.has('SPL'),
-      unpaid: leaveType.has('UNPAID'),
+      leave: leaveType.has(LEAVE),
+      wfh: leaveType.has(WFH),
+      optionalHoliday: leaveType.has(OPTIONAL_HOLIDAY),
+      spl: leaveType.has(SPL),
+      unpaid: leaveType.has(UNPAID),
     };
   }, [filters]);
 
@@ -84,6 +84,7 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
     isLoading: isProjectsLoading,
     isError: isProjectsError,
   } = useProjectList();
+
   const {
     data: users,
     refetch: refetchUsers,
@@ -114,37 +115,28 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
       unpaid,
       optionalHoliday,
     } = formValues;
-
     const leaveType: string[] = [];
-
     if (leave) {
       leaveType.push(LEAVE);
     }
-
     if (wfh) {
       leaveType.push(WFH);
     }
-
     if (spl) {
       leaveType.push(SPL);
     }
-
     if (optionalHoliday) {
       leaveType.push(OPTIONAL_HOLIDAY);
     }
-
     if (unpaid) {
       leaveType.push(UNPAID);
     }
 
-    setFilter({
+    changeFilters({
       project_id: projectId,
       user_id: userId,
       active_or_all_flags: userType ? 'all' : 'active',
-      from: filters.from,
-      to: filters.to,
       leave_type: leaveType.join(','),
-      pending_flag: filters.pending_flag,
     });
 
     closeModal();
@@ -205,7 +197,7 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
 
     return (
       <View style={styles.container}>
-        {isManagement(userRole) && (
+        {isManager && (
           <>
             <View style={styles.row}>
               <Typography type="header" style={styles.header}>

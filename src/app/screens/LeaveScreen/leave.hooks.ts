@@ -2,25 +2,22 @@ import {AxiosError} from 'axios';
 import {useRef} from 'react';
 import {useInfiniteQuery, useQuery} from 'react-query';
 
+import {dateFormate} from '../../utils/date';
 import {
+  getManagerLeaveListRequest,
   getLeaveDetailRequest,
-  getLeaveListRequest,
   getAllProjectsRequest,
   getAllUsersRequest,
-} from '../../services/api/leave';
+} from '../../services/leaves';
 import toast from '../../utils/toast';
 
-import {ILeaveDetailData, ILeaveListItemData} from './interface';
+import {ISO_DATE_FROMAT} from '../../constant/date';
+import {ILeaveFilters, ILeaveListItemData} from './interface';
 
-export function useLeaveList(
-  active_or_all_flags: 'active' | 'all',
-  from: Date,
-  leave_type: string,
-  pending_flag: boolean,
-  to: Date,
-  project_id?: number,
-  user_id?: number,
-) {
+export function useManagerLeaveList(filters: ILeaveFilters) {
+  const from = dateFormate(filters.from, ISO_DATE_FROMAT);
+  const to = dateFormate(filters.to, ISO_DATE_FROMAT);
+
   const {
     data,
     isLoading,
@@ -32,27 +29,9 @@ export function useLeaveList(
     isRefetching,
     isRefetchError,
   } = useInfiniteQuery({
-    queryKey: [
-      'leaveList',
-      project_id,
-      user_id,
-      active_or_all_flags,
-      from,
-      leave_type,
-      pending_flag,
-      to,
-    ],
+    queryKey: ['ManagerLeaveList', ...Object.values(filters), from, to],
     queryFn: async ({pageParam}) =>
-      getLeaveListRequest(
-        active_or_all_flags,
-        from,
-        leave_type,
-        pending_flag,
-        to,
-        project_id,
-        user_id,
-        pageParam,
-      ),
+      getManagerLeaveListRequest({...filters, from, to, page_no: pageParam}),
     getNextPageParam: lastPage => {
       const totalPages = lastPage.data.data.total_pages;
       const lastPageNumber = lastPage.data.data.page_no;
@@ -64,19 +43,17 @@ export function useLeaveList(
       return undefined;
     },
     onError: (err: AxiosError) => {
-      toast(err.message, 'error');
+      const response = err.response?.data;
+      toast(response.message, 'error');
     },
   });
 
-  let leaves: ILeaveListItemData[] | ILeaveDetailData[] = [];
-
+  let leaves: ILeaveListItemData[] = [];
   const pages = data?.pages || [];
+
   leaves =
     pages.reduce((acc, group) => {
-      const groupLeaves = (group.data.data.leaves || []) as
-        | ILeaveListItemData[]
-        | ILeaveDetailData[];
-
+      const groupLeaves = group.data.data.leaves || [];
       return [...acc, ...groupLeaves];
     }, leaves) || [];
 
@@ -84,7 +61,7 @@ export function useLeaveList(
     data: leaves,
     isLoading,
     isError,
-    error,
+    error: error?.response?.data.message || 'Failed to fetch leaves',
     refetch,
     fetchNextPage,
     isFetchingNextPage,
@@ -96,7 +73,7 @@ export function useLeaveList(
 export function useLeaveDetail(leaveID: number) {
   const {data, isLoading, isError} = useQuery({
     queryKey: ['leaveDetail', leaveID],
-    queryFn: async () => getLeaveDetailRequest(leaveID),
+    queryFn: async () => getLeaveDetailRequest({leave_id: leaveID}),
   });
 
   return {

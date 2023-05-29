@@ -7,13 +7,13 @@ import {
   ScrollView,
 } from 'react-native';
 
-import Header from '../components/header';
-import Typography from '../components/typography';
-import DetailRow from '../components/DetailRow';
-import {useLeaveDetail} from './LeaveScreen/leave.hooks';
+import Header from '../../../components/header';
+import Typography from '../../../components/typography';
+import DetailRow from '../../../components/DetailRow';
+import {useLeaveDetail} from '../leave.hooks';
 
-import colors from '../constant/colors';
-import {LeaveDetailScreenNavigationProp} from '../navigation/types';
+import colors from '../../../constant/colors';
+import {LeaveDetailScreenNavigationProp} from '../../../navigation/types';
 
 function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
   const {leaveID} = route.params;

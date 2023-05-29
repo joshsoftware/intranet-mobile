@@ -1,67 +1,47 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import FilterModal from './FilterModal';
-import Typography from '../../../components/typography';
-import Touchable from '../../../components/touchable';
-import DateRange from '../../../components/pickers/dateRange';
-import RenderScreenContent from './RenderScreenContent';
-import {useLeaveList} from '../leave.hooks';
+import Typography from '../../components/typography';
+import Touchable from '../../components/touchable';
+import DateRange from '../../components/pickers/dateRange';
 
-import {dateFormate, startOfMonth, todaysDate} from '../../../utils/date';
+import {dateFormate, startOfMonth, todaysDate} from '../../utils/date';
 
-import colors from '../../../constant/colors';
-import {Calendar, Search} from '../../../constant/icons';
-import {ILeaveFilters} from '../interface';
+import colors from '../../constant/colors';
+import {Calendar, Filter} from '../../constant/icons';
+import {isManagement} from '../../utils/user';
+import UserContext from '../../context/user.context';
+import ManagementLeaveScreen from './ManagementLeaveScreen';
+import {TDateRange} from '../../../types';
 
 interface Props {
   route: string;
 }
 
 function TabScreen({route}: Props) {
+  const [userContext] = useContext(UserContext);
+
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
-  const [filters, setFilters] = useState<ILeaveFilters>({
-    leave_type: '',
-    pending_flag: route === 'pending' ? true : false,
-    active_or_all_flags: 'active',
-    from: startOfMonth,
-    to: todaysDate,
-    page_no: 1,
+  const [dateRange, setDateRange] = useState<TDateRange>({
+    startDate: startOfMonth,
+    endDate: todaysDate,
   });
 
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-    isRefetchError,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useLeaveList(
-    filters.active_or_all_flags,
-    filters.from,
-    filters.leave_type,
-    filters.pending_flag,
-    filters.to,
-    filters.project_id,
-    filters.user_id,
-  );
+  const isManagementRole = isManagement(userContext?.userData.role);
 
   const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
     if (startDate && endDate) {
-      setFilters(value => ({
+      setDateRange(value => ({
         ...value,
-        from: startDate,
-        to: endDate,
+        startDate,
+        endDate,
       }));
     } else {
-      setFilters(value => ({
+      setDateRange(value => ({
         ...value,
-        from: startOfMonth,
-        to: todaysDate,
+        startDate: startOfMonth,
+        endDate: todaysDate,
       }));
     }
   }, []);
@@ -69,13 +49,16 @@ function TabScreen({route}: Props) {
   const toggelDatePicker = () => setIsDateRangeVisible(v => !v);
 
   const dateRangeText = useMemo(
-    () => `${dateFormate(filters.from)} to ${dateFormate(filters.to)}`,
-    [filters.to, filters.from],
+    () =>
+      `${dateFormate(dateRange.startDate)} to ${dateFormate(
+        dateRange.endDate,
+      )}`,
+    [dateRange.endDate, dateRange.startDate],
   );
 
   const toggleFilterModal = useCallback(() => {
     setShowFilterModal(value => !value);
-  }, [setShowFilterModal]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -99,31 +82,27 @@ function TabScreen({route}: Props) {
             initialEndDateValue={todaysDate}
           />
         </View>
-        <Touchable
-          type="opacity"
-          style={styles.filterContainer}
-          onPress={toggleFilterModal}>
-          <Search />
-        </Touchable>
+        {isManagementRole && (
+          <Touchable
+            type="opacity"
+            style={styles.filterContainer}
+            onPress={toggleFilterModal}>
+            <Filter />
+          </Touchable>
+        )}
       </View>
 
-      <RenderScreenContent
-        data={data}
-        isLoading={isLoading}
-        isError={isError || isRefetchError}
-        error={error?.message}
-        refetch={refetch}
-        isRefetching={isRefetching}
-        fetchNextPage={fetchNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-      />
-
-      <FilterModal
-        isVisible={showFilterModal}
-        closeModal={toggleFilterModal}
-        filters={filters}
-        setFilter={setFilters}
-      />
+      {isManagementRole ? (
+        <ManagementLeaveScreen
+          isModalVisible={showFilterModal}
+          toggleFilterModal={toggleFilterModal}
+          isPendingRoute={route === 'pending'}
+          startDate={dateRange.startDate}
+          endDate={dateRange.endDate}
+        />
+      ) : (
+        <></>
+      )}
     </View>
   );
 }

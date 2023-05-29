@@ -14,7 +14,7 @@ import Linkdin from '../../assets/svg/linkedin.svg';
 import Facebook from '../../assets/svg/facebook.svg';
 import Github from '../../assets/svg/github.svg';
 import Blog from '../../assets/svg/blog.svg';
-
+import Filter from '../../assets/svg/filter.svg';
 import Search from '../../assets/svg/search.svg';
 import Arrow from '../../assets/svg/arrow.svg';
 
@@ -37,4 +37,5 @@ export {
   Facebook,
   JoshLogo,
   Profile,
+  Filter,
 };
