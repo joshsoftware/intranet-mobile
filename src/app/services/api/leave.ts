@@ -10,7 +10,6 @@ import {
 import {ISO_DATE_FROMAT} from '../../constant/date';
 import {
   ILeaveDetailData,
-  ILeaveFilters,
   ILeaveListItemData,
   IProjectData,
   IUserData,
@@ -28,7 +27,13 @@ export type GetLeaveListResponseBody = {
 };
 
 export const getLeaveListRequest = async (
-  filters: ILeaveFilters,
+  active_or_all_flags: 'active' | 'all',
+  from: Date,
+  leave_type: string,
+  pending_flag: boolean,
+  to: Date,
+  project_id?: number,
+  user_id?: number,
   pageNumber?: number,
 ) => {
   const response = await apiCall<
@@ -38,9 +43,13 @@ export const getLeaveListRequest = async (
     method: 'GET',
     url: LEAVE_LIST_ROUTE,
     params: {
-      ...filters,
-      from: dateFormate(filters.from, ISO_DATE_FROMAT),
-      to: dateFormate(filters.to, ISO_DATE_FROMAT),
+      active_or_all_flags,
+      leave_type,
+      pending_flag,
+      project_id,
+      user_id,
+      from: dateFormate(from, ISO_DATE_FROMAT),
+      to: dateFormate(to, ISO_DATE_FROMAT),
       page_no: pageNumber || 1,
     },
   });

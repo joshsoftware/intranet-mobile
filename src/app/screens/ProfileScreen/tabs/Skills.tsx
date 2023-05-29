@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 
 import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
-import DetailRow from '../component/DetailRow';
+import DetailRow from '../../../components/DetailRow';
 import Button from '../../../components/button';
 import UpdateSkillModal from '../component/UpdateSkillModal';
 import CustomChip from '../../../components/customChip';

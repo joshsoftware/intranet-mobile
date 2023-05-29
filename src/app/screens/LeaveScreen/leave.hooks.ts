@@ -10,9 +10,17 @@ import {
 } from '../../services/api/leave';
 import toast from '../../utils/toast';
 
-import {ILeaveDetailData, ILeaveFilters, ILeaveListItemData} from './interface';
+import {ILeaveDetailData, ILeaveListItemData} from './interface';
 
-export function useLeaveList(filters: ILeaveFilters) {
+export function useLeaveList(
+  active_or_all_flags: 'active' | 'all',
+  from: Date,
+  leave_type: string,
+  pending_flag: boolean,
+  to: Date,
+  project_id?: number,
+  user_id?: number,
+) {
   const {
     data,
     isLoading,
@@ -24,8 +32,27 @@ export function useLeaveList(filters: ILeaveFilters) {
     isRefetching,
     isRefetchError,
   } = useInfiniteQuery({
-    queryKey: ['leaveList', filters],
-    queryFn: async ({pageParam}) => getLeaveListRequest(filters, pageParam),
+    queryKey: [
+      'leaveList',
+      project_id,
+      user_id,
+      active_or_all_flags,
+      from,
+      leave_type,
+      pending_flag,
+      to,
+    ],
+    queryFn: async ({pageParam}) =>
+      getLeaveListRequest(
+        active_or_all_flags,
+        from,
+        leave_type,
+        pending_flag,
+        to,
+        project_id,
+        user_id,
+        pageParam,
+      ),
     getNextPageParam: lastPage => {
       const totalPages = lastPage.data.data.total_pages;
       const lastPageNumber = lastPage.data.data.page_no;

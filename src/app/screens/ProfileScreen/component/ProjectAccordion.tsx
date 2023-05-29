@@ -4,7 +4,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import * as Animatable from 'react-native-animatable';
 
 import Typography from '../../../components/typography';
-import DetailRow from './DetailRow';
+import DetailRow from '../../../components/DetailRow';
 
 import {IProject} from '../interface/employeeDetail';
 import {ArrowDown, ArrowUp} from '../../../constant/icons';

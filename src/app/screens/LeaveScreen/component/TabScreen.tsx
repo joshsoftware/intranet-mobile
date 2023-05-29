@@ -40,7 +40,15 @@ function TabScreen({route}: Props) {
     isRefetchError,
     fetchNextPage,
     isFetchingNextPage,
-  } = useLeaveList(filters);
+  } = useLeaveList(
+    filters.active_or_all_flags,
+    filters.from,
+    filters.leave_type,
+    filters.pending_flag,
+    filters.to,
+    filters.project_id,
+    filters.user_id,
+  );
 
   const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
     if (startDate && endDate) {

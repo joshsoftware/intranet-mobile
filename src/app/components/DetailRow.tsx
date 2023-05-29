@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import Typography from '../../../components/typography';
+import Typography from './typography';
 
 interface Props {
   label: string;

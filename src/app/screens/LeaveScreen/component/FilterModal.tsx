@@ -16,7 +16,6 @@ import {isManagement} from '../../../utils/user';
 
 import strings from '../../../constant/strings';
 import colors from '../../../constant/colors';
-import {roles} from '../../../constant/roles';
 import {
   LEAVE,
   OPTIONAL_HOLIDAY,
@@ -46,7 +45,7 @@ interface IFormValues {
 
 function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
   const [userContextValue] = useContext(UserContext);
-  const userRole = userContextValue?.userData.role || roles.EMPLOYEE;
+  const userRole = userContextValue?.userData.role || 'Employee';
 
   const keyboardIsVisible = useIsKeyboardShown();
 
@@ -144,7 +143,6 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
       active_or_all_flags: userType ? 'all' : 'active',
       from: filters.from,
       to: filters.to,
-      page_no: filters.page_no,
       leave_type: leaveType.join(','),
       pending_flag: filters.pending_flag,
     });

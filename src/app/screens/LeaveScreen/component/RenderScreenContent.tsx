@@ -12,7 +12,8 @@ import Accordion from 'react-native-collapsible/Accordion';
 
 import Typography from '../../../components/typography';
 import LeaveListItem from './LeaveListItem';
-import {AccordionContent, AccordionHeader} from './AccordionCard';
+import AccordionContent from './AccordionContent';
+import AccordionHeader from './AccordionHeader';
 import {useLastCall} from '../leave.hooks';
 
 import UserContext from '../../../context/user.context';
@@ -134,7 +135,6 @@ function RenderScreenContent({
       sectionContainerStyle={styles.accordionSectionContainer}
       renderContent={renderContent}
       onChange={setActiveSections}
-      underlayColor="#E6EDFF"
       touchableComponent={TouchableOpacity}
       renderAsFlatList={true}
       onEndReached={fetchNextPageLastCall}
