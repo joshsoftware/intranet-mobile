@@ -4,6 +4,8 @@ import * as Animatable from 'react-native-animatable';
 
 import Typography from '../../../components/typography';
 
+import {dateFormate} from '../../../utils/date';
+
 import {ArrowDown, ArrowUp} from '../../../constant/icons';
 import {ILeaveDetailData} from '../interface';
 
@@ -21,14 +23,14 @@ export const AccordionHeader = ({content, isActive}: AccordionHeaderProps) => {
       style={[styles.header, isActive ? {} : styles.inactiveHeader]}>
       <View style={styles.row}>
         <Typography type="text">Date: </Typography>
-        <Typography type="secondaryText" style={styles.paddingLeft}>
+        <Typography type="secondaryText" style={styles.secondaryText}>
           From
         </Typography>
-        <Typography type="text"> {leave_from}</Typography>
-        <Typography type="secondaryText" style={styles.paddingLeft}>
+        <Typography type="text">{dateFormate(leave_from)}</Typography>
+        <Typography type="secondaryText" style={styles.secondaryText}>
           To
         </Typography>
-        <Typography type="text"> {leave_to}</Typography>
+        <Typography type="text">{dateFormate(leave_to)}</Typography>
       </View>
       {isActive ? <ArrowUp /> : <ArrowDown />}
     </Animatable.View>
@@ -51,8 +53,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
-  paddingLeft: {
+  secondaryText: {
     paddingLeft: 10,
+    paddingRight: 4,
     fontSize: 14,
   },
   row: {
