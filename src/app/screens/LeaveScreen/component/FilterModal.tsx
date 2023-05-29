@@ -16,6 +16,7 @@ import {isManagement} from '../../../utils/user';
 
 import strings from '../../../constant/strings';
 import colors from '../../../constant/colors';
+import {roles} from '../../../constant/roles';
 import {
   LEAVE,
   OPTIONAL_HOLIDAY,
@@ -45,7 +46,7 @@ interface IFormValues {
 
 function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
   const [userContextValue] = useContext(UserContext);
-  const userRole = userContextValue?.userData.role || 'Employee';
+  const userRole = userContextValue?.userData.role || roles.EMPLOYEE;
 
   const keyboardIsVisible = useIsKeyboardShown();
 

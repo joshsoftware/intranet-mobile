@@ -3,7 +3,7 @@ import {dateFormate} from '../../utils/date';
 
 import {
   LEAVE_DETAIL_ROUTE,
-  LEAVE_LIST_EMPLOYEES_ROUTE,
+  LEAVE_LIST_ROUTE,
   ALL_PROJECTS_ROUTE,
   ALL_USERS_ROUTE,
 } from '../../constant/apiRoutes';
@@ -27,13 +27,16 @@ export type GetLeaveListResponseBody = {
   };
 };
 
-export const getLeaveListRequest = async (filters: ILeaveFilters, pageNumber?: number) => {
+export const getLeaveListRequest = async (
+  filters: ILeaveFilters,
+  pageNumber?: number,
+) => {
   const response = await apiCall<
     GetLeaveListRequestBody,
     GetLeaveListResponseBody
   >({
     method: 'GET',
-    url: LEAVE_LIST_EMPLOYEES_ROUTE,
+    url: LEAVE_LIST_ROUTE,
     params: {
       ...filters,
       from: dateFormate(filters.from, ISO_DATE_FROMAT),

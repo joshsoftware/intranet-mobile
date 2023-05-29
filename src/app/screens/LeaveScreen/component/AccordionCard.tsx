@@ -12,8 +12,6 @@ export const AccordionContent = React.memo((content: ILeaveDetailData) => {
   const {leave_type, leave_approver, leave_note, leave_reason, leave_status} =
     content || {};
 
-  console.log('HERE: ', content.leave_id);
-
   return (
     <Animatable.View duration={400} style={styles.contentContainer}>
       <DetailRow label="Leave Approver" value={leave_approver} />
