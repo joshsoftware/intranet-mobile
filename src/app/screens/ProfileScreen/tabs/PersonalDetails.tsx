@@ -2,7 +2,7 @@ import React from 'react';
 
 import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
-import DetailRow from '../component/DetailRow';
+import DetailRow from '../../../components/DetailRow';
 
 import {IPersonalDetailsData} from '../interface/personalDetails';
 

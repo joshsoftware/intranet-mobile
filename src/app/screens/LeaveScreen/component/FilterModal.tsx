@@ -1,5 +1,5 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {StyleSheet, Switch, View} from 'react-native';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
+import {ActivityIndicator, StyleSheet, Switch, View} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 
 import Button from '../../../components/button';
@@ -7,10 +7,15 @@ import Modal from '../../../components/modal';
 import PickerSelect from '../../../components/pickers/pickerSelect';
 import Typography from '../../../components/typography';
 import CheckBoxField from './CheckBoxField';
+import Touchable from '../../../components/touchable';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {useProjectList, useUserList} from '../leave.hooks';
 
+import UserContext from '../../../context/user.context';
+import {isManagement} from '../../../utils/user';
+
 import strings from '../../../constant/strings';
+import colors from '../../../constant/colors';
 import {
   LEAVE,
   OPTIONAL_HOLIDAY,
@@ -39,6 +44,9 @@ interface IFormValues {
 }
 
 function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
+  const [userContextValue] = useContext(UserContext);
+  const userRole = userContextValue?.userData.role || 'Employee';
+
   const keyboardIsVisible = useIsKeyboardShown();
 
   const [isSelectAll, setIsSelectAll] = useState(false);
@@ -70,8 +78,18 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
     defaultValues: defaultFormValues,
   });
 
-  const projects = useProjectList();
-  const users = useUserList();
+  const {
+    data: projects,
+    refetch: refetchProjects,
+    isLoading: isProjectsLoading,
+    isError: isProjectsError,
+  } = useProjectList();
+  const {
+    data: users,
+    refetch: refetchUsers,
+    isLoading: isUsersLoading,
+    isError: isUsersError,
+  } = useUserList();
 
   const toggleIsSelectAll = useCallback(() => {
     setIsSelectAll(value => {
@@ -125,7 +143,6 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
       active_or_all_flags: userType ? 'all' : 'active',
       from: filters.from,
       to: filters.to,
-      page_no: filters.page_no,
       leave_type: leaveType.join(','),
       pending_flag: filters.pending_flag,
     });
@@ -133,79 +150,131 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
     closeModal();
   };
 
-  return (
-    <Modal
-      isVisible={isVisible}
-      animationIn={'slideInUp'}
-      animationOut={'slideOutDown'}
-      animationInTiming={500}
-      animationOutTiming={500}
-      contentStyle={styles.contentStyle}>
+  const handleClearAll = () => {
+    setValue('projectId', undefined);
+    setValue('userId', undefined);
+    setValue('leave', false);
+    setValue('wfh', false);
+    setValue('optionalHoliday', false);
+    setValue('spl', false);
+    setValue('unpaid', false);
+    setIsSelectAll(false);
+  };
+
+  const onLeaveTypeChange = (
+    handleChange: (...event: any[]) => void,
+    ...event: any[]
+  ) => {
+    setIsSelectAll(false);
+    handleChange(...event);
+  };
+
+  const renderContent = () => {
+    if (isUsersLoading || isProjectsLoading) {
+      return (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={colors.PRIMARY} />
+        </View>
+      );
+    }
+
+    if (isUsersError || isProjectsError) {
+      return (
+        <View style={styles.centerContainer}>
+          <Typography type="error">
+            Could not get projects and users information
+          </Typography>
+          <View style={styles.row}>
+            <View style={styles.buttonContainer}>
+              <Button title="Cancel" onPress={closeModal} type="secondary" />
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Retry"
+                onPress={() => {
+                  refetchProjects();
+                  refetchUsers();
+                }}
+                type="primary"
+              />
+            </View>
+          </View>
+        </View>
+      );
+    }
+
+    return (
       <View style={styles.container}>
-        <View style={styles.row}>
-          <Typography type="header" style={styles.header}>
-            Filter
-          </Typography>
-          <Typography type="title" style={styles.clearAll}>
-            Clear All
-          </Typography>
-        </View>
+        {isManagement(userRole) && (
+          <>
+            <View style={styles.row}>
+              <Typography type="header" style={styles.header}>
+                Filter
+              </Typography>
+              <Touchable type="opacity" onPress={handleClearAll}>
+                <Typography type="title" style={styles.clearAll}>
+                  Clear All
+                </Typography>
+              </Touchable>
+            </View>
 
-        <View style={styles.fieldStyle}>
-          <Typography type="text" style={styles.labelText}>
-            Select Project
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <PickerSelect
-                placeholder={{
-                  label: strings.SELECT,
-                  value: null,
-                }}
-                error={errors.projectId?.message}
-                onValueChange={onChange}
-                value={value ? value : strings.SELECT}
-                items={projects}
+            <View style={styles.fieldStyle}>
+              <Typography type="text" style={styles.labelText}>
+                Select Project
+              </Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <PickerSelect
+                    placeholder={{
+                      label: strings.SELECT,
+                      value: null,
+                    }}
+                    error={errors.projectId?.message}
+                    onValueChange={onChange}
+                    value={value ? value : strings.SELECT}
+                    items={projects}
+                  />
+                )}
+                name="projectId"
               />
-            )}
-            name="projectId"
-          />
-        </View>
+            </View>
 
-        <View style={styles.fieldStyle}>
-          <Typography type="text" style={styles.labelText}>
-            Select User
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <PickerSelect
-                placeholder={{
-                  label: strings.SELECT,
-                  value: null,
-                }}
-                error={errors.userId?.message}
-                onValueChange={onChange}
-                value={value ? value : strings.SELECT}
-                items={users}
+            <View style={styles.fieldStyle}>
+              <Typography type="text" style={styles.labelText}>
+                Select User
+              </Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <PickerSelect
+                    placeholder={{
+                      label: strings.SELECT,
+                      value: null,
+                    }}
+                    error={errors.userId?.message}
+                    onValueChange={onChange}
+                    value={value ? value : strings.SELECT}
+                    items={users}
+                  />
+                )}
+                name="userId"
               />
-            )}
-            name="userId"
-          />
-        </View>
+            </View>
 
-        <View style={styles.row}>
-          <Typography type="text">Show Active User</Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Switch value={value} onValueChange={onChange} />
-            )}
-            name="userType"
-          />
-          <Typography type="text">Show All User</Typography>
-        </View>
+            <View style={styles.row}>
+              <Typography type="text">Show Active User</Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <Switch value={value} onValueChange={onChange} />
+                )}
+                name="userType"
+              />
+              <Typography type="text">Show All User</Typography>
+            </View>
+          </>
+        )}
 
         <View style={styles.row}>
           <Typography type="header" style={styles.header}>
@@ -226,7 +295,9 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
                 <CheckBoxField
                   label="Leave"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="leave"
@@ -237,7 +308,9 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
                 <CheckBoxField
                   label="Work From Home"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="wfh"
@@ -248,7 +321,9 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
                 <CheckBoxField
                   label="Optional Holiday"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="optionalHoliday"
@@ -261,7 +336,9 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
                 <CheckBoxField
                   label="Special Leave"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="spl"
@@ -272,14 +349,15 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
                 <CheckBoxField
                   label="Unpaid Leave"
                   checked={value}
-                  onPress={onChange}
+                  onPress={(...event: any[]) =>
+                    onLeaveTypeChange(onChange, ...event)
+                  }
                 />
               )}
               name="unpaid"
             />
           </View>
         </View>
-
         {!keyboardIsVisible && (
           <View style={styles.row}>
             <View style={styles.buttonContainer}>
@@ -295,6 +373,18 @@ function FilterModal({isVisible, closeModal, filters, setFilter}: Props) {
           </View>
         )}
       </View>
+    );
+  };
+
+  return (
+    <Modal
+      isVisible={isVisible}
+      animationIn={'slideInUp'}
+      animationOut={'slideOutDown'}
+      animationInTiming={500}
+      animationOutTiming={500}
+      contentStyle={styles.contentStyle}>
+      {renderContent()}
     </Modal>
   );
 }
@@ -338,6 +428,11 @@ const styles = StyleSheet.create({
   leaveTypeColumn: {
     flex: 1,
     justifyContent: 'flex-start',
+  },
+  centerContainer: {
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

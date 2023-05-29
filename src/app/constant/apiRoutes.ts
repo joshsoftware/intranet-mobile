@@ -15,5 +15,8 @@ export const PUT_TIMESHEET_ROUTE =
 export const DELETE_TIMESHEET_ROUTE =
   '/api/mobile/v1/time_sheets/delete_time_sheet';
 
-export const LEAVE_LIST_EMPLOYEES_ROUTE = '/api/mobile/v1/leaves/employee';
+export const LEAVE_LIST_ROUTE = '/api/mobile/v1/leaves/employee';
 export const LEAVE_DETAIL_ROUTE = '/api/mobile/v1/leaves/employee/details';
+
+export const ALL_PROJECTS_ROUTE = '/api/mobile/v1/leaves/all_project_list';
+export const ALL_USERS_ROUTE = '/api/mobile/v1/employees_for_manager';
