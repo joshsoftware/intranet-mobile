@@ -58,6 +58,7 @@ const TimesheetForm = ({
     formState: {errors},
   } = useForm({
     mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
     values: defaultData ?? {
       project: undefined,
       date: undefined,

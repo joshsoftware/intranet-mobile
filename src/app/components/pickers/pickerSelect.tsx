@@ -27,7 +27,7 @@ const PickerSelect = ({
       <View
         style={[styles.container, error ? styles.error : {}, containerStyle]}>
         <RNPickerSelect
-          value={value ? value : undefined}
+          value={value ? value : null}
           style={{...textStyle}}
           {...props}
         />
