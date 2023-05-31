@@ -36,8 +36,8 @@ const TimesheetList = () => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editTimesheetData, setEditTimesheetData] = useState<Timesheet>();
   const [dateRange, setDateRange] = useState<TDateRange>({
-    startDate: startOfMonth,
-    endDate: todaysDate,
+    startDate: params?.startDate ? new Date(params.startDate) : startOfMonth,
+    endDate: params?.endDate ? new Date(params.endDate) : todaysDate,
   });
 
   const {data, isFetching, refetch} = useTimesheets(

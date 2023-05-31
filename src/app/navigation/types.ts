@@ -3,7 +3,7 @@ import {Employee} from '../../app/screens/TimesheetScreen/interface';
 
 export type RootStackParamList = {
   Login: undefined;
-  UserTimesheet: Employee;
+  UserTimesheet: Employee & {startDate: string; endDate: string};
   Drawer: undefined;
   Profile: undefined;
 };

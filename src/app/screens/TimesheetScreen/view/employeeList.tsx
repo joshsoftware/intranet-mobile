@@ -67,9 +67,17 @@ const EmployeeList = () => {
 
   const renderItem = useCallback(
     ({item: {name, email, user_id}}: ListRenderItemInfo<RenderItemProps>) => {
-      return <EmployeeCard name={name} email={email} userId={user_id} />;
+      return (
+        <EmployeeCard
+          name={name}
+          email={email}
+          userId={user_id}
+          startDate={dateRange.startDate}
+          endDate={dateRange.endDate}
+        />
+      );
     },
-    [],
+    [dateRange.startDate, dateRange.endDate],
   );
 
   return (
