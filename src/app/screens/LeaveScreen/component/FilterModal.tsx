@@ -1,5 +1,5 @@
-import React, {useCallback, useContext, useMemo, useState} from 'react';
-import {ActivityIndicator, StyleSheet, Switch, View} from 'react-native';
+import React, {useCallback, useMemo, useState} from 'react';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 
 import Button from '../../../components/button';
@@ -10,9 +10,7 @@ import CheckBoxField from './CheckBoxField';
 import Touchable from '../../../components/touchable';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {useProjectList, useUserList} from '../leave.hooks';
-
-import UserContext from '../../../context/user.context';
-import {isManagement} from '../../../utils/user';
+import UserTypeButton from './UserTypeButton';
 
 import strings from '../../../constant/strings';
 import colors from '../../../constant/colors';
@@ -35,7 +33,7 @@ interface Props {
 interface IFormValues {
   projectId?: number;
   userId?: number;
-  userType: boolean;
+  userType: 'active' | 'all';
   leave: boolean;
   wfh: boolean;
   optionalHoliday: boolean;
@@ -44,10 +42,7 @@ interface IFormValues {
 }
 
 function FilterModal({isVisible, closeModal, filters, changeFilters}: Props) {
-  const [userContextValue] = useContext(UserContext);
   const keyboardIsVisible = useIsKeyboardShown();
-
-  const isManager = isManagement(userContextValue?.userData?.role);
 
   const [isSelectAll, setIsSelectAll] = useState(false);
 
@@ -59,7 +54,7 @@ function FilterModal({isVisible, closeModal, filters, changeFilters}: Props) {
     return {
       projectId: filters.project_id,
       userId: filters.user_id,
-      userType: filters.active_or_all_flags === 'all',
+      userType: filters.active_or_all_flags,
       leave: leaveType.has(LEAVE),
       wfh: leaveType.has(WFH),
       optionalHoliday: leaveType.has(OPTIONAL_HOLIDAY),
@@ -135,7 +130,7 @@ function FilterModal({isVisible, closeModal, filters, changeFilters}: Props) {
     changeFilters({
       project_id: projectId,
       user_id: userId,
-      active_or_all_flags: userType ? 'all' : 'active',
+      active_or_all_flags: userType,
       leave_type: leaveType.join(','),
     });
 
@@ -145,6 +140,7 @@ function FilterModal({isVisible, closeModal, filters, changeFilters}: Props) {
   const handleClearAll = () => {
     setValue('projectId', undefined);
     setValue('userId', undefined);
+    setValue('userType', 'active');
     setValue('leave', false);
     setValue('wfh', false);
     setValue('optionalHoliday', false);
@@ -197,76 +193,70 @@ function FilterModal({isVisible, closeModal, filters, changeFilters}: Props) {
 
     return (
       <View style={styles.container}>
-        {isManager && (
-          <>
-            <View style={styles.row}>
-              <Typography type="header" style={styles.header}>
-                Filter
-              </Typography>
-              <Touchable type="opacity" onPress={handleClearAll}>
-                <Typography type="title" style={styles.clearAll}>
-                  Clear All
-                </Typography>
-              </Touchable>
-            </View>
+        <View style={styles.row}>
+          <Typography type="header" style={styles.header}>
+            Filter
+          </Typography>
+          <Touchable type="opacity" onPress={handleClearAll}>
+            <Typography type="title" style={styles.clearAll}>
+              Clear All
+            </Typography>
+          </Touchable>
+        </View>
 
-            <View style={styles.fieldStyle}>
-              <Typography type="text" style={styles.labelText}>
-                Select Project
-              </Typography>
-              <Controller
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <PickerSelect
-                    placeholder={{
-                      label: strings.SELECT,
-                      value: null,
-                    }}
-                    error={errors.projectId?.message}
-                    onValueChange={onChange}
-                    value={value ? value : strings.SELECT}
-                    items={projects}
-                  />
-                )}
-                name="projectId"
+        <View style={styles.fieldStyle}>
+          <Typography type="text" style={styles.labelText}>
+            Select Project
+          </Typography>
+          <Controller
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <PickerSelect
+                placeholder={{
+                  label: strings.SELECT,
+                  value: null,
+                }}
+                error={errors.projectId?.message}
+                onValueChange={onChange}
+                value={value ? value : strings.SELECT}
+                items={projects}
               />
-            </View>
+            )}
+            name="projectId"
+          />
+        </View>
 
-            <View style={styles.fieldStyle}>
-              <Typography type="text" style={styles.labelText}>
-                Select User
-              </Typography>
-              <Controller
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <PickerSelect
-                    placeholder={{
-                      label: strings.SELECT,
-                      value: null,
-                    }}
-                    error={errors.userId?.message}
-                    onValueChange={onChange}
-                    value={value ? value : strings.SELECT}
-                    items={users}
-                  />
-                )}
-                name="userId"
+        <View style={styles.fieldStyle}>
+          <Typography type="text" style={styles.labelText}>
+            Select User
+          </Typography>
+          <Controller
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <PickerSelect
+                placeholder={{
+                  label: strings.SELECT,
+                  value: null,
+                }}
+                error={errors.userId?.message}
+                onValueChange={onChange}
+                value={value ? value : strings.SELECT}
+                items={users}
               />
-            </View>
+            )}
+            name="userId"
+          />
+        </View>
 
-            <View style={styles.row}>
-              <Typography type="text">Show Active User</Typography>
-              <Controller
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <Switch value={value} onValueChange={onChange} />
-                )}
-                name="userType"
-              />
-              <Typography type="text">Show All User</Typography>
-            </View>
-          </>
-        )}
+        <View style={styles.row}>
+          <Controller
+            control={control}
+            name="userType"
+            render={({field: {onChange, value}}) => (
+              <UserTypeButton value={value} onChange={onChange} />
+            )}
+          />
+        </View>
 
         <View style={styles.row}>
           <Typography type="header" style={styles.header}>
