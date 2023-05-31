@@ -1,4 +1,4 @@
-import React, {memo, useMemo} from 'react';
+import React, {memo, useEffect, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
@@ -32,7 +32,7 @@ const timesheetFormSchema = yup.object().shape({
 
 type Props = {
   defaultData?: Timesheet;
-  onSubmit: (data: any, reset?: Function) => void;
+  onSubmit: (data: any) => void;
   onCancel?: () => void;
   isEditForm?: boolean;
   isFormVisible?: boolean;
@@ -55,10 +55,9 @@ const TimesheetForm = ({
     handleSubmit,
     control,
     reset,
-    formState: {errors},
+    formState: {errors, isSubmitted, isSubmitSuccessful},
   } = useForm({
     mode: 'onSubmit',
-    reValidateMode: 'onSubmit',
     values: defaultData ?? {
       project: undefined,
       date: undefined,
@@ -70,23 +69,26 @@ const TimesheetForm = ({
 
   const {data: projects} = useAssignedProjects(userId);
 
+  useEffect(() => {
+    if (isSubmitted && isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitted, isSubmitSuccessful, reset]);
+
   const addTimesheet = useMemo(
     () =>
       handleSubmit((data: any) => {
         let project = projects?.find(value => {
           return data.project === value.value;
         });
-        onSubmit(
-          {
-            ...data,
-            timesheet_id: data.project + dateFormater(data.date),
-            project: project?.label,
-            project_id: data.project,
-          },
-          reset,
-        );
+        onSubmit({
+          ...data,
+          timesheet_id: data.project + dateFormater(data.date),
+          project: project?.label,
+          project_id: data.project,
+        });
       }),
-    [handleSubmit, onSubmit, projects, reset],
+    [handleSubmit, onSubmit, projects],
   );
 
   const handleAddTimesheet = (...args: any[]) => {

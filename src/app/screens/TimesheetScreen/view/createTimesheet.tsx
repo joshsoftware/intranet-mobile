@@ -75,7 +75,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   const toggleForm = useCallback(() => setIsFormVisible(v => !v), []);
 
   // helps to add a timesheet item to addedTimesheet state
-  const onAddTimesheet = useCallback((data: Timesheet, reset?: Function) => {
+  const onAddTimesheet = useCallback((data: Timesheet) => {
     const isDuplicateEntry = (section: ITimesheetSectionListItem) => {
       return section.data.some(item => item.timesheet_id === data.timesheet_id);
     };
@@ -99,7 +99,6 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
         });
       }
       setIsFormVisible(v => !v);
-      reset?.();
       setFormDefaultData(undefined);
       return sections;
     };
