@@ -29,9 +29,11 @@ const Header = ({type, title, isRightButtonVisible}: Props) => {
       return (
         <View style={styles.container}>
           <JoshLogo height={18} width={85} fill={colors.WHITE} />
-          <TouchableOpacity activeOpacity={0.5} onPress={goToProfileScreen}>
-            <Profile height={18} width={18} fill={colors.WHITE} />
-          </TouchableOpacity>
+          {false && (
+            <TouchableOpacity activeOpacity={0.5} onPress={goToProfileScreen}>
+              <Profile height={18} width={18} fill={colors.WHITE} />
+            </TouchableOpacity>
+          )}
         </View>
       );
     case 'secondary':
