@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import FilterModal from '../component/FilterModal';
 import LeaveListItem from '../component/LeaveListItem';
@@ -70,53 +70,60 @@ const ManagementLeaveScreen: React.FC<Props> = ({
     }));
   }, [startDate, endDate]);
 
-  const refreshControlComponent = (
-    <RefreshControl
-      refreshing={!isFetchingNextPage && isRefetching}
-      onRefresh={refetch}
-    />
+  const refreshControlComponent = useMemo(
+    () => (
+      <RefreshControl
+        refreshing={!isFetchingNextPage && isRefetching}
+        onRefresh={refetch}
+      />
+    ),
+    [isFetchingNextPage, isRefetching, refetch],
   );
 
-  const listFooterComponent = isFetchingNextPage ? (
-    <ActivityIndicator style={styles.paddingVertical} color={colors.PRIMARY} />
-  ) : null;
+  const listFooterComponent = useMemo(
+    () =>
+      isFetchingNextPage ? (
+        <ActivityIndicator
+          style={styles.paddingVertical}
+          color={colors.PRIMARY}
+        />
+      ) : null,
+    [isFetchingNextPage],
+  );
 
-  if (isLoading) {
+  const renderContent = useCallback(() => {
+    if (isLoading) {
+      return (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={colors.PRIMARY} />
+        </View>
+      );
+    }
+    if (isError) {
+      return (
+        <ScrollView
+          contentContainerStyle={styles.centerContainer}
+          refreshControl={refreshControlComponent}>
+          <Typography type="error">{error}</Typography>
+        </ScrollView>
+      );
+    }
+    if (!data) {
+      return (
+        <View style={styles.centerContainer}>
+          <Typography type="error">Could not get leaves!</Typography>
+        </View>
+      );
+    }
+    if (!data.length) {
+      return (
+        <View style={styles.centerContainer}>
+          <Typography type="secondaryText">No Leaves!</Typography>
+        </View>
+      );
+    }
+
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={colors.PRIMARY} />
-      </View>
-    );
-  }
-
-  if (isError) {
-    return (
-      <ScrollView
-        contentContainerStyle={styles.centerContainer}
-        refreshControl={refreshControlComponent}>
-        <Typography type="error">{error}</Typography>
-      </ScrollView>
-    );
-  }
-
-  if (!data) {
-    return (
-      <View style={styles.centerContainer}>
-        <Typography type="error">Could not get leaves!</Typography>
-      </View>
-    );
-  }
-
-  if (!data.length) {
-    return (
-      <View style={styles.centerContainer}>
-        <Typography type="secondaryText">No Leaves!</Typography>
-      </View>
-    );
-  }
-
-  return (
-    <>
       <FlatList
         data={data}
         refreshControl={refreshControlComponent}
@@ -124,6 +131,20 @@ const ManagementLeaveScreen: React.FC<Props> = ({
         ListFooterComponent={listFooterComponent}
         renderItem={leaveListRenderItem}
       />
+    );
+  }, [
+    data,
+    error,
+    fetchNextPage,
+    isError,
+    isLoading,
+    listFooterComponent,
+    refreshControlComponent,
+  ]);
+
+  return (
+    <>
+      {renderContent()}
       <FilterModal
         isVisible={isModalVisible}
         closeModal={toggleFilterModal}

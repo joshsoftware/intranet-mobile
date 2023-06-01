@@ -363,6 +363,8 @@ function FilterModal({isVisible, closeModal, filters, changeFilters}: Props) {
       isVisible={isVisible}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
+      onBackButtonPress={closeModal}
+      onBackdropPress={closeModal}
       animationInTiming={500}
       animationOutTiming={500}
       contentStyle={styles.contentStyle}>
