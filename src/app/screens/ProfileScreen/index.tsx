@@ -89,7 +89,7 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type="secondary" title="Profile" isRightButtonVisible={false} />
+      <Header type="secondary" title="Profile" />
       {isLoading ? (
         <View style={styles.flexCenter}>
           <ActivityIndicator size="large" color={colors.PRIMARY} />

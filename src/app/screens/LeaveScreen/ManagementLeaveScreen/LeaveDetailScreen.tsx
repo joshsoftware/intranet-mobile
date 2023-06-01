@@ -34,7 +34,7 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header type="secondary" title="Leave" isRightButtonVisible={false} />
+        <Header type="secondary" title="Leave" />
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={colors.PRIMARY} />
         </View>
@@ -44,7 +44,7 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type="secondary" title="Leave" isRightButtonVisible={false} />
+      <Header type="secondary" title="Leave" />
 
       <ScrollView style={styles.screenview}>
         <View style={styles.titleContainer}>

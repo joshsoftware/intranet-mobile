@@ -2,23 +2,17 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {Arrow, JoshLogo, Profile} from '../../constant/icons';
+import {Arrow, JoshLogo} from '../../constant/icons';
 import colors from '../../constant/colors';
-import {USER_PROFILE_SCREEN} from '../../constant/screenNames';
 import {MainScreenNavigationProp} from '../../navigation/types';
 
 interface Props {
   type: 'primary' | 'secondary';
   title?: string;
-  isRightButtonVisible?: boolean;
 }
 
-const Header = ({type, title, isRightButtonVisible}: Props) => {
+const Header = ({type, title}: Props) => {
   const navigation = useNavigation<MainScreenNavigationProp>();
-
-  const goToProfileScreen = () => {
-    navigation.navigate(USER_PROFILE_SCREEN);
-  };
 
   const goBack = () => {
     navigation.goBack();
@@ -29,11 +23,6 @@ const Header = ({type, title, isRightButtonVisible}: Props) => {
       return (
         <View style={styles.container}>
           <JoshLogo height={18} width={85} fill={colors.WHITE} />
-          {false && (
-            <TouchableOpacity activeOpacity={0.5} onPress={goToProfileScreen}>
-              <Profile height={18} width={18} fill={colors.WHITE} />
-            </TouchableOpacity>
-          )}
         </View>
       );
     case 'secondary':
@@ -50,13 +39,6 @@ const Header = ({type, title, isRightButtonVisible}: Props) => {
             </TouchableOpacity>
             <Text style={styles.backText}>{title}</Text>
           </View>
-          {isRightButtonVisible ? (
-            <TouchableOpacity activeOpacity={0.5} onPress={goToProfileScreen}>
-              <Profile height={18} width={18} fill={colors.WHITE} />
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
         </View>
       );
     default:

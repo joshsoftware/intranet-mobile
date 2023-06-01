@@ -112,13 +112,7 @@ const TimesheetList = () => {
 
   return (
     <>
-      {params?.user_id && (
-        <Header
-          title={TIMESHEET_SCREEN}
-          type="secondary"
-          isRightButtonVisible={false}
-        />
-      )}
+      {params?.user_id && <Header title={TIMESHEET_SCREEN} type="secondary" />}
 
       <View>
         <DateRange
