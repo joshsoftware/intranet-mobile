@@ -121,6 +121,7 @@ const TimesheetList = () => {
           toggleModal={toggelDatePicker}
           initialStartDateValue={startOfMonth}
           initialEndDateValue={todaysDate}
+          maximumDate={todaysDate}
         />
         <Touchable
           type="opacity"

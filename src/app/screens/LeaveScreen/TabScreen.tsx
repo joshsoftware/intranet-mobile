@@ -7,7 +7,7 @@ import ManagementLeaveScreen from './ManagementLeaveScreen';
 import Touchable from '../../components/touchable';
 import Typography from '../../components/typography';
 
-import {dateFormate, startOfMonth, todaysDate} from '../../utils/date';
+import {dateFormate, endOfMonth, startOfMonth} from '../../utils/date';
 import UserContext from '../../context/user.context';
 import {isManagement} from '../../utils/user';
 
@@ -26,7 +26,7 @@ function TabScreen({route}: Props) {
   const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
   const [dateRange, setDateRange] = useState<TDateRange>({
     startDate: startOfMonth,
-    endDate: todaysDate,
+    endDate: endOfMonth,
   });
 
   const isManagementRole = isManagement(userContext?.userData.role);
@@ -42,7 +42,7 @@ function TabScreen({route}: Props) {
       setDateRange(value => ({
         ...value,
         startDate: startOfMonth,
-        endDate: todaysDate,
+        endDate: endOfMonth,
       }));
     }
   }, []);
@@ -80,7 +80,7 @@ function TabScreen({route}: Props) {
             isVisible={isDateRangeVisible}
             toggleModal={toggelDatePicker}
             initialStartDateValue={startOfMonth}
-            initialEndDateValue={todaysDate}
+            initialEndDateValue={endOfMonth}
           />
         </View>
         {isManagementRole && (

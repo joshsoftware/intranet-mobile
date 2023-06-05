@@ -6,6 +6,8 @@ import Typography from '../typography';
 import DatePicker from './datePicker';
 import Button from '../button';
 
+import {todaysDate} from '../../utils/date';
+
 import strings from '../../constant/strings';
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
@@ -15,6 +17,8 @@ type Props = {
   toggleModal: () => void;
   initialStartDateValue?: Date;
   initialEndDateValue?: Date;
+  minimumDate?: Date;
+  maximumDate?: Date;
   onSubmit: (startDate?: Date, endDate?: Date) => void;
 };
 
@@ -24,6 +28,8 @@ const DateRange = ({
   initialStartDateValue,
   initialEndDateValue,
   onSubmit,
+  minimumDate,
+  maximumDate,
 }: Props) => {
   const [startDate, setStartDate] = useState(initialStartDateValue);
   const [endDate, setEndDate] = useState(initialEndDateValue);
@@ -36,8 +42,6 @@ const DateRange = ({
     onSubmit(startDate, endDate);
     toggleModal();
   };
-
-  const newDate = new Date();
 
   return (
     <Modal
@@ -58,11 +62,12 @@ const DateRange = ({
           <Typography style={styles.secondaryText}>{strings.FROM}</Typography>
 
           <DatePicker
-            value={startDate ? startDate : newDate}
+            value={startDate ?? todaysDate}
             selectedDate={startDate}
             placeholder={strings.SELECT}
             onDateChange={onChangeStart}
-            maximumDate={endDate ? endDate : newDate}
+            minimumDate={minimumDate}
+            maximumDate={endDate ?? maximumDate}
             hideIcon={false}
           />
         </View>
@@ -71,13 +76,13 @@ const DateRange = ({
           <Typography style={styles.secondaryText}>{strings.TO}</Typography>
 
           <DatePicker
-            value={endDate ? endDate : newDate}
+            value={endDate ?? todaysDate}
             selectedDate={endDate}
             placeholder={strings.SELECT}
             onDateChange={onChangeEnd}
             hideIcon={false}
-            minimumDate={startDate}
-            maximumDate={newDate}
+            minimumDate={startDate ?? minimumDate}
+            maximumDate={maximumDate}
           />
         </View>
 
@@ -86,7 +91,7 @@ const DateRange = ({
             <Button type="secondary" title="Cancel" onPress={toggleModal} />
           </View>
           <View style={styles.btn}>
-            <Button type="primary" title="Ok" onPress={handleSubmit} />
+            <Button type="primary" title="Apply" onPress={handleSubmit} />
           </View>
         </View>
       </View>
@@ -120,6 +125,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     paddingVertical: 20,
     flexDirection: 'row',
+    gap: 10,
   },
   btn: {
     flex: 1 / 2,

@@ -22,6 +22,12 @@ export const startOfMonth = moment().startOf('month').toDate();
 export const todaysDate = moment().toDate();
 
 /**
+ * Retrieves end of the current month as a Date object.
+ * @returns The end of the current month as a Date object.
+ */
+export const endOfMonth = moment().endOf('month').toDate();
+
+/**
  * Converts a time string to minutes.
  * @param timeStr The time string to be converted (format: 'HH:mm').
  * @returns The time converted to minutes.

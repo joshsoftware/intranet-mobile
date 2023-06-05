@@ -88,6 +88,7 @@ const EmployeeList = () => {
         toggleModal={toggelDatePicker}
         initialStartDateValue={startOfMonth}
         initialEndDateValue={todaysDate}
+        maximumDate={todaysDate}
       />
       <View style={styles.filter}>
         <Input
