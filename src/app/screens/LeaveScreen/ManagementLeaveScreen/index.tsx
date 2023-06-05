@@ -66,7 +66,7 @@ const ManagementLeaveScreen: React.FC<Props> = ({
     setFilters(prevFilters => ({
       ...prevFilters,
       from: startDate,
-      end: endDate,
+      to: endDate,
     }));
   }, [startDate, endDate]);
 
