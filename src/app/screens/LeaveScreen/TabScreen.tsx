@@ -100,6 +100,7 @@ function TabScreen({route}: Props) {
           isPendingRoute={route === 'pending'}
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
+          setDateRange={setDateRange}
         />
       ) : (
         <EmployeeLeaveScreen

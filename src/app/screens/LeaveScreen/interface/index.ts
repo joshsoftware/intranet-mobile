@@ -23,8 +23,8 @@ export interface ILeaveDetailData {
 }
 
 export interface ILeaveFilters {
-  project_id?: number;
-  user_id?: number;
+  project_id: number | null;
+  user_id: number | null;
   active_or_all_flags: 'active' | 'all';
   from: Date;
   leave_type: string;
