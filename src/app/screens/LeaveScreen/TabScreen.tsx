@@ -61,6 +61,13 @@ function TabScreen({route}: Props) {
     setShowFilterModal(value => !value);
   }, []);
 
+  const resetDateRange = () => {
+    setDateRange({
+      startDate: startOfMonth,
+      endDate: endOfMonth,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -100,7 +107,7 @@ function TabScreen({route}: Props) {
           isPendingRoute={route === 'pending'}
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
-          setDateRange={setDateRange}
+          resetDateRange={resetDateRange}
         />
       ) : (
         <EmployeeLeaveScreen

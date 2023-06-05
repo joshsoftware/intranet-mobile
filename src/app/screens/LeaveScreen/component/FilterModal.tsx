@@ -24,14 +24,13 @@ import {
   WFH,
 } from '../../../constant/leaveType';
 import {ILeaveFilters} from '../interface';
-import {TDateRange} from '../../../../types';
 
 interface Props {
   isVisible: boolean;
   closeModal: () => void;
   filters: ILeaveFilters;
   changeFilters: (filters: Partial<ILeaveFilters>) => void;
-  setDateRange: React.Dispatch<React.SetStateAction<TDateRange>>;
+  resetDateRange: () => void;
 }
 
 interface IFormValues {
@@ -50,7 +49,7 @@ function FilterModal({
   closeModal,
   filters,
   changeFilters,
-  setDateRange,
+  resetDateRange,
 }: Props) {
   const keyboardIsVisible = useIsKeyboardShown();
 
@@ -170,10 +169,7 @@ function FilterModal({
       to: endOfMonth,
     });
 
-    setDateRange(() => ({
-      startDate: startOfMonth,
-      endDate: endOfMonth,
-    }));
+    resetDateRange();
 
     setIsSelectAll(false);
   };

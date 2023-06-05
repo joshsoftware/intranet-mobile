@@ -16,7 +16,6 @@ import {useManagerLeaveList} from '../leave.hooks';
 
 import {ILeaveFilters, ILeaveListItemData} from '../interface';
 import colors from '../../../constant/colors';
-import {TDateRange} from '../../../../types';
 
 type Props = {
   isModalVisible: boolean;
@@ -24,7 +23,7 @@ type Props = {
   isPendingRoute: boolean;
   startDate: Date;
   endDate: Date;
-  setDateRange: React.Dispatch<React.SetStateAction<TDateRange>>;
+  resetDateRange: () => void;
 };
 
 const leaveListRenderItem = ({
@@ -37,7 +36,7 @@ const ManagementLeaveScreen: React.FC<Props> = ({
   isPendingRoute,
   startDate,
   endDate,
-  setDateRange,
+  resetDateRange,
 }) => {
   const [filters, setFilters] = useState<ILeaveFilters>({
     leave_type: '',
@@ -155,7 +154,7 @@ const ManagementLeaveScreen: React.FC<Props> = ({
         closeModal={toggleFilterModal}
         filters={filters}
         changeFilters={changeFilters}
-        setDateRange={setDateRange}
+        resetDateRange={resetDateRange}
       />
     </>
   );
