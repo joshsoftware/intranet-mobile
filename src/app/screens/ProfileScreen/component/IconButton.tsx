@@ -17,9 +17,7 @@ const IconButton = ({icon: Icon, link}: IconButtonProps) => {
       return;
     }
 
-    const supported = await Linking.canOpenURL(link);
-
-    if (supported) {
+    if (link.startsWith('http://') || link.startsWith('https://')) {
       await Linking.openURL(link);
     } else {
       toast(`Could not open URL: \n${link} `, 'error');
