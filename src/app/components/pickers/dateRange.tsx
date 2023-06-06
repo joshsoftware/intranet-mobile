@@ -1,4 +1,4 @@
-import React, {memo, useState} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -33,6 +33,11 @@ const DateRange = ({
 }: Props) => {
   const [startDate, setStartDate] = useState(initialStartDateValue);
   const [endDate, setEndDate] = useState(initialEndDateValue);
+
+  useEffect(() => {
+    setStartDate(initialStartDateValue);
+    setEndDate(initialEndDateValue);
+  }, [initialStartDateValue, initialEndDateValue]);
 
   const onChangeStart = (date?: Date) => setStartDate(date);
 

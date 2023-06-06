@@ -86,8 +86,8 @@ function TabScreen({route}: Props) {
             onSubmit={onDateRangeSubmit}
             isVisible={isDateRangeVisible}
             toggleModal={toggelDatePicker}
-            initialStartDateValue={startOfMonth}
-            initialEndDateValue={endOfMonth}
+            initialStartDateValue={dateRange.startDate}
+            initialEndDateValue={dateRange.endDate}
           />
         </View>
         {isManagementRole && (
