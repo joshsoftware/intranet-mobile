@@ -12,6 +12,8 @@ import Typography from '../../../components/typography';
 import DetailRow from '../../../components/DetailRow';
 import {useLeaveDetail} from '../leave.hooks';
 
+import {dateFormate} from '../../../utils/date';
+
 import colors from '../../../constant/colors';
 import {LeaveDetailScreenNavigationProp} from '../../../navigation/types';
 
@@ -55,11 +57,11 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
             <Typography type="secondaryText" style={styles.paddingLeft}>
               From
             </Typography>
-            <Typography type="text"> {leaveFrom}</Typography>
+            <Typography type="text"> {dateFormate(leaveFrom)}</Typography>
             <Typography type="secondaryText" style={styles.paddingLeft}>
               To
             </Typography>
-            <Typography type="text"> {leaveTo}</Typography>
+            <Typography type="text"> {dateFormate(leaveTo)}</Typography>
           </View>
         </View>
 
