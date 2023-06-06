@@ -3,9 +3,9 @@ import {apiCall} from '../api';
 import {
   LEAVE_DETAIL_ROUTE,
   ALL_PROJECTS_ROUTE,
-  ALL_USERS_ROUTE,
   MANAGER_LEAVE_LIST_ROUTE,
   LEAVE_LIST_ROUTE,
+  USERS_LIST_LEAVE_ROUTE,
 } from '../../constant/apiRoutes';
 import {
   GetAllProjectsResponseBody,
@@ -60,7 +60,7 @@ export const getAllProjectsRequest = async () => {
 export const getAllUsersRequest = async () => {
   const response = await apiCall<any, GetUsersResponseBody>({
     method: 'GET',
-    url: ALL_USERS_ROUTE,
+    url: USERS_LIST_LEAVE_ROUTE,
   });
 
   return response;
