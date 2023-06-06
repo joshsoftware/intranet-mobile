@@ -70,9 +70,11 @@ const EmployeeDetails = (props: IEmployeeDetailData) => {
         <DetailRow label="Source" value={source} />
         <DetailRow label="Project" value={project} />
       </Card>
-      <Card title="Description">
-        <Typography type="text">{description}</Typography>
-      </Card>
+      {description && (
+        <Card title="Description">
+          <Typography type="text">{description}</Typography>
+        </Card>
+      )}
       <Card title="Current Projects">
         <ProjectAccordion data={currentProjects} />
       </Card>
