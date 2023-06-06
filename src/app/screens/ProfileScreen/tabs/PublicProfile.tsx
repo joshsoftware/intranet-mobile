@@ -34,7 +34,7 @@ const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
         <DetailRow label="Date of Birth" value={dateFormate(dateOfBirth)} />
       </Card>
 
-      {(github || linkedin || blog || facebook) && (
+      {(github || linkedin || blog || facebook || twitter) && (
         <Card title="Social Media Links">
           <View style={styles.row}>
             {github && <IconButton icon={Github} link={github} />}
