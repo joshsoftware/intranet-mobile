@@ -27,14 +27,14 @@ const EditTimesheetModal = ({
   isVisible,
   userId,
 }: Props) => {
-  const [isShowToast, setIsToastShow] = useState<Boolean>(false);
+  const [isShowToast, setIsShowToast] = useState<Boolean>(false);
 
   const {mutate, isLoading, isSuccess, message} = useEditTimesheet();
 
   useEffect(() => {
     if (isSuccess) {
       toggleModal();
-      setIsToastShow(v => !v);
+      setIsShowToast(v => !v);
     }
   }, [isSuccess, toggleModal]);
 
@@ -54,7 +54,7 @@ const EditTimesheetModal = ({
   const onModalHide = () => {
     if (isShowToast) {
       toast(message!);
-      setIsToastShow(v => !v);
+      setIsShowToast(v => !v);
     }
   };
 
