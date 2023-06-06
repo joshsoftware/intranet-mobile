@@ -36,6 +36,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
     undefined,
   );
   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
+  const [isShowToast, setIsShowToast] = useState<Boolean>(false);
   const isKeyboardVisible = useIsKeyboardShown();
 
   const {
@@ -171,8 +172,9 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   }, [toggleModal]);
 
   const onModalHide = () => {
-    if (isSuccess) {
+    if (isShowToast) {
       toast(message!);
+      setIsShowToast(v => !v);
     }
   };
 
@@ -180,6 +182,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
   useEffect(() => {
     if (isSuccess) {
       resetStates();
+      setIsShowToast(v => !v);
     }
   }, [isSuccess, resetStates]);
 

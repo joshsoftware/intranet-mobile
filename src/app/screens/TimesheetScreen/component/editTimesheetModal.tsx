@@ -1,4 +1,4 @@
-import React, {memo, useEffect} from 'react';
+import React, {memo, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import Modal from '../../../components/modal';
@@ -27,11 +27,14 @@ const EditTimesheetModal = ({
   isVisible,
   userId,
 }: Props) => {
+  const [isShowToast, setIsShowToast] = useState<Boolean>(false);
+
   const {mutate, isLoading, isSuccess, message} = useEditTimesheet();
 
   useEffect(() => {
     if (isSuccess) {
       toggleModal();
+      setIsShowToast(v => !v);
     }
   }, [isSuccess, toggleModal]);
 
@@ -49,8 +52,9 @@ const EditTimesheetModal = ({
   };
 
   const onModalHide = () => {
-    if (isSuccess) {
+    if (isShowToast) {
       toast(message!);
+      setIsShowToast(v => !v);
     }
   };
 

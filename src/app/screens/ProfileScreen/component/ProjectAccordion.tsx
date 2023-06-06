@@ -6,6 +6,8 @@ import * as Animatable from 'react-native-animatable';
 import Typography from '../../../components/typography';
 import DetailRow from '../../../components/DetailRow';
 
+import {dateFormate} from '../../../utils/date';
+
 import {IProject} from '../interface/employeeDetail';
 import {ArrowDown, ArrowUp} from '../../../constant/icons';
 
@@ -35,8 +37,8 @@ function ProjectAccordion({data}: Props) {
     return (
       <Animatable.View duration={400} style={styles.contentContainer}>
         <DetailRow label="Type" value={content.type} />
-        <DetailRow label="Start Date" value={content.startDate} />
-        <DetailRow label="End Date" value={content.endDate} />
+        <DetailRow label="Start Date" value={dateFormate(content.startDate)} />
+        <DetailRow label="End Date" value={dateFormate(content.endDate)} />
         <DetailRow
           label="Timesheet Required"
           value={content.isTimesheetRequired ? 'yes' : 'no'}
