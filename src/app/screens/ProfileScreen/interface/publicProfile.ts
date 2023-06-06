@@ -12,6 +12,7 @@ export interface ISocialDetails {
   linkedin: string | null;
   facebook: string | null;
   blog: string | null;
+  twitter: string | null;
 }
 
 export interface IPublicProfileData {

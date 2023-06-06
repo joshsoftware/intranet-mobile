@@ -7,14 +7,22 @@ import DetailRow from '../../../components/DetailRow';
 import IconButton from '../component/IconButton';
 import Typography from '../../../components/typography';
 
+import {dateFormate} from '../../../utils/date';
+
 import {IPublicProfileData} from '../interface/publicProfile';
-import {Facebook, Github, Linkdin, Blog} from '../../../constant/icons';
+import {
+  Facebook,
+  Github,
+  Linkdin,
+  Blog,
+  Twitter,
+} from '../../../constant/icons';
 
 const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
   const {firstName, lastName, gender, mobileNumber, bloodGroup, dateOfBirth} =
     publicProfile || {};
 
-  const {linkedin, github, facebook, blog} = socialDetails || {};
+  const {linkedin, github, facebook, blog, twitter} = socialDetails || {};
 
   return (
     <ScreenWrapper>
@@ -24,10 +32,7 @@ const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
         <DetailRow label="Gender" value={gender} />
         <DetailRow label="Mobile Number" value={mobileNumber} />
         <DetailRow label="Blood Group" value={bloodGroup} />
-        <DetailRow
-          label="Date of Birth"
-          value={dateOfBirth?.split('-').reverse().join('-')}
-        />
+        <DetailRow label="Date of Birth" value={dateFormate(dateOfBirth)} />
       </Card>
 
       <Card title="Social Media Links">
@@ -39,6 +44,7 @@ const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
           {linkedin && <IconButton icon={Linkdin} link={linkedin} />}
           {blog && <IconButton icon={Blog} link={blog} />}
           {facebook && <IconButton icon={Facebook} link={facebook} />}
+          {twitter && <IconButton icon={Twitter} link={twitter} />}
         </View>
       </Card>
     </ScreenWrapper>
@@ -48,6 +54,8 @@ const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 });
 

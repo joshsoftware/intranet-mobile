@@ -17,6 +17,7 @@ import Blog from '../../assets/svg/blog.svg';
 import Filter from '../../assets/svg/filter.svg';
 import Search from '../../assets/svg/search.svg';
 import Arrow from '../../assets/svg/arrow.svg';
+import Twitter from '../../assets/svg/twitter.svg';
 
 export {
   Calendar,
@@ -38,4 +39,5 @@ export {
   JoshLogo,
   Profile,
   Filter,
+  Twitter,
 };

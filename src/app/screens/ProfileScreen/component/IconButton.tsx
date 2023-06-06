@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking, StyleSheet} from 'react-native';
+import {Linking} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 
 import Touchable from '../../../components/touchable';
@@ -27,18 +27,10 @@ const IconButton = ({icon: Icon, link}: IconButtonProps) => {
   };
 
   return (
-    <Touchable
-      type="opacity"
-      style={styles.iconContainer}
-      onPress={handlePress}>
+    <Touchable type="opacity" onPress={handlePress}>
       <Icon />
     </Touchable>
   );
 };
 
-const styles = StyleSheet.create({
-  iconContainer: {
-    paddingHorizontal: 20,
-  },
-});
 export default IconButton;
