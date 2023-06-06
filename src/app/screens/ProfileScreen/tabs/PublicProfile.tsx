@@ -5,7 +5,6 @@ import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
 import DetailRow from '../../../components/DetailRow';
 import IconButton from '../component/IconButton';
-import Typography from '../../../components/typography';
 
 import {IPublicProfileData} from '../interface/publicProfile';
 import {Facebook, Github, Linkdin, Blog} from '../../../constant/icons';
@@ -30,17 +29,16 @@ const PublicProfile = ({publicProfile, socialDetails}: IPublicProfileData) => {
         />
       </Card>
 
-      <Card title="Social Media Links">
-        <View style={styles.row}>
-          {!github && !linkedin && !blog && !facebook && (
-            <Typography type="secondaryText">No social media links</Typography>
-          )}
-          {github && <IconButton icon={Github} link={github} />}
-          {linkedin && <IconButton icon={Linkdin} link={linkedin} />}
-          {blog && <IconButton icon={Blog} link={blog} />}
-          {facebook && <IconButton icon={Facebook} link={facebook} />}
-        </View>
-      </Card>
+      {(github || linkedin || blog || facebook) && (
+        <Card title="Social Media Links">
+          <View style={styles.row}>
+            {github && <IconButton icon={Github} link={github} />}
+            {linkedin && <IconButton icon={Linkdin} link={linkedin} />}
+            {blog && <IconButton icon={Blog} link={blog} />}
+            {facebook && <IconButton icon={Facebook} link={facebook} />}
+          </View>
+        </Card>
+      )}
     </ScreenWrapper>
   );
 };
