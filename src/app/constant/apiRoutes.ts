@@ -21,3 +21,6 @@ export const LEAVE_DETAIL_ROUTE = '/api/mobile/v1/leaves/employee/details';
 
 export const ALL_PROJECTS_ROUTE = '/api/mobile/v1/leaves/all_project_list';
 export const USERS_LIST_LEAVE_ROUTE = '/api/mobile/v1/employees_for_leaves';
+
+export const TEAM_MEMBERS_UPCOMING_LEAVES_ROUTE =
+  '/api/mobile/v1/team_members_leaves';
