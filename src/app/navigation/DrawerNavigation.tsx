@@ -14,6 +14,7 @@ const Drawer = createDrawerNavigator();
 
 const screenOptions: DrawerNavigationOptions = {
   headerShown: false,
+  swipeEnabled: false,
   drawerPosition: 'right',
   drawerStyle: {
     borderTopLeftRadius: 16,

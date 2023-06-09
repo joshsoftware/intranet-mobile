@@ -21,6 +21,7 @@ const DrawerContent = (props: any) => {
 
   const goToProfile = () => {
     navigation.navigate(USER_PROFILE_SCREEN);
+    closeDrawer();
   };
 
   const logout = async () => {
