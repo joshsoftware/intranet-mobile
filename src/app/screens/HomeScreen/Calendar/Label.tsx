@@ -4,26 +4,39 @@ import {StyleSheet, View} from 'react-native';
 import Typography from '../../../components/typography';
 
 interface Props {
+  count: number;
   color: string;
   borderColor: string;
   text: string;
 }
 
-function Label({color, borderColor, text}: Props) {
+function Label({count = 0, color, borderColor, text}: Props) {
   return (
     <View style={styles.container}>
-      <View
-        style={[styles.dot, {backgroundColor: color, borderColor: borderColor}]}
-      />
-      <Typography type="header" style={styles.labelText}>
-        {text}
+      <Typography type="header" style={{color: borderColor}}>
+        {count}
       </Typography>
+      <View style={styles.row}>
+        <View
+          style={[
+            styles.dot,
+            {backgroundColor: color, borderColor: borderColor},
+          ]}
+        />
+        <Typography type="header" style={styles.labelText}>
+          {text}
+        </Typography>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

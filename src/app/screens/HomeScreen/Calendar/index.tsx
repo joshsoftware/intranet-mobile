@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {CalendarList} from 'react-native-calendars';
+import {CalendarList, DateData} from 'react-native-calendars';
 
 import Typography from '../../../components/typography';
 import Label from './Label';
+import {useHomeCalendar} from '../dashboard.hooks';
+
+import {todaysDate} from '../../../utils/date';
 
 import colors from '../../../constant/colors';
 
@@ -12,27 +15,104 @@ const theme = {
   monthTextColor: colors.PRIMARY,
   textMonthFontSize: 14,
   textMonthFontWeight: 'bold' as 'bold',
-  'stylesheet.calendar-list.main': {
-    container: {
-      height: 280,
-    },
-  },
   'stylesheet.calendar.header': {
     header: {
       justifyContent: 'flex-start',
     },
   },
-  'stylesheet.day.basic': {
-    base: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: 20,
-      width: 20,
+  'stylesheet.calendar.main': {
+    week: {
+      marginVertical: 2,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
     },
   },
 };
 
+const monthName = [
+  '',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 function Calendar() {
+  const [month, setMonth] = useState(monthName[todaysDate.getMonth()]);
+  const [year, setYear] = useState(todaysDate.getFullYear());
+
+  const {filled, notFilled, incompleteFilled, leaves, holidays, isLoading} =
+    useHomeCalendar(month, year);
+
+  const handleMonthChange = (date: DateData) => {
+    setMonth(monthName[date.month]);
+    setYear(date.year);
+  };
+
+  const markedDates = useMemo(() => {
+    let result: Record<string, any> = {};
+
+    result = filled.reduce((acc, date) => {
+      acc[date] = {
+        color: colors.LIGHT_GREEN_BACKGROUND,
+        startingDay: true,
+        endingDay: true,
+      };
+
+      return acc;
+    }, result);
+
+    result = notFilled.reduce((acc, date) => {
+      acc[date] = {
+        color: colors.LIGHT_RED_BACKGROUND,
+        startingDay: true,
+        endingDay: true,
+      };
+
+      return acc;
+    }, result);
+
+    result = incompleteFilled.reduce((acc, date) => {
+      acc[date] = {
+        color: colors.YELLOW_BACKGROUND,
+        startingDay: true,
+        endingDay: true,
+      };
+
+      return acc;
+    }, result);
+
+    result = leaves.reduce((acc, date) => {
+      acc[date] = {
+        color: colors.CYAN_BACKGROUND,
+        startingDay: true,
+        endingDay: true,
+      };
+
+      return acc;
+    }, result);
+
+    result = holidays.reduce((acc, date) => {
+      acc[date] = {
+        color: colors.GRAY_BACKGROUND,
+        startingDay: true,
+        endingDay: true,
+      };
+
+      return acc;
+    }, result);
+
+    return result;
+  }, [filled, notFilled, incompleteFilled, leaves, holidays]);
+
   return (
     <View style={styles.container}>
       <Typography type="header" style={styles.title}>
@@ -41,28 +121,49 @@ function Calendar() {
 
       <View style={styles.labelContainer}>
         <Label
-          text="Completed"
+          count={filled.length}
+          text="Filled"
           color={colors.LIGHT_GREEN_BACKGROUND}
           borderColor={colors.GREEN_BORDER}
         />
         <Label
-          text="Not Completed"
+          count={notFilled.length}
+          text="Not Filled"
           color={colors.LIGHT_RED_BACKGROUND}
           borderColor={colors.RED_BORDER}
         />
         <Label
-          text="Less than 8hrs"
+          count={incompleteFilled.length}
+          text="< 8hrs"
           color={colors.YELLOW_BACKGROUND}
           borderColor={colors.YELLOW_BORDER}
+        />
+        <Label
+          count={leaves.length}
+          text="Leave"
+          color={colors.CYAN_BACKGROUND}
+          borderColor={colors.CYAN_BORDER_COLOR}
+        />
+        <Label
+          count={holidays.length}
+          text="Holiday"
+          color={colors.GRAY_BACKGROUND}
+          borderColor={colors.GREY_BORDER_COLOR}
         />
       </View>
 
       <CalendarList
+        theme={theme}
+        displayLoadingIndicator={isLoading}
+        onMonthChange={handleMonthChange}
         horizontal={true}
         pagingEnabled={true}
-        showSixWeeks={false}
-        theme={theme}
-        markingType="custom"
+        markingType="period"
+        markedDates={markedDates}
+        firstDay={1}
+        // calendarHeight is used as minHeight in library
+        // calendar will expand to take required space
+        calendarHeight={0}
       />
     </View>
   );
