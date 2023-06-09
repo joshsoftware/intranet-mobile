@@ -13,7 +13,9 @@ interface Props {
 function Label({count = 0, color, borderColor, text}: Props) {
   return (
     <View style={styles.container}>
-      <Typography type="header" style={{color: borderColor}}>
+      <Typography
+        type="header"
+        style={[{color: borderColor}, styles.countText]}>
         {count}
       </Typography>
       <View style={styles.row}>
@@ -47,6 +49,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderWidth: StyleSheet.hairlineWidth,
     marginHorizontal: 5,
+  },
+  countText: {
+    paddingLeft: 14,
   },
   labelText: {
     fontSize: 12,
