@@ -1,4 +1,5 @@
 export type GetHomeTimesheetDataResponse = {
+  message: string;
   data: {
     filled: string[];
     not_filled: string[];

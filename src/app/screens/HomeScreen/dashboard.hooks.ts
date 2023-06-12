@@ -1,13 +1,21 @@
 import {useQuery} from 'react-query';
+import {AxiosError} from 'axios';
 
 import {getTimesheetCalendar} from '../../services/home';
+import toast from '../../utils/toast';
+
+import {GetHomeTimesheetDataResponse} from '../../services/home/types';
 
 export const useHomeCalendar = (month: string, year: number) => {
   const {data, isLoading} = useQuery({
     queryKey: ['home_calendar_data', month, year],
     queryFn: () => getTimesheetCalendar(month, year),
-    onError: error => {
-      console.log(error);
+    onError: (error: AxiosError<GetHomeTimesheetDataResponse>) => {
+      if (error.response?.data.message) {
+        toast(error.response.data.message, 'error');
+      } else {
+        toast('Something went wrong while fetching calendar data', 'error');
+      }
     },
   });
 
