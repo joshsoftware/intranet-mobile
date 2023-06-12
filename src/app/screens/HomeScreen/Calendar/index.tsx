@@ -30,7 +30,6 @@ const theme = {
 };
 
 const monthName = [
-  '',
   'January',
   'February',
   'March',
@@ -53,7 +52,7 @@ function Calendar() {
     useHomeCalendar(month, year);
 
   const handleMonthChange = (date: DateData) => {
-    setMonth(monthName[date.month]);
+    setMonth(monthName[date.month - 1]);
     setYear(date.year);
   };
 
@@ -62,9 +61,13 @@ function Calendar() {
 
     result = filled.reduce((acc, date) => {
       acc[date] = {
-        color: colors.LIGHT_GREEN_BACKGROUND,
-        startingDay: true,
-        endingDay: true,
+        customStyles: {
+          container: {
+            backgroundColor: colors.LIGHT_GREEN_BACKGROUND,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        },
       };
 
       return acc;
@@ -72,9 +75,13 @@ function Calendar() {
 
     result = notFilled.reduce((acc, date) => {
       acc[date] = {
-        color: colors.LIGHT_RED_BACKGROUND,
-        startingDay: true,
-        endingDay: true,
+        customStyles: {
+          container: {
+            backgroundColor: colors.LIGHT_RED_BACKGROUND,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        },
       };
 
       return acc;
@@ -82,9 +89,13 @@ function Calendar() {
 
     result = incompleteFilled.reduce((acc, date) => {
       acc[date] = {
-        color: colors.YELLOW_BACKGROUND,
-        startingDay: true,
-        endingDay: true,
+        customStyles: {
+          container: {
+            backgroundColor: colors.YELLOW_BACKGROUND,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        },
       };
 
       return acc;
@@ -92,9 +103,13 @@ function Calendar() {
 
     result = leaves.reduce((acc, date) => {
       acc[date] = {
-        color: colors.CYAN_BACKGROUND,
-        startingDay: true,
-        endingDay: true,
+        customStyles: {
+          container: {
+            backgroundColor: colors.CYAN_BACKGROUND,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        },
       };
 
       return acc;
@@ -102,9 +117,13 @@ function Calendar() {
 
     result = holidays.reduce((acc, date) => {
       acc[date] = {
-        color: colors.GRAY_BACKGROUND,
-        startingDay: true,
-        endingDay: true,
+        customStyles: {
+          container: {
+            backgroundColor: colors.GRAY_BACKGROUND,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        },
       };
 
       return acc;
@@ -158,7 +177,7 @@ function Calendar() {
         onMonthChange={handleMonthChange}
         horizontal={true}
         pagingEnabled={true}
-        markingType="period"
+        markingType="custom"
         markedDates={markedDates}
         firstDay={1}
         // calendarHeight is used as minHeight in library

@@ -5,7 +5,7 @@ import {getTimesheetCalendar} from '../../services/home';
 export const useHomeCalendar = (month: string, year: number) => {
   const {data, isLoading} = useQuery({
     queryKey: ['home_calendar_data', month, year],
-    queryFn: async () => getTimesheetCalendar(month, year),
+    queryFn: () => getTimesheetCalendar(month, year),
     onError: error => {
       console.log(error);
     },
