@@ -213,7 +213,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   description: {
-    alignItems: 'flex-start',
     maxHeight: 100,
     fontSize: 15,
   },
