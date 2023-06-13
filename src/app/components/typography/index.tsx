@@ -1,11 +1,11 @@
 import React, {memo, PropsWithChildren} from 'react';
-import {StyleSheet, Text, TextStyle} from 'react-native';
+import {StyleProp, StyleSheet, Text, TextStyle} from 'react-native';
 
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
 
 type Props = PropsWithChildren & {
-  style?: TextStyle;
+  style?: StyleProp<TextStyle>;
   type?:
     | 'title'
     | 'header'
