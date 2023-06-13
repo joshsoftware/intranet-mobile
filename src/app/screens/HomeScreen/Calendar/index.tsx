@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   container: {
     borderBottomLeftRadius: 19,
     borderBottomRightRadius: 19,
-    elevation: 10,
+    elevation: 5,
     backgroundColor: colors.WHITE,
     marginBottom: 15,
     paddingVertical: 16,
