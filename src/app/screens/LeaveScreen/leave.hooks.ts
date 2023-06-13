@@ -114,7 +114,7 @@ export function useUserList() {
     data:
       users.map(({name, email, user_id}) => ({
         label:
-          name === undefined || name == null || name === '' || name === ' ' // Due to inconsistent response from staging backend
+          !name || name === ' ' // Due to inconsistent response from staging backend
             ? email
             : name,
         value: user_id,
