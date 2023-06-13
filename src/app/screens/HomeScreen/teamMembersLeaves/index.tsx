@@ -17,16 +17,19 @@ type ItemProps = {
   name: string;
   from: string;
   to: string;
+  days: number;
 };
 
 const renderItem = ({
-  item: {name, from, to},
+  item: {name, from, to, days},
 }: ListRenderItemInfo<ItemProps>) => {
   return (
     <View style={styles.item}>
       <Typography type="header">{name}</Typography>
       <Typography type="label">
-        Leave From: {dateFormate(from)} To: {dateFormate(to)}
+        {days === 1
+          ? `Leave on ${dateFormate(from)}`
+          : `Leave From: ${dateFormate(from)} To: ${dateFormate(to)}`}
       </Typography>
     </View>
   );
@@ -42,7 +45,7 @@ const TeamMembersLeaves = () => {
   return (
     <View style={styles.container}>
       <Typography type="header" style={styles.title}>
-        Team Members Upcoming Leaves
+        Upcoming Team Leaves: Next 20 Days
       </Typography>
       {isLoading ? (
         <ActivityIndicator size="large" />
