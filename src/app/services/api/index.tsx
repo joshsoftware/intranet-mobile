@@ -1,4 +1,4 @@
-import React, {FC, PropsWithChildren, useContext, useMemo} from 'react';
+import React, {FC, PropsWithChildren, useContext, useEffect} from 'react';
 import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 import Config from 'react-native-config';
 
@@ -16,8 +16,8 @@ export const axiosInstance: AxiosInstance = axios.create({
 export const Interceptor: FC<PropsWithChildren> = ({children}) => {
   const [, setUserContext] = useContext(UserContext);
 
-  useMemo(() => {
-    axiosInstance.interceptors.response.use(
+  useEffect(() => {
+    const instance = axiosInstance.interceptors.response.use(
       response => {
         return response;
       },
@@ -36,6 +36,8 @@ export const Interceptor: FC<PropsWithChildren> = ({children}) => {
         return Promise.reject(error);
       },
     );
+
+    return () => axiosInstance.interceptors.response.eject(instance);
   }, [setUserContext]);
 
   return <>{children}</>;
