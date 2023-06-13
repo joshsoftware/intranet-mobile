@@ -105,7 +105,7 @@ function Calendar() {
       acc[date] = {
         customStyles: {
           container: {
-            backgroundColor: colors.CYAN_BACKGROUND,
+            backgroundColor: colors.LIGHT_BLUE_BACKGROUND,
             justifyContent: 'center',
             alignItems: 'center',
           },
@@ -143,31 +143,26 @@ function Calendar() {
           count={filled.length}
           text="Filled"
           color={colors.LIGHT_GREEN_BACKGROUND}
-          borderColor={colors.GREEN_BORDER}
         />
         <Label
           count={notFilled.length}
           text="Not Filled"
           color={colors.LIGHT_RED_BACKGROUND}
-          borderColor={colors.RED_BORDER}
         />
         <Label
           count={incompleteFilled.length}
           text="< 8hrs"
           color={colors.YELLOW_BACKGROUND}
-          borderColor={colors.YELLOW_BORDER}
         />
         <Label
           count={leaves.length}
           text="Leave"
-          color={colors.CYAN_BACKGROUND}
-          borderColor={colors.CYAN_BORDER_COLOR}
+          color={colors.LIGHT_BLUE_BACKGROUND}
         />
         <Label
           count={holidays.length}
           text="Holiday"
           color={colors.GRAY_BACKGROUND}
-          borderColor={colors.GREY_BORDER_COLOR}
         />
       </View>
 
@@ -205,9 +200,6 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: colors.LIGHT_GREY_BACKGROUND,
-    paddingVertical: 8,
   },
 });
 

@@ -6,52 +6,26 @@ import Typography from '../../../components/typography';
 interface Props {
   count: number;
   color: string;
-  borderColor: string;
   text: string;
 }
 
-function Label({count = 0, color, borderColor, text}: Props) {
+function Label({count = 0, color, text}: Props) {
   return (
-    <View style={styles.container}>
-      <Typography
-        type="header"
-        style={[{color: borderColor}, styles.countText]}>
-        {count}
+    <View style={[styles.container, {backgroundColor: color}]}>
+      <Typography type="header">{count}</Typography>
+      <Typography type="header" style={styles.labelText}>
+        {text}
       </Typography>
-      <View style={styles.row}>
-        <View
-          style={[
-            styles.dot,
-            {backgroundColor: color, borderColor: borderColor},
-          ]}
-        />
-        <Typography type="header" style={styles.labelText}>
-          {text}
-        </Typography>
-      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dot: {
-    height: 7,
-    width: 7,
-    borderRadius: 100,
-    borderWidth: StyleSheet.hairlineWidth,
-    marginHorizontal: 5,
-  },
-  countText: {
-    paddingLeft: 14,
+    paddingVertical: 8,
   },
   labelText: {
     fontSize: 12,
