@@ -22,4 +22,5 @@ export const LEAVE_DETAIL_ROUTE = '/api/mobile/v1/leaves/employee/details';
 export const ALL_PROJECTS_ROUTE = '/api/mobile/v1/leaves/all_project_list';
 export const USERS_LIST_LEAVE_ROUTE = '/api/mobile/v1/employees_for_leaves';
 
-export const HOME_CALENDAR_ROUTE = '/api/mobile/v1/home_calendar';
+export const HOME_CALENDAR_ROUTE =
+  '/api/mobile/v1/time_sheets/timesheet_calender';
