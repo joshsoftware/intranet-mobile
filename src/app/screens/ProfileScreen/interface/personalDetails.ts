@@ -7,7 +7,7 @@ export interface IPersonalDetails {
   workExperience: number;
   previousCompany: string | null;
   tshirtSize: string | null;
-  end_of_probation: string;
+  end_of_probation: string | null;
 }
 
 export interface IEmergencyContactDetails {

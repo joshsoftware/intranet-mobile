@@ -57,7 +57,6 @@ const PersonalDetails = (props: IPersonalDetailsData) => {
         />
         <DetailRow label="Work Experience" value={workExperience} />
         <DetailRow label="Previous Company" value={previousCompany} />
-        <DetailRow label="Bonusly Auth Token" value={'-'} />
         <DetailRow label="Tshirt Size" value={tshirtSize} />
         <DetailRow
           label="Probation End Date"
