@@ -37,3 +37,12 @@ export const convertToMins = (timeStr: string) => {
   const mins = time.hours() * 60 + time.minutes();
   return mins;
 };
+
+export const getMonthYearFromISO = (dateString: string) => {
+  const date = moment(dateString);
+
+  return {
+    month: date.format('MMMM'),
+    year: Number(date.format('YYYY')),
+  };
+};

@@ -2,7 +2,7 @@ import {AxiosError} from 'axios';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 import toast from '../../utils/toast';
-import {dateFormate} from '../../utils/date';
+import {dateFormate, getMonthYearFromISO} from '../../utils/date';
 import {
   createTimesheetRequest,
   deleteTimesheetRequest,
@@ -62,8 +62,14 @@ export const useDeleteTimesheet = () => {
   const {mutate, isLoading} = useMutation(
     (payload: TDeleteTimesheetRequest) => deleteTimesheetRequest(payload),
     {
-      onSuccess: successData => {
+      onSuccess: (successData, variables) => {
         toast(successData.data.message);
+
+        if (variables.time_sheet_date) {
+          const {month, year} = getMonthYearFromISO(variables.time_sheet_date);
+          queryClient.invalidateQueries(['home_calendar_data', month, year]);
+        }
+
         queryClient.invalidateQueries(['timesheet']);
       },
       onError: (err: AxiosError) => {
@@ -100,7 +106,12 @@ export const useEditTimesheet = () => {
   const {mutate, isLoading, isSuccess, data} = useMutation(
     (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
     {
-      onSuccess: () => {
+      onSuccess: (_, variables) => {
+        const {month, year} = getMonthYearFromISO(
+          variables.time_sheets_attributes.date,
+        );
+
+        queryClient.invalidateQueries(['home_calendar_data', month, year]);
         queryClient.invalidateQueries(['timesheet']);
       },
       onError: (err: AxiosError) => {
@@ -118,7 +129,18 @@ export const useAddTimesheet = () => {
   const {mutate, data, isLoading, isSuccess} = useMutation(
     (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
     {
-      onSuccess: () => {
+      onSuccess: (_, variables) => {
+        const monthYearSet = new Set<string>();
+
+        variables.time_sheets_attributes.forEach(({date}) => {
+          const {month, year} = getMonthYearFromISO(date);
+
+          if (!monthYearSet.has(month + year)) {
+            queryClient.invalidateQueries(['home_calendar_data', month, year]);
+            monthYearSet.add(month + year);
+          }
+        });
+
         queryClient.invalidateQueries(['timesheet']);
       },
       onError: (err: AxiosError) => {

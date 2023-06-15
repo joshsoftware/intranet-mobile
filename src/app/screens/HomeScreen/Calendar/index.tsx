@@ -6,7 +6,7 @@ import Typography from '../../../components/typography';
 import Label from './Label';
 import {useHomeCalendar} from '../dashboard.hooks';
 
-import {todaysDate} from '../../../utils/date';
+import {getMonthYearFromISO, todaysDate} from '../../../utils/date';
 
 import colors from '../../../constant/colors';
 
@@ -29,31 +29,20 @@ const theme = {
   },
 };
 
-const monthName = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
 function Calendar() {
-  const [month, setMonth] = useState(monthName[todaysDate.getMonth()]);
+  const [month, setMonth] = useState(
+    todaysDate.toLocaleString('indian', {month: 'long'}),
+  );
   const [year, setYear] = useState(todaysDate.getFullYear());
 
   const {filled, notFilled, incompleteFilled, leaves, holidays, isLoading} =
     useHomeCalendar(month, year);
 
   const handleMonthChange = (date: DateData) => {
-    setMonth(monthName[date.month - 1]);
-    setYear(date.year);
+    const monthYear = getMonthYearFromISO(date.dateString);
+
+    setMonth(monthYear.month);
+    setYear(monthYear.year);
   };
 
   const markedDates = useMemo(() => {
