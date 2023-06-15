@@ -2,12 +2,12 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import React, {Fragment} from 'react';
 
 import Linear from '../../../components/seperator/linear';
-import LeaveCard from './leaveCard';
 import Typography from '../../../components/typography';
-import {useTeamMembersLeaves} from '../dashboard.hooks';
+import BirthdayCard from './BirthdayCard';
+import {useTeamMembersBirthdays} from '../dashboard.hooks';
 
-const TeamMembersLeaves = () => {
-  const {data, isLoading} = useTeamMembersLeaves();
+const TeamMembersBirthdays = () => {
+  const {data, isLoading} = useTeamMembersBirthdays();
 
   if (!isLoading && !data.length) {
     return null;
@@ -16,18 +16,16 @@ const TeamMembersLeaves = () => {
   return (
     <View style={styles.container}>
       <Typography type="header" style={styles.title}>
-        Upcoming Leaves of Team Members
+        Upcoming Birthdays of Team Members
       </Typography>
-      <Typography type="secondaryText" style={styles.subTitle}>
-        Next 20 days
-      </Typography>
+
       {isLoading ? (
         <ActivityIndicator size="large" />
       ) : (
         data.map((item, index) => (
           <Fragment key={index}>
             {Boolean(index) && <Linear />}
-            <LeaveCard {...item} />
+            <BirthdayCard {...item} />
           </Fragment>
         ))
       )}
@@ -44,12 +42,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 5,
   },
-  subTitle: {
-    fontSize: 13,
-    fontStyle: 'italic',
-    fontWeight: '100',
-    marginBottom: 10,
-  },
 });
 
-export default TeamMembersLeaves;
+export default TeamMembersBirthdays;

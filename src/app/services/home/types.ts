@@ -18,3 +18,11 @@ export type GetTeamMembersLeavesResponse = {
     days: number;
   }[];
 };
+
+export type GetTeamMembersBirthdaysResponse = {
+  message?: string;
+  data: {
+    name: string;
+    date: string;
+  }[];
+};

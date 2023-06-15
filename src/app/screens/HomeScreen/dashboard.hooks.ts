@@ -4,6 +4,7 @@ import {AxiosError} from 'axios';
 import {
   getTimesheetCalendar,
   getTeamMembersUpcomingLeaves,
+  getTeamMembersUpcomingBirthdays,
 } from '../../services/home';
 import toast from '../../utils/toast';
 
@@ -36,6 +37,15 @@ export const useTeamMembersLeaves = () => {
   const {data, isLoading} = useQuery(
     ['teamMembersLeaves'],
     getTeamMembersUpcomingLeaves,
+  );
+
+  return {data: data?.data.data ?? [], isLoading};
+};
+
+export const useTeamMembersBirthdays = () => {
+  const {data, isLoading} = useQuery(
+    ['teamMembersBirthdays'],
+    getTeamMembersUpcomingBirthdays,
   );
 
   return {data: data?.data.data ?? [], isLoading};
