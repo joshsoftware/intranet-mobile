@@ -1,5 +1,6 @@
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import React, {Fragment} from 'react';
+import {StyleSheet} from 'react-native';
+import Animated, {FadeInDown} from 'react-native-reanimated';
 
 import Linear from '../../../components/seperator/linear';
 import LeaveCard from './leaveCard';
@@ -9,29 +10,25 @@ import {useTeamMembersLeaves} from '../dashboard.hooks';
 const TeamMembersLeaves = () => {
   const {data, isLoading} = useTeamMembersLeaves();
 
-  if (!isLoading && !data.length) {
+  if (isLoading || !data.length) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
+    <Animated.View entering={FadeInDown} style={styles.container}>
       <Typography type="header" style={styles.title}>
         Upcoming Leaves of Team Members
       </Typography>
       <Typography type="secondaryText" style={styles.subTitle}>
         Next 20 days
       </Typography>
-      {isLoading ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        data.map((item, index) => (
-          <Fragment key={index}>
-            {Boolean(index) && <Linear />}
-            <LeaveCard {...item} />
-          </Fragment>
-        ))
-      )}
-    </View>
+      {data.map((item, index) => (
+        <Fragment key={index}>
+          {Boolean(index) && <Linear />}
+          <LeaveCard {...item} />
+        </Fragment>
+      ))}
+    </Animated.View>
   );
 };
 
@@ -42,13 +39,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 5,
   },
   subTitle: {
     fontSize: 13,
     fontStyle: 'italic',
     fontWeight: '100',
-    marginBottom: 10,
+    marginBottom: 5,
   },
 });
 
