@@ -45,3 +45,7 @@ export const generateMarkedDates = (data: Record<string, string[]>) => {
 
   return result;
 };
+
+export const filterWFHFromLeaves = (data: {leave_type: string}[]) => {
+  return data.filter(({leave_type}) => leave_type !== 'WFH');
+};

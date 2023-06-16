@@ -7,6 +7,7 @@ import {
   getTeamMembersUpcomingBirthdays,
 } from '../../services/home';
 import toast from '../../utils/toast';
+import {filterWFHFromLeaves} from '../../utils/home';
 
 import {GetHomeTimesheetDataResponse} from '../../services/home/types';
 
@@ -39,7 +40,7 @@ export const useTeamMembersLeaves = () => {
     getTeamMembersUpcomingLeaves,
   );
 
-  return {data: data?.data.data ?? [], isLoading};
+  return {data: filterWFHFromLeaves(data?.data.data ?? []), isLoading};
 };
 
 export const useTeamMembersBirthdays = () => {
