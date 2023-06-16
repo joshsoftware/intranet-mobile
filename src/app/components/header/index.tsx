@@ -28,17 +28,15 @@ const Header = ({type, title}: Props) => {
     case 'secondary':
       return (
         <View style={styles.container}>
-          <View style={styles.backButton}>
-            <TouchableOpacity activeOpacity={0.5} onPress={goBack}>
-              <Arrow
-                height={20}
-                width={20}
-                style={styles.arrow}
-                fill={colors.WHITE}
-              />
-            </TouchableOpacity>
-            <Text style={styles.backText}>{title}</Text>
-          </View>
+          <TouchableOpacity activeOpacity={0.5} onPress={goBack}>
+            <Arrow
+              height={20}
+              width={20}
+              style={styles.arrow}
+              fill={colors.WHITE}
+            />
+          </TouchableOpacity>
+          <Text style={styles.backText}>{title}</Text>
         </View>
       );
     default:
@@ -49,7 +47,7 @@ const Header = ({type, title}: Props) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 13,
@@ -58,16 +56,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.PRIMARY,
     height: 52,
   },
-  backButton: {
-    flexDirection: 'row',
-  },
   backText: {
     color: colors.WHITE,
-    fontSize: 15,
+    fontSize: 16,
     marginStart: 20,
+    fontWeight: 'bold',
   },
   arrow: {
-    marginTop: 2,
+    marginTop: 5,
     transform: [{rotate: '180 deg'}],
   },
 });
