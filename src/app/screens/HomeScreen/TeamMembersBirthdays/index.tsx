@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {ActivityIndicator, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 
 import Linear from '../../../components/seperator/linear';
@@ -19,17 +19,12 @@ const TeamMembersBirthdays = () => {
       <Typography type="header" style={styles.title}>
         Upcoming Birthdays of Team Members
       </Typography>
-
-      {isLoading ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        data.map((item, index) => (
-          <Fragment key={index}>
-            {Boolean(index) && <Linear />}
-            <BirthdayCard {...item} />
-          </Fragment>
-        ))
-      )}
+      {data.map((item, index) => (
+        <Fragment key={index}>
+          {Boolean(index) && <Linear />}
+          <BirthdayCard {...item} />
+        </Fragment>
+      ))}
     </Animated.View>
   );
 };
