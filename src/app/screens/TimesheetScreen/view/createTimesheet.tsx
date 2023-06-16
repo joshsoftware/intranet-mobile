@@ -26,9 +26,16 @@ type Props = {
   toggleModal: () => void;
   userId: string;
   userName?: string;
+  defaultDate?: string;
 };
 
-const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
+const CreateTimesheet = ({
+  toggleModal,
+  isVisible,
+  userId,
+  userName,
+  defaultDate,
+}: Props) => {
   const [addedTimesheet, setAddedTimesheet] = useState<
     ITimesheetSectionListItem[]
   >([]);
@@ -214,6 +221,7 @@ const CreateTimesheet = ({toggleModal, isVisible, userId, userName}: Props) => {
           onSubmit={onAddTimesheet}
           isFormVisible={isFormVisible}
           defaultData={formDefaultData}
+          defaultDate={defaultDate}
           toggleForm={toggleForm}
           userId={userId}
         />

@@ -1,4 +1,10 @@
-import React, {useCallback, useContext, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
 import CreateTimesheetButton from './createTimesheetButton';
@@ -110,6 +116,20 @@ const TimesheetList = () => {
     [dateRange.endDate, dateRange.startDate],
   );
 
+  useEffect(() => {
+    if (params?.startDate) {
+      setDateRange({
+        startDate: params?.startDate,
+        endDate: params?.endDate,
+      });
+    } else {
+      setDateRange({
+        startDate: startOfMonth,
+        endDate: todaysDate,
+      });
+    }
+  }, [params?.endDate, params?.startDate]);
+
   return (
     <>
       {params?.user_id && <Header title={TIMESHEET_SCREEN} type="secondary" />}
@@ -133,7 +153,7 @@ const TimesheetList = () => {
           </Typography>
           <Calendar height={17} width={17} />
         </Touchable>
-        {params && (
+        {(params?.name || params?.email) && (
           <View style={styles.userInfo}>
             <Typography type="header">{params?.name}</Typography>
             <Typography type="description">{params?.email}</Typography>

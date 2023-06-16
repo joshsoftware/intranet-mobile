@@ -32,6 +32,7 @@ const timesheetFormSchema = yup.object().shape({
 
 type Props = {
   defaultData?: Timesheet;
+  defaultDate?: string;
   onSubmit: (data: any) => void;
   onCancel?: () => void;
   isEditForm?: boolean;
@@ -43,6 +44,7 @@ type Props = {
 
 const TimesheetForm = ({
   defaultData,
+  defaultDate,
   onSubmit,
   onCancel,
   isEditForm = false,
@@ -60,7 +62,7 @@ const TimesheetForm = ({
     mode: 'onSubmit',
     values: defaultData ?? {
       project: undefined,
-      date: undefined,
+      date: defaultDate ?? undefined,
       work_in_hours: undefined,
       description: undefined,
     },

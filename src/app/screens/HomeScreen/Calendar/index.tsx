@@ -1,14 +1,19 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {CalendarList, DateData} from 'react-native-calendars';
+import {useNavigation} from '@react-navigation/native';
 
 import Typography from '../../../components/typography';
 import Label from './Label';
 import {useHomeCalendar} from '../dashboard.hooks';
 
 import {getMonthYearFromISO, todaysDate} from '../../../utils/date';
+import {generateMarkedDates} from '../../../utils/home';
+import {isManagement} from '../../../utils/user';
+import UserContext from '../../../context/user.context';
 
 import colors from '../../../constant/colors';
+import {TIMESHEET_SCREEN, USER_TIMESHEET} from '../../../constant/screenNames';
 
 const theme = {
   textDayFontSize: 14,
@@ -30,6 +35,11 @@ const theme = {
 };
 
 function Calendar() {
+  const navigation = useNavigation<any>();
+  const [userData] = useContext(UserContext);
+
+  const isManager = isManagement(userData?.userData.role);
+
   const [month, setMonth] = useState(
     todaysDate.toLocaleString('indian', {month: 'long'}),
   );
@@ -46,80 +56,46 @@ function Calendar() {
   };
 
   const markedDates = useMemo(() => {
-    let result: Record<string, any> = {};
-
-    result = filled.reduce((acc, date) => {
-      acc[date] = {
-        customStyles: {
-          container: {
-            backgroundColor: colors.LIGHT_GREEN_BACKGROUND,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        },
-      };
-
-      return acc;
-    }, result);
-
-    result = notFilled.reduce((acc, date) => {
-      acc[date] = {
-        customStyles: {
-          container: {
-            backgroundColor: colors.LIGHT_RED_BACKGROUND,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        },
-      };
-
-      return acc;
-    }, result);
-
-    result = incompleteFilled.reduce((acc, date) => {
-      acc[date] = {
-        customStyles: {
-          container: {
-            backgroundColor: colors.YELLOW_BACKGROUND,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        },
-      };
-
-      return acc;
-    }, result);
-
-    result = leaves.reduce((acc, date) => {
-      acc[date] = {
-        customStyles: {
-          container: {
-            backgroundColor: colors.LIGHT_BLUE_BACKGROUND,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        },
-      };
-
-      return acc;
-    }, result);
-
-    result = holidays.reduce((acc, date) => {
-      acc[date] = {
-        customStyles: {
-          container: {
-            backgroundColor: colors.GRAY_BACKGROUND,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        },
-      };
-
-      return acc;
-    }, result);
-
-    return result;
+    return generateMarkedDates({
+      filled,
+      notFilled,
+      incompleteFilled,
+      leaves,
+      holidays,
+    });
   }, [filled, notFilled, incompleteFilled, leaves, holidays]);
+
+  const onDatePress = useCallback(
+    ({dateString}: DateData) => {
+      const commonParams = {startDate: dateString, endDate: dateString};
+
+      const screen = isManager ? USER_TIMESHEET : TIMESHEET_SCREEN;
+      const params = isManager
+        ? {...commonParams, user_id: userData?.userData.userId}
+        : commonParams;
+
+      switch (markedDates[dateString]?.type) {
+        case 'filled':
+          navigation.navigate(screen, params);
+          return;
+
+        case 'unfilled':
+          navigation.navigate(screen, {
+            ...params,
+            isAddModalOpen: true,
+          });
+          return;
+
+        case 'partiallyFilled':
+          navigation.navigate(screen, params);
+          return;
+
+        default:
+          return;
+      }
+    },
+    [isManager, markedDates, navigation, userData?.userData.userId],
+  );
 
   return (
     <View style={styles.container}>
@@ -164,6 +140,7 @@ function Calendar() {
         markingType="custom"
         markedDates={markedDates}
         firstDay={1}
+        onDayPress={onDatePress}
         // calendarHeight is used as minHeight in library
         // calendar will expand to take required space
         calendarHeight={0}

@@ -76,7 +76,7 @@ export function useLeaveDetail(leaveID: number) {
   });
 
   return {
-    data: data?.data.data || [],
+    data: data?.data.data || {},
     isLoading,
     isError,
   };
