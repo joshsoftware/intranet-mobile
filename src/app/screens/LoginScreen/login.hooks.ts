@@ -1,11 +1,11 @@
-import {useCallback, useContext} from 'react';
+import {useContext} from 'react';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 
 import UserContext, {UserData} from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
-import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
+import {googleSignOut} from '../../services/auth/google.auth';
 import toast from '../../utils/toast';
 
 export const useLogin = () => {
@@ -42,24 +42,5 @@ export const useLogin = () => {
     },
   });
 
-  const emailPasswordSignInHandler = (email: string, password: string) => {
-    // User login from backend
-    mutate({email, password});
-  };
-
-  const googleSignInHandler = useCallback(async () => {
-    const response = await googleSignIn();
-
-    if (response) {
-      // User login from backend
-      mutate(response);
-    }
-  }, [mutate]);
-
-  return {
-    googleSignInHandler,
-    emailPasswordSignInHandler,
-    isLoading,
-    mutate,
-  };
+  return {isLoading, mutate};
 };
