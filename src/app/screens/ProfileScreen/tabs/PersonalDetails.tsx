@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {Fragment} from 'react';
+import {StyleSheet} from 'react-native';
 
-import ScreenWrapper from '../component/ScreenWrapper';
 import Card from '../component/Card';
 import DetailRow from '../../../components/DetailRow';
+import Linear from '../../../components/seperator/linear';
+import ScreenWrapper from '../component/ScreenWrapper';
 
 import {dateFormate} from '../../../utils/date';
 
@@ -47,14 +49,11 @@ const PersonalDetails = (props: IPersonalDetailsData) => {
   return (
     <ScreenWrapper>
       <Card title="Personal Details">
-        <DetailRow label="Pan Number" value={panNumber} />
+        <DetailRow label="PAN Number" value={panNumber} />
         <DetailRow label="Personal Email" value={personalEmail} />
         <DetailRow label="Passport Number" value={passportNumber} />
         <DetailRow label="Qualification" value={qualification} />
-        <DetailRow
-          label="Date Of Joining"
-          value={dateOfJoining?.split('-').reverse().join('-')}
-        />
+        <DetailRow label="Date Of Joining" value={dateFormate(dateOfJoining)} />
         <DetailRow label="Work Experience" value={workExperience} />
         <DetailRow label="Previous Company" value={previousCompany} />
         <DetailRow label="Tshirt Size" value={tshirtSize} />
@@ -65,20 +64,27 @@ const PersonalDetails = (props: IPersonalDetailsData) => {
       </Card>
 
       <Card title="Emergency Contact Details">
-        <DetailRow label="Name" value={emergencyContactDetails[0]?.name} />
-        <DetailRow
-          label="Relation"
-          value={emergencyContactDetails[0]?.relation}
-        />
-        <DetailRow
-          label="Phone No"
-          value={emergencyContactDetails[0]?.phoneNumber}
-        />
+        {emergencyContactDetails?.map(
+          ({name, relation, phoneNumber}, index) => (
+            <Fragment key={index}>
+              {Boolean(index) && <Linear style={styles.line} />}
+              <DetailRow label="Name" value={name} />
+              <DetailRow label="Relation" value={relation} />
+              <DetailRow label="Phone No" value={phoneNumber} />
+            </Fragment>
+          ),
+        )}
       </Card>
 
       {addressCards}
     </ScreenWrapper>
   );
 };
+
+const styles = StyleSheet.create({
+  line: {
+    marginVertical: 4,
+  },
+});
 
 export default React.memo(PersonalDetails);
