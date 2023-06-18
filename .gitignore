@@ -63,5 +63,6 @@ yarn-error.log
 .metro-health-check*
 
 .env*
+!.env.sample
 google-services.json
 .vscode
