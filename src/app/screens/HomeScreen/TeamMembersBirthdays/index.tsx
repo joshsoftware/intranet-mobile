@@ -17,7 +17,7 @@ const TeamMembersBirthdays = () => {
   return (
     <Animated.View entering={FadeInDown} style={styles.container}>
       <Typography type="header" style={styles.title}>
-        Upcoming Birthdays of Team Members
+        Upcoming Birthdays Of Team Members
       </Typography>
       {data.map((item, index) => (
         <Fragment key={index}>
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 16,
     fontWeight: '700',
     marginBottom: 5,
   },

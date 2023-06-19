@@ -21,7 +21,7 @@ const Header = ({type, title}: Props) => {
   switch (type) {
     case 'primary':
       return (
-        <View style={styles.container}>
+        <View style={[styles.container, styles.primaryHeader]}>
           <JoshLogo height={18} width={85} fill={colors.WHITE} />
         </View>
       );
@@ -47,7 +47,6 @@ const Header = ({type, title}: Props) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 13,
@@ -55,6 +54,9 @@ const styles = StyleSheet.create({
     paddingRight: 23,
     backgroundColor: colors.PRIMARY,
     height: 52,
+  },
+  primaryHeader: {
+    justifyContent: 'center',
   },
   backText: {
     color: colors.WHITE,

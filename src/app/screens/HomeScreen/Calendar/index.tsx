@@ -20,11 +20,6 @@ const theme = {
   monthTextColor: colors.PRIMARY,
   textMonthFontSize: 14,
   textMonthFontWeight: 'bold' as 'bold',
-  'stylesheet.calendar.header': {
-    header: {
-      justifyContent: 'flex-start',
-    },
-  },
   'stylesheet.calendar.main': {
     week: {
       marginVertical: 2,
@@ -100,7 +95,7 @@ function Calendar() {
   return (
     <View style={styles.container}>
       <Typography type="header" style={styles.title}>
-        Timesheet
+        Timesheet Dashboard For The Month
       </Typography>
 
       <View style={styles.labelContainer}>
@@ -159,7 +154,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   title: {
-    fontSize: 16,
     fontWeight: 'bold',
     paddingHorizontal: 16,
     paddingBottom: 10,

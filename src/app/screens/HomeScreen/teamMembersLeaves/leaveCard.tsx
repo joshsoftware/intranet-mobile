@@ -17,8 +17,8 @@ const LeaveCard = ({name, from, to, days}: ItemProps) => (
     <Typography type="header">{name}</Typography>
     <Typography type="label">
       {days === 1
-        ? `Leave on ${dateFormate(from)}`
-        : `Leave From: ${dateFormate(from)} To: ${dateFormate(to)}`}
+        ? `Leave on ${dateFormate(from, 'll')}`
+        : `Leave From: ${dateFormate(from, 'll')} To: ${dateFormate(to, 'll')}`}
     </Typography>
   </View>
 );

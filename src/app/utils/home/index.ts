@@ -1,4 +1,5 @@
 import colors from '../../constant/colors';
+import {GetTeamMembersLeavesResponse} from '../../services/home/types';
 
 const dateTypes: Record<string, {color: string; type: string}> = {
   filled: {
@@ -84,6 +85,8 @@ export const generateMarkedDates = (data: Record<string, string[]>) => {
   return result;
 };
 
-export const filterWFHFromLeaves = (data: {leave_type: string}[]) => {
+export const filterWFHFromLeaves = (
+  data: GetTeamMembersLeavesResponse['data'],
+) => {
   return data.filter(({leave_type}) => leave_type !== 'WFH');
 };

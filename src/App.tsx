@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {StatusBar} from 'react-native';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {QueryClient, QueryClientProvider} from 'react-query';
 
@@ -29,6 +30,7 @@ const App = () => {
       <UserContext.Provider value={userContextValue}>
         <Interceptor>
           <QueryClientProvider client={queryClient}>
+            <StatusBar backgroundColor={colors.PRIMARY} />
             <NavigationContainer theme={theme} ref={navigationRef}>
               <RootNavigator />
             </NavigationContainer>

@@ -17,15 +17,20 @@ const TeamMembersLeaves = () => {
   return (
     <Animated.View entering={FadeInDown} style={styles.container}>
       <Typography type="header" style={styles.title}>
-        Upcoming Leaves of Team Members
+        Upcoming Leaves Of Your Team Members
       </Typography>
       <Typography type="secondaryText" style={styles.subTitle}>
-        Next 20 days
+        For next 20 days
       </Typography>
       {data.map((item, index) => (
         <Fragment key={index}>
           {Boolean(index) && <Linear />}
-          <LeaveCard {...item} />
+          <LeaveCard
+            name={item.name}
+            days={item.days}
+            from={item.from}
+            to={item.to}
+          />
         </Fragment>
       ))}
     </Animated.View>
@@ -37,11 +42,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 16,
     fontWeight: '700',
   },
   subTitle: {
-    fontSize: 13,
+    fontSize: 12,
     fontStyle: 'italic',
     fontWeight: '100',
     marginBottom: 5,
