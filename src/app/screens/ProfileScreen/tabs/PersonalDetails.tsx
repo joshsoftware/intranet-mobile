@@ -63,18 +63,20 @@ const PersonalDetails = (props: IPersonalDetailsData) => {
         />
       </Card>
 
-      <Card title="Emergency Contact Details">
-        {emergencyContactDetails?.map(
-          ({name, relation, phoneNumber}, index) => (
-            <Fragment key={index}>
-              {Boolean(index) && <Linear style={styles.line} />}
-              <DetailRow label="Name" value={name} />
-              <DetailRow label="Relation" value={relation} />
-              <DetailRow label="Phone No" value={phoneNumber} />
-            </Fragment>
-          ),
-        )}
-      </Card>
+      {Boolean(emergencyContactDetails?.length) && (
+        <Card title="Emergency Contact Details">
+          {emergencyContactDetails?.map(
+            ({name, relation, phoneNumber}, index) => (
+              <Fragment key={index}>
+                {Boolean(index) && <Linear style={styles.line} />}
+                <DetailRow label="Name" value={name} />
+                <DetailRow label="Relation" value={relation} />
+                <DetailRow label="Phone No" value={phoneNumber} />
+              </Fragment>
+            ),
+          )}
+        </Card>
+      )}
 
       {addressCards}
     </ScreenWrapper>
