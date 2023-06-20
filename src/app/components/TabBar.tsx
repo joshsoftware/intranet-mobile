@@ -101,12 +101,10 @@ const styles = StyleSheet.create({
   container: {
     height: 64,
     flexDirection: 'row',
-    backgroundColor: colors.SECONDARY_BACKGROUND,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    borderWidth: StyleSheet.hairlineWidth,
+    backgroundColor: '#FFFBFE',
     borderColor: colors.GREY_BORDER_COLOR,
     borderBottomWidth: 0,
+    elevation: 10,
   },
 });
 

@@ -52,7 +52,7 @@ export const generateMarkedDates = (data: Record<string, string[]>) => {
       let borderWidth = 0;
 
       if (result[date]) {
-        borderWidth = 4;
+        borderWidth = 2;
 
         switch (result[date].type) {
           case 'leave':
