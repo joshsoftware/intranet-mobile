@@ -13,6 +13,7 @@ import Cross from '../../assets/svg/cross.svg';
 import Filter from '../../assets/svg/filter.svg';
 import Search from '../../assets/svg/search.svg';
 import Arrow from '../../assets/svg/arrow.svg';
+import BirthdayCake from '../../assets/svg/birthdayCake.svg';
 
 export {
   Calendar,
@@ -30,4 +31,5 @@ export {
   JoshLogo,
   Profile,
   Filter,
+  BirthdayCake,
 };

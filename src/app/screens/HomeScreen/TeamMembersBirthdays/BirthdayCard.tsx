@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import Typography from '../../../components/typography';
 
 import {dateFormate} from '../../../utils/date';
+import {BirthdayCake} from '../../../constant/icons';
 
 type ItemProps = {
   name: string;
@@ -13,7 +14,10 @@ type ItemProps = {
 const BirthdayCard = ({name, date}: ItemProps) => (
   <View style={styles.item}>
     <Typography type="header">{name}</Typography>
-    <Typography type="label">🎂 {dateFormate(date, 'MMMM DD')}</Typography>
+    <View style={styles.row}>
+      <BirthdayCake height={20} width={20} />
+      <Typography type="label">{dateFormate(date, 'MMMM DD')}</Typography>
+    </View>
   </View>
 );
 
@@ -22,6 +26,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 6,
     paddingVertical: 12,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 6,
+    alignItems: 'center',
   },
 });
 
