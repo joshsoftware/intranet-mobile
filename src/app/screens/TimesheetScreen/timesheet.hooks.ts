@@ -56,7 +56,7 @@ export const useTimesheets = (
   return {data: data?.data?.data[0], refetch, isFetching};
 };
 
-export const useDeleteTimesheet = () => {
+export const useDeleteTimesheet = (isSelf: boolean) => {
   const queryClient = useQueryClient();
 
   const {mutate, isLoading} = useMutation(
@@ -65,7 +65,7 @@ export const useDeleteTimesheet = () => {
       onSuccess: (successData, variables) => {
         toast(successData.data.message);
 
-        if (variables.time_sheet_date) {
+        if (isSelf && variables.time_sheet_date) {
           const {month, year} = getMonthYearFromISO(variables.time_sheet_date);
           queryClient.invalidateQueries(['home_calendar_data', month, year]);
         }
