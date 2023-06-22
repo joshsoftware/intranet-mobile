@@ -13,7 +13,7 @@ type ItemProps = {
 const BirthdayCard = ({name, date}: ItemProps) => (
   <View style={styles.item}>
     <Typography type="header">{name}</Typography>
-    <Typography type="label">On {dateFormate(date, 'MMMM DD')}</Typography>
+    <Typography type="label">🎂 {dateFormate(date, 'MMMM DD')}</Typography>
   </View>
 );
 
