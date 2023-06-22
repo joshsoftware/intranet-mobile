@@ -52,8 +52,10 @@ const TimesheetList = () => {
     dateRange.endDate,
   );
 
+  // user_id can be either string or number type
+  // using == to check only value
   const {mutate} = useDeleteTimesheet(
-    userId === userContextData?.userData.userId,
+    params?.user_id == userContextData?.userData.userId,
   );
 
   const toggleEditModal = useCallback(() => {
