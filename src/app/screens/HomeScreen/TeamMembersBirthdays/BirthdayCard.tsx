@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import Typography from '../../../components/typography';
 
 import {dateFormate} from '../../../utils/date';
+
 import {BirthdayCake} from '../../../constant/icons';
 
 type ItemProps = {
