@@ -16,7 +16,7 @@ const BirthdayCard = ({name, date}: ItemProps) => (
   <View style={styles.item}>
     <Typography type="header">{name}</Typography>
     <View style={styles.row}>
-      <BirthdayCake height={20} width={20} />
+      <BirthdayCake height={20} width={20} style={styles.iconStyle} />
       <Typography type="label">{dateFormate(date, 'MMMM DD')}</Typography>
     </View>
   </View>
@@ -28,10 +28,13 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 12,
   },
+  iconStyle: {
+    marginBottom: 1,
+  },
   row: {
     flexDirection: 'row',
     gap: 6,
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
 });
 
