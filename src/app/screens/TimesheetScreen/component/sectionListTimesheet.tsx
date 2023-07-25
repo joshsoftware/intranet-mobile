@@ -14,6 +14,7 @@ import Linear from '../../../components/seperator/linear';
 import EmptyList from './emptyList';
 
 import {Timesheet} from '../interface';
+import colors from '../../../constant/colors';
 
 type Props = SectionListProps<any, any> & {
   onEdit: Function;
@@ -28,7 +29,11 @@ const sectionHeader = ({
   section,
 }: {
   section: SectionListData<Timesheet, {title: string}>;
-}) => <Typography style={styles.title}>{section.title}</Typography>;
+}) => (
+  <View style={styles.sectionHeaderContainer}>
+    <Typography style={styles.title}>{section.title}</Typography>
+  </View>
+);
 
 const SectionListTimesheet = ({
   onEdit,
@@ -80,6 +85,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingBottom: 100,
+  },
+  sectionHeaderContainer: {
+    backgroundColor: colors.WHITE,
   },
 });
 

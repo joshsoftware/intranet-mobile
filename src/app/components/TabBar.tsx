@@ -10,6 +10,7 @@ import {
   BottomTabNavigationEventMap,
 } from '@react-navigation/bottom-tabs';
 import {SvgProps} from 'react-native-svg';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import TabBarButton from './button/TabBarButton';
 import {useIsKeyboardShown} from '../hooks/useIsKeyboardShown';
@@ -34,6 +35,7 @@ const screenIcons: Record<keyof MainTabParamList, React.FC<SvgProps>> = {
 
 const TabBar = (props: BottomTabBarProps) => {
   const isKeyboardShown = useIsKeyboardShown();
+  const inset = useSafeAreaInsets();
 
   const state = props.state as StateType;
   const navigation = props.navigation as NavigationType;
@@ -84,27 +86,38 @@ const TabBar = (props: BottomTabBarProps) => {
   };
 
   return (
-    <View style={styles.container}>
-      {tabButtons}
+    <View style={[styles.container, {paddingBottom: inset.bottom}]}>
+      <View style={styles.contentContainer}>
+        {tabButtons}
 
-      <TabBarButton
-        icon={MenuIcon}
-        title="Menu"
-        active={false}
-        onPress={handleMenuButtonPress}
-      />
+        <TabBarButton
+          icon={MenuIcon}
+          title="Menu"
+          active={false}
+          onPress={handleMenuButtonPress}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#FFFBFE',
+    elevation: 10,
+    shadowColor: colors.SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+  },
+  contentContainer: {
     height: 64,
     flexDirection: 'row',
-    backgroundColor: '#FFFBFE',
     borderColor: colors.GREY_BORDER_COLOR,
     borderBottomWidth: 0,
-    elevation: 10,
   },
 });
 

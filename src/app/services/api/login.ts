@@ -3,7 +3,7 @@ import {AxiosResponse} from 'axios';
 
 import {apiCall} from '.';
 import {LOGIN_ROUTE} from '../../constant/apiRoutes';
-import {getNotificationToken} from '../firebase/messaging';
+// import {getNotificationToken} from '../firebase/messaging';
 import {UserRole} from '../../context/user.context';
 
 type PayloadType = User | {email: string; password: string};
@@ -19,7 +19,8 @@ export type LoginResponseBody = {
 };
 
 export const sendLoginRequest = async (payload: PayloadType) => {
-  const notificationToken = await getNotificationToken();
+  // const notificationToken = await getNotificationToken();
+  const notificationToken = '';
   const data = {...payload, notificationToken};
 
   const response = await apiCall<LoginRequestBody, LoginResponseBody>({

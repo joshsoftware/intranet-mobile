@@ -245,7 +245,6 @@ const styles = StyleSheet.create({
   addButton: {
     alignSelf: 'center',
     width: '50%',
-    height: 50,
     marginTop: 20,
   },
   btns: {

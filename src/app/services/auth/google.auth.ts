@@ -9,6 +9,7 @@ import {INVALID_EMAIL_ERROR} from '../../constant/message';
 
 GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
+  iosClientId: Config.IOS_CLIENT_ID,
 });
 
 export const googleSignIn = async () => {
@@ -19,6 +20,7 @@ export const googleSignIn = async () => {
     if (!userInfo.user.email.endsWith('@joshsoftware.com')) {
       throw INVALID_EMAIL_ERROR;
     }
+
     return userInfo;
   } catch (error: any) {
     googleSignOut();

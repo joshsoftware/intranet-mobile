@@ -1,15 +1,15 @@
 import React, {memo, useCallback, useState} from 'react';
 import {StyleSheet, TextStyle, View, ViewStyle} from 'react-native';
-import DateTimePicker, {
+import {
   DatePickerOptions,
-  DateTimePickerEvent,
   BaseProps,
-  IOSNativeProps,
   AndroidNativeProps,
 } from '@react-native-community/datetimepicker';
+import {DatePickerProps} from 'react-native-date-picker';
 
 import Touchable from '../touchable';
 import Typography from '../typography';
+import NativeDatePicker from './NativeDatePicker';
 
 import {dateFormate} from '../../utils/date';
 
@@ -18,9 +18,9 @@ import colors from '../../constant/colors';
 import {Calendar} from '../../constant/icons';
 
 type Props = (BaseProps &
-  IOSNativeProps &
   DatePickerOptions &
-  AndroidNativeProps) & {
+  AndroidNativeProps &
+  DatePickerProps) & {
   style?: ViewStyle;
   textStyle?: TextStyle;
   selectedDate?: Date;
@@ -29,6 +29,7 @@ type Props = (BaseProps &
   hideIcon?: boolean;
   error?: string;
 };
+
 const DatePicker = ({
   style,
   textStyle,
@@ -39,19 +40,9 @@ const DatePicker = ({
   error,
   ...props
 }: Props) => {
-  const [isVisible, setIsVisible] = useState<Boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleVisibility = useCallback(() => setIsVisible(value => !value), []);
-
-  const handleDateChange = useCallback(
-    (event: DateTimePickerEvent, date: Date | undefined) => {
-      event.type === 'neutralButtonPressed'
-        ? onDateChange(undefined)
-        : onDateChange(date);
-      handleVisibility();
-    },
-    [handleVisibility, onDateChange],
-  );
 
   return (
     <>
@@ -69,13 +60,14 @@ const DatePicker = ({
             {selectedDate ? dateFormate(selectedDate) : placeholder}
           </Typography>
           {!hideIcon && <Calendar style={styles.icon} height={20} width={20} />}
-          {isVisible && (
-            <DateTimePicker
-              onChange={handleDateChange}
-              neutralButton={{label: 'Clear', textColor: 'grey'}}
-              {...props}
-            />
-          )}
+          <NativeDatePicker
+            open={isVisible}
+            mode="date"
+            onDateChange={onDateChange}
+            togglePicker={handleVisibility}
+            neutralButton={{label: 'Clear', textColor: 'grey'}}
+            {...props}
+          />
         </View>
       </Touchable>
       {error && (

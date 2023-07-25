@@ -1,9 +1,9 @@
-import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging';
 
-export const initNotificationService = async () => {
-  await messaging().registerDeviceForRemoteMessages();
-};
+// export const initNotificationService = async () => {
+//   await messaging().registerDeviceForRemoteMessages();
+// };
 
-export const getNotificationToken = () => {
-  return messaging().getToken();
-};
+// export const getNotificationToken = () => {
+//   return messaging().getToken();
+// };
