@@ -1,6 +1,6 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, View, ScrollView} from 'react-native';
+import {StyleSheet, View, ScrollView, Platform} from 'react-native';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
@@ -17,7 +17,6 @@ import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {ISkillsData} from '../interface/skills';
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
-import fonts from '../../../constant/fonts';
 
 interface Props {
   isVisible: boolean;
@@ -89,6 +88,9 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
   const skillsList = useSkillList();
   const {updateSkills, isLoading} = useUpdateSkills(closeModal);
 
+  // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+  const iOSTextInputWorkaroundRef = useRef(false);
+
   const {
     control,
     handleSubmit,
@@ -120,6 +122,9 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
 
       setValue('otherSkills', skills.join(','));
     }
+
+    // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+    iOSTextInputWorkaroundRef.current = Platform.OS === 'ios';
 
     setOtherSkillFieldValue('');
   };
@@ -242,7 +247,15 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
                     })}
                 </View>
                 <Input
-                  onChangeText={setOtherSkillFieldValue}
+                  onChangeText={txt => {
+                    // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+                    if (iOSTextInputWorkaroundRef.current) {
+                      iOSTextInputWorkaroundRef.current = false;
+                      return;
+                    }
+
+                    setOtherSkillFieldValue(txt);
+                  }}
                   value={otherSkillFieldValue}
                   onSubmitEditing={handleOtherSkillSubmit}
                   placeholder="Type other skills here"

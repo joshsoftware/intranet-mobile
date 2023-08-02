@@ -1,5 +1,5 @@
-import React, {memo, useEffect, useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {memo, useEffect, useMemo, useRef} from 'react';
+import {Platform, StyleSheet, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -71,9 +71,15 @@ const TimesheetForm = ({
 
   const {data: projects} = useAssignedProjects(userId);
 
+  // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+  const iOSTextInputWorkaroundRef = useRef(false);
+
   useEffect(() => {
     if (isSubmitted && isSubmitSuccessful) {
       reset();
+
+      // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+      iOSTextInputWorkaroundRef.current = Platform.OS === 'ios';
     }
   }, [isSubmitted, isSubmitSuccessful, reset]);
 
@@ -174,7 +180,15 @@ const TimesheetForm = ({
             render={({field: {onChange, onBlur, value}}) => (
               <Input
                 onBlur={onBlur}
-                onChangeText={onChange}
+                onChangeText={txt => {
+                  // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+                  if (iOSTextInputWorkaroundRef.current) {
+                    iOSTextInputWorkaroundRef.current = false;
+                    return;
+                  }
+
+                  onChange(txt);
+                }}
                 value={value}
                 multiline={true}
                 placeholder={strings.DESCRIPTION_PLACEHOLDER}
