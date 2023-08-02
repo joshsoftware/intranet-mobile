@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   textInput: {
     color: colors.SECONDARY,
     width: '100%',
+    paddingVertical: 10,
   },
 });
 

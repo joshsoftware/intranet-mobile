@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderColor: colors.TEXT_INPUT_BORDER,
     borderBottomWidth: 1,
+    color: colors.SECONDARY,
   },
   errorText: {
     color: colors.ERROR_RED,

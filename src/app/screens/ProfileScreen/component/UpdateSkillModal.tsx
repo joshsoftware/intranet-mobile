@@ -1,8 +1,9 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, View, ScrollView, Platform} from 'react-native';
+import {StyleSheet, View, Platform} from 'react-native';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Modal from '../../../components/modal';
 import Button from '../../../components/button';
@@ -149,7 +150,7 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
       animationInTiming={500}
       animationOutTiming={500}
       contentStyle={styles.contentStyle}>
-      <ScrollView>
+      <KeyboardAwareScrollView>
         <Typography style={styles.title} type="header">
           Update Skills
         </Typography>
@@ -295,7 +296,7 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
             </View>
           </View>
         )}
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </Modal>
   );
 }
