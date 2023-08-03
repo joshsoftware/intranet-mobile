@@ -1,15 +1,27 @@
 import {useEffect, useState} from 'react';
-import {EmitterSubscription, Keyboard, Platform} from 'react-native';
+import {
+  EmitterSubscription,
+  Keyboard,
+  KeyboardEventListener,
+  Platform,
+} from 'react-native';
 
 // Reference:
 // https://github.com/react-navigation/react-navigation/blob/9fe34b445fcb86e5666f61e144007d7540f014fa/packages/bottom-tabs/src/utils/useIsKeyboardShown.tsx#L4
 
 export function useIsKeyboardShown() {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
-    const handleKeyboardShow = () => setIsKeyboardShown(true);
-    const handleKeyboardHide = () => setIsKeyboardShown(false);
+    const handleKeyboardShow: KeyboardEventListener = e => {
+      setIsKeyboardShown(true);
+      setKeyboardHeight(e.endCoordinates.height);
+    };
+    const handleKeyboardHide: KeyboardEventListener = () => {
+      setIsKeyboardShown(false);
+      setKeyboardHeight(0);
+    };
 
     let subscriptions: EmitterSubscription[];
 
@@ -30,5 +42,5 @@ export function useIsKeyboardShown() {
     };
   }, []);
 
-  return isKeyboardShown;
+  return {isKeyboardShown, keyboardHeight};
 }

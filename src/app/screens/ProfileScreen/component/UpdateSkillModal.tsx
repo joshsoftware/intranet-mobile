@@ -83,7 +83,7 @@ const updateSkillFormSchema = yup.object().shape({
 });
 
 function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
-  const keyboardIsVisible = useIsKeyboardShown();
+  const {isKeyboardShown, keyboardHeight} = useIsKeyboardShown();
   const [otherSkillFieldValue, setOtherSkillFieldValue] = useState('');
 
   const skillsList = useSkillList();
@@ -150,7 +150,8 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
       animationInTiming={500}
       animationOutTiming={500}
       contentStyle={styles.contentStyle}>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView
+        style={[styles.scrollView, {paddingBottom: keyboardHeight}]}>
         <Typography style={styles.title} type="header">
           Update Skills
         </Typography>
@@ -276,7 +277,7 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
           </Typography>
         </View>
 
-        {!keyboardIsVisible && (
+        {!isKeyboardShown && (
           <View style={styles.buttonRow}>
             <View style={styles.buttonContainer}>
               <Button
@@ -305,9 +306,11 @@ const styles = StyleSheet.create({
   contentStyle: {
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
     flexDirection: 'row',
+    paddingVertical: 16,
+  },
+  scrollView: {
+    paddingHorizontal: 16,
   },
   title: {
     fontWeight: 'bold',

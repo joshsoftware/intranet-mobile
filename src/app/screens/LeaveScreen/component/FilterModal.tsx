@@ -51,7 +51,7 @@ function FilterModal({
   changeFilters,
   resetDateRange,
 }: Props) {
-  const keyboardIsVisible = useIsKeyboardShown();
+  const {isKeyboardShown} = useIsKeyboardShown();
 
   const [isSelectAll, setIsSelectAll] = useState(false);
 

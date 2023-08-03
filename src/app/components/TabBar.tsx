@@ -34,7 +34,7 @@ const screenIcons: Record<keyof MainTabParamList, React.FC<SvgProps>> = {
 };
 
 const TabBar = (props: BottomTabBarProps) => {
-  const isKeyboardShown = useIsKeyboardShown();
+  const {isKeyboardShown} = useIsKeyboardShown();
   const inset = useSafeAreaInsets();
 
   const state = props.state as StateType;

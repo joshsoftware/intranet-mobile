@@ -44,7 +44,7 @@ const CreateTimesheet = ({
   );
   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
   const [isShowToast, setIsShowToast] = useState<Boolean>(false);
-  const isKeyboardVisible = useIsKeyboardShown();
+  const {isKeyboardShown} = useIsKeyboardShown();
 
   const {
     mutate,
@@ -249,7 +249,7 @@ const CreateTimesheet = ({
         />
       </View>
 
-      {!isKeyboardVisible && (
+      {!isKeyboardShown && (
         <View style={styles.btns}>
           <Button title="Cancel" type="secondary" onPress={resetStates} />
           <Button

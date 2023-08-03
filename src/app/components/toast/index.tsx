@@ -7,7 +7,7 @@ import RNToast, {
   ToastProps,
 } from 'react-native-toast-message';
 
-const testConfig: ToastConfig = {
+const toastConfig: ToastConfig = {
   success: props => (
     <BaseToast
       contentContainerStyle={[styles.contentContainerStyle, styles.successBg]}
@@ -29,7 +29,7 @@ const testConfig: ToastConfig = {
 };
 
 const Toast: React.FC<ToastProps> = props => (
-  <RNToast config={testConfig} {...props} />
+  <RNToast config={toastConfig} {...props} />
 );
 
 const styles = StyleSheet.create({
