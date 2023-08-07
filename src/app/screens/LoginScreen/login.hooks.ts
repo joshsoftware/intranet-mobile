@@ -1,15 +1,19 @@
-import {useContext} from 'react';
+import {useCallback, useContext, useState} from 'react';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
 
 import UserContext, {UserData} from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
-import {googleSignOut} from '../../services/auth/google.auth';
+import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
+import appleSignIn from '../../services/auth/apple.auth';
 import toast from '../../utils/toast';
+
+type TAuthType = 'Google' | 'Apple';
 
 export const useLogin = () => {
   const [, setUserContextData] = useContext(UserContext);
+  const [authType, setAuthType] = useState<TAuthType>();
 
   const {mutate, isLoading} = useMutation(sendLoginRequest, {
     onSuccess: async response => {
@@ -42,5 +46,27 @@ export const useLogin = () => {
     },
   });
 
-  return {isLoading, mutate};
+  const googleSignInHandler = useCallback(async () => {
+    const response = await googleSignIn();
+    if (response) {
+      mutate(response);
+      setAuthType('Google');
+    }
+  }, [mutate]);
+
+  const appleSignInHandler = useCallback(async () => {
+    const response = await appleSignIn();
+    if (response) {
+      mutate(response);
+      setAuthType('Apple');
+    }
+  }, [mutate]);
+
+  return {
+    isLoading,
+    googleSignInHandler,
+    appleSignInHandler,
+    isGoogleAuth: authType === 'Google',
+    isAppleAuth: authType === 'Apple',
+  };
 };

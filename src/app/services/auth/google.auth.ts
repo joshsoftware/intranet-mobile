@@ -21,7 +21,12 @@ export const googleSignIn = async () => {
       throw INVALID_EMAIL_ERROR;
     }
 
-    return userInfo;
+    return {
+      idToken: userInfo.idToken || '',
+      user: {
+        email: userInfo.user.email,
+      },
+    };
   } catch (error: any) {
     googleSignOut();
     if (error === INVALID_EMAIL_ERROR) {
