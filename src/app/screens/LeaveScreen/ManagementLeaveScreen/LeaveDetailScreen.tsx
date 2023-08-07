@@ -45,7 +45,7 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Header type="secondary" title="Leave" />
 
       <ScrollView style={styles.screenview}>
@@ -73,7 +73,7 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
           <DetailRow label="Reason" value={leaveReason} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

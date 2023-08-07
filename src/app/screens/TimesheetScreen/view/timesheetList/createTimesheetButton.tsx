@@ -1,6 +1,7 @@
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useRoute} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Button from '../../../../components/button';
 import CreateTimesheet from '../createTimesheet';
@@ -14,6 +15,7 @@ type Props = {
 
 const CreateTimesheetButton: React.FC<Props> = ({name, userId}) => {
   const route = useRoute<UserTimesheetRouteProp>();
+  const insets = useSafeAreaInsets();
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -26,7 +28,7 @@ const CreateTimesheetButton: React.FC<Props> = ({name, userId}) => {
   }, [route.params, toggleModal]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
       <Button
         type="tertiary"
         title="Add timesheet for this user"

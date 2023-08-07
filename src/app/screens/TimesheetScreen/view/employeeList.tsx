@@ -96,6 +96,7 @@ const EmployeeList = () => {
           StartIcon={searchIcon}
           placeholder="Search"
           style={styles.input}
+          value={searchText}
         />
         <Touchable type="opacity" onPress={toggelDatePicker}>
           <Calendar

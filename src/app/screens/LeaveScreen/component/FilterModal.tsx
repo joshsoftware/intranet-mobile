@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Platform, StyleSheet, View} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 
 import Button from '../../../components/button';
@@ -365,7 +365,7 @@ function FilterModal({
             />
           </View>
         </View>
-        {!keyboardIsVisible && (
+        {!isKeyboardShown && (
           <View style={styles.row}>
             <View style={styles.buttonContainer}>
               <Button title="Cancel" onPress={closeModal} type="secondary" />
@@ -437,6 +437,10 @@ const styles = StyleSheet.create({
   leaveTypeColumn: {
     flex: 1,
     justifyContent: 'flex-start',
+    ...Platform.select({
+      ios: {gap: 15},
+      android: {},
+    }),
   },
   centerContainer: {
     padding: 10,
