@@ -15,6 +15,7 @@ import {navigationRef} from '.';
 
 import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
+import {initNotificationService} from '../services/firebase/messaging';
 
 import {RootStackParamList} from './types';
 import {
@@ -47,7 +48,7 @@ const RootNavigator = () => {
   useEffect(() => {
     const run = async () => {
       // Setup Application to receive notifications
-      // await initNotificationService();
+      await initNotificationService();
 
       const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
       const userData = await AsyncStore.getItem(AsyncStore.USER_DATA);

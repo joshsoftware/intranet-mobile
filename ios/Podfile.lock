@@ -21,6 +21,9 @@ PODS:
   - Firebase/Crashlytics (10.12.0):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 10.12.0)
+  - Firebase/Messaging (10.12.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.12.0)
   - FirebaseCore (10.12.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
@@ -42,6 +45,15 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.12.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - FirebaseSessions (10.12.0):
     - FirebaseCore (~> 10.5)
     - FirebaseCoreExtension (~> 10.0)
@@ -60,11 +72,21 @@ PODS:
     - AppAuth (~> 1.5)
     - GTMAppAuth (< 3.0, >= 1.3)
     - GTMSessionFetcher/Core (< 4.0, >= 1.1)
+  - GoogleUtilities/AppDelegateSwizzler (7.11.4):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
   - GoogleUtilities/Environment (7.11.4):
     - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUtilities/Logger (7.11.4):
     - GoogleUtilities/Environment
+  - GoogleUtilities/Network (7.11.4):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.11.4)"
+  - GoogleUtilities/Reachability (7.11.4):
+    - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.4):
     - GoogleUtilities/Logger
   - GTMAppAuth (2.0.0):
@@ -524,6 +546,11 @@ PODS:
     - FirebaseCoreExtension (= 10.12.0)
     - React-Core
     - RNFBApp
+  - RNFBMessaging (18.3.0):
+    - Firebase/Messaging (= 10.12.0)
+    - FirebaseCoreExtension (= 10.12.0)
+    - React-Core
+    - RNFBApp
   - RNGestureHandler (2.12.0):
     - React-Core
   - RNGoogleSignin (10.0.1):
@@ -620,6 +647,7 @@ DEPENDENCIES:
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
+  - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -637,6 +665,7 @@ SPEC REPOS:
     - FirebaseCoreInternal
     - FirebaseCrashlytics
     - FirebaseInstallations
+    - FirebaseMessaging
     - FirebaseSessions
     - fmt
     - GoogleDataTransport
@@ -752,6 +781,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBCrashlytics:
     :path: "../node_modules/@react-native-firebase/crashlytics"
+  RNFBMessaging:
+    :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -778,6 +809,7 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 950500ad8a08963657f6d8c67b579740c06d6aa1
   FirebaseCrashlytics: c4d111b7430c49744c74bcc6346ea00868661ac8
   FirebaseInstallations: 7b99ef103f013624444c614397038219c45f8e63
+  FirebaseMessaging: bb2c4f6422a753038fe137d90ae7c1af57251316
   FirebaseSessions: a4ee211eeb31a2224cd8d9d4e30a0fccde9aa00c
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
@@ -835,6 +867,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 9b4091348e53f540180abdc54984d839a556f593
   RNFBApp: f0b5cf917b0b91a0ae890fbbaec0fb5d3285ea46
   RNFBCrashlytics: 7bb4840e45b15b56859c03afd8c3707e7a0eb2eb
+  RNFBMessaging: dec20e8fa230fb776b94c33384676da33c605d2e
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
