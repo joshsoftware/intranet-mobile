@@ -20,7 +20,6 @@ import {Timesheet} from '../interface';
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
 import {workHoursData} from '../../../constant/timesheet';
-import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 
 const timesheetFormSchema = yup.object().shape({
   project: yup.string().required('Project is a required field'),
@@ -72,7 +71,6 @@ const TimesheetForm = ({
   });
 
   const {data: projects} = useAssignedProjects(userId);
-  const {isKeyboardShown} = useIsKeyboardShown();
 
   // Workaround for issue: https://github.com/facebook/react-native/issues/36494
   const iOSTextInputWorkaroundRef = useRef(false);
@@ -143,7 +141,6 @@ const TimesheetForm = ({
                 control={control}
                 render={({field: {onChange, value}}) => (
                   <DatePicker
-                    value={value ? new Date(value) : todaysDate}
                     onDateChange={onChange}
                     hideIcon={false}
                     selectedDate={value ? new Date(value) : undefined}

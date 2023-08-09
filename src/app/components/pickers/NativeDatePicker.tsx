@@ -1,20 +1,20 @@
 import React, {useCallback} from 'react';
 import DateTimePicker, {
-  DatePickerOptions,
   DateTimePickerEvent,
-  BaseProps,
-  AndroidNativeProps,
 } from '@react-native-community/datetimepicker';
+import {todaysDate} from '../../utils/date';
 
-type Props = (BaseProps & DatePickerOptions & AndroidNativeProps) & {
+type Props = {
   open: boolean;
   selectedDate?: Date;
   onDateChange: (date?: Date) => void;
   togglePicker: () => void;
+  minimumDate?: Date;
+  maximumDate?: Date;
 };
 
 function NativeDatePicker(props: Props) {
-  const {open, onDateChange, togglePicker} = props;
+  const {open, onDateChange, togglePicker, minimumDate, maximumDate} = props;
 
   const handleDateChange = useCallback(
     (event: DateTimePickerEvent, date: Date | undefined) => {
@@ -33,9 +33,11 @@ function NativeDatePicker(props: Props) {
   return (
     <DateTimePicker
       mode="date"
+      value={props.selectedDate || todaysDate}
       onChange={handleDateChange}
       neutralButton={{label: 'Clear', textColor: 'grey'}}
-      {...props}
+      minimumDate={minimumDate}
+      maximumDate={maximumDate}
     />
   );
 }

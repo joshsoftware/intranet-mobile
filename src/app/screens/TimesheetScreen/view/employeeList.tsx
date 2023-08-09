@@ -3,15 +3,13 @@ import {FlatList, ListRenderItemInfo, StyleSheet, View} from 'react-native';
 
 import EmployeeCard from '../component/employeeCard';
 import Input from '../../../components/input';
-import DateRange from '../../../components/pickers/dateRange';
 import Linear from '../../../components/seperator/linear';
-import Touchable from '../../../components/touchable';
 import {useEmployees} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
 
-import {Calendar, Search} from '../../../constant/icons';
-import colors from '../../../constant/colors';
+import {Search} from '../../../constant/icons';
+import DateRangePicker from '../../../components/pickers/DateRangePicker';
 
 type DateRangeProps = {
   startDate: Date;
@@ -27,8 +25,6 @@ type RenderItemProps = {
 const searchIcon = () => <Search style={styles.icon} />;
 
 const EmployeeList = () => {
-  const [isDateRangeApplied, setIsDateRangeApplied] = useState(false);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');
   const [dateRange, setDateRange] = useState<DateRangeProps>({
     startDate: startOfMonth,
@@ -40,15 +36,11 @@ const EmployeeList = () => {
     dateRange.endDate,
   );
 
-  const toggelDatePicker = () => setIsVisible(v => !v);
-
   // on date range change
-  const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
+  const onDateRangeSubmit = useCallback((startDate: Date, endDate: Date) => {
     if (startDate && endDate) {
-      setIsDateRangeApplied(true);
       setDateRange({startDate, endDate});
     } else {
-      setIsDateRangeApplied(false);
       setDateRange({
         startDate: startOfMonth,
         endDate: todaysDate,
@@ -82,30 +74,19 @@ const EmployeeList = () => {
 
   return (
     <View style={styles.main}>
-      <DateRange
-        onSubmit={onDateRangeSubmit}
-        isVisible={isVisible}
-        toggleModal={toggelDatePicker}
-        initialStartDateValue={startOfMonth}
-        initialEndDateValue={todaysDate}
-        maximumDate={todaysDate}
-      />
       <View style={styles.filter}>
+        <DateRangePicker
+          onChange={onDateRangeSubmit}
+          startDate={dateRange.startDate}
+          endDate={dateRange.endDate}
+          maximumDate={todaysDate}
+        />
         <Input
           onChangeText={setSearchText}
           StartIcon={searchIcon}
           placeholder="Search"
-          style={styles.input}
           value={searchText}
         />
-        <Touchable type="opacity" onPress={toggelDatePicker}>
-          <Calendar
-            width={18}
-            height={18}
-            style={styles.icon}
-            fill={isDateRangeApplied ? colors.PRIMARY : colors.SECONDARY}
-          />
-        </Touchable>
       </View>
 
       <FlatList
@@ -129,14 +110,9 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   filter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
-  },
-  input: {
-    textAlignVertical: 'center',
-    width: '85%',
+    paddingVertical: 10,
+    gap: 5,
   },
   icon: {
     marginRight: 6,

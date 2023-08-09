@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   container: {
     height: 40,
     justifyContent: 'center',
-    marginBottom: 3,
+    // marginBottom: 3,
     width: '100%',
     borderColor: colors.TEXT_INPUT_BORDER,
     borderBottomWidth: 1,

@@ -1,23 +1,15 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
 import CreateTimesheetButton from './createTimesheetButton';
-import DateRange from '../../../../components/pickers/dateRange';
 import SectionListTimesheet from '../../component/sectionListTimesheet';
 import EditTimesheetModal from '../../component/editTimesheetModal';
 import Typography from '../../../../components/typography';
 import Header from '../../../../components/header';
-import Touchable from '../../../../components/touchable';
 import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
 
 import {getParams} from '../../../../navigation';
-import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
+import {startOfMonth, todaysDate} from '../../../../utils/date';
 import UserContext from '../../../../context/user.context';
 import {isManagement} from '../../../../utils/user';
 
@@ -25,8 +17,8 @@ import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
 import strings from '../../../../constant/strings';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
-import {Calendar} from '../../../../constant/icons';
 import colors from '../../../../constant/colors';
+import DateRangePicker from '../../../../components/pickers/DateRangePicker';
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -38,7 +30,6 @@ const TimesheetList = () => {
     [params?.user_id, userContextData?.userData.userId],
   );
 
-  const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editTimesheetData, setEditTimesheetData] = useState<Timesheet>();
   const [dateRange, setDateRange] = useState<TDateRange>({
@@ -62,10 +53,8 @@ const TimesheetList = () => {
     setIsEditModalVisible(v => !v);
   }, []);
 
-  const toggelDatePicker = () => setIsDateRangeVisible(v => !v);
-
   // on date range change
-  const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
+  const onDateRangeSubmit = useCallback((startDate: Date, endDate: Date) => {
     if (startDate && endDate) {
       setDateRange({startDate, endDate});
     } else {
@@ -113,51 +102,20 @@ const TimesheetList = () => {
     [toggleEditModal],
   );
 
-  const dateRangeText = useMemo(
-    () =>
-      `${dateFormate(dateRange.startDate)} to ${dateFormate(
-        dateRange.endDate,
-      )}`,
-    [dateRange.endDate, dateRange.startDate],
-  );
-
-  useEffect(() => {
-    if (params?.startDate) {
-      setDateRange({
-        startDate: params?.startDate,
-        endDate: params?.endDate,
-      });
-    } else {
-      setDateRange({
-        startDate: startOfMonth,
-        endDate: todaysDate,
-      });
-    }
-  }, [params?.endDate, params?.startDate]);
-
   return (
     <>
       {params?.user_id && <Header title={TIMESHEET_SCREEN} type="secondary" />}
 
       <View>
-        <DateRange
-          onSubmit={onDateRangeSubmit}
-          isVisible={isDateRangeVisible}
-          toggleModal={toggelDatePicker}
-          initialStartDateValue={startOfMonth}
-          initialEndDateValue={todaysDate}
-          maximumDate={todaysDate}
-        />
-        <Touchable
-          type="opacity"
-          onPress={toggelDatePicker}
-          activeOpacity={0.5}
-          style={styles.filter}>
-          <Typography type={'subheader'} style={styles.filterText}>
-            {dateRangeText}
-          </Typography>
-          <Calendar height={17} width={17} />
-        </Touchable>
+        <View style={styles.dateRangePickerContainer}>
+          <DateRangePicker
+            onChange={onDateRangeSubmit}
+            startDate={dateRange.startDate}
+            endDate={dateRange.endDate}
+            maximumDate={todaysDate}
+          />
+        </View>
+
         {(params?.name || params?.email) && (
           <View style={styles.userInfo}>
             <Typography type="header">{params?.name}</Typography>
@@ -245,6 +203,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     flexDirection: 'column',
     gap: 6,
+  },
+  dateRangePickerContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 16,
   },
 });
 

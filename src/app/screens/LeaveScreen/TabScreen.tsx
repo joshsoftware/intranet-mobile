@@ -1,18 +1,17 @@
-import React, {useCallback, useContext, useMemo, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import DateRange from '../../components/pickers/dateRange';
 import EmployeeLeaveScreen from './EmployeeLeaveScreen';
 import ManagementLeaveScreen from './ManagementLeaveScreen';
 import Touchable from '../../components/touchable';
-import Typography from '../../components/typography';
-
-import {dateFormate, endOfMonth, startOfMonth} from '../../utils/date';
+import DateRangePicker from '../../components/pickers/DateRangePicker';
 import UserContext from '../../context/user.context';
+
+import {endOfMonth, startOfMonth} from '../../utils/date';
 import {isManagement} from '../../utils/user';
 
 import colors from '../../constant/colors';
-import {Calendar, Filter} from '../../constant/icons';
+import {Filter} from '../../constant/icons';
 import {TDateRange} from '../../../types';
 
 interface Props {
@@ -23,7 +22,6 @@ function TabScreen({route}: Props) {
   const [userContext] = useContext(UserContext);
 
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [isDateRangeVisible, setIsDateRangeVisible] = useState(false);
   const [dateRange, setDateRange] = useState<TDateRange>({
     startDate: startOfMonth,
     endDate: endOfMonth,
@@ -31,31 +29,19 @@ function TabScreen({route}: Props) {
 
   const isManagementRole = isManagement(userContext?.userData.role);
 
-  const onDateRangeSubmit = useCallback((startDate?: Date, endDate?: Date) => {
+  const onDateRangeSubmit = useCallback((startDate: Date, endDate: Date) => {
     if (startDate && endDate) {
-      setDateRange(value => ({
-        ...value,
+      setDateRange(() => ({
         startDate,
         endDate,
       }));
     } else {
-      setDateRange(value => ({
-        ...value,
+      setDateRange(() => ({
         startDate: startOfMonth,
         endDate: endOfMonth,
       }));
     }
   }, []);
-
-  const toggelDatePicker = () => setIsDateRangeVisible(v => !v);
-
-  const dateRangeText = useMemo(
-    () =>
-      `${dateFormate(dateRange.startDate)} to ${dateFormate(
-        dateRange.endDate,
-      )}`,
-    [dateRange.endDate, dateRange.startDate],
-  );
 
   const toggleFilterModal = useCallback(() => {
     setShowFilterModal(value => !value);
@@ -71,25 +57,33 @@ function TabScreen({route}: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <View style={styles.searchBoxContainer}>
-          <Touchable
+        <View style={styles.dateRangeContainer}>
+          <DateRangePicker
+            startDate={dateRange.startDate}
+            endDate={dateRange.endDate}
+            onChange={onDateRangeSubmit}
+          />
+        </View>
+
+        {/* <View style={styles.searchBoxContainer}> */}
+        {/* <Touchable
             type="opacity"
             onPress={toggelDatePicker}
             activeOpacity={0.5}
-            style={styles.filter}>
+            style={styles.filter}>s
             <Calendar height={17} width={17} />
             <Typography type={'subheader'} style={styles.filterText}>
               {dateRangeText}
             </Typography>
-          </Touchable>
-          <DateRange
+          </Touchable> */}
+        {/* <DateRange
             onSubmit={onDateRangeSubmit}
             isVisible={isDateRangeVisible}
             toggleModal={toggelDatePicker}
             initialStartDateValue={dateRange.startDate}
             initialEndDateValue={dateRange.endDate}
-          />
-        </View>
+          /> */}
+        {/* </View> */}
         {isManagementRole && (
           <Touchable
             type="opacity"
@@ -134,7 +128,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 9,
   },
-  searchBoxContainer: {
+  dateRangeContainer: {
     flex: 9,
   },
   filterContainer: {
