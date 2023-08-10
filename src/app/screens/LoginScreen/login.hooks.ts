@@ -6,7 +6,7 @@ import UserContext, {UserData} from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {LoginResponseBody, sendLoginRequest} from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
-import appleSignIn from '../../services/auth/apple.auth';
+import {appleSignIn} from '../../services/auth/apple.auth';
 import toast from '../../utils/toast';
 
 type TAuthType = 'Google' | 'Apple';

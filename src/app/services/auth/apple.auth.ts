@@ -1,39 +1,39 @@
 import {appleAuth} from '@invertase/react-native-apple-authentication';
 
-const appleSignIn = async () => {
+import AsyncStore from '../asyncStorage';
+import toast from '../../utils/toast';
+
+export const appleSignIn = async () => {
   try {
     // performs login request
-    const appleAuthRequestResponse = await appleAuth.performRequest({
+    const response = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,
       // Note: it appears putting FULL_NAME first is important, see issue #293
       requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
     });
 
-    // // get current authentication state for user
-    // // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-    // const credentialState = await appleAuth.getCredentialStateForUser(
-    //   appleAuthRequestResponse.user,
-    // );
+    let {identityToken, email} = response;
 
-    // // use credentialState response to ensure the user is authenticated
-    // if (credentialState === appleAuth.State.AUTHORIZED) {
-    //   // user is authenticated
-    // }
+    // Apple returns user info only on first login
+    // So we store email in persistent storage
+    if (email) {
+      await AsyncStore.setItem(AsyncStore.APPLE_USER_EMAIL_ID, email);
+    } else {
+      email = await AsyncStore.getItem(AsyncStore.APPLE_USER_EMAIL_ID);
+    }
 
-    if (
-      appleAuthRequestResponse.identityToken &&
-      appleAuthRequestResponse.email
-    ) {
+    if (identityToken && email) {
       return {
-        idToken: appleAuthRequestResponse.identityToken,
+        idToken: identityToken,
         user: {
-          email: appleAuthRequestResponse.email,
+          email: email,
         },
       };
+    } else {
+      toast('Something Went Wrong!', 'error');
     }
   } catch (err) {
     console.error(err);
+    toast('Something Went Wrong!', 'error');
   }
 };
-
-export default appleSignIn;
