@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 
 import Typography from '../typography';
 import DatePicker from './datePicker';
-import {dateFormate} from '../../utils/date';
 
 type Props = {
   startDate: Date;
@@ -14,7 +13,7 @@ type Props = {
 };
 
 function DateRangePicker(props: Props) {
-  const {onChange, startDate, endDate} = props;
+  const {onChange, startDate, endDate, minimumDate, maximumDate} = props;
 
   const handleStartDateChange = (date?: Date) => {
     if (date) {
@@ -36,6 +35,7 @@ function DateRangePicker(props: Props) {
           selectedDate={startDate}
           hideIcon
           onDateChange={handleStartDateChange}
+          minimumDate={minimumDate}
           maximumDate={endDate}
         />
       </View>
@@ -47,6 +47,7 @@ function DateRangePicker(props: Props) {
           hideIcon
           onDateChange={handleEndDateChange}
           minimumDate={startDate}
+          maximumDate={maximumDate}
         />
       </View>
     </View>

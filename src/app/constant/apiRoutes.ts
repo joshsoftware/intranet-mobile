@@ -28,4 +28,5 @@ export const HOME_CALENDAR_ROUTE =
 export const TEAM_MEMBERS_UPCOMING_LEAVES_ROUTE =
   '/api/mobile/v1/leaves/upcoming_users_leaves';
 
-export const TEAM_MEMBERS_UPCOMING_BIRTHDAYS_ROUTE = '/api/mobile/v1/employee_birthdays';
+export const TEAM_MEMBERS_UPCOMING_BIRTHDAYS_ROUTE =
+  '/api/mobile/v1/employee_birthdays';
