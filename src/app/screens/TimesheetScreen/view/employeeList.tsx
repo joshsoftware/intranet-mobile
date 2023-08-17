@@ -10,6 +10,7 @@ import {startOfMonth, todaysDate} from '../../../utils/date';
 
 import {Search} from '../../../constant/icons';
 import DateRangePicker from '../../../components/pickers/DateRangePicker';
+import EmptyList from '../component/emptyList';
 
 type DateRangeProps = {
   startDate: Date;
@@ -96,7 +97,7 @@ const EmployeeList = () => {
         ItemSeparatorComponent={Linear}
         refreshing={isLoading}
         onRefresh={refetch}
-        ListFooterComponent={Linear}
+        ListEmptyComponent={<EmptyList message="No User for current filters" />}
       />
     </View>
   );
