@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useContext, useState} from 'react';
 import {
   SectionList,
   SectionListData,
@@ -12,6 +12,10 @@ import Typography from '../../../components/typography';
 import TimesheetItem from './timesheetItem';
 import Linear from '../../../components/seperator/linear';
 import EmptyList from './emptyList';
+import TimesheetActionModal from './TimesheetActionModal';
+
+import UserContext from '../../../context/user.context';
+import {isManagement} from '../../../utils/user';
 
 import {Timesheet} from '../interface';
 import colors from '../../../constant/colors';
@@ -47,9 +51,20 @@ const SectionListTimesheet = ({
   isLoading,
   ...props
 }: Props) => {
+  const [userContext] = useContext(UserContext);
+  const [actionTimesheetData, setActionTimesheetData] =
+    useState<Timesheet | null>(null);
+
+  const isManagementRole = isManagement(userContext?.userData.role);
+
+  const showActionModal = (timesheetData: Timesheet) => {
+    setActionTimesheetData(timesheetData);
+  };
+
   const renderItem = useCallback(
     ({item, section}: SectionListRenderItemInfo<Timesheet>) => (
       <TimesheetItem
+        showActionModal={showActionModal}
         timesheetData={item}
         onEdit={onEdit}
         onDelete={onDelete}
@@ -68,19 +83,30 @@ const SectionListTimesheet = ({
   if (isLoading) {
     return <LoadingSpinner />;
   }
+  const closeActionModal = () => {
+    setActionTimesheetData(null);
+  };
 
   return (
-    <SectionList
-      {...props}
-      keyExtractor={(item, index) => item.timesheet_id + index}
-      renderItem={renderItem}
-      renderSectionHeader={sectionHeader}
-      style={styles.list}
-      ListFooterComponent={footer}
-      ItemSeparatorComponent={Linear}
-      showsVerticalScrollIndicator={false}
-      ListEmptyComponent={listEmptyComponent}
-    />
+    <>
+      <SectionList
+        {...props}
+        keyExtractor={(item, index) => item.timesheet_id + index}
+        renderItem={renderItem}
+        renderSectionHeader={sectionHeader}
+        style={styles.list}
+        ListFooterComponent={footer}
+        ItemSeparatorComponent={Linear}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={listEmptyComponent}
+      />
+      {isManagementRole && (
+        <TimesheetActionModal
+          timesheetData={actionTimesheetData}
+          closeModal={closeActionModal}
+        />
+      )}
+    </>
   );
 };
 

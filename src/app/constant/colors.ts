@@ -29,4 +29,6 @@ export default {
   YELLOW_BACKGROUND: '#FCDDA3',
   LIGHT_BLUE_BACKGROUND: '#b9bfeb',
   GRAY_BACKGROUND: '#adadad',
+  SUCCESS: '#66bb6a',
+  DANGER: '#f44336',
 };

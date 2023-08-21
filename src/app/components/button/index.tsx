@@ -13,7 +13,7 @@ import {
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
 
-type ButtonType = 'primary' | 'secondary' | 'tertiary';
+type ButtonType = 'primary' | 'secondary' | 'tertiary' | 'success' | 'danger';
 
 interface Props {
   title: string;
@@ -39,6 +39,14 @@ const getButtonStyle = (
 
     case 'tertiary':
       style.push(styles.tertiary);
+      break;
+
+    case 'success':
+      style.push(styles.success);
+      break;
+
+    case 'danger':
+      style.push(styles.danger);
       break;
 
     default:
@@ -110,6 +118,12 @@ const styles = StyleSheet.create({
   },
   tertiary: {
     backgroundColor: colors.TERTIARY,
+  },
+  success: {
+    backgroundColor: colors.SUCCESS,
+  },
+  danger: {
+    backgroundColor: colors.DANGER,
   },
 });
 

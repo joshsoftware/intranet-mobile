@@ -64,26 +64,6 @@ function TabScreen({route}: Props) {
             onChange={onDateRangeSubmit}
           />
         </View>
-
-        {/* <View style={styles.searchBoxContainer}> */}
-        {/* <Touchable
-            type="opacity"
-            onPress={toggelDatePicker}
-            activeOpacity={0.5}
-            style={styles.filter}>s
-            <Calendar height={17} width={17} />
-            <Typography type={'subheader'} style={styles.filterText}>
-              {dateRangeText}
-            </Typography>
-          </Touchable> */}
-        {/* <DateRange
-            onSubmit={onDateRangeSubmit}
-            isVisible={isDateRangeVisible}
-            toggleModal={toggelDatePicker}
-            initialStartDateValue={dateRange.startDate}
-            initialEndDateValue={dateRange.endDate}
-          /> */}
-        {/* </View> */}
         {isManagementRole && (
           <Touchable
             type="opacity"

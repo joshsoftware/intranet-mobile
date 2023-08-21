@@ -13,6 +13,9 @@ import EditTimesheetModal from '../../component/editTimesheetModal';
 import Typography from '../../../../components/typography';
 import Header from '../../../../components/header';
 import DateRangePicker from '../../../../components/pickers/DateRangePicker';
+import MaterialTopTabs, {
+  RenderSceneProps,
+} from '../../../../components/MaterialTopTabs';
 import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
 
 import {getParams} from '../../../../navigation';
@@ -25,6 +28,12 @@ import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
 import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
+
+const routes = [
+  {key: 'pending', title: 'Pending'},
+  {key: 'approved', title: 'Approved'},
+  {key: 'rejected', title: 'Rejected'},
+];
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -122,6 +131,22 @@ const TimesheetList = () => {
     }
   }, [params?.endDate, params?.startDate]);
 
+  const renderScene = ({}: RenderSceneProps) => {
+    return (
+      <SectionListTimesheet
+        isLoading={isLoading}
+        showEmptyListIcon={true}
+        sections={data?.data ?? []}
+        onDelete={timesheetDeleteCall}
+        onEdit={timesheetEditCall}
+        refreshing={isFetching}
+        onRefresh={refetch}
+        emptyListMessage={strings.NO_TIMESHEET_PRESENT}
+        isDeleteVisible={isManager}
+      />
+    );
+  };
+
   return (
     <>
       {params?.user_id && <Header title={TIMESHEET_SCREEN} type="secondary" />}
@@ -162,17 +187,7 @@ const TimesheetList = () => {
           </View>
         </View>
 
-        <SectionListTimesheet
-          isLoading={isLoading}
-          sections={data?.data ?? []}
-          onDelete={timesheetDeleteCall}
-          onEdit={timesheetEditCall}
-          refreshing={isFetching}
-          onRefresh={refetch}
-          showEmptyListIcon={true}
-          emptyListMessage={strings.NO_TIMESHEET_PRESENT}
-          isDeleteVisible={isManager}
-        />
+        <MaterialTopTabs routes={routes} renderScene={renderScene} />
 
         <EditTimesheetModal
           isVisible={isEditModalVisible}
@@ -180,6 +195,7 @@ const TimesheetList = () => {
           formData={editTimesheetData}
           userId={userId}
         />
+
         {params?.user_id && (
           <CreateTimesheetButton userId={params?.user_id} name={params?.name} />
         )}

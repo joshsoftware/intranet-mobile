@@ -15,6 +15,7 @@ type Props = {
   onEdit?: Function;
   onDelete?: Function;
   isDeleteVisible?: boolean;
+  showActionModal: (data: Timesheet) => void;
 };
 
 const TimesheetItem = ({
@@ -23,6 +24,7 @@ const TimesheetItem = ({
   onEdit,
   onDelete,
   isDeleteVisible = true,
+  showActionModal,
 }: Props) => {
   const handleEdit = () =>
     onEdit?.({
@@ -36,32 +38,36 @@ const TimesheetItem = ({
       project_title: title,
     });
 
+  const openActionModal = () => showActionModal(timesheetData);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.titleContent}>
-        <View>
-          <Typography type="header">
-            {dateFormate(timesheetData.date)}
-          </Typography>
-          <Typography type="subheader" style={styles.workedHours}>
-            {timesheetData.work_in_hours}
-          </Typography>
+    <Touchable type="opacity" onPress={openActionModal}>
+      <View style={styles.container}>
+        <View style={styles.titleContent}>
+          <View>
+            <Typography type="header">
+              {dateFormate(timesheetData.date)}
+            </Typography>
+            <Typography type="subheader" style={styles.workedHours}>
+              {timesheetData.work_in_hours}
+            </Typography>
+          </View>
+          <View style={styles.buttons}>
+            {onEdit && (
+              <Touchable type="opacity" onPress={handleEdit}>
+                <Edit width={20} height={20} />
+              </Touchable>
+            )}
+            {onDelete && isDeleteVisible && (
+              <Touchable type="opacity" onPress={handleDelete}>
+                <Delete width={20} height={20} />
+              </Touchable>
+            )}
+          </View>
         </View>
-        <View style={styles.buttons}>
-          {onEdit && (
-            <Touchable type="opacity" onPress={handleEdit}>
-              <Edit width={20} height={20} />
-            </Touchable>
-          )}
-          {onDelete && isDeleteVisible && (
-            <Touchable type="opacity" onPress={handleDelete}>
-              <Delete width={20} height={20} />
-            </Touchable>
-          )}
-        </View>
+        <Typography type="description">{timesheetData.description}</Typography>
       </View>
-      <Typography type="description">{timesheetData.description}</Typography>
-    </View>
+    </Touchable>
   );
 };
 

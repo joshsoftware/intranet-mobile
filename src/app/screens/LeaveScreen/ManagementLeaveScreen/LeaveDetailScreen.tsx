@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  ActivityIndicator,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, View, ActivityIndicator, ScrollView} from 'react-native';
 
 import Header from '../../../components/header';
 import Typography from '../../../components/typography';
@@ -35,12 +29,12 @@ function LeaveDetailScreen({route}: LeaveDetailScreenNavigationProp) {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Header type="secondary" title="Leave" />
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={colors.PRIMARY} />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
