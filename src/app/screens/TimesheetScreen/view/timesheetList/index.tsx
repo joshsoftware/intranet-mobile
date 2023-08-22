@@ -1,4 +1,10 @@
-import React, {useCallback, useContext, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
 import CreateTimesheetButton from './createTimesheetButton';
@@ -101,6 +107,20 @@ const TimesheetList = () => {
     },
     [toggleEditModal],
   );
+
+  useEffect(() => {
+    if (params?.startDate && params?.endDate) {
+      setDateRange({
+        startDate: new Date(params?.startDate),
+        endDate: new Date(params?.endDate),
+      });
+    } else {
+      setDateRange({
+        startDate: startOfMonth,
+        endDate: todaysDate,
+      });
+    }
+  }, [params?.endDate, params?.startDate]);
 
   return (
     <>
