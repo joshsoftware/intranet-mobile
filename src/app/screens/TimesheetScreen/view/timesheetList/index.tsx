@@ -12,6 +12,7 @@ import SectionListTimesheet from '../../component/sectionListTimesheet';
 import EditTimesheetModal from '../../component/editTimesheetModal';
 import Typography from '../../../../components/typography';
 import Header from '../../../../components/header';
+import DateRangePicker from '../../../../components/pickers/DateRangePicker';
 import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
 
 import {getParams} from '../../../../navigation';
@@ -19,12 +20,11 @@ import {startOfMonth, todaysDate} from '../../../../utils/date';
 import UserContext from '../../../../context/user.context';
 import {isManagement} from '../../../../utils/user';
 
-import {Timesheet} from '../../interface';
-import {TDateRange} from '../../../../../types';
 import strings from '../../../../constant/strings';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
-import DateRangePicker from '../../../../components/pickers/DateRangePicker';
+import {Timesheet} from '../../interface';
+import {TDateRange} from '../../../../../types';
 
 const TimesheetList = () => {
   const params: any = getParams();

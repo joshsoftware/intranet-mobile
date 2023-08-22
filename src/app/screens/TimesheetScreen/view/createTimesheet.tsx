@@ -53,6 +53,7 @@ const CreateTimesheet = ({
     isPartiallyFailed,
     failedTimesheets,
     message,
+    reset: resetAddTimesheet,
   } = useAddTimesheet();
 
   // mutation function
@@ -176,7 +177,8 @@ const CreateTimesheet = ({
     setFormDefaultData(undefined);
     setIsFormVisible(true);
     toggleModal();
-  }, [toggleModal]);
+    resetAddTimesheet();
+  }, [toggleModal, resetAddTimesheet]);
 
   const onModalHide = () => {
     if (isShowToast) {

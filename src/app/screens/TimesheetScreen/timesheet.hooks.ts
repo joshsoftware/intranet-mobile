@@ -103,7 +103,7 @@ export const useAssignedProjects = (userId: string) => {
 export const useEditTimesheet = () => {
   const queryClient = useQueryClient();
 
-  const {mutate, isLoading, isSuccess, data} = useMutation(
+  const {mutate, isLoading, isSuccess, data, reset} = useMutation(
     (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
     {
       onSuccess: (_, variables) => {
@@ -120,13 +120,13 @@ export const useEditTimesheet = () => {
       },
     },
   );
-  return {mutate, isLoading, isSuccess, message: data?.data.message};
+  return {mutate, isLoading, isSuccess, message: data?.data.message, reset};
 };
 
 export const useAddTimesheet = () => {
   const queryClient = useQueryClient();
 
-  const {mutate, data, isLoading, isSuccess} = useMutation(
+  const {mutate, data, isLoading, isSuccess, reset} = useMutation(
     (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
     {
       onSuccess: (_, variables) => {
@@ -159,5 +159,6 @@ export const useAddTimesheet = () => {
     isPartiallyFailed: isSuccess && !isEmpty,
     failedTimesheets: data?.data.data,
     message: data?.data.message,
+    reset,
   };
 };
