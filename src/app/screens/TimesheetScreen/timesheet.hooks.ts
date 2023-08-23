@@ -43,7 +43,7 @@ export const useTimesheets = (
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
   const toDate = dateFormate(endDate, ISO_DATE_FROMAT);
 
-  const {data, isFetching, refetch} = useQuery(
+  const {data, isFetching, refetch, isLoading} = useQuery(
     ['timesheet', userId, startDate, endDate],
     () =>
       getTimesheetRequest({
@@ -53,7 +53,7 @@ export const useTimesheets = (
       }),
   );
 
-  return {data: data?.data?.data[0], refetch, isFetching};
+  return {data: data?.data?.data[0], refetch, isFetching, isLoading};
 };
 
 export const useDeleteTimesheet = (isSelf: boolean) => {

@@ -177,8 +177,7 @@ const CreateTimesheet = ({
     setFormDefaultData(undefined);
     setIsFormVisible(true);
     toggleModal();
-    resetAddTimesheet();
-  }, [toggleModal, resetAddTimesheet]);
+  }, [toggleModal]);
 
   const onModalHide = () => {
     if (isShowToast) {
@@ -202,6 +201,12 @@ const CreateTimesheet = ({
       );
     }
   }, [isPartiallyFailed, failedTimesheets]);
+
+  useEffect(() => {
+    if (!isVisible && isPartiallyFailed) {
+      resetAddTimesheet();
+    }
+  }, [isVisible, isPartiallyFailed, resetAddTimesheet]);
 
   return (
     <Modal
@@ -244,6 +249,8 @@ const CreateTimesheet = ({
 
       <View style={styles.list}>
         <SectionListTimesheet
+          isLoading={false}
+          showEmptyListIcon={false}
           sections={addedTimesheet}
           onEdit={onEdit}
           onDelete={onDelete}

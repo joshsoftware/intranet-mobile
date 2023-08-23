@@ -43,7 +43,7 @@ const TimesheetList = () => {
     endDate: params?.endDate ? new Date(params.endDate) : todaysDate,
   });
 
-  const {data, isFetching, refetch} = useTimesheets(
+  const {data, isFetching, refetch, isLoading} = useTimesheets(
     userId ?? '',
     dateRange.startDate,
     dateRange.endDate,
@@ -163,11 +163,13 @@ const TimesheetList = () => {
         </View>
 
         <SectionListTimesheet
+          isLoading={isLoading}
           sections={data?.data ?? []}
           onDelete={timesheetDeleteCall}
           onEdit={timesheetEditCall}
           refreshing={isFetching}
           onRefresh={refetch}
+          showEmptyListIcon={true}
           emptyListMessage={strings.NO_TIMESHEET_PRESENT}
           isDeleteVisible={isManager}
         />

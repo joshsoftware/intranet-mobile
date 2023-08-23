@@ -15,12 +15,15 @@ import EmptyList from './emptyList';
 
 import {Timesheet} from '../interface';
 import colors from '../../../constant/colors';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 type Props = SectionListProps<any, any> & {
   onEdit: Function;
   onDelete: Function;
-  emptyListMessage?: string;
+  emptyListMessage: string;
+  showEmptyListIcon: boolean;
   isDeleteVisible?: boolean;
+  isLoading: boolean;
 };
 
 const footer = () => <View style={styles.footer} />;
@@ -39,7 +42,9 @@ const SectionListTimesheet = ({
   onEdit,
   onDelete,
   isDeleteVisible = true,
+  showEmptyListIcon,
   emptyListMessage,
+  isLoading,
   ...props
 }: Props) => {
   const renderItem = useCallback(
@@ -56,9 +61,13 @@ const SectionListTimesheet = ({
   );
 
   const listEmptyComponent = useCallback(
-    () => <EmptyList message={emptyListMessage} />,
-    [emptyListMessage],
+    () => <EmptyList message={emptyListMessage} showIcon={showEmptyListIcon} />,
+    [emptyListMessage, showEmptyListIcon],
   );
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <SectionList
