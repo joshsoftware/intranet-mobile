@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 
 import Calendar from './Calendar';
 import TeamMembersLeaves from './teamMembersLeaves';
@@ -9,13 +9,15 @@ import colors from '../../constant/colors';
 
 const HomeScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContentContainer}
+        showsVerticalScrollIndicator={false}>
         <Calendar />
         <TeamMembersLeaves />
         <TeamMembersBirthdays />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

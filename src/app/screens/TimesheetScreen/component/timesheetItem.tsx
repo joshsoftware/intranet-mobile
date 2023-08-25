@@ -10,6 +10,7 @@ import {Delete, Edit} from '../../../constant/icons';
 import {Timesheet} from '../interface';
 
 type Props = {
+  touchable: boolean;
   timesheetData: Timesheet;
   title: string;
   onEdit?: Function;
@@ -19,6 +20,7 @@ type Props = {
 };
 
 const TimesheetItem = ({
+  touchable,
   timesheetData,
   title,
   onEdit,
@@ -38,10 +40,12 @@ const TimesheetItem = ({
       project_title: title,
     });
 
-  const openActionModal = () => showActionModal(timesheetData);
+  const openActionModal = touchable
+    ? () => showActionModal(timesheetData)
+    : () => null;
 
   return (
-    <Touchable type="opacity" onPress={openActionModal}>
+    <Touchable type={touchable ? 'opacity' : 'none'} onPress={openActionModal}>
       <View style={styles.container}>
         <View style={styles.titleContent}>
           <View>

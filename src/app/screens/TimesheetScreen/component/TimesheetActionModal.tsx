@@ -24,6 +24,28 @@ function TimesheetActionModal(props: IProps) {
   const {closeModal, timesheetData} = props;
 
   const [noteText, setNoteText] = useState('');
+  const [showError, setShowError] = useState(false);
+
+  const handleNoteTextChange = (txt: string) => {
+    if (txt.trim().length !== 0) {
+      setShowError(false);
+    }
+
+    setNoteText(txt);
+  };
+
+  const handleApproveClick = () => {
+    // TODO: Send approve request
+  };
+
+  const handleRejectClick = () => {
+    const trimedNoteText = noteText.trim();
+    if (trimedNoteText.length === 0) {
+      setShowError(true);
+    } else {
+      // TODO: Send rejection request
+    }
+  };
 
   return (
     <Modal
@@ -49,16 +71,25 @@ function TimesheetActionModal(props: IProps) {
 
         <View style={styles.buttonContainer}>
           <View style={styles.row}>
-            <Button title="Approve" type="success" onPress={() => {}} />
+            <Button
+              title="Approve"
+              type="success"
+              onPress={handleApproveClick}
+            />
           </View>
           <View style={styles.rejectCard}>
             <Input
               placeholder="Rejection Note"
               value={noteText}
-              onChangeText={setNoteText}
+              onChangeText={handleNoteTextChange}
+              error={showError ? 'Rejection note is required' : ''}
             />
-            <View style={styles.row}>
-              <Button title="Reject" type="danger" onPress={() => {}} />
+            <View style={(styles.row, styles.rejectButtonContainer)}>
+              <Button
+                title="Reject"
+                type="danger"
+                onPress={handleRejectClick}
+              />
             </View>
           </View>
 
@@ -105,6 +136,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingVertical: 16,
     gap: 16,
+  },
+  rejectButtonContainer: {
+    marginTop: 10,
   },
 });
 

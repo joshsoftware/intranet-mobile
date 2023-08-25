@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useContext, useState} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import {
   SectionList,
   SectionListData,
@@ -13,13 +13,11 @@ import TimesheetItem from './timesheetItem';
 import Linear from '../../../components/seperator/linear';
 import EmptyList from './emptyList';
 import TimesheetActionModal from './TimesheetActionModal';
-
-import UserContext from '../../../context/user.context';
-import {isManagement} from '../../../utils/user';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import useIsManagement from '../../../hooks/useIsManagement';
 
 import {Timesheet} from '../interface';
 import colors from '../../../constant/colors';
-import LoadingSpinner from '../../../components/LoadingSpinner';
 
 type Props = SectionListProps<any, any> & {
   onEdit: Function;
@@ -51,11 +49,10 @@ const SectionListTimesheet = ({
   isLoading,
   ...props
 }: Props) => {
-  const [userContext] = useContext(UserContext);
   const [actionTimesheetData, setActionTimesheetData] =
     useState<Timesheet | null>(null);
 
-  const isManagementRole = isManagement(userContext?.userData.role);
+  const isManagementRole = useIsManagement();
 
   const showActionModal = (timesheetData: Timesheet) => {
     setActionTimesheetData(timesheetData);
@@ -64,6 +61,7 @@ const SectionListTimesheet = ({
   const renderItem = useCallback(
     ({item, section}: SectionListRenderItemInfo<Timesheet>) => (
       <TimesheetItem
+        touchable={isManagementRole}
         showActionModal={showActionModal}
         timesheetData={item}
         onEdit={onEdit}
@@ -72,7 +70,7 @@ const SectionListTimesheet = ({
         isDeleteVisible={isDeleteVisible}
       />
     ),
-    [isDeleteVisible, onDelete, onEdit],
+    [isDeleteVisible, onDelete, onEdit, isManagementRole],
   );
 
   const listEmptyComponent = useCallback(
