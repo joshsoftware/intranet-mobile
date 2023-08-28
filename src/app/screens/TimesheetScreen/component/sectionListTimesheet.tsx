@@ -20,6 +20,7 @@ import {Timesheet} from '../interface';
 import colors from '../../../constant/colors';
 
 type Props = SectionListProps<any, any> & {
+  enableActionModal: boolean;
   onEdit: Function;
   onDelete: Function;
   emptyListMessage: string;
@@ -41,6 +42,7 @@ const sectionHeader = ({
 );
 
 const SectionListTimesheet = ({
+  enableActionModal,
   onEdit,
   onDelete,
   isDeleteVisible = true,
@@ -61,7 +63,7 @@ const SectionListTimesheet = ({
   const renderItem = useCallback(
     ({item, section}: SectionListRenderItemInfo<Timesheet>) => (
       <TimesheetItem
-        touchable={isManagementRole}
+        touchable={isManagementRole && enableActionModal}
         showActionModal={showActionModal}
         timesheetData={item}
         onEdit={onEdit}
@@ -70,7 +72,7 @@ const SectionListTimesheet = ({
         isDeleteVisible={isDeleteVisible}
       />
     ),
-    [isDeleteVisible, onDelete, onEdit, isManagementRole],
+    [isDeleteVisible, onDelete, onEdit, isManagementRole, enableActionModal],
   );
 
   const listEmptyComponent = useCallback(
@@ -98,7 +100,7 @@ const SectionListTimesheet = ({
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={listEmptyComponent}
       />
-      {isManagementRole && (
+      {isManagementRole && enableActionModal && (
         <TimesheetActionModal
           timesheetData={actionTimesheetData}
           closeModal={closeActionModal}

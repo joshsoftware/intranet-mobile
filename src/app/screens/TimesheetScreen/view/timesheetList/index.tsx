@@ -134,6 +134,7 @@ const TimesheetList = () => {
   const renderScene = ({}: RenderSceneProps) => {
     return (
       <SectionListTimesheet
+        enableActionModal={true}
         isLoading={isLoading}
         showEmptyListIcon={true}
         sections={data?.data ?? []}

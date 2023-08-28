@@ -249,6 +249,7 @@ const CreateTimesheet = ({
 
       <View style={styles.list}>
         <SectionListTimesheet
+          enableActionModal={false}
           isLoading={false}
           showEmptyListIcon={false}
           sections={addedTimesheet}
