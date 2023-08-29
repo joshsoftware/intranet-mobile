@@ -1,30 +1,31 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Button from '../../../components/button';
-import DetailRow from '../../../components/DetailRow';
 import Modal from '../../../components/modal';
 import Typography from '../../../components/typography';
 import Input from '../../../components/input';
-
-import {getParams} from '../../../navigation';
+import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 
 import colors from '../../../constant/colors';
 import fonts from '../../../constant/fonts';
-import {Timesheet} from '../interface';
+
+export type TModalState = 'approve' | 'reject' | null;
 
 interface IProps {
-  timesheetData: Timesheet | null;
+  modalState: TModalState;
   closeModal: () => void;
 }
 
 function TimesheetActionModal(props: IProps) {
-  const params: any = getParams();
-  const {closeModal, timesheetData} = props;
+  const {modalState} = props;
 
   const [noteText, setNoteText] = useState('');
   const [showError, setShowError] = useState(false);
+  const {keyboardHeight} = useIsKeyboardShown();
+  const insets = useSafeAreaInsets();
 
   const handleNoteTextChange = (txt: string) => {
     if (txt.trim().length !== 0) {
@@ -47,56 +48,70 @@ function TimesheetActionModal(props: IProps) {
     }
   };
 
+  const closeModal = () => {
+    setShowError(false);
+    setNoteText('');
+    props.closeModal();
+  };
+
+  const dynamicStyles = StyleSheet.create({
+    scrollView: {
+      marginBottom: Platform.OS === 'ios' ? keyboardHeight - insets.bottom : 0,
+    },
+  });
+
   return (
     <Modal
-      isVisible={timesheetData !== null}
+      isVisible={modalState !== null}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
       animationInTiming={500}
       animationOutTiming={500}
       onBackButtonPress={closeModal}
       onBackdropPress={closeModal}
-      // onModalHide={onModalHide}
       contentStyle={styles.contentStyle}>
-      <KeyboardAwareScrollView contentContainerStyle={styles.containerStyle}>
-        <Typography style={styles.title}>Timesheet</Typography>
-        {params.name && <DetailRow label="Employee" value={params.name} />}
-        <DetailRow label="Date" value={timesheetData?.date} />
-        <DetailRow label="Work Hours" value={timesheetData?.work_in_hours} />
+      <KeyboardAwareScrollView
+        contentContainerStyle={[
+          styles.containerStyle,
+          dynamicStyles.scrollView,
+        ]}>
+        {modalState === 'approve' && (
+          <>
+            <Typography style={styles.title}>
+              Please Confirm Timesheet Approval
+            </Typography>
+            <View style={styles.row}>
+              <Button title="Cancel" type="secondary" onPress={closeModal} />
+              <Button
+                title="Approve"
+                type="success"
+                onPress={handleApproveClick}
+              />
+            </View>
+          </>
+        )}
 
-        <Typography type="label" style={styles.descriptionTitle}>
-          Description
-        </Typography>
-        <Typography type="text">{timesheetData?.description}</Typography>
+        {modalState === 'reject' && (
+          <>
+            <View style={styles.card}>
+              <Input
+                placeholder="Rejection Note"
+                value={noteText}
+                onChangeText={handleNoteTextChange}
+                error={showError ? 'Rejection note is required' : ''}
+              />
+            </View>
 
-        <View style={styles.buttonContainer}>
-          <View style={styles.row}>
-            <Button
-              title="Approve"
-              type="success"
-              onPress={handleApproveClick}
-            />
-          </View>
-          <View style={styles.rejectCard}>
-            <Input
-              placeholder="Rejection Note"
-              value={noteText}
-              onChangeText={handleNoteTextChange}
-              error={showError ? 'Rejection note is required' : ''}
-            />
-            <View style={(styles.row, styles.rejectButtonContainer)}>
+            <View style={styles.row}>
+              <Button title="Cancel" type="secondary" onPress={closeModal} />
               <Button
                 title="Reject"
                 type="danger"
                 onPress={handleRejectClick}
               />
             </View>
-          </View>
-
-          <View style={styles.row}>
-            <Button title="Cancel" type="secondary" onPress={closeModal} />
-          </View>
-        </View>
+          </>
+        )}
       </KeyboardAwareScrollView>
     </Modal>
   );
@@ -104,9 +119,8 @@ function TimesheetActionModal(props: IProps) {
 
 const styles = StyleSheet.create({
   contentStyle: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    marginTop: '20%',
+    width: '100%',
+    flexDirection: 'row',
     backgroundColor: colors.WHITE,
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
@@ -114,28 +128,22 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     paddingHorizontal: 16,
+    paddingBottom: 40,
   },
   title: {
     color: colors.SECONDARY,
     fontFamily: fonts.ARIAL_BOLD,
     marginVertical: 16,
   },
-  descriptionTitle: {
-    paddingVertical: 10,
+  successText: {
+    color: colors.SUCCESS,
   },
   row: {
     flexDirection: 'row',
-    width: '100%',
+    gap: 10,
   },
-  rejectCard: {
-    borderWidth: 2,
-    borderColor: colors.LIGHT_RED_BACKGROUND,
+  card: {
     padding: 10,
-    borderRadius: 22,
-  },
-  buttonContainer: {
-    paddingVertical: 16,
-    gap: 16,
   },
   rejectButtonContainer: {
     marginTop: 10,

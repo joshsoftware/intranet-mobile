@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useState} from 'react';
+import React, {memo, useCallback} from 'react';
 import {
   SectionList,
   SectionListData,
@@ -12,7 +12,6 @@ import Typography from '../../../components/typography';
 import TimesheetItem from './timesheetItem';
 import Linear from '../../../components/seperator/linear';
 import EmptyList from './emptyList';
-import TimesheetActionModal from './TimesheetActionModal';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import useIsManagement from '../../../hooks/useIsManagement';
 
@@ -51,20 +50,12 @@ const SectionListTimesheet = ({
   isLoading,
   ...props
 }: Props) => {
-  const [actionTimesheetData, setActionTimesheetData] =
-    useState<Timesheet | null>(null);
-
   const isManagementRole = useIsManagement();
-
-  const showActionModal = (timesheetData: Timesheet) => {
-    setActionTimesheetData(timesheetData);
-  };
 
   const renderItem = useCallback(
     ({item, section}: SectionListRenderItemInfo<Timesheet>) => (
       <TimesheetItem
         touchable={isManagementRole && enableActionModal}
-        showActionModal={showActionModal}
         timesheetData={item}
         onEdit={onEdit}
         onDelete={onDelete}
@@ -83,9 +74,6 @@ const SectionListTimesheet = ({
   if (isLoading) {
     return <LoadingSpinner />;
   }
-  const closeActionModal = () => {
-    setActionTimesheetData(null);
-  };
 
   return (
     <>
@@ -100,12 +88,6 @@ const SectionListTimesheet = ({
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={listEmptyComponent}
       />
-      {isManagementRole && enableActionModal && (
-        <TimesheetActionModal
-          timesheetData={actionTimesheetData}
-          closeModal={closeActionModal}
-        />
-      )}
     </>
   );
 };

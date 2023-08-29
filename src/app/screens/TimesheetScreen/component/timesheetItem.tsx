@@ -1,5 +1,6 @@
 import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import Typography from '../../../components/typography';
 import Touchable from '../../../components/touchable';
@@ -7,7 +8,10 @@ import Touchable from '../../../components/touchable';
 import {dateFormate} from '../../../utils/date';
 
 import {Delete, Edit} from '../../../constant/icons';
+import {TIMESHEET_DETAIL_SCREEN} from '../../../constant/screenNames';
 import {Timesheet} from '../interface';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../../navigation/types';
 
 type Props = {
   touchable: boolean;
@@ -16,7 +20,6 @@ type Props = {
   onEdit?: Function;
   onDelete?: Function;
   isDeleteVisible?: boolean;
-  showActionModal: (data: Timesheet) => void;
 };
 
 const TimesheetItem = ({
@@ -26,8 +29,10 @@ const TimesheetItem = ({
   onEdit,
   onDelete,
   isDeleteVisible = true,
-  showActionModal,
 }: Props) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const handleEdit = () =>
     onEdit?.({
       ...timesheetData,
@@ -40,12 +45,17 @@ const TimesheetItem = ({
       project_title: title,
     });
 
-  const openActionModal = touchable
-    ? () => showActionModal(timesheetData)
-    : () => null;
+  const handleTimesheetItemClick = () => {
+    navigation.navigate(TIMESHEET_DETAIL_SCREEN, {
+      timesheetID: timesheetData.timesheet_id,
+      timesheetData: JSON.stringify(timesheetData),
+    });
+  };
 
   return (
-    <Touchable type={touchable ? 'opacity' : 'none'} onPress={openActionModal}>
+    <Touchable
+      type={touchable ? 'opacity' : 'none'}
+      onPress={handleTimesheetItemClick}>
       <View style={styles.container}>
         <View style={styles.titleContent}>
           <View>

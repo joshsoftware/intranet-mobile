@@ -12,6 +12,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import LeaveDetailScreen from '../screens/LeaveScreen/ManagementLeaveScreen/LeaveDetailScreen';
 import DrawerNavigator from './DrawerNavigation';
 import {navigationRef} from '.';
+import TimesheetDetailScreen from '../screens/TimesheetScreen/TimesheetDetailScreen';
 
 import UserContext from '../context/user.context';
 import AsyncStore from '../services/asyncStorage';
@@ -21,6 +22,7 @@ import {
   DRAWER,
   LEAVE_DETAIL_SCREEN,
   LOGIN_SCREEN,
+  TIMESHEET_DETAIL_SCREEN,
   USER_PROFILE_SCREEN,
   USER_TIMESHEET,
 } from '../constant/screenNames';
@@ -85,6 +87,10 @@ const RootNavigator = () => {
             <RootStack.Screen
               name={LEAVE_DETAIL_SCREEN}
               component={LeaveDetailScreen}
+            />
+            <RootStack.Screen
+              name={TIMESHEET_DETAIL_SCREEN}
+              component={TimesheetDetailScreen}
             />
           </>
         ) : (

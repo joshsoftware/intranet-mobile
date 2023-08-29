@@ -16,6 +16,7 @@ export type RootStackParamList = {
   Drawer: NavigatorScreenParams<DrawerParamList>;
   Profile: undefined;
   LeaveDetail: {leaveID: number};
+  TimesheetDetail: {timesheetID: string; timesheetData: string};
 };
 
 export type MainTabParamList = {
@@ -36,6 +37,11 @@ export type MainScreenNavigationProp = NativeStackNavigationProp<
 export type LeaveDetailScreenNavigationProp = NativeStackScreenProps<
   RootStackParamList,
   'LeaveDetail'
+>;
+
+export type TimesheetDetailScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'TimesheetDetail'
 >;
 
 export type UserTimesheetRouteProp = RouteProp<
