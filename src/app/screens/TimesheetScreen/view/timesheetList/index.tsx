@@ -22,17 +22,18 @@ import {getParams} from '../../../../navigation';
 import {startOfMonth, todaysDate} from '../../../../utils/date';
 import UserContext from '../../../../context/user.context';
 import {isManagement} from '../../../../utils/user';
+import {filterTimesheetsByStatus} from '../../utils';
 
 import strings from '../../../../constant/strings';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
-import {Timesheet} from '../../interface';
+import {Timesheet, TimesheetStatus} from '../../interface';
 import {TDateRange} from '../../../../../types';
 
 const routes = [
-  {key: 'pending', title: 'Pending'},
-  {key: 'approved', title: 'Approved'},
-  {key: 'rejected', title: 'Rejected'},
+  {key: 'Pending', title: 'Pending'},
+  {key: 'Approved', title: 'Approved'},
+  {key: 'Rejected', title: 'Rejected'},
 ];
 
 const TimesheetList = () => {
@@ -131,13 +132,22 @@ const TimesheetList = () => {
     }
   }, [params?.endDate, params?.startDate]);
 
-  const renderScene = ({}: RenderSceneProps) => {
+  // console.log(data?.data[0].data);
+
+  const renderScene = ({route}: RenderSceneProps) => {
+    const tsData = data?.data ?? [];
+    console.log(JSON.stringify(tsData));
+    const filteredTsData = filterTimesheetsByStatus(
+      tsData,
+      route.key as TimesheetStatus,
+    );
+
     return (
       <SectionListTimesheet
         enableActionModal={true}
         isLoading={isLoading}
         showEmptyListIcon={true}
-        sections={data?.data ?? []}
+        sections={filteredTsData}
         onDelete={timesheetDeleteCall}
         onEdit={timesheetEditCall}
         refreshing={isFetching}

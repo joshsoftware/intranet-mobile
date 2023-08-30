@@ -4,6 +4,8 @@ export interface Employee {
   user_id: string;
 }
 
+export type TimesheetStatus = 'Approved' | 'Rejected' | 'Pending';
+
 export interface Timesheet {
   timesheet_id: string;
   date: string;
@@ -11,6 +13,7 @@ export interface Timesheet {
   description: string;
   project?: string;
   project_id: string;
+  status: TimesheetStatus;
 }
 
 export interface ITimesheetSectionListItem {

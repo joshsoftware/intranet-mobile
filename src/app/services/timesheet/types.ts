@@ -4,13 +4,16 @@ export interface Employee {
   user_id: string;
 }
 
+type TimesheetStatus = 'Approved' | 'Rejected' | 'Pending';
 export type Timesheet = {
-  project_id: string | number;
+  project_id: string;
   date: string;
   duration: string | number;
   description: string;
-  timesheet_id?: string;
+  timesheet_id: string;
   id?: string;
+  work_in_hours: string;
+  status: TimesheetStatus;
 };
 
 export type TDateRange = {

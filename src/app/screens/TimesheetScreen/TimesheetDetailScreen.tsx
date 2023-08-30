@@ -3,6 +3,7 @@ import {StyleSheet, View, ScrollView} from 'react-native';
 
 import Header from '../../components/header';
 import DetailRow from '../../components/DetailRow';
+import useIsManagement from '../../hooks/useIsManagement';
 
 import {TimesheetDetailScreenNavigationProp} from '../../navigation/types';
 import {Timesheet} from './interface';
@@ -19,6 +20,7 @@ function TimesheetDetailScreen({route}: TimesheetDetailScreenNavigationProp) {
   const params = route.params;
 
   const [modalState, setModalState] = useState<TModalState>(null);
+  const isManagement = useIsManagement();
 
   const timesheetData = JSON.parse(params.timesheetData) as Timesheet;
 
@@ -42,24 +44,28 @@ function TimesheetDetailScreen({route}: TimesheetDetailScreenNavigationProp) {
           <Typography type="text">{timesheetData.description}</Typography>
         </View>
 
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Reject"
-            type="danger"
-            onPress={() => setModalState('reject')}
-          />
-          <Button
-            title="Approve"
-            type="success"
-            onPress={() => setModalState('approve')}
-          />
-        </View>
+        {isManagement && (
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Reject"
+              type="danger"
+              onPress={() => setModalState('reject')}
+            />
+            <Button
+              title="Approve"
+              type="success"
+              onPress={() => setModalState('approve')}
+            />
+          </View>
+        )}
       </ScrollView>
 
-      <TimesheetActionModal
-        modalState={modalState}
-        closeModal={() => setModalState(null)}
-      />
+      {isManagement && (
+        <TimesheetActionModal
+          modalState={modalState}
+          closeModal={() => setModalState(null)}
+        />
+      )}
     </View>
   );
 }
