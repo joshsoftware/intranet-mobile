@@ -5,8 +5,14 @@ import {LOGIN_ROUTE} from '../../constant/apiRoutes';
 import {getNotificationToken} from '../firebase/messaging';
 import {UserRole} from '../../context/user.context';
 
+export enum AuthType {
+  GOOGLE = 'google',
+  APPLE = 'apple',
+};
+
 type PayloadType =
   | {
+      type: AuthType;
       idToken: string;
       user: {
         email: string;
