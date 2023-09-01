@@ -8,6 +8,6 @@ export const logEvent = async (
     // console.log('[Analytics Events] ', eventName, eventProperties);
     await analytics().logEvent(eventName, eventProperties);
   } catch (err) {
-    // 
+    //
   }
 };
