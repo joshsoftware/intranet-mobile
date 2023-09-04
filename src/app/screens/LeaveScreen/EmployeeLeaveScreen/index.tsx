@@ -101,6 +101,13 @@ const styles = StyleSheet.create({
   accordionSectionContainer: {
     backgroundColor: colors.WHITE,
     elevation: 5,
+    shadowColor: colors.SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     marginBottom: 16,
     borderRadius: 10,
     marginHorizontal: 16,

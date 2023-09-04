@@ -1,10 +1,13 @@
 import React, {memo, useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Modal from '../../../components/modal';
 import TimesheetForm from '../component/timesheetForm';
 import Typography from '../../../components/typography';
 import {useEditTimesheet} from '../timesheet.hooks';
+import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 
 import {convertToMins, dateFormate} from '../../../utils/date';
 import toast from '../../../utils/toast';
@@ -28,6 +31,8 @@ const EditTimesheetModal = ({
   userId,
 }: Props) => {
   const [isShowToast, setIsShowToast] = useState<Boolean>(false);
+  const {keyboardHeight} = useIsKeyboardShown();
+  const insets = useSafeAreaInsets();
 
   const {mutate, isLoading, isSuccess, message} = useEditTimesheet();
 
@@ -58,6 +63,12 @@ const EditTimesheetModal = ({
     }
   };
 
+  const dynamicStyles = StyleSheet.create({
+    scrollView: {
+      paddingBottom: Platform.OS === 'ios' ? keyboardHeight - insets.bottom : 0,
+    },
+  });
+
   return (
     <Modal
       isVisible={isVisible}
@@ -69,7 +80,8 @@ const EditTimesheetModal = ({
       onBackdropPress={toggleModal}
       onModalHide={onModalHide}
       contentStyle={styles.main}>
-      <View>
+      <KeyboardAwareScrollView
+        style={[styles.scrollView, dynamicStyles.scrollView]}>
         <Typography type="title" style={styles.title}>
           Edit Timesheet
         </Typography>
@@ -82,7 +94,7 @@ const EditTimesheetModal = ({
           isFormVisible
           isEditForm
         />
-      </View>
+      </KeyboardAwareScrollView>
     </Modal>
   );
 };
@@ -92,12 +104,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
-    paddingHorizontal: 16,
   },
   title: {
     color: colors.SECONDARY,
     fontFamily: fonts.ARIAL_BOLD,
     marginVertical: 24,
+  },
+  scrollView: {
+    paddingHorizontal: 16,
   },
 });
 

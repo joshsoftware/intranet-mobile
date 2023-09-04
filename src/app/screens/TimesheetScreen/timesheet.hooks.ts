@@ -43,7 +43,7 @@ export const useTimesheets = (
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
   const toDate = dateFormate(endDate, ISO_DATE_FROMAT);
 
-  const {data, isFetching, refetch} = useQuery(
+  const {data, isFetching, refetch, isLoading} = useQuery(
     ['timesheet', userId, startDate, endDate],
     () =>
       getTimesheetRequest({
@@ -53,7 +53,7 @@ export const useTimesheets = (
       }),
   );
 
-  return {data: data?.data?.data[0], refetch, isFetching};
+  return {data: data?.data?.data[0], refetch, isFetching, isLoading};
 };
 
 export const useDeleteTimesheet = (isSelf: boolean) => {
@@ -103,7 +103,7 @@ export const useAssignedProjects = (userId: string) => {
 export const useEditTimesheet = () => {
   const queryClient = useQueryClient();
 
-  const {mutate, isLoading, isSuccess, data} = useMutation(
+  const {mutate, isLoading, isSuccess, data, reset} = useMutation(
     (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
     {
       onSuccess: (_, variables) => {
@@ -120,13 +120,13 @@ export const useEditTimesheet = () => {
       },
     },
   );
-  return {mutate, isLoading, isSuccess, message: data?.data.message};
+  return {mutate, isLoading, isSuccess, message: data?.data.message, reset};
 };
 
 export const useAddTimesheet = () => {
   const queryClient = useQueryClient();
 
-  const {mutate, data, isLoading, isSuccess} = useMutation(
+  const {mutate, data, isLoading, isSuccess, reset} = useMutation(
     (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
     {
       onSuccess: (_, variables) => {
@@ -159,5 +159,6 @@ export const useAddTimesheet = () => {
     isPartiallyFailed: isSuccess && !isEmpty,
     failedTimesheets: data?.data.data,
     message: data?.data.message,
+    reset,
   };
 };

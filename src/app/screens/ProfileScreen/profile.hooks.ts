@@ -1,4 +1,4 @@
-import {ToastAndroid} from 'react-native';
+import {Alert, Platform, ToastAndroid} from 'react-native';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 import {
@@ -48,11 +48,16 @@ export function useUpdateSkills(closeModal: () => void) {
     {
       onSuccess: () => {
         closeModal();
-        ToastAndroid.showWithGravity(
-          strings.UPDATE_SKILLS_SUCCESS,
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
-        );
+
+        if (Platform.OS === 'android') {
+          ToastAndroid.showWithGravity(
+            strings.UPDATE_SKILLS_SUCCESS,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+          );
+        } else {
+          Alert.alert(strings.UPDATE_SKILLS_SUCCESS);
+        }
 
         queryClient.invalidateQueries(['user']);
       },

@@ -5,10 +5,14 @@ import {
 } from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
+import { logEvent } from '../firebase/analytics';
+import { AuthType } from '../api/login';
+
 import {INVALID_EMAIL_ERROR} from '../../constant/message';
 
 GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
+  iosClientId: Config.IOS_CLIENT_ID,
 });
 
 export const googleSignIn = async () => {
@@ -19,8 +23,17 @@ export const googleSignIn = async () => {
     if (!userInfo.user.email.endsWith('@joshsoftware.com')) {
       throw INVALID_EMAIL_ERROR;
     }
-    return userInfo;
+    
+    await logEvent('GOOGLE_SIGNIN_SUCCESS', userInfo);
+    return {
+      type: AuthType.GOOGLE,
+      idToken: userInfo.idToken || '',
+      user: {
+        email: userInfo.user.email,
+      },
+    };
   } catch (error: any) {
+    await logEvent('GOOGLE_SIGNIN_FAILED', error);
     googleSignOut();
     if (error === INVALID_EMAIL_ERROR) {
       Alert.alert(

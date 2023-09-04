@@ -1,8 +1,9 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, View, ScrollView} from 'react-native';
+import {StyleSheet, View, Platform} from 'react-native';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Modal from '../../../components/modal';
 import Button from '../../../components/button';
@@ -17,7 +18,6 @@ import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import {ISkillsData} from '../interface/skills';
 import colors from '../../../constant/colors';
 import strings from '../../../constant/strings';
-import fonts from '../../../constant/fonts';
 
 interface Props {
   isVisible: boolean;
@@ -83,11 +83,14 @@ const updateSkillFormSchema = yup.object().shape({
 });
 
 function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
-  const keyboardIsVisible = useIsKeyboardShown();
+  const {isKeyboardShown, keyboardHeight} = useIsKeyboardShown();
   const [otherSkillFieldValue, setOtherSkillFieldValue] = useState('');
 
   const skillsList = useSkillList();
   const {updateSkills, isLoading} = useUpdateSkills(closeModal);
+
+  // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+  const iOSTextInputWorkaroundRef = useRef(false);
 
   const {
     control,
@@ -121,6 +124,9 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
       setValue('otherSkills', skills.join(','));
     }
 
+    // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+    iOSTextInputWorkaroundRef.current = Platform.OS === 'ios';
+
     setOtherSkillFieldValue('');
   };
 
@@ -144,7 +150,8 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
       animationInTiming={500}
       animationOutTiming={500}
       contentStyle={styles.contentStyle}>
-      <ScrollView>
+      <KeyboardAwareScrollView
+        style={[styles.scrollView, {paddingBottom: keyboardHeight}]}>
         <Typography style={styles.title} type="header">
           Update Skills
         </Typography>
@@ -242,7 +249,15 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
                     })}
                 </View>
                 <Input
-                  onChangeText={setOtherSkillFieldValue}
+                  onChangeText={txt => {
+                    // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+                    if (iOSTextInputWorkaroundRef.current) {
+                      iOSTextInputWorkaroundRef.current = false;
+                      return;
+                    }
+
+                    setOtherSkillFieldValue(txt);
+                  }}
                   value={otherSkillFieldValue}
                   onSubmitEditing={handleOtherSkillSubmit}
                   placeholder="Type other skills here"
@@ -262,7 +277,7 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
           </Typography>
         </View>
 
-        {!keyboardIsVisible && (
+        {!isKeyboardShown && (
           <View style={styles.buttonRow}>
             <View style={styles.buttonContainer}>
               <Button
@@ -282,7 +297,7 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
             </View>
           </View>
         )}
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </Modal>
   );
 }
@@ -291,9 +306,11 @@ const styles = StyleSheet.create({
   contentStyle: {
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
     flexDirection: 'row',
+    paddingVertical: 16,
+  },
+  scrollView: {
+    paddingHorizontal: 16,
   },
   title: {
     fontWeight: 'bold',
@@ -301,6 +318,7 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: 'row',
+    paddingBottom: 10,
   },
   buttonContainer: {
     flex: 1,

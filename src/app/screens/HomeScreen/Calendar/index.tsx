@@ -154,6 +154,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 19,
     borderBottomRightRadius: 19,
     elevation: 5,
+    shadowColor: colors.SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     backgroundColor: colors.WHITE,
     marginBottom: 15,
     paddingVertical: 16,

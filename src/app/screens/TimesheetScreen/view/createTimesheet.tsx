@@ -44,7 +44,7 @@ const CreateTimesheet = ({
   );
   const [isFormVisible, setIsFormVisible] = useState<boolean>(true);
   const [isShowToast, setIsShowToast] = useState<Boolean>(false);
-  const isKeyboardVisible = useIsKeyboardShown();
+  const {isKeyboardShown} = useIsKeyboardShown();
 
   const {
     mutate,
@@ -53,6 +53,7 @@ const CreateTimesheet = ({
     isPartiallyFailed,
     failedTimesheets,
     message,
+    reset: resetAddTimesheet,
   } = useAddTimesheet();
 
   // mutation function
@@ -201,6 +202,12 @@ const CreateTimesheet = ({
     }
   }, [isPartiallyFailed, failedTimesheets]);
 
+  useEffect(() => {
+    if (!isVisible && isPartiallyFailed) {
+      resetAddTimesheet();
+    }
+  }, [isVisible, isPartiallyFailed, resetAddTimesheet]);
+
   return (
     <Modal
       isVisible={isVisible}
@@ -242,6 +249,8 @@ const CreateTimesheet = ({
 
       <View style={styles.list}>
         <SectionListTimesheet
+          isLoading={false}
+          showEmptyListIcon={false}
           sections={addedTimesheet}
           onEdit={onEdit}
           onDelete={onDelete}
@@ -249,7 +258,7 @@ const CreateTimesheet = ({
         />
       </View>
 
-      {!isKeyboardVisible && (
+      {!isKeyboardShown && (
         <View style={styles.btns}>
           <Button title="Cancel" type="secondary" onPress={resetStates} />
           <Button
@@ -281,6 +290,13 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     elevation: 3,
+    shadowColor: colors.SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
     backgroundColor: colors.WHITE,
     borderRadius: 24,
     zIndex: 1,
@@ -292,6 +308,13 @@ const styles = StyleSheet.create({
   },
   form: {
     elevation: 4,
+    shadowColor: colors.SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
     borderRadius: 30,
     zIndex: 1,
     backgroundColor: colors.WHITE,

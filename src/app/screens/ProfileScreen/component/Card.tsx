@@ -28,6 +28,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.TERNARY_BACKGROUND,
     padding: 16,
     elevation: 5,
+    shadowColor: colors.SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     borderRadius: 10,
   },
   title: {

@@ -7,36 +7,27 @@ import {
 } from '../../constant/apiRoutes';
 import {IUserProfileData} from '../../screens/ProfileScreen/interface';
 
-export type GetUserRequestBody = {};
-
 export type GetUserResponseBody = {
   data: IUserProfileData;
 };
 
-export const getUserRequest = async (payload: GetUserRequestBody) => {
-  const response = await apiCall<GetUserRequestBody, GetUserResponseBody>({
+export const getUserRequest = async () => {
+  const response = await apiCall<null, GetUserResponseBody>({
     method: 'GET',
     url: USER_PROFILE_ROUTE,
-    data: payload,
   });
 
   return response;
 };
 
-export type GetAllSkillRequestBody = {};
-
 export type GetAllSkillResponseBody = {
   data: string[];
 };
 
-export const getAllSkillRequest = async (payload: GetAllSkillRequestBody) => {
-  const response = await apiCall<
-    GetAllSkillRequestBody,
-    GetAllSkillResponseBody
-  >({
+export const getAllSkillRequest = async () => {
+  const response = await apiCall<null, GetAllSkillResponseBody>({
     method: 'GET',
     url: GET_ALL_SKILL_ROUTE,
-    data: payload,
   });
 
   return response;

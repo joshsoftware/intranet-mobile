@@ -1,11 +1,12 @@
 import React, {useCallback, useContext} from 'react';
-import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {
   TabBar,
   TabBarProps,
   TabView,
   SceneRendererProps,
 } from 'react-native-tab-view';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Header from '../../components/header';
 import PersonalDetails from './tabs/PersonalDetails';
@@ -75,6 +76,7 @@ const ProfileScreen = () => {
   const [userContext] = useContext(UserContext);
   const [sceneIndex, setSceneIndex] = React.useState(0);
   const {data, isLoading, isError} = useProfileData();
+  const inset = useSafeAreaInsets();
 
   const routes = renderRoutesPerRole(userContext?.userData.role || 'Employee');
 
@@ -88,7 +90,7 @@ const ProfileScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, {marginBottom: inset.bottom}]}>
       <Header type="secondary" title="Profile" />
       {isLoading ? (
         <View style={styles.flexCenter}>
@@ -110,7 +112,7 @@ const ProfileScreen = () => {
           )}
         </>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 class AsyncStore {
   static AUTH_TOKEN_KEY = 'authToken';
   static USER_DATA = 'user_data';
+  static APPLE_USER_EMAIL_ID = 'appleUserEmailId';
 
   static setItem = async (key: string, value: string) => {
     await AsyncStorage.setItem(key, value);
