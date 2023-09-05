@@ -5,8 +5,9 @@ import {
 } from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
-import { logEvent } from '../firebase/analytics';
-import { AuthType } from '../api/login';
+import toast from '../../utils/toast';
+import {logEvent} from '../firebase/analytics';
+import {AuthType} from '../api/login';
 
 import {INVALID_EMAIL_ERROR} from '../../constant/message';
 
@@ -23,7 +24,7 @@ export const googleSignIn = async () => {
     if (!userInfo.user.email.endsWith('@joshsoftware.com')) {
       throw INVALID_EMAIL_ERROR;
     }
-    
+
     await logEvent('GOOGLE_SIGNIN_SUCCESS', userInfo);
     return {
       type: AuthType.GOOGLE,
@@ -43,11 +44,11 @@ export const googleSignIn = async () => {
     } else if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       return;
     } else if (error.code === statusCodes.IN_PROGRESS) {
-      Alert.alert('', 'sign in is in progress already');
+      toast('Sign in is in progress already', 'error');
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      Alert.alert('', 'play services not available or outdated');
+      toast('Google play services not available or outdated', 'error');
     } else {
-      Alert.alert('', 'Something went wrong');
+      toast('Google sign-in failed. Please try again.', 'error');
     }
   }
 };
