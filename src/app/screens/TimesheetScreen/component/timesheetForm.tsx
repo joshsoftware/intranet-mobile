@@ -4,7 +4,6 @@ import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import Collapsible from 'react-native-collapsible';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
@@ -113,10 +112,48 @@ const TimesheetForm = ({
   return (
     <>
       <Collapsible collapsed={!isFormVisible} duration={400}>
-        <KeyboardAwareScrollView>
-          <View>
+        <View>
+          <Typography type="header" style={styles.labelText}>
+            Project
+          </Typography>
+          <Controller
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <PickerSelect
+                onValueChange={onChange}
+                value={value}
+                items={projects}
+                error={errors?.project?.message}
+              />
+            )}
+            name="project"
+          />
+        </View>
+
+        <View style={styles.row}>
+          <View style={styles.rowItem}>
             <Typography type="header" style={styles.labelText}>
-              Project
+              Select Date
+            </Typography>
+            <Controller
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <DatePicker
+                  onDateChange={onChange}
+                  hideIcon={false}
+                  selectedDate={value ? new Date(value) : undefined}
+                  placeholder="Select date"
+                  maximumDate={todaysDate}
+                  error={errors?.date?.message}
+                />
+              )}
+              name="date"
+            />
+          </View>
+
+          <View style={styles.rowItem}>
+            <Typography type="header" style={styles.labelText}>
+              Work in hours
             </Typography>
             <Controller
               control={control}
@@ -124,83 +161,43 @@ const TimesheetForm = ({
                 <PickerSelect
                   onValueChange={onChange}
                   value={value}
-                  items={projects}
-                  error={errors?.project?.message}
+                  items={workHoursData}
+                  error={errors?.work_in_hours?.message}
                 />
               )}
-              name="project"
+              name="work_in_hours"
             />
           </View>
+        </View>
 
-          <View style={styles.row}>
-            <View style={styles.rowItem}>
-              <Typography type="header" style={styles.labelText}>
-                Select Date
-              </Typography>
-              <Controller
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <DatePicker
-                    onDateChange={onChange}
-                    hideIcon={false}
-                    selectedDate={value ? new Date(value) : undefined}
-                    placeholder="Select date"
-                    maximumDate={todaysDate}
-                    error={errors?.date?.message}
-                  />
-                )}
-                name="date"
+        <View>
+          <Typography type="header" style={styles.labelText}>
+            Description
+          </Typography>
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                onBlur={onBlur}
+                onChangeText={txt => {
+                  // Workaround for issue: https://github.com/facebook/react-native/issues/36494
+                  if (iOSTextInputWorkaroundRef.current) {
+                    iOSTextInputWorkaroundRef.current = false;
+                    return;
+                  }
+
+                  onChange(txt);
+                }}
+                value={value}
+                multiline={true}
+                placeholder={strings.DESCRIPTION_PLACEHOLDER}
+                style={styles.description}
+                error={errors?.description?.message}
               />
-            </View>
-
-            <View style={styles.rowItem}>
-              <Typography type="header" style={styles.labelText}>
-                Work in hours
-              </Typography>
-              <Controller
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <PickerSelect
-                    onValueChange={onChange}
-                    value={value}
-                    items={workHoursData}
-                    error={errors?.work_in_hours?.message}
-                  />
-                )}
-                name="work_in_hours"
-              />
-            </View>
-          </View>
-
-          <View>
-            <Typography type="header" style={styles.labelText}>
-              Description
-            </Typography>
-            <Controller
-              control={control}
-              render={({field: {onChange, onBlur, value}}) => (
-                <Input
-                  onBlur={onBlur}
-                  onChangeText={txt => {
-                    // Workaround for issue: https://github.com/facebook/react-native/issues/36494
-                    if (iOSTextInputWorkaroundRef.current) {
-                      iOSTextInputWorkaroundRef.current = false;
-                      return;
-                    }
-
-                    onChange(txt);
-                  }}
-                  value={value}
-                  multiline={true}
-                  placeholder={strings.DESCRIPTION_PLACEHOLDER}
-                  style={styles.description}
-                  error={errors?.description?.message}
-                />
-              )}
-              name="description"
-            />
-          </View>
-        </KeyboardAwareScrollView>
+            )}
+            name="description"
+          />
+        </View>
       </Collapsible>
       {!isEditForm ? (
         <View style={styles.addButton}>
