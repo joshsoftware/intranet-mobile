@@ -4,11 +4,15 @@ import {AxiosError} from 'axios';
 
 import UserContext, {UserData} from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
-import {LoginResponseBody, AuthType, sendLoginRequest} from '../../services/api/login';
+import {
+  LoginResponseBody,
+  AuthType,
+  sendLoginRequest,
+} from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
 import {appleSignIn} from '../../services/auth/apple.auth';
 import toast from '../../utils/toast';
-import { logEvent } from '../../services/firebase/analytics';
+import {logEvent} from '../../services/firebase/analytics';
 
 export const useLogin = () => {
   const [, setUserContextData] = useContext(UserContext);
@@ -17,7 +21,7 @@ export const useLogin = () => {
   const {mutate, isLoading} = useMutation(sendLoginRequest, {
     onSuccess: async response => {
       const responseData = response.data.data;
-      await logEvent('INTRANET_SIGNIN_SUCCESS', responseData);
+      await logEvent('INTRANET_SIGNIN_SUCCESS');
 
       const authToken = responseData.jwtToken;
       const userData: UserData = {
