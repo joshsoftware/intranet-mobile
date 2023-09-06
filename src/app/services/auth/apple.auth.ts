@@ -53,13 +53,16 @@ export const appleSignIn = async () => {
 
       switch (error.code) {
         case appleAuth.Error.FAILED:
+          toast('Apple sign-in failed. Please try again.', 'error');
           codeName = 'Failed';
           break;
         case appleAuth.Error.INVALID_RESPONSE:
           codeName = 'Invalid Response';
+          toast('Apple sign-in failed. Please try again.', 'error');
           break;
         case appleAuth.Error.NOT_HANDLED:
           codeName = 'Not Handled';
+          toast('Apple sign-in failed. Please try again.', 'error');
           break;
         case appleAuth.Error.UNKNOWN:
         default:
@@ -67,7 +70,6 @@ export const appleSignIn = async () => {
           break;
       }
 
-      toast('Apple sign-in failed. Please try again.', 'error');
       await logEvent('APPLE_SIGNIN_FAILED', {
         code: codeName,
         message: error.message,
