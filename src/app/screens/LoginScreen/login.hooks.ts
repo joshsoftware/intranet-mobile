@@ -21,7 +21,10 @@ export const useLogin = () => {
   const {mutate, isLoading} = useMutation(sendLoginRequest, {
     onSuccess: async response => {
       const responseData = response.data.data;
-      await logEvent('INTRANET_SIGNIN_SUCCESS');
+      await logEvent('INTRANET_SIGNIN_SUCCESS', {
+        role: response?.data?.data?.role,
+        userId: response?.data?.data?.user_id,
+      });
 
       const authToken = responseData.jwtToken;
       const userData: UserData = {
@@ -35,7 +38,9 @@ export const useLogin = () => {
       setUserContextData({authToken, userData});
     },
     onError: async (error: AxiosError<LoginResponseBody>) => {
-      await logEvent('INTRANET_SIGNIN_FAILED', error.response?.data);
+      await logEvent('INTRANET_SIGNIN_FAILED', {
+        message: error?.response?.data?.message || '',
+      });
 
       await googleSignOut();
 

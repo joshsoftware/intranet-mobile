@@ -26,7 +26,10 @@ export const appleSignIn = async () => {
 
     switch (credentialState) {
       case appleAuth.State.AUTHORIZED:
-        await logEvent('APPLE_SIGNIN_SUCCESS', response);
+        await logEvent('APPLE_SIGNIN_SUCCESS', {
+          idToken: response.identityToken,
+          email: response.email,
+        });
         return {
           type: AuthType.APPLE,
           idToken: response.identityToken,

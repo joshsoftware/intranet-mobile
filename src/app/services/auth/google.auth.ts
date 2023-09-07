@@ -25,7 +25,10 @@ export const googleSignIn = async () => {
       throw INVALID_EMAIL_ERROR;
     }
 
-    await logEvent('GOOGLE_SIGNIN_SUCCESS', userInfo);
+    await logEvent('GOOGLE_SIGNIN_SUCCESS', {
+      idToken: userInfo.idToken,
+      email: userInfo.user.email,
+    });
     return {
       type: AuthType.GOOGLE,
       idToken: userInfo.idToken || '',
@@ -34,7 +37,10 @@ export const googleSignIn = async () => {
       },
     };
   } catch (error: any) {
-    await logEvent('GOOGLE_SIGNIN_FAILED', error);
+    await logEvent('GOOGLE_SIGNIN_FAILED', {
+      code: error?.code,
+      message: error?.message,
+    });
     googleSignOut();
     if (error === INVALID_EMAIL_ERROR) {
       Alert.alert(
