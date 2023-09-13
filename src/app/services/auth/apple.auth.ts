@@ -30,6 +30,7 @@ export const appleSignIn = async () => {
           idToken: response.identityToken,
           email: response.email,
         });
+
         return {
           type: AuthType.APPLE,
           idToken: response.identityToken,

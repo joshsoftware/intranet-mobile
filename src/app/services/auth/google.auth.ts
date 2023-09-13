@@ -1,4 +1,3 @@
-import {Alert} from 'react-native';
 import {
   GoogleSignin,
   statusCodes,
@@ -8,8 +7,6 @@ import Config from 'react-native-config';
 import toast from '../../utils/toast';
 import {logEvent} from '../firebase/analytics';
 import {AuthType} from '../api/login';
-
-import {INVALID_EMAIL_ERROR} from '../../constant/message';
 
 GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
@@ -21,17 +18,14 @@ export const googleSignIn = async () => {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
 
-    if (!userInfo.user.email.endsWith('@joshsoftware.com')) {
-      throw INVALID_EMAIL_ERROR;
-    }
-
     await logEvent('GOOGLE_SIGNIN_SUCCESS', {
       idToken: userInfo.idToken,
       email: userInfo.user.email,
     });
+
     return {
       type: AuthType.GOOGLE,
-      idToken: userInfo.idToken || '',
+      idToken: userInfo.idToken,
       user: {
         email: userInfo.user.email,
       },
@@ -41,13 +35,9 @@ export const googleSignIn = async () => {
       code: error?.code,
       message: error?.message,
     });
-    googleSignOut();
-    if (error === INVALID_EMAIL_ERROR) {
-      Alert.alert(
-        'Login Error',
-        'Only Google accounts from joshsoftware are allowed.',
-      );
-    } else if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    await googleSignOut();
+
+    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       return;
     } else if (error.code === statusCodes.IN_PROGRESS) {
       toast('Sign in is in progress already', 'error');

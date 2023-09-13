@@ -20,11 +20,13 @@ import {RootStackParamList} from './types';
 import {
   DRAWER,
   LEAVE_DETAIL_SCREEN,
+  LOGIN_INSTRUCTION_SCREEN,
   LOGIN_SCREEN,
   USER_PROFILE_SCREEN,
   USER_TIMESHEET,
 } from '../constant/screenNames';
 import colors from '../constant/colors';
+import LoginInstructionScreen from '../screens/LoginScreen/LoginInstructionScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -88,7 +90,13 @@ const RootNavigator = () => {
             />
           </>
         ) : (
-          <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
+          <>
+            <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
+            <RootStack.Screen
+              name={LOGIN_INSTRUCTION_SCREEN}
+              component={LoginInstructionScreen}
+            />
+          </>
         )}
       </RootStack.Navigator>
     </NavigationContainer>

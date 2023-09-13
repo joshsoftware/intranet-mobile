@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ImageBackground, Platform, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -7,6 +7,7 @@ import {useLogin} from './login.hooks';
 
 import {JoshLogo} from '../../constant/icons';
 import boxBackgroundImage from '../../../assets/images/boxBackground.png';
+import AppleLoginInfoModal from './components/AppleLoginInfoModal';
 
 const LoginScreen = () => {
   const {
@@ -17,6 +18,12 @@ const LoginScreen = () => {
     appleSignInHandler,
   } = useLogin();
   const insets = useSafeAreaInsets();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAppleLoginContinue = () => {
+    setShowModal(false);
+    appleSignInHandler();
+  };
 
   return (
     <ImageBackground source={boxBackgroundImage} style={styles.imageContainer}>
@@ -40,11 +47,17 @@ const LoginScreen = () => {
             type="primary"
             title="Login With Apple"
             disabled={isLoading || Platform.OS !== 'ios'}
-            onPress={appleSignInHandler}
+            onPress={() => setShowModal(true)}
             isLoading={isLoading && isAppleAuth}
           />
         </View>
       </View>
+
+      <AppleLoginInfoModal
+        isVisible={showModal}
+        closeModal={() => setShowModal(false)}
+        continueAppleLogin={handleAppleLoginContinue}
+      />
     </ImageBackground>
   );
 };

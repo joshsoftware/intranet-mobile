@@ -1,6 +1,8 @@
 import {useCallback, useContext, useState} from 'react';
 import {useMutation} from 'react-query';
 import {AxiosError} from 'axios';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import UserContext, {UserData} from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
@@ -8,15 +10,20 @@ import {
   LoginResponseBody,
   AuthType,
   sendLoginRequest,
+  LoginErrorResponseBody,
 } from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
 import {appleSignIn} from '../../services/auth/apple.auth';
 import toast from '../../utils/toast';
 import {logEvent} from '../../services/firebase/analytics';
+import {RootStackParamList} from '../../navigation/types';
+import {LOGIN_INSTRUCTION_SCREEN} from '../../constant/screenNames';
 
 export const useLogin = () => {
   const [, setUserContextData] = useContext(UserContext);
   const [authType, setAuthType] = useState<AuthType>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const {mutate, isLoading} = useMutation(sendLoginRequest, {
     onSuccess: async response => {
@@ -47,12 +54,21 @@ export const useLogin = () => {
       if (error.response) {
         if (error.response.status >= 500) {
           toast('Server Error: Please try again later.', 'error');
+        } else if (error.response.status === 404) {
+          let responseData = error.response
+            .data as unknown as LoginErrorResponseBody;
+
+          navigation.navigate(LOGIN_INSTRUCTION_SCREEN, {
+            code: responseData.data.code,
+            email: responseData.data.email,
+            type: responseData.data.type,
+          });
         } else {
           const responseData = error.response.data;
           toast(responseData.message, 'error');
         }
       } else {
-        toast(error.message, 'error');
+        toast('Network Error: Please try again.', 'error');
       }
     },
   });

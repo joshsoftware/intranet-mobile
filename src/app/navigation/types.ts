@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/native-stack';
 
 import {Employee} from '../../app/screens/TimesheetScreen/interface';
+import {AuthType, IntranetErrorCode} from '../services/api/login';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
   Drawer: NavigatorScreenParams<DrawerParamList>;
   Profile: undefined;
   LeaveDetail: {leaveID: number};
+  LoginInstruction: {code: IntranetErrorCode; type: AuthType; email: string};
 };
 
 export type MainTabParamList = {
@@ -46,3 +48,8 @@ export type UserTimesheetRouteProp = RouteProp<
 export type Navigation = {
   navigate: Function;
 };
+
+export type LoginInstructionScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'LoginInstruction'
+>;

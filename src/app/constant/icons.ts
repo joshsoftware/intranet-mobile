@@ -15,6 +15,9 @@ import Search from '../../assets/svg/search.svg';
 import Arrow from '../../assets/svg/arrow.svg';
 import BirthdayCake from '../../assets/svg/birthdayCake.svg';
 import Timesheet from '../../assets/svg/timesheet.svg';
+import Info from '../../assets/svg/info.svg';
+import TaskAlt from '../../assets/svg/taskAlt.svg';
+import Warning from '../../assets/svg/warning.svg';
 
 export {
   Calendar,
@@ -34,4 +37,7 @@ export {
   Filter,
   BirthdayCake,
   Timesheet,
+  Info,
+  TaskAlt,
+  Warning,
 };
