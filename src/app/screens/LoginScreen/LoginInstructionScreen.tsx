@@ -12,7 +12,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Button from '../../components/button';
 import Header from '../../components/header';
-import SigninSuccessCard from './components/SigninSuccessCard';
 import WarningMessageCard from './components/WarningMessageCard';
 import InstructionCard from './components/InstructionCard';
 
@@ -42,10 +41,7 @@ function LoginInstructionScreen(props: LoginInstructionScreenNavigationProp) {
         </View>
 
         <ScrollView style={styles.contentContainer}>
-          <SigninSuccessCard type={type} email={email} />
-
-          <WarningMessageCard code={code} />
-
+          <WarningMessageCard code={code} email={email} />
           <InstructionCard type={type} code={code} />
         </ScrollView>
         <View style={styles.buttonContainer}>
