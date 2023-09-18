@@ -14,8 +14,9 @@ import {
 } from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
 import {appleSignIn} from '../../services/auth/apple.auth';
-import toast from '../../utils/toast';
 import {logEvent} from '../../services/firebase/analytics';
+import toast from '../../utils/toast';
+
 import {RootStackParamList} from '../../navigation/types';
 import {LOGIN_INSTRUCTION_SCREEN} from '../../constant/screenNames';
 

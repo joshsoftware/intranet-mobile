@@ -3,11 +3,11 @@ import {ImageBackground, Platform, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Button from '../../components/button';
+import AppleLoginInfoModal from './components/AppleLoginInfoModal';
 import {useLogin} from './login.hooks';
 
 import {JoshLogo} from '../../constant/icons';
 import boxBackgroundImage from '../../../assets/images/boxBackground.png';
-import AppleLoginInfoModal from './components/AppleLoginInfoModal';
 
 const LoginScreen = () => {
   const {

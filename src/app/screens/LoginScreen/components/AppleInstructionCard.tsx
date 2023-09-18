@@ -1,10 +1,10 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import {Info} from '../../../constant/icons';
-
-import {cardStyles, infoStyles} from '../styles';
 import Typography from '../../../components/typography';
+
+import {Info} from '../../../constant/icons';
+import {cardStyles, infoStyles} from '../styles';
 
 function AppleLoginInstructionCard() {
   return (

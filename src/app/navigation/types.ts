@@ -4,8 +4,8 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 
-import {Employee} from '../../app/screens/TimesheetScreen/interface';
 import {AuthType, IntranetErrorCode} from '../services/api/login';
+import {Employee} from '../../app/screens/TimesheetScreen/interface';
 
 export type RootStackParamList = {
   Login: undefined;

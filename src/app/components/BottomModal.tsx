@@ -3,8 +3,9 @@ import {Platform, StyleSheet, View} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import colors from '../constant/colors';
 import {useIsKeyboardShown} from '../hooks/useIsKeyboardShown';
+
+import colors from '../constant/colors';
 
 interface IProps {
   isVisible: boolean;

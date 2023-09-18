@@ -10,6 +10,7 @@ import LoginScreen from '../screens/LoginScreen';
 import TimesheetList from '../screens/TimesheetScreen/view/timesheetList';
 import ProfileScreen from '../screens/ProfileScreen';
 import LeaveDetailScreen from '../screens/LeaveScreen/ManagementLeaveScreen/LeaveDetailScreen';
+import LoginInstructionScreen from '../screens/LoginScreen/LoginInstructionScreen';
 import DrawerNavigator from './DrawerNavigation';
 import {navigationRef} from '.';
 
@@ -26,7 +27,6 @@ import {
   USER_TIMESHEET,
 } from '../constant/screenNames';
 import colors from '../constant/colors';
-import LoginInstructionScreen from '../screens/LoginScreen/LoginInstructionScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
