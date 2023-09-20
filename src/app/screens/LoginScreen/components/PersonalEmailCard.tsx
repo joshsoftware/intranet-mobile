@@ -42,7 +42,7 @@ function PersonalEmailCard(props: IProps) {
         <Text style={warningStyles.text} />
         <Text style={warningStyles.text}>
           In case you do not have email id of joshsoftware domain, contact Josh
-          Businuess Support at{' '}
+          Business Support at{' '}
           <Text style={warningStyles.boldText}>
             business.support@joshsoftware.com
           </Text>
