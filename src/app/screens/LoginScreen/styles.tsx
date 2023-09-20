@@ -25,6 +25,9 @@ export const warningStyles = StyleSheet.create({
   text: {
     color: '#663c00',
   },
+  boldText: {
+    fontWeight: 'bold',
+  },
   icon: {
     color: '#ed6c02',
   },
@@ -38,6 +41,9 @@ export const infoStyles = StyleSheet.create({
   },
   text: {
     color: '#014361',
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
   icon: {
     color: '#0288d1',

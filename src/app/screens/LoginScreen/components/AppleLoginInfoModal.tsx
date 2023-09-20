@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import Button from '../../../components/button';
 import BottomModal from '../../../components/BottomModal';
@@ -29,17 +29,11 @@ function AppleLoginInfoModal(props: IProps) {
             <Info fill={infoStyles.icon.color} />
           </View>
           <View style={cardStyles.contentContainer}>
-            <Typography style={infoStyles.text}>
-              1. Please use Apple ID with josh software email.
-            </Typography>
-            <Typography />
-            <Typography style={infoStyles.text}>
-              2. Do select the "Share my email" option when using Apple login.
-            </Typography>
-            <Typography />
-            <Typography style={infoStyles.text}>
-              3. Email id is mandatory for login process.
-            </Typography>
+            <Text style={infoStyles.text}>
+              Ensure to choose the{' '}
+              <Text style={infoStyles.boldText}>"Share My Email"</Text> option
+              in the upcoming pop-up menu.
+            </Text>
           </View>
         </View>
         <Button title="Continue" type="primary" onPress={continueAppleLogin} />

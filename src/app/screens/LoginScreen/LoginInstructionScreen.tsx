@@ -13,7 +13,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Button from '../../components/button';
 import Header from '../../components/header';
 import WarningMessageCard from './components/WarningMessageCard';
-import InstructionCard from './components/InstructionCard';
 
 import boxBackgroundImage from '../../../assets/images/boxBackground.png';
 
@@ -26,7 +25,7 @@ function LoginInstructionScreen(props: LoginInstructionScreenNavigationProp) {
   const {route} = props;
   const params = route.params;
 
-  const {code, type, email} = params;
+  const {code, email, type} = params;
 
   const insets = useSafeAreaInsets();
   const navigation =
@@ -41,8 +40,7 @@ function LoginInstructionScreen(props: LoginInstructionScreenNavigationProp) {
         </View>
 
         <ScrollView style={styles.contentContainer}>
-          <WarningMessageCard code={code} email={email} />
-          <InstructionCard type={type} code={code} />
+          <WarningMessageCard code={code} email={email} type={type} />
         </ScrollView>
         <View style={styles.buttonContainer}>
           <Button

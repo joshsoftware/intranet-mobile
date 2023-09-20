@@ -43,13 +43,15 @@ const LoginScreen = () => {
             onPress={googleSignInHandler}
             isLoading={isLoading && isGoogleAuth}
           />
-          <Button
-            type="primary"
-            title="Login With Apple"
-            disabled={isLoading || Platform.OS !== 'ios'}
-            onPress={() => setShowModal(true)}
-            isLoading={isLoading && isAppleAuth}
-          />
+          {Platform.OS === 'ios' && (
+            <Button
+              type="primary"
+              title="Login With Apple"
+              disabled={isLoading}
+              onPress={() => setShowModal(true)}
+              isLoading={isLoading && isAppleAuth}
+            />
+          )}
         </View>
       </View>
 

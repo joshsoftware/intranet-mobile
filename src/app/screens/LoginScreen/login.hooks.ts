@@ -61,7 +61,7 @@ export const useLogin = () => {
 
           navigation.navigate(LOGIN_INSTRUCTION_SCREEN, {
             code: responseData.data.code,
-            email: responseData.data.email,
+            email: responseData.data.email || '',
             type: responseData.data.type,
           });
         } else {
