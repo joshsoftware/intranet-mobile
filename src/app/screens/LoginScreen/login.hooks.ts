@@ -11,6 +11,7 @@ import {
   AuthType,
   sendLoginRequest,
   LoginErrorResponseBody,
+  IntranetErrorCode,
 } from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
 import {appleSignIn} from '../../services/auth/apple.auth';
@@ -59,10 +60,15 @@ export const useLogin = () => {
           let responseData = error.response
             .data as unknown as LoginErrorResponseBody;
 
+          const code =
+            responseData?.data?.code || IntranetErrorCode.MISSING_EMAIL;
+          const type = responseData?.data?.type || AuthType.GOOGLE;
+          const email = responseData?.data?.email || '';
+
           navigation.navigate(LOGIN_INSTRUCTION_SCREEN, {
-            code: responseData.data.code,
-            email: responseData.data.email || '',
-            type: responseData.data.type,
+            code: code,
+            email: email,
+            type: type,
           });
         } else {
           const responseData = error.response.data;

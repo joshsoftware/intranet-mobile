@@ -1,8 +1,9 @@
 import React from 'react';
 
+import AccountNotPresentCard from './AccountNotPresentCard';
+import MissingEmailCard from './MissingEmailCard';
 import PrivateEmailCard from './PrivateEmailCard';
 import PersonalEmailCard from './PersonalEmailCard';
-import AccountNotPresentCard from './AccountNotPresentCard';
 
 import {AuthType, IntranetErrorCode} from '../../../services/api/login';
 
@@ -18,6 +19,8 @@ function WarningMessageCard(props: IProps) {
       return <PrivateEmailCard email={props.email} />;
     case IntranetErrorCode.PERSONAL_EMAIL:
       return <PersonalEmailCard email={props.email} type={props.type} />;
+    case IntranetErrorCode.MISSING_EMAIL:
+      return <MissingEmailCard type={props.type} />;
     case IntranetErrorCode.ABSENT_IN_DATABASE:
     default:
       return <AccountNotPresentCard email={props.email} />;
