@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, StyleSheet, TouchableOpacity} from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
@@ -25,10 +25,22 @@ const DrawerContent = (props: any) => {
   };
 
   const logout = async () => {
-    await googleSignOut();
-    AsyncStore.removeItem('authToken');
-    AsyncStore.removeItem('user_data');
-    setUserContextData(null);
+    Alert.alert('Alert', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          await googleSignOut();
+          AsyncStore.removeItem('authToken');
+          AsyncStore.removeItem('user_data');
+          setUserContextData(null);
+        },
+      },
+    ]);
   };
 
   const closeDrawer = () => {

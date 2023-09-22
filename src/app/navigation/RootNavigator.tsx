@@ -10,6 +10,7 @@ import LoginScreen from '../screens/LoginScreen';
 import TimesheetList from '../screens/TimesheetScreen/view/timesheetList';
 import ProfileScreen from '../screens/ProfileScreen';
 import LeaveDetailScreen from '../screens/LeaveScreen/ManagementLeaveScreen/LeaveDetailScreen';
+import LoginInstructionScreen from '../screens/LoginScreen/LoginInstructionScreen';
 import DrawerNavigator from './DrawerNavigation';
 import {navigationRef} from '.';
 
@@ -20,6 +21,7 @@ import {RootStackParamList} from './types';
 import {
   DRAWER,
   LEAVE_DETAIL_SCREEN,
+  LOGIN_INSTRUCTION_SCREEN,
   LOGIN_SCREEN,
   USER_PROFILE_SCREEN,
   USER_TIMESHEET,
@@ -88,7 +90,13 @@ const RootNavigator = () => {
             />
           </>
         ) : (
-          <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
+          <>
+            <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />
+            <RootStack.Screen
+              name={LOGIN_INSTRUCTION_SCREEN}
+              component={LoginInstructionScreen}
+            />
+          </>
         )}
       </RootStack.Navigator>
     </NavigationContainer>
