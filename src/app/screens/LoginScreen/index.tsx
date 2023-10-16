@@ -8,20 +8,24 @@ import {useLogin} from './login.hooks';
 
 import {JoshLogo} from '../../constant/icons';
 import boxBackgroundImage from '../../../assets/images/boxBackground.png';
+import OTPSignInModal from './components/OTPSignInModal';
 
 const LoginScreen = () => {
   const {
     isLoading,
+    isOTPAuth,
     isGoogleAuth,
     isAppleAuth,
+    otpSignInHandler,
     googleSignInHandler,
     appleSignInHandler,
   } = useLogin();
   const insets = useSafeAreaInsets();
-  const [showModal, setShowModal] = useState(false);
+  const [showAppleLoginInfoModal, setShowAppleLoginInfoModal] = useState(false);
+  const [showOTPSignInModal, setShowOTPSignInModal] = useState(false);
 
   const handleAppleLoginContinue = () => {
-    setShowModal(false);
+    setShowAppleLoginInfoModal(false);
     appleSignInHandler();
   };
 
@@ -38,6 +42,13 @@ const LoginScreen = () => {
         <View style={styles.buttonContainer}>
           <Button
             type="primary"
+            title="Login With OTP"
+            disabled={isLoading}
+            onPress={() => setShowOTPSignInModal(true)}
+            isLoading={isLoading && isOTPAuth}
+          />
+          <Button
+            type="primary"
             title="Login With Google"
             disabled={isLoading}
             onPress={googleSignInHandler}
@@ -48,7 +59,7 @@ const LoginScreen = () => {
               type="primary"
               title="Login With Apple"
               disabled={isLoading}
-              onPress={() => setShowModal(true)}
+              onPress={() => setShowAppleLoginInfoModal(true)}
               isLoading={isLoading && isAppleAuth}
             />
           )}
@@ -56,9 +67,15 @@ const LoginScreen = () => {
       </View>
 
       <AppleLoginInfoModal
-        isVisible={showModal}
-        closeModal={() => setShowModal(false)}
+        isVisible={showAppleLoginInfoModal}
+        closeModal={() => setShowAppleLoginInfoModal(false)}
         continueAppleLogin={handleAppleLoginContinue}
+      />
+
+      <OTPSignInModal
+        isVisible={showOTPSignInModal}
+        closeModal={() => setShowOTPSignInModal(false)}
+        otpSignInHandler={otpSignInHandler}
       />
     </ImageBackground>
   );

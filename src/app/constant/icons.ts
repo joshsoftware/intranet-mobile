@@ -18,6 +18,7 @@ import Timesheet from '../../assets/svg/timesheet.svg';
 import Info from '../../assets/svg/info.svg';
 import TaskAlt from '../../assets/svg/taskAlt.svg';
 import Warning from '../../assets/svg/warning.svg';
+import Error from '../../assets/svg/error.svg';
 
 export {
   Calendar,
@@ -40,4 +41,5 @@ export {
   Info,
   TaskAlt,
   Warning,
+  Error,
 };

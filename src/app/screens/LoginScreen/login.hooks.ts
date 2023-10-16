@@ -12,6 +12,7 @@ import {
   sendLoginRequest,
   LoginErrorResponseBody,
   IntranetErrorCode,
+  sendGenerateOTPRequest,
 } from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
 import {appleSignIn} from '../../services/auth/apple.auth';
@@ -80,6 +81,18 @@ export const useLogin = () => {
     },
   });
 
+  const otpSignInHandler = useCallback(
+    async (email: string, otp: string) => {
+      setAuthType(AuthType.OTP);
+      mutate({
+        type: AuthType.OTP,
+        email: email,
+        otp: otp,
+      });
+    },
+    [mutate],
+  );
+
   const googleSignInHandler = useCallback(async () => {
     await logEvent('GOOGLE_SIGNIN_BUTTON_CLICK');
     const response = await googleSignIn();
@@ -100,9 +113,50 @@ export const useLogin = () => {
 
   return {
     isLoading,
+    otpSignInHandler,
     googleSignInHandler,
     appleSignInHandler,
+    isOTPAuth: authType === 'otp',
     isGoogleAuth: authType === 'google',
     isAppleAuth: authType === 'apple',
+  };
+};
+
+export const useGenerateOTP = (
+  successCallback: () => void,
+  errorCallback: (error: string) => void,
+) => {
+  const {mutate, isLoading} = useMutation(sendGenerateOTPRequest, {
+    onSuccess: response => {
+      if (response === undefined) {
+        errorCallback('Network Error: Please try again.');
+      } else {
+        successCallback();
+      }
+    },
+    onError: async (error: AxiosError<LoginResponseBody>) => {
+      if (error.response) {
+        if (error.response.status >= 500) {
+          errorCallback('Server Error: Please try again later.');
+        } else {
+          const responseData = error.response.data;
+          errorCallback(responseData.message);
+        }
+      } else {
+        errorCallback('Network Error: Please try again.');
+      }
+    },
+  });
+
+  const generateOTP = (email: string) => {
+    mutate({
+      type: AuthType.OTP,
+      email: email,
+    });
+  };
+
+  return {
+    generateOTP,
+    isLoading,
   };
 };

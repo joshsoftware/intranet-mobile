@@ -11,10 +11,11 @@ interface IProps {
   isVisible: boolean;
   closeModal: () => void;
   children: ReactNode;
+  closeOnBackdropPress?: boolean;
 }
 
 function BottomModal(props: IProps) {
-  const {isVisible, closeModal, children} = props;
+  const {isVisible, closeModal, children, closeOnBackdropPress = true} = props;
 
   const insets = useSafeAreaInsets();
   const {keyboardHeight, isKeyboardShown} = useIsKeyboardShown();
@@ -42,7 +43,7 @@ function BottomModal(props: IProps) {
       animationInTiming={500}
       animationOutTiming={500}
       onBackButtonPress={closeModal}
-      onBackdropPress={closeModal}>
+      onBackdropPress={closeOnBackdropPress ? closeModal : () => {}}>
       <View
         style={[styles.modalContent, {paddingBottom: contentPaddingBottom}]}>
         {children}

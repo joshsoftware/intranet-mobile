@@ -1,11 +1,12 @@
 import {AxiosResponse} from 'axios';
 
 import {apiCall} from '.';
-import {LOGIN_ROUTE} from '../../constant/apiRoutes';
-import {getNotificationToken} from '../firebase/messaging';
+import {EMAIL_OTP, LOGIN_ROUTE} from '../../constant/apiRoutes';
+// import {getNotificationToken} from '../firebase/messaging';
 import {UserRole} from '../../context/user.context';
 
 export enum AuthType {
+  OTP = 'otp',
   GOOGLE = 'google',
   APPLE = 'apple',
 }
@@ -25,7 +26,7 @@ type PayloadType =
         email: string | null;
       };
     }
-  | {email: string; password: string};
+  | {type: AuthType; email: string; otp: string};
 
 export type LoginRequestBody = PayloadType & {
   notificationToken: string;
@@ -50,9 +51,12 @@ export type LoginErrorResponseBody = {
 };
 
 export const sendLoginRequest = async (payload: PayloadType) => {
-  const notificationToken = await getNotificationToken();
+  // const notificationToken = await getNotificationToken();
 
-  const data: LoginRequestBody = {...payload, notificationToken};
+  const data: LoginRequestBody = {
+    ...payload,
+    notificationToken: '',
+  };
 
   const response = await apiCall<LoginRequestBody, LoginResponseBody>({
     method: 'POST',
@@ -61,4 +65,28 @@ export const sendLoginRequest = async (payload: PayloadType) => {
   });
 
   return response as AxiosResponse<LoginResponseBody>;
+};
+
+interface GeneratteOTPRequestBody {
+  type: string;
+  email: string;
+}
+
+interface GenerateOTPResponseBody {
+  message: string;
+}
+
+export const sendGenerateOTPRequest = async (
+  payload: GeneratteOTPRequestBody,
+) => {
+  const response = await apiCall<
+    GeneratteOTPRequestBody,
+    GenerateOTPResponseBody
+  >({
+    method: 'POST',
+    url: EMAIL_OTP,
+    data: payload,
+  });
+
+  return response as AxiosResponse<GenerateOTPResponseBody>;
 };

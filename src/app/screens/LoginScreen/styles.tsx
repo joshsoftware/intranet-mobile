@@ -18,7 +18,6 @@ export const cardStyles = StyleSheet.create({
 
 export const warningStyles = StyleSheet.create({
   container: {
-    // backgroundColor: '#e5f6fd',
     borderWidth: 1,
     borderColor: '#ff9800',
   },
@@ -35,7 +34,6 @@ export const warningStyles = StyleSheet.create({
 
 export const infoStyles = StyleSheet.create({
   container: {
-    // backgroundColor: '#e5f6fd',
     borderWidth: 1,
     borderColor: '#03a9f4',
   },
@@ -52,7 +50,6 @@ export const infoStyles = StyleSheet.create({
 
 export const successStyles = StyleSheet.create({
   container: {
-    // backgroundColor: '#edf7ed',
     borderWidth: 1,
     borderColor: '#4caf50',
   },
@@ -61,5 +58,18 @@ export const successStyles = StyleSheet.create({
   },
   icon: {
     color: '#2e7d32',
+  },
+});
+
+export const errorStyles = StyleSheet.create({
+  container: {
+    borderWidth: 1,
+    borderColor: '#ef5350',
+  },
+  text: {
+    color: '#5f2120',
+  },
+  icon: {
+    color: '#d32f2f',
   },
 });
