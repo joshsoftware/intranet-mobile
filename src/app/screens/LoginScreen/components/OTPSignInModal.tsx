@@ -34,8 +34,6 @@ function OTPSignInModal(props: Props) {
     setError('');
     setEmailError('');
     setOTPError('');
-    setEmail('');
-    setOTP('');
     closeModal();
   };
 
@@ -78,8 +76,6 @@ function OTPSignInModal(props: Props) {
       setEmailError('Enter a valid email of joshsoftware domain!');
       return;
     }
-
-    console.log(isFirst);
 
     if (!isFirst) {
       setTimerValue(waitTimeRef.current);
@@ -136,6 +132,7 @@ function OTPSignInModal(props: Props) {
             </View>
           </View>
         )}
+
         {emailView ? (
           <EmailView
             email={email}
@@ -245,7 +242,7 @@ function OTPView(props: OTPViewProps) {
         />
       </View>
 
-      <Text>
+      <Text style={styles.sendOTPContainer}>
         <Text
           style={[
             styles.sendOTPButton,
@@ -258,7 +255,7 @@ function OTPView(props: OTPViewProps) {
         {timerValue !== 0 && (
           <Text>
             {' '}
-            in
+            in{' '}
             {Math.floor(timerValue / 60).toLocaleString('en-IN', {
               minimumIntegerDigits: 2,
             })}
@@ -290,16 +287,21 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   title: {
+    color: colors.SECONDARY,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   inputContainer: {},
   inputLabel: {
+    color: colors.SECONDARY,
     fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 10,
+  },
+  sendOTPContainer: {
+    textAlign: 'center',
   },
   sendOTPButton: {
     textAlign: 'center',
