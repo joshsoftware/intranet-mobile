@@ -23,10 +23,12 @@ import {
   LEAVE_DETAIL_SCREEN,
   LOGIN_INSTRUCTION_SCREEN,
   LOGIN_SCREEN,
+  OTP_AUTHENTICATION_SCREEN,
   USER_PROFILE_SCREEN,
   USER_TIMESHEET,
 } from '../constant/screenNames';
 import colors from '../constant/colors';
+import OTPAuthenticationScreen from '../screens/LoginScreen/OTPAuthenticationScreen';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -95,6 +97,10 @@ const RootNavigator = () => {
             <RootStack.Screen
               name={LOGIN_INSTRUCTION_SCREEN}
               component={LoginInstructionScreen}
+            />
+            <RootStack.Screen
+              name={OTP_AUTHENTICATION_SCREEN}
+              component={OTPAuthenticationScreen}
             />
           </>
         )}

@@ -18,6 +18,7 @@ export type RootStackParamList = {
   Profile: undefined;
   LeaveDetail: {leaveID: number};
   LoginInstruction: {code: IntranetErrorCode; type: AuthType; email: string};
+  OTPAuthentication: {email: string};
 };
 
 export type MainTabParamList = {
@@ -38,6 +39,11 @@ export type MainScreenNavigationProp = NativeStackNavigationProp<
 export type LeaveDetailScreenNavigationProp = NativeStackScreenProps<
   RootStackParamList,
   'LeaveDetail'
+>;
+
+export type OTPAuthenticationScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'OTPAuthentication'
 >;
 
 export type UserTimesheetRouteProp = RouteProp<

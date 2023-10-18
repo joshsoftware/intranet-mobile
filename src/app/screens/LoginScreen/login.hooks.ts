@@ -122,14 +122,11 @@ export const useLogin = () => {
   };
 };
 
-export const useGenerateOTP = (
-  successCallback: () => void,
-  errorCallback: (error: string) => void,
-) => {
+export const useGenerateOTP = (successCallback: () => void) => {
   const {mutate, isLoading} = useMutation(sendGenerateOTPRequest, {
     onSuccess: response => {
       if (response === undefined) {
-        errorCallback('Network Error: Please try again.');
+        toast('Network Error: Please try again.', 'error');
       } else {
         successCallback();
       }
@@ -137,13 +134,13 @@ export const useGenerateOTP = (
     onError: async (error: AxiosError<LoginResponseBody>) => {
       if (error.response) {
         if (error.response.status >= 500) {
-          errorCallback('Server Error: Please try again later.');
+          toast('Server Error: Please try again later.', 'error');
         } else {
           const responseData = error.response.data;
-          errorCallback(responseData.message);
+          toast(responseData.message, 'error');
         }
       } else {
-        errorCallback('Network Error: Please try again.');
+        toast('Network Error: Please try again.', 'error');
       }
     },
   });
