@@ -2,6 +2,7 @@ export interface Employee {
   name: string;
   email: string;
   user_id: string;
+  worked_minutes: number;
 }
 
 export type Timesheet = {
@@ -53,8 +54,21 @@ export type TCerateTimsheetResponse = ITimesheetResponse & {
   data: {[key: string]: string[]};
 };
 
-export type TEmpListTSResponse = ITimesheetResponse & {
-  data: Employee[];
+export type TEmpListTSResponse = {
+  message: string;
+  data: {
+    user_id: string;
+    name: string;
+    email: string;
+    worked_minutes: number;
+    user_data: {
+      status: string;
+      projects: {
+        title: string;
+        users: Employee[];
+      }[];
+    }[];
+  };
 };
 
 export type TAssignedProjectList = {data: TSelectData[]};

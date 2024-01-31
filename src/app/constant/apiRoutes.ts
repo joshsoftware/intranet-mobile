@@ -6,7 +6,7 @@ export const USER_PROFILE_ROUTE = '/api/mobile/v1/user_details';
 export const GET_ALL_SKILL_ROUTE = '/api/mobile/v1/skills_list';
 export const UPDATE_SKILL_ROUTE = '/api/mobile/v1/update_skills';
 
-export const GET_EMPLOYEE_LIST_ROUTE = '/api/mobile/v1/time_sheets/emp_list';
+export const GET_EMPLOYEE_LIST_ROUTE = '/api/mobile/v2/time_sheets/reportees';
 export const GET_TIMESHEET_ROUTE = '/api/mobile/v1/time_sheets/show_time_sheet';
 export const GET_PROJECT_LIST_ROUTE =
   '/api/mobile/v1/time_sheets/project_list/:user_id';

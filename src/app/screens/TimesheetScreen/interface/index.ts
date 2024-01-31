@@ -2,6 +2,7 @@ export interface Employee {
   name: string;
   email: string;
   user_id: string;
+  worked_minutes: number;
 }
 
 export interface Timesheet {

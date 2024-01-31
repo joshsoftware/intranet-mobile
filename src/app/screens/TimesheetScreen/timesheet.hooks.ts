@@ -24,7 +24,7 @@ export const useEmployees = (startDate: Date, endDate: Date) => {
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
   const toDate = dateFormate(endDate, ISO_DATE_FROMAT);
 
-  const {data, isLoading, refetch} = useQuery(
+  const {data, isLoading, refetch, isRefetching} = useQuery(
     ['timesheet', 'employee', fromDate, toDate],
     () =>
       getEmployeeListRequest({
@@ -32,7 +32,8 @@ export const useEmployees = (startDate: Date, endDate: Date) => {
         to_date: toDate,
       }),
   );
-  return {data: data?.data?.data ?? [], isLoading, refetch};
+
+  return {data: data?.data?.data, isLoading, refetch, isRefetching};
 };
 
 export const useTimesheets = (

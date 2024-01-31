@@ -17,9 +17,12 @@ type Props = {
   userId: string;
   startDate: Date;
   endDate: Date;
+  worked_minutes: number;
 };
 
-const EmployeeCard = ({name, email, userId, startDate, endDate}: Props) => {
+const EmployeeCard = (props: Props) => {
+  const {name, email, userId, startDate, endDate, worked_minutes} = props;
+
   const handleNavigation = () =>
     navigate(USER_TIMESHEET, {
       name,
@@ -29,12 +32,15 @@ const EmployeeCard = ({name, email, userId, startDate, endDate}: Props) => {
       endDate: dateFormate(endDate, ISO_DATE_FROMAT),
     });
 
+  const hours = Math.floor(worked_minutes / 60);
+  const minutes = Math.floor(worked_minutes % 60);
+
   return (
     <Touchable type="native" onPress={handleNavigation}>
       <View style={styles.main}>
         <View>
           <Typography type="header" style={styles.empName}>
-            {name}
+            {name} {formatTimeString(hours, minutes)}
           </Typography>
           <Typography type="description">{email}</Typography>
         </View>
@@ -42,6 +48,13 @@ const EmployeeCard = ({name, email, userId, startDate, endDate}: Props) => {
       </View>
     </Touchable>
   );
+};
+
+const formatTimeString = (hours: number, minutes: number) => {
+  const hourString = hours === 1 ? '1 hour' : hours + ' hours';
+  const minuteString = minutes === 1 ? '1 minute' : minutes + ' minutes';
+
+  return '(' + hourString + (minutes > 0 ? ' ' + minuteString : '') + ')';
 };
 
 const styles = StyleSheet.create({

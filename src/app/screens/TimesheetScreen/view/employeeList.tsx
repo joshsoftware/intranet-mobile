@@ -1,41 +1,33 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {FlatList, ListRenderItemInfo, StyleSheet, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 
+import DateRangePicker from '../../../components/pickers/DateRangePicker';
 import EmployeeCard from '../component/employeeCard';
-import Input from '../../../components/input';
-import Linear from '../../../components/seperator/linear';
+import FlatSectionList from '../component/FlatSectionList';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import {useEmployees} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
-
-import {Search} from '../../../constant/icons';
-import DateRangePicker from '../../../components/pickers/DateRangePicker';
-import EmptyList from '../component/emptyList';
+import {TEmpListTSResponse} from '../../../services/timesheet/types';
+import {Employee} from '../interface';
 
 type DateRangeProps = {
   startDate: Date;
   endDate: Date;
 };
 
-type RenderItemProps = {
-  name: string;
-  email: string;
-  user_id: string;
-};
-
-const searchIcon = () => <Search style={styles.icon} />;
-
 const EmployeeList = () => {
-  const [searchText, setSearchText] = useState<string>('');
   const [dateRange, setDateRange] = useState<DateRangeProps>({
     startDate: startOfMonth,
     endDate: todaysDate,
   });
 
-  const {data, isLoading, refetch} = useEmployees(
+  const {data, isLoading, refetch, isRefetching} = useEmployees(
     dateRange.startDate,
     dateRange.endDate,
   );
+
+  const userData = prepareFlatSectionListData(data?.user_data || []);
 
   // on date range change
   const onDateRangeSubmit = useCallback((startDate: Date, endDate: Date) => {
@@ -49,17 +41,8 @@ const EmployeeList = () => {
     }
   }, []);
 
-  // filter out employee list basis of searched text
-  const employeeList = useMemo(() => {
-    if (searchText) {
-      const text = searchText.toLowerCase();
-      return data?.filter(({name}) => name.toLowerCase().includes(text));
-    }
-    return data;
-  }, [data, searchText]);
-
   const renderItem = useCallback(
-    ({item: {name, email, user_id}}: ListRenderItemInfo<RenderItemProps>) => {
+    ({item: {name, email, user_id, worked_minutes}}: {item: Employee}) => {
       return (
         <EmployeeCard
           name={name}
@@ -67,6 +50,7 @@ const EmployeeList = () => {
           userId={user_id}
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
+          worked_minutes={worked_minutes}
         />
       );
     },
@@ -82,25 +66,43 @@ const EmployeeList = () => {
           endDate={dateRange.endDate}
           maximumDate={todaysDate}
         />
-        <Input
-          onChangeText={setSearchText}
-          StartIcon={searchIcon}
-          placeholder="Search"
-          value={searchText}
-        />
       </View>
 
-      <FlatList
-        data={employeeList}
-        renderItem={renderItem}
-        keyExtractor={item => item.user_id}
-        ItemSeparatorComponent={Linear}
-        refreshing={isLoading}
-        onRefresh={refetch}
-        ListEmptyComponent={<EmptyList message="No User for current filters" />}
-      />
+      {isLoading && <LoadingSpinner />}
+
+      {data && (
+        <EmployeeCard
+          name={data.name}
+          email={data.email}
+          userId={data.user_id}
+          worked_minutes={data.worked_minutes}
+          startDate={dateRange.startDate}
+          endDate={dateRange.endDate}
+        />
+      )}
+
+      {data && (
+        <FlatSectionList
+          data={userData}
+          refreshing={isRefetching}
+          renderItem={renderItem}
+          onRefresh={refetch}
+        />
+      )}
     </View>
   );
+};
+
+const prepareFlatSectionListData = (
+  data: TEmpListTSResponse['data']['user_data'],
+) => {
+  return data.map(statusObj => ({
+    title: statusObj.status,
+    data: statusObj.projects.map(projectObj => ({
+      title: projectObj.title,
+      data: projectObj.users,
+    })),
+  }));
 };
 
 const styles = StyleSheet.create({
