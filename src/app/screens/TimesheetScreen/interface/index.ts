@@ -18,3 +18,18 @@ export interface ITimesheetSectionListItem {
   title: string;
   data: Timesheet[];
 }
+
+export enum TimesheetStatus {
+  Pending = 'Pending',
+  ReviewPending = 'Review-Pending',
+  RejectedPending = 'Rejected-Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+}
+
+export enum TimesheetStatusFilter {
+  All = 'All',
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+}

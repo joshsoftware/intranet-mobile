@@ -3,13 +3,13 @@ import {StyleSheet, View} from 'react-native';
 
 import DateRangePicker from '../../../components/pickers/DateRangePicker';
 import EmployeeCard from '../component/employeeCard';
-import FlatSectionList from '../component/FlatSectionList';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import StatusFilterList from '../component/StatusFilterList';
 import {useEmployees} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
 import {TEmpListTSResponse} from '../../../services/timesheet/types';
-import {Employee} from '../interface';
+import {Employee, TimesheetStatusFilter} from '../interface';
 
 type DateRangeProps = {
   startDate: Date;
@@ -82,8 +82,9 @@ const EmployeeList = () => {
       )}
 
       {data && (
-        <FlatSectionList
+        <StatusFilterList
           data={userData}
+          defaultStatus={TimesheetStatusFilter.Pending}
           refreshing={isRefetching}
           renderItem={renderItem}
           onRefresh={refetch}
