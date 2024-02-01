@@ -1,9 +1,10 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/native';
 
+import Button from '../../components/button';
 import EmployeeList from './view/employeeList';
 import TimesheetList from './view/timesheetList';
-import FloatingActionButton from '../../components/button/floatingActionButton';
 import CreateTimesheet from './view/createTimesheet';
 
 import {isManagement} from '../../utils/user';
@@ -33,7 +34,13 @@ const TimesheetScreen = () => {
   return (
     <>
       {isManager ? <EmployeeList /> : <TimesheetList />}
-      <FloatingActionButton onPress={toggleModal} />
+      <View style={styles.buttonContainer}>
+        <Button
+          type="tertiary"
+          title="Add Your Timesheet"
+          onPress={toggleModal}
+        />
+      </View>
       <CreateTimesheet
         toggleModal={toggleModal}
         isVisible={isModalOpen}
@@ -43,5 +50,12 @@ const TimesheetScreen = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 5,
+  },
+});
 
 export default TimesheetScreen;

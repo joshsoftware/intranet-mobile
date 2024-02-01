@@ -121,6 +121,10 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 6,
   },
+  buttonContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
 });
 
 export default EmployeeList;
