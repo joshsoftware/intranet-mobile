@@ -9,7 +9,7 @@ import {useEmployees} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
 import {TEmpListTSResponse} from '../../../services/timesheet/types';
-import {Employee, TimesheetStatusFilter} from '../interface';
+import {Employee, TimesheetStatus, TimesheetStatusFilter} from '../interface';
 
 type DateRangeProps = {
   startDate: Date;
@@ -42,7 +42,10 @@ const EmployeeList = () => {
   }, []);
 
   const renderItem = useCallback(
-    ({item: {name, email, user_id, worked_minutes}}: {item: Employee}) => {
+    (item: Employee, superSection: string) => {
+      const {name, email, user_id, worked_minutes} = item;
+      const status = superSection as TimesheetStatus;
+
       return (
         <EmployeeCard
           name={name}
@@ -51,6 +54,7 @@ const EmployeeList = () => {
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
           worked_minutes={worked_minutes}
+          status={status}
         />
       );
     },

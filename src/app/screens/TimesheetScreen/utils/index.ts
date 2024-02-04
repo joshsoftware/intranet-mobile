@@ -56,3 +56,18 @@ const sortData = <T>(data: FlatSectionListData<T>) => {
     ),
   );
 };
+
+export const toTimesheetFilterStatus = (status: TimesheetStatus) => {
+  switch (status) {
+    case TimesheetStatus.Approved:
+      return TimesheetStatusFilter.Approved;
+    case TimesheetStatus.Rejected:
+      return TimesheetStatusFilter.Rejected;
+    case TimesheetStatus.Pending:
+    case TimesheetStatus.ReviewPending:
+    case TimesheetStatus.RejectedPending:
+      return TimesheetStatusFilter.Pending;
+    default:
+      return TimesheetStatusFilter.All;
+  }
+};

@@ -8,27 +8,25 @@ import React, {
 import {Alert, StyleSheet, View} from 'react-native';
 
 import CreateTimesheetButton from './createTimesheetButton';
-import SectionListTimesheet from '../../component/sectionListTimesheet';
 import EditTimesheetModal from '../../component/editTimesheetModal';
 import Typography from '../../../../components/typography';
 import Header from '../../../../components/header';
 import DateRangePicker from '../../../../components/pickers/DateRangePicker';
+import TimesheetItem from '../../component/timesheetItem';
+import StatusFilterList from '../../component/StatusFilterList';
 import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
 
 import {getParams} from '../../../../navigation';
 import {startOfMonth, todaysDate} from '../../../../utils/date';
 import UserContext from '../../../../context/user.context';
+import {IGetTimesheetsResponse} from '../../../../services/timesheet/types';
 import {isManagement} from '../../../../utils/user';
 
-import strings from '../../../../constant/strings';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
-import {Timesheet, TimesheetStatusFilter} from '../../interface';
+import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
-import {IGetTimesheetsResponse} from '../../../../services/timesheet/types';
-import FlatSectionList from '../../component/FlatSectionList';
-import TimesheetItem from '../../component/timesheetItem';
-import StatusFilterList from '../../component/StatusFilterList';
+import {toTimesheetFilterStatus} from '../../utils';
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -122,7 +120,7 @@ const TimesheetList = () => {
   }, [params?.endDate, params?.startDate]);
 
   const renderItem = useCallback(
-    ({item}: {item: Timesheet}) => (
+    (item: Timesheet) => (
       <TimesheetItem
         timesheetData={item}
         onEdit={timesheetEditCall}
@@ -161,57 +159,12 @@ const TimesheetList = () => {
       {data && (
         <StatusFilterList
           data={timesheetData}
-          defaultStatus={TimesheetStatusFilter.All}
+          defaultStatus={toTimesheetFilterStatus(params.status)}
           refreshing={isRefetching}
           renderItem={renderItem}
           onRefresh={refetch}
         />
       )}
-      {/*
-      <FlatSectionList
-        data={timesheetData}
-        refreshing={isRefetching}
-        renderItem={renderItem}
-        onRefresh={refetch}
-      />
-      */}
-
-      {/*
-      <View style={styles.view}>
-        <View style={styles.headerData}>
-          <View style={styles.headerContent}>
-            <Typography type="description" style={styles.title}>
-              {strings.PROJECTS}
-            </Typography>
-            <Typography type="subheader">{data?.projects}</Typography>
-          </View>
-          <View style={styles.headerContent}>
-            <Typography type="description" style={styles.title}>
-              {strings.WORK_HOURS}
-            </Typography>
-            <Typography type="subheader">
-              {workHoursTrim(data?.total_work)}
-            </Typography>
-          </View>
-        </View>
-
-        <SectionListTimesheet
-          isLoading={isLoading}
-          sections={data?.data ?? []}
-          onDelete={timesheetDeleteCall}
-          onEdit={timesheetEditCall}
-          refreshing={isFetching}
-          onRefresh={refetch}
-          showEmptyListIcon={true}
-          emptyListMessage={strings.NO_TIMESHEET_PRESENT}
-          isDeleteVisible={isManager}
-        />
-
-        {params?.user_id && (
-          <CreateTimesheetButton userId={params?.user_id} name={params?.name} />
-        )}
-      </View>
-      */}
 
       {params?.user_id && (
         <View style={styles.buttonContainer}>

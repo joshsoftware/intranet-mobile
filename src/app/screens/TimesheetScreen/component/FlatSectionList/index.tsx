@@ -17,7 +17,7 @@ interface IProps<T> {
   data: FlatSectionListData<T>;
   refreshing: boolean;
   onRefresh: () => void;
-  renderItem: ({item}: {item: T}) => React.ReactElement;
+  renderItem: (item: T, superSection: string) => React.ReactElement;
 }
 
 const FlatSectionList = <T,>(props: IProps<T>) => {
@@ -31,7 +31,11 @@ const FlatSectionList = <T,>(props: IProps<T>) => {
     return (
       <>
         <Text style={styles.title}>{item.title}</Text>
-        <NestedSectionList data={item.data} renderItem={renderNestedItem} />
+        <NestedSectionList
+          data={item.data}
+          renderItem={renderNestedItem}
+          superSection={item.title}
+        />
       </>
     );
   };

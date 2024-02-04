@@ -3,11 +3,14 @@ import {SectionList, StyleSheet, Text} from 'react-native';
 
 import colors from '../../../../constant/colors';
 
-const NestedSectionList = <T,>(props: {
+interface IProps<T> {
   data: {title: string; data: T[]}[];
-  renderItem: ({item}: {item: T}) => React.ReactElement;
-}) => {
-  const {data, renderItem} = props;
+  superSection: string;
+  renderItem: (item: T, superSection: string) => React.ReactElement;
+}
+
+const NestedSectionList = <T,>(props: IProps<T>) => {
+  const {data, superSection, renderItem} = props;
 
   const renderSectionHeader = ({
     section: {title},
@@ -17,10 +20,14 @@ const NestedSectionList = <T,>(props: {
     return <Text style={styles.sectionHeader}>{title}</Text>;
   };
 
+  const renderItemWrapper = ({item}: {item: T}) => {
+    return renderItem(item, superSection);
+  };
+
   return (
     <SectionList
       sections={data}
-      renderItem={renderItem}
+      renderItem={renderItemWrapper}
       renderSectionHeader={renderSectionHeader}
     />
   );

@@ -10,6 +10,7 @@ import {dateFormate} from '../../../utils/date';
 import {Arrow} from '../../../constant/icons';
 import {USER_TIMESHEET} from '../../../constant/screenNames';
 import {ISO_DATE_FROMAT} from '../../../constant/date';
+import { TimesheetStatus } from '../interface';
 
 type Props = {
   name: string;
@@ -18,10 +19,11 @@ type Props = {
   startDate: Date;
   endDate: Date;
   worked_minutes: number;
+  status?: TimesheetStatus;
 };
 
 const EmployeeCard = (props: Props) => {
-  const {name, email, userId, startDate, endDate, worked_minutes} = props;
+  const {name, email, userId, startDate, endDate, worked_minutes, status} = props;
 
   const handleNavigation = () =>
     navigate(USER_TIMESHEET, {
@@ -30,6 +32,7 @@ const EmployeeCard = (props: Props) => {
       user_id: userId,
       startDate: dateFormate(startDate, ISO_DATE_FROMAT),
       endDate: dateFormate(endDate, ISO_DATE_FROMAT),
+      status: status,
     });
 
   const hours = Math.floor(worked_minutes / 60);
