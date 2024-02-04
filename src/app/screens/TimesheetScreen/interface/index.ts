@@ -6,12 +6,11 @@ export interface Employee {
 }
 
 export interface Timesheet {
-  timesheet_id: string;
+  time_sheet_id: string;
   date: string;
-  work_in_hours: string;
   description: string;
-  project?: string;
-  project_id: string;
+  worked_minutes: number;
+  project: string;
 }
 
 export interface ITimesheetSectionListItem {

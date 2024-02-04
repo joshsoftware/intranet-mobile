@@ -1,3 +1,5 @@
+import {Timesheet} from '../../screens/TimesheetScreen/interface';
+
 export interface Employee {
   name: string;
   email: string;
@@ -5,14 +7,14 @@ export interface Employee {
   worked_minutes: number;
 }
 
-export type Timesheet = {
-  project_id: string | number;
-  date: string;
-  duration: string | number;
-  description: string;
-  timesheet_id?: string;
-  id?: string;
-};
+// export type Timesheet = {
+//   project_id: string | number;
+//   date: string;
+//   duration: string | number;
+//   description: string;
+//   timesheet_id?: string;
+//   id?: string;
+// };
 
 export type TDateRange = {
   from_date: string;
@@ -80,8 +82,22 @@ type GetTimesheetAPIData = {
   data: ITimesheetSectionList[];
 };
 
-export type IGetTimesheetsResponse = ITimesheetResponse & {
-  data: GetTimesheetAPIData[];
+export type IGetTimesheetsResponse = {
+  message: string;
+  data: {
+    user_id: string;
+    user_name: string;
+    user_email: string;
+    time_sheet_data: {
+      status: string;
+      worked_minutes: number;
+      project_count: number;
+      projects: {
+        project: string;
+        timesheets: Timesheet[];
+      }[];
+    }[];
+  };
 };
 
 export type TimesheetError = {

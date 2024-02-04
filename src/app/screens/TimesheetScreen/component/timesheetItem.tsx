@@ -36,6 +36,12 @@ const TimesheetItem = ({
       project_title: title,
     });
 
+  const hours = Math.floor(timesheetData.worked_minutes / 60);
+  const minutes = Math.floor(timesheetData.worked_minutes % 60).toLocaleString(
+    'en-US',
+    {minimumIntegerDigits: 2, useGrouping: false},
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContent}>
@@ -44,7 +50,7 @@ const TimesheetItem = ({
             {dateFormate(timesheetData.date)}
           </Typography>
           <Typography type="subheader" style={styles.workedHours}>
-            {timesheetData.work_in_hours}
+            {hours}:{minutes}
           </Typography>
         </View>
         <View style={styles.buttons}>
@@ -68,6 +74,7 @@ const TimesheetItem = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
+    paddingHorizontal: 16,
   },
   titleContent: {
     flexDirection: 'row',

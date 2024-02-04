@@ -23,8 +23,12 @@ import {isManagement} from '../../../../utils/user';
 import strings from '../../../../constant/strings';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
-import {Timesheet} from '../../interface';
+import {Timesheet, TimesheetStatusFilter} from '../../interface';
 import {TDateRange} from '../../../../../types';
+import {IGetTimesheetsResponse} from '../../../../services/timesheet/types';
+import FlatSectionList from '../../component/FlatSectionList';
+import TimesheetItem from '../../component/timesheetItem';
+import StatusFilterList from '../../component/StatusFilterList';
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -43,7 +47,7 @@ const TimesheetList = () => {
     endDate: params?.endDate ? new Date(params.endDate) : todaysDate,
   });
 
-  const {data, isFetching, refetch, isLoading} = useTimesheets(
+  const {data, isRefetching, refetch, isLoading} = useTimesheets(
     userId ?? '',
     dateRange.startDate,
     dateRange.endDate,
@@ -71,11 +75,6 @@ const TimesheetList = () => {
     }
   }, []);
 
-  const workHoursTrim = useCallback(
-    (workHours?: string) => workHours?.slice(0, workHours.indexOf('(')),
-    [],
-  );
-
   const timesheetDeleteCall = useCallback(
     (timesheetData: Timesheet) => {
       Alert.alert(
@@ -91,7 +90,7 @@ const TimesheetList = () => {
             onPress: () =>
               mutate({
                 time_sheet_date: timesheetData?.date,
-                timesheet_id: timesheetData?.timesheet_id,
+                timesheet_id: timesheetData?.time_sheet_id,
               }),
           },
         ],
@@ -122,6 +121,21 @@ const TimesheetList = () => {
     }
   }, [params?.endDate, params?.startDate]);
 
+  const renderItem = useCallback(
+    ({item}: {item: Timesheet}) => (
+      <TimesheetItem
+        timesheetData={item}
+        onEdit={timesheetEditCall}
+        onDelete={timesheetDeleteCall}
+        title={item.project}
+        isDeleteVisible={isManager}
+      />
+    ),
+    [isManager, timesheetDeleteCall, timesheetEditCall],
+  );
+
+  const timesheetData = processTimesheetData(data?.time_sheet_data || []);
+
   return (
     <>
       {params?.user_id && <Header title={TIMESHEET_SCREEN} type="secondary" />}
@@ -144,6 +158,25 @@ const TimesheetList = () => {
         )}
       </View>
 
+      {data && (
+        <StatusFilterList
+          data={timesheetData}
+          defaultStatus={TimesheetStatusFilter.All}
+          refreshing={isRefetching}
+          renderItem={renderItem}
+          onRefresh={refetch}
+        />
+      )}
+      {/*
+      <FlatSectionList
+        data={timesheetData}
+        refreshing={isRefetching}
+        renderItem={renderItem}
+        onRefresh={refetch}
+      />
+      */}
+
+      {/*
       <View style={styles.view}>
         <View style={styles.headerData}>
           <View style={styles.headerContent}>
@@ -174,18 +207,38 @@ const TimesheetList = () => {
           isDeleteVisible={isManager}
         />
 
-        <EditTimesheetModal
-          isVisible={isEditModalVisible}
-          toggleModal={toggleEditModal}
-          formData={editTimesheetData}
-          userId={userId}
-        />
         {params?.user_id && (
           <CreateTimesheetButton userId={params?.user_id} name={params?.name} />
         )}
       </View>
+      */}
+
+      {params?.user_id && (
+        <View style={styles.buttonContainer}>
+          <CreateTimesheetButton userId={params?.user_id} name={params?.name} />
+        </View>
+      )}
+
+      <EditTimesheetModal
+        isVisible={isEditModalVisible}
+        toggleModal={toggleEditModal}
+        formData={editTimesheetData}
+        userId={userId}
+      />
     </>
   );
+};
+
+const processTimesheetData = (
+  data: IGetTimesheetsResponse['data']['time_sheet_data'],
+) => {
+  return data.map(statusObj => ({
+    title: statusObj.status,
+    data: statusObj.projects.map(projectObj => ({
+      title: projectObj.project,
+      data: projectObj.timesheets,
+    })),
+  }));
 };
 
 const styles = StyleSheet.create({
@@ -230,6 +283,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 10,
     paddingBottom: 16,
+  },
+  buttonContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 5,
   },
 });
 

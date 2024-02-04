@@ -61,5 +61,5 @@ export const apiCall = async <T, D>(config: AxiosRequestConfig<T>) => {
 };
 
 // Log Axios Request response for debugging
-// axiosInstance.interceptors.request.use(request => { console.log( '[API Request]', request.method, request.url, JSON.stringify(request.data),); return request; });
-// axiosInstance.interceptors.response.use( response => { console.log( '[API Response]', response.status, response.config.url, JSON.stringify(response.data),); return response; }, error => { if (error.response) { console.log( '[API Response]', error.response.status, error.response.config.url, JSON.stringify(error.response?.data),); return Promise.reject(error); } },);
+axiosInstance.interceptors.request.use(request => { console.log( '[API Request]', request.method, request.url, JSON.stringify(request.data),); return request; });
+axiosInstance.interceptors.response.use( response => { console.log( '[API Response]', response.status, response.config.url, JSON.stringify(response.data),); return response; }, error => { if (error.response) { console.log( '[API Response]', error.response.status, error.response.config.url, JSON.stringify(error.response?.data),); return Promise.reject(error); } },);
