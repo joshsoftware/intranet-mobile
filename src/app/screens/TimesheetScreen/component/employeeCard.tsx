@@ -10,7 +10,8 @@ import {dateFormate} from '../../../utils/date';
 import {Arrow} from '../../../constant/icons';
 import {USER_TIMESHEET} from '../../../constant/screenNames';
 import {ISO_DATE_FROMAT} from '../../../constant/date';
-import { TimesheetStatus } from '../interface';
+import {TimesheetStatus} from '../interface';
+import CheckBox from '@react-native-community/checkbox';
 
 type Props = {
   name: string;
@@ -20,10 +21,24 @@ type Props = {
   endDate: Date;
   worked_minutes: number;
   status?: TimesheetStatus;
+  showCheckbox?: boolean;
+  isChecked?: boolean;
+  toggleCheckbox: () => void;
 };
 
 const EmployeeCard = (props: Props) => {
-  const {name, email, userId, startDate, endDate, worked_minutes, status} = props;
+  const {
+    name,
+    email,
+    userId,
+    startDate,
+    endDate,
+    worked_minutes,
+    status,
+    isChecked = false,
+    showCheckbox = false,
+    toggleCheckbox,
+  } = props;
 
   const handleNavigation = () =>
     navigate(USER_TIMESHEET, {
@@ -40,14 +55,24 @@ const EmployeeCard = (props: Props) => {
 
   return (
     <Touchable type="native" onPress={handleNavigation}>
-      <View style={styles.main}>
-        <View>
-          <Typography type="header" style={styles.empName}>
-            {name} {formatTimeString(hours, minutes)}
-          </Typography>
-          <Typography type="description">{email}</Typography>
+      <View style={styles.container}>
+        {showCheckbox && (
+          <View style={styles.checkBoxContainer}>
+            <CheckBox value={isChecked} onChange={toggleCheckbox} />
+          </View>
+        )}
+        <View
+          style={[styles.main, showCheckbox ? styles.mainWithCheckbox : {}]}>
+          <View>
+            <Typography type="header" style={styles.empName}>
+              {name} {formatTimeString(hours, minutes)}
+            </Typography>
+            <Typography type="description">{email}</Typography>
+          </View>
+          <View style={styles.arrowContainer}>
+            <Arrow />
+          </View>
         </View>
-        <Arrow />
       </View>
     </Touchable>
   );
@@ -61,14 +86,33 @@ const formatTimeString = (hours: number, minutes: number) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+  },
   empName: {
     paddingBottom: 7,
   },
   main: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingVertical: 16,
+    gap: 16,
+    paddingHorizontal: 16,
+  },
+  mainWithCheckbox: {
+    paddingLeft: 0,
+  },
+  checkBoxContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 10,
+  },
+  arrowContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

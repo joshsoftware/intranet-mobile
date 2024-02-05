@@ -5,7 +5,7 @@ import DateRangePicker from '../../../components/pickers/DateRangePicker';
 import EmployeeCard from '../component/employeeCard';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import StatusFilterList from '../component/StatusFilterList';
-import {useEmployees} from '../timesheet.hooks';
+import {useEmployees, useEmployeeTimesheetAction} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
 import {TEmpListTSResponse} from '../../../services/timesheet/types';
@@ -27,6 +27,8 @@ const EmployeeList = () => {
     dateRange.endDate,
   );
 
+  const {isEmployeeChecked, toggleCheckEmployee} = useEmployeeTimesheetAction();
+
   const userData = prepareFlatSectionListData(data?.user_data || []);
 
   // on date range change
@@ -42,9 +44,14 @@ const EmployeeList = () => {
   }, []);
 
   const renderItem = useCallback(
-    (item: Employee, superSection: string) => {
+    (item: Employee, superSection: string, subSectionId: number) => {
       const {name, email, user_id, worked_minutes} = item;
       const status = superSection as TimesheetStatus;
+
+      const isChecked = isEmployeeChecked(user_id, subSectionId, status);
+      const toggleCheckbox = () => {
+        toggleCheckEmployee(user_id, subSectionId, status);
+      };
 
       return (
         <EmployeeCard
@@ -55,10 +62,18 @@ const EmployeeList = () => {
           endDate={dateRange.endDate}
           worked_minutes={worked_minutes}
           status={status}
+          showCheckbox={true}
+          isChecked={isChecked}
+          toggleCheckbox={toggleCheckbox}
         />
       );
     },
-    [dateRange.startDate, dateRange.endDate],
+    [
+      dateRange.startDate,
+      dateRange.endDate,
+      isEmployeeChecked,
+      toggleCheckEmployee,
+    ],
   );
 
   return (
@@ -82,6 +97,9 @@ const EmployeeList = () => {
           worked_minutes={data.worked_minutes}
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
+          showCheckbox={false}
+          isChecked={false}
+          toggleCheckbox={() => {}}
         />
       )}
 
@@ -105,6 +123,7 @@ const prepareFlatSectionListData = (
     title: statusObj.status,
     data: statusObj.projects.map(projectObj => ({
       title: projectObj.title,
+      id: projectObj.id,
       data: projectObj.users,
     })),
   }));

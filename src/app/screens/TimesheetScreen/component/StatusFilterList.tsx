@@ -12,7 +12,11 @@ interface IProps<T> {
   defaultStatus: TimesheetStatusFilter;
   refreshing: boolean;
   onRefresh: () => void;
-  renderItem: (item: T, superStatus: string) => React.ReactElement;
+  renderItem: (
+    item: T,
+    superStatus: string,
+    subSectionId: number,
+  ) => React.ReactElement;
 }
 
 const StatusFilterList = <T,>(props: IProps<T>) => {

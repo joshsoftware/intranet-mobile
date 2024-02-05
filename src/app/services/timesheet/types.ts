@@ -67,6 +67,7 @@ export type TEmpListTSResponse = {
       status: string;
       projects: {
         title: string;
+        id: number;
         users: Employee[];
       }[];
     }[];

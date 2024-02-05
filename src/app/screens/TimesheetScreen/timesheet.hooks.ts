@@ -19,6 +19,8 @@ import {
   TimesheetRequestBody,
 } from '../../services/timesheet/types';
 import {ISO_DATE_FROMAT} from '../../constant/date';
+import {useState} from 'react';
+import {TimesheetStatus} from './interface';
 
 export const useEmployees = (startDate: Date, endDate: Date) => {
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
@@ -162,4 +164,48 @@ export const useAddTimesheet = () => {
     message: data?.data.message,
     reset,
   };
+};
+
+export const useEmployeeTimesheetAction = () => {
+  const [checkedEmployees, setCheckedEmployees] = useState<
+    {userId: string; projectId: number; status: TimesheetStatus}[]
+  >([]);
+
+  const isEmployeeChecked = (
+    userId: string,
+    projectId: number,
+    status: TimesheetStatus,
+  ) => {
+    return (
+      checkedEmployees.findIndex(
+        obj =>
+          obj.status === status &&
+          obj.userId === userId &&
+          obj.projectId === projectId,
+      ) !== -1
+    );
+  };
+
+  const toggleCheckEmployee = (
+    userId: string,
+    projectId: number,
+    status: TimesheetStatus,
+  ) => {
+    if (isEmployeeChecked(userId, projectId, status)) {
+      setCheckedEmployees(
+        checkedEmployees.filter(
+          obj =>
+            !(
+              obj.status === status &&
+              obj.userId === userId &&
+              obj.projectId === projectId
+            ),
+        ),
+      );
+    } else {
+      setCheckedEmployees([...checkedEmployees, {userId, projectId, status}]);
+    }
+  };
+
+  return {isEmployeeChecked, toggleCheckEmployee};
 };
