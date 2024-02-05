@@ -15,7 +15,7 @@ interface IProps<T> {
   renderItem: (
     item: T,
     superStatus: string,
-    subSectionId: number,
+    subSectionId?: number,
   ) => React.ReactElement;
 }
 

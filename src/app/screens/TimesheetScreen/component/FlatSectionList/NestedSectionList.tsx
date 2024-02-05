@@ -4,12 +4,12 @@ import {SectionList, StyleSheet, Text} from 'react-native';
 import colors from '../../../../constant/colors';
 
 interface IProps<T> {
-  data: {title: string; id: number; data: T[]}[];
+  data: {title: string; id?: number; data: T[]}[];
   superSection: string;
   renderItem: (
     item: T,
     superSection: string,
-    subSectionId: number,
+    subSectionId?: number,
   ) => React.ReactElement;
 }
 
@@ -29,7 +29,7 @@ const NestedSectionList = <T,>(props: IProps<T>) => {
     section: {id},
   }: {
     item: T;
-    section: {id: number};
+    section: {id?: number};
   }) => {
     return renderItem(item, superSection, id);
   };

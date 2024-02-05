@@ -8,6 +8,7 @@ import {dateFormate} from '../../../utils/date';
 
 import {Delete, Edit} from '../../../constant/icons';
 import {Timesheet} from '../interface';
+import CheckBox from '@react-native-community/checkbox';
 
 type Props = {
   timesheetData: Timesheet;
@@ -15,6 +16,9 @@ type Props = {
   onEdit?: Function;
   onDelete?: Function;
   isDeleteVisible?: boolean;
+  showCheckbox?: boolean;
+  isChecked?: boolean;
+  toggleCheckbox: () => void;
 };
 
 const TimesheetItem = ({
@@ -23,6 +27,9 @@ const TimesheetItem = ({
   onEdit,
   onDelete,
   isDeleteVisible = true,
+  showCheckbox = true,
+  isChecked = false,
+  toggleCheckbox,
 }: Props) => {
   const handleEdit = () =>
     onEdit?.({
@@ -44,29 +51,36 @@ const TimesheetItem = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContent}>
-        <View>
-          <Typography type="header">
-            {dateFormate(timesheetData.date)}
-          </Typography>
-          <Typography type="subheader" style={styles.workedHours}>
-            {hours}:{minutes}
-          </Typography>
+      {showCheckbox && (
+        <View style={styles.checkboxContainer}>
+          <CheckBox value={isChecked} onChange={toggleCheckbox} />
         </View>
-        <View style={styles.buttons}>
-          {onEdit && (
-            <Touchable type="opacity" onPress={handleEdit}>
-              <Edit width={20} height={20} />
-            </Touchable>
-          )}
-          {onDelete && isDeleteVisible && (
-            <Touchable type="opacity" onPress={handleDelete}>
-              <Delete width={20} height={20} />
-            </Touchable>
-          )}
+      )}
+      <View style={styles.main}>
+        <View style={styles.titleContent}>
+          <View>
+            <Typography type="header">
+              {dateFormate(timesheetData.date)}
+            </Typography>
+            <Typography type="subheader" style={styles.workedHours}>
+              {hours}:{minutes}
+            </Typography>
+          </View>
+          <View style={styles.buttons}>
+            {onEdit && (
+              <Touchable type="opacity" onPress={handleEdit}>
+                <Edit width={20} height={20} />
+              </Touchable>
+            )}
+            {onDelete && isDeleteVisible && (
+              <Touchable type="opacity" onPress={handleDelete}>
+                <Delete width={20} height={20} />
+              </Touchable>
+            )}
+          </View>
         </View>
+        <Typography type="description">{timesheetData.description}</Typography>
       </View>
-      <Typography type="description">{timesheetData.description}</Typography>
     </View>
   );
 };
@@ -75,6 +89,15 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
     paddingHorizontal: 16,
+    flexDirection: 'row',
+    gap: 10,
+  },
+  main: {
+    flex: 1,
+  },
+  checkboxContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   titleContent: {
     flexDirection: 'row',

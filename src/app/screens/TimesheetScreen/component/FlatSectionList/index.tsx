@@ -9,7 +9,7 @@ export type FlatSectionListData<T> = {
   title: string;
   data: {
     title: string;
-    id: number;
+    id?: number;
     data: T[];
   }[];
 }[];
@@ -18,7 +18,7 @@ interface IProps<T> {
   data: FlatSectionListData<T>;
   refreshing: boolean;
   onRefresh: () => void;
-  renderItem: (item: T, superSection: string, subSectionId: number) => React.ReactElement;
+  renderItem: (item: T, superSection: string, subSectionId?: number) => React.ReactElement;
 }
 
 const FlatSectionList = <T,>(props: IProps<T>) => {
@@ -27,7 +27,7 @@ const FlatSectionList = <T,>(props: IProps<T>) => {
   const renderItem = ({
     item,
   }: {
-    item: {title: string; data: {title: string; id: number; data: T[]}[]};
+    item: {title: string; data: {title: string; id?: number; data: T[]}[]};
   }) => {
     return (
       <>

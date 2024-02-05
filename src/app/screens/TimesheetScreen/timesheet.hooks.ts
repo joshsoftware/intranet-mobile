@@ -209,3 +209,21 @@ export const useEmployeeTimesheetAction = () => {
 
   return {isEmployeeChecked, toggleCheckEmployee};
 };
+
+export const useTimesheetAction = () => {
+  const [checkedTimesheets, setCheckedTimesheets] = useState<string[]>([]);
+
+  const isTimesheetChecked = (timesheetId: string) => {
+    return checkedTimesheets.findIndex(id => id === timesheetId) !== -1;
+  };
+
+  const toggleCheckTimesheet = (timesheetId: string) => {
+    if (isTimesheetChecked(timesheetId)) {
+      setCheckedTimesheets(checkedTimesheets.filter(id => id !== timesheetId));
+    } else {
+      setCheckedTimesheets([...checkedTimesheets, timesheetId]);
+    }
+  };
+
+  return {isTimesheetChecked, toggleCheckTimesheet};
+};

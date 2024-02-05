@@ -14,7 +14,11 @@ import Header from '../../../../components/header';
 import DateRangePicker from '../../../../components/pickers/DateRangePicker';
 import TimesheetItem from '../../component/timesheetItem';
 import StatusFilterList from '../../component/StatusFilterList';
-import {useDeleteTimesheet, useTimesheets} from '../../timesheet.hooks';
+import {
+  useDeleteTimesheet,
+  useTimesheetAction,
+  useTimesheets,
+} from '../../timesheet.hooks';
 
 import {getParams} from '../../../../navigation';
 import {startOfMonth, todaysDate} from '../../../../utils/date';
@@ -50,6 +54,8 @@ const TimesheetList = () => {
     dateRange.startDate,
     dateRange.endDate,
   );
+
+  const {isTimesheetChecked, toggleCheckTimesheet} = useTimesheetAction();
 
   // user_id can be either string or number type
   // using == to check only value
@@ -120,16 +126,32 @@ const TimesheetList = () => {
   }, [params?.endDate, params?.startDate]);
 
   const renderItem = useCallback(
-    (item: Timesheet) => (
-      <TimesheetItem
-        timesheetData={item}
-        onEdit={timesheetEditCall}
-        onDelete={timesheetDeleteCall}
-        title={item.project}
-        isDeleteVisible={isManager}
-      />
-    ),
-    [isManager, timesheetDeleteCall, timesheetEditCall],
+    (item: Timesheet) => {
+      const isChecked = isTimesheetChecked(item.time_sheet_id);
+      const toggleChecked = () => {
+        toggleCheckTimesheet(item.time_sheet_id);
+      };
+
+      return (
+        <TimesheetItem
+          timesheetData={item}
+          onEdit={timesheetEditCall}
+          onDelete={timesheetDeleteCall}
+          title={item.project}
+          isDeleteVisible={isManager}
+          showCheckbox={true}
+          isChecked={isChecked}
+          toggleCheckbox={toggleChecked}
+        />
+      );
+    },
+    [
+      isManager,
+      timesheetDeleteCall,
+      timesheetEditCall,
+      isTimesheetChecked,
+      toggleCheckTimesheet,
+    ],
   );
 
   const timesheetData = processTimesheetData(data?.time_sheet_data || []);

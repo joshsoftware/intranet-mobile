@@ -44,9 +44,13 @@ const EmployeeList = () => {
   }, []);
 
   const renderItem = useCallback(
-    (item: Employee, superSection: string, subSectionId: number) => {
+    (item: Employee, superSection: string, subSectionId?: number) => {
       const {name, email, user_id, worked_minutes} = item;
       const status = superSection as TimesheetStatus;
+
+      if (!subSectionId) {
+        return <></>;
+      }
 
       const isChecked = isEmployeeChecked(user_id, subSectionId, status);
       const toggleCheckbox = () => {
