@@ -21,7 +21,7 @@ import {
 } from '../../timesheet.hooks';
 
 import {getParams} from '../../../../navigation';
-import {startOfMonth, todaysDate} from '../../../../utils/date';
+import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
 import UserContext from '../../../../context/user.context';
 import {IGetTimesheetsResponse} from '../../../../services/timesheet/types';
 import {isManagement} from '../../../../utils/user';
@@ -57,8 +57,14 @@ const TimesheetList = () => {
     dateRange.endDate,
   );
 
-  const {isTimesheetChecked, isActionMode, toggleCheckTimesheet} =
-    useTimesheetAction();
+  const {
+    isActionMode,
+    checkedTimesheets,
+    erroredTimesheets,
+    isTimesheetChecked,
+    toggleCheckTimesheet,
+    performAction,
+  } = useTimesheetAction();
 
   // user_id can be either string or number type
   // using == to check only value
@@ -128,9 +134,29 @@ const TimesheetList = () => {
     }
   }, [params?.endDate, params?.startDate]);
 
+  const handleApprove = () => {
+    performAction({
+      from_date: dateFormate(dateRange.startDate),
+      to_date: dateFormate(dateRange.endDate),
+      timesheet_ids: checkedTimesheets,
+      action: 'Approved',
+    });
+  };
+
+  const handleReject = (reason: string) => {
+    performAction({
+      from_date: dateFormate(dateRange.startDate),
+      to_date: dateFormate(dateRange.endDate),
+      timesheet_ids: checkedTimesheets,
+      action: 'Approved',
+      reject_reason: reason,
+    });
+  };
+
   const renderItem = useCallback(
     (item: Timesheet) => {
       const isChecked = isTimesheetChecked(item.time_sheet_id);
+      const errorMessage = erroredTimesheets[item.time_sheet_id];
       const toggleChecked = () => {
         toggleCheckTimesheet(item.time_sheet_id);
       };
@@ -144,12 +170,14 @@ const TimesheetList = () => {
           isDeleteVisible={isManager}
           showCheckbox={true}
           isChecked={isChecked}
+          error={errorMessage}
           toggleCheckbox={toggleChecked}
         />
       );
     },
     [
       isManager,
+      erroredTimesheets,
       timesheetDeleteCall,
       timesheetEditCall,
       isTimesheetChecked,
@@ -198,7 +226,9 @@ const TimesheetList = () => {
         />
       )}
 
-      {isActionMode && <ManagerActionBar />}
+      {isActionMode && (
+        <ManagerActionBar onApprove={handleApprove} onReject={handleReject} />
+      )}
 
       <EditTimesheetModal
         isVisible={isEditModalVisible}

@@ -24,7 +24,10 @@ import {
   TimesheetActionRequestBody,
   TimesheetRequestBody,
 } from './types';
-import {TimesheetStatus} from '../../screens/TimesheetScreen/interface';
+import {
+  Timesheet,
+  TimesheetStatus,
+} from '../../screens/TimesheetScreen/interface';
 import {dateFormate} from '../../utils/date';
 
 export const createTimesheetRequest = async (payload: TimesheetRequestBody) => {
@@ -139,6 +142,19 @@ export const employeeTimesheetAction = async (
     method: 'PATCH',
     url: GET_EMPLOYEE_LIST_ROUTE,
     data: body,
+  });
+
+  return response;
+};
+
+export const timesheetAction = async (payload: TimesheetActionRequestBody) => {
+  const response = await apiCall<
+    TimesheetActionRequestBody,
+    ITimesheetResponse
+  >({
+    method: 'PATCH',
+    url: GET_TIMESHEET_ROUTE,
+    data: payload,
   });
 
   return response;

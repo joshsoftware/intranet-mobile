@@ -1,5 +1,6 @@
 import React, {memo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 
 import Typography from '../../../components/typography';
 import Touchable from '../../../components/touchable';
@@ -8,7 +9,7 @@ import {dateFormate} from '../../../utils/date';
 
 import {Delete, Edit} from '../../../constant/icons';
 import {Timesheet} from '../interface';
-import CheckBox from '@react-native-community/checkbox';
+import colors from '../../../constant/colors';
 
 type Props = {
   timesheetData: Timesheet;
@@ -18,6 +19,7 @@ type Props = {
   isDeleteVisible?: boolean;
   showCheckbox?: boolean;
   isChecked?: boolean;
+  error?: string;
   toggleCheckbox: () => void;
 };
 
@@ -29,6 +31,7 @@ const TimesheetItem = ({
   isDeleteVisible = true,
   showCheckbox = true,
   isChecked = false,
+  error,
   toggleCheckbox,
 }: Props) => {
   const handleEdit = () =>
@@ -53,7 +56,13 @@ const TimesheetItem = ({
     <View style={styles.container}>
       {showCheckbox && (
         <View style={styles.checkboxContainer}>
-          <CheckBox value={isChecked} onChange={toggleCheckbox} />
+          <CheckBox
+            value={isChecked}
+            tintColors={{
+              true: error ? colors.ERROR_RED : colors.PRIMARY,
+            }}
+            onChange={toggleCheckbox}
+          />
         </View>
       )}
       <View style={styles.main}>
@@ -80,6 +89,7 @@ const TimesheetItem = ({
           </View>
         </View>
         <Typography type="description">{timesheetData.description}</Typography>
+        {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
     </View>
   );
@@ -111,6 +121,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     gap: 12,
     right: 6,
+  },
+  errorText: {
+    color: colors.ERROR_RED,
   },
 });
 

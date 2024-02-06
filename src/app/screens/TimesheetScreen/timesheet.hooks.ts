@@ -10,6 +10,7 @@ import {
   getEmployeeListRequest,
   getProjectListRequest,
   getTimesheetRequest,
+  timesheetAction,
   updateTimesheetRequest,
 } from '../../services/timesheet';
 
@@ -274,6 +275,30 @@ export const useEmployeeTimesheetAction = () => {
 
 export const useTimesheetAction = () => {
   const [checkedTimesheets, setCheckedTimesheets] = useState<string[]>([]);
+  const [erroredTimesheets, setErroredTimesheets] = useState<
+    Record<string, string>
+  >({});
+
+  const {mutate} = useMutation(timesheetAction, {
+    onSuccess(data) {
+      toast(data.data.message);
+    },
+    onError(error: AxiosError) {
+      if (!error.response) {
+        return;
+      }
+
+      const data = error.response.data as {
+        data: {
+          error_data: Record<string, string>;
+        };
+        message: string;
+      };
+
+      toast(data.message, 'error');
+      setErroredTimesheets(data.data.error_data);
+    },
+  });
 
   const isTimesheetChecked = (timesheetId: string) => {
     return checkedTimesheets.findIndex(id => id === timesheetId) !== -1;
@@ -289,5 +314,12 @@ export const useTimesheetAction = () => {
 
   const isActionMode = checkedTimesheets.length !== 0;
 
-  return {isTimesheetChecked, isActionMode, toggleCheckTimesheet};
+  return {
+    checkedTimesheets,
+    erroredTimesheets,
+    isTimesheetChecked,
+    isActionMode,
+    toggleCheckTimesheet,
+    performAction: mutate,
+  };
 };
