@@ -1,4 +1,4 @@
-import {Timesheet} from '../../screens/TimesheetScreen/interface';
+import {Timesheet, TimesheetStatus} from '../../screens/TimesheetScreen/interface';
 
 export interface Employee {
   name: string;
@@ -106,3 +106,33 @@ export type TimesheetError = {
   code: number | string;
   message: string;
 };
+
+export interface EmployeeTimesheetActionRequestBody {
+  from_date: string;
+  to_date: string;
+  users: {
+    status: string;
+    projects: {
+      project_id: number;
+      user_ids: string[];
+    }[];
+  }[];
+  action: 'Approved' | 'Rejected';
+  reject_reason?: string;
+}
+
+export interface EmployeeTimesheetActionPayload {
+  from_date: Date;
+  to_date: Date;
+  users: {userId: string; projectId: number; status: TimesheetStatus}[];
+  action: 'Approved' | 'Rejected';
+  reject_reason?: string;
+}
+
+export interface TimesheetActionRequestBody {
+  from_date: string;
+  to_date: string;
+  timesheet_ids: string[];
+  action: 'Approved' | 'Rejected';
+  reject_reason?: string;
+}

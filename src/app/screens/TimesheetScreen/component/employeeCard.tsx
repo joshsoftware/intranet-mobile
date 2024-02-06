@@ -1,5 +1,6 @@
 import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 
 import Touchable from '../../../components/touchable';
 import Typography from '../../../components/typography';
@@ -11,7 +12,7 @@ import {Arrow} from '../../../constant/icons';
 import {USER_TIMESHEET} from '../../../constant/screenNames';
 import {ISO_DATE_FROMAT} from '../../../constant/date';
 import {TimesheetStatus} from '../interface';
-import CheckBox from '@react-native-community/checkbox';
+import colors from '../../../constant/colors';
 
 type Props = {
   name: string;
@@ -20,6 +21,7 @@ type Props = {
   startDate: Date;
   endDate: Date;
   worked_minutes: number;
+  isErrored?: boolean;
   status?: TimesheetStatus;
   showCheckbox?: boolean;
   isChecked?: boolean;
@@ -35,6 +37,7 @@ const EmployeeCard = (props: Props) => {
     endDate,
     worked_minutes,
     status,
+    isErrored = false,
     isChecked = false,
     showCheckbox = false,
     toggleCheckbox,
@@ -58,7 +61,13 @@ const EmployeeCard = (props: Props) => {
       <View style={styles.container}>
         {showCheckbox && (
           <View style={styles.checkBoxContainer}>
-            <CheckBox value={isChecked} onChange={toggleCheckbox} />
+            <CheckBox
+              value={isChecked}
+              onChange={toggleCheckbox}
+              tintColors={{
+                true: isErrored ? colors.ERROR_RED : colors.PRIMARY,
+              }}
+            />
           </View>
         )}
         <View

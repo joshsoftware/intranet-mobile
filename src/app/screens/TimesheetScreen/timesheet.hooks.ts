@@ -6,6 +6,7 @@ import {dateFormate, getMonthYearFromISO} from '../../utils/date';
 import {
   createTimesheetRequest,
   deleteTimesheetRequest,
+  employeeTimesheetAction,
   getEmployeeListRequest,
   getProjectListRequest,
   getTimesheetRequest,
@@ -171,6 +172,43 @@ export const useEmployeeTimesheetAction = () => {
     {userId: string; projectId: number; status: TimesheetStatus}[]
   >([]);
 
+  const [erroredEmployees, setErroredEmployees] = useState<
+    {userId: string; projectId: number; status: TimesheetStatus}[]
+  >([]);
+
+  const {mutate} = useMutation(employeeTimesheetAction, {
+    onSuccess: data => {
+      if (data?.data?.message) {
+        toast(data.data.message);
+      }
+    },
+    onError: (err: AxiosError) => {
+      if (!err.response) {
+        return;
+      }
+
+      const data = err.response.data as {
+        data: {
+          error_data: {
+            status: TimesheetStatus;
+            user_id: string;
+            project_id: number;
+          }[];
+        };
+        message: string;
+      };
+
+      toast(data.message, 'error');
+      setErroredEmployees(
+        data.data.error_data.map(obj => ({
+          userId: obj.user_id,
+          projectId: obj.project_id,
+          status: obj.status,
+        })),
+      );
+    },
+  });
+
   const isEmployeeChecked = (
     userId: string,
     projectId: number,
@@ -182,6 +220,21 @@ export const useEmployeeTimesheetAction = () => {
           obj.status === status &&
           obj.userId === userId &&
           obj.projectId === projectId,
+      ) !== -1
+    );
+  };
+
+  const isErroredEmployee = (
+    userId: string,
+    projectId: number,
+    status: TimesheetStatus,
+  ) => {
+    return (
+      erroredEmployees.findIndex(
+        obj =>
+          obj.status === status &&
+          obj.userId.toString() === userId.toString() &&
+          obj.projectId.toString() === projectId.toString(),
       ) !== -1
     );
   };
@@ -207,7 +260,16 @@ export const useEmployeeTimesheetAction = () => {
     }
   };
 
-  return {isEmployeeChecked, toggleCheckEmployee};
+  const isActionMode = checkedEmployees.length !== 0;
+
+  return {
+    checkedEmployees,
+    isEmployeeChecked,
+    isErroredEmployee,
+    isActionMode,
+    toggleCheckEmployee,
+    performAction: mutate,
+  };
 };
 
 export const useTimesheetAction = () => {
@@ -225,5 +287,7 @@ export const useTimesheetAction = () => {
     }
   };
 
-  return {isTimesheetChecked, toggleCheckTimesheet};
+  const isActionMode = checkedTimesheets.length !== 0;
+
+  return {isTimesheetChecked, isActionMode, toggleCheckTimesheet};
 };

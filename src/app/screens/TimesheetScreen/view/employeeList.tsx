@@ -10,6 +10,8 @@ import {useEmployees, useEmployeeTimesheetAction} from '../timesheet.hooks';
 import {startOfMonth, todaysDate} from '../../../utils/date';
 import {TEmpListTSResponse} from '../../../services/timesheet/types';
 import {Employee, TimesheetStatus, TimesheetStatusFilter} from '../interface';
+import CreateTimesheetButton from '../component/CreateTimesheetButton';
+import ManagerActionBar from '../component/ManagerActionBar';
 
 type DateRangeProps = {
   startDate: Date;
@@ -27,7 +29,14 @@ const EmployeeList = () => {
     dateRange.endDate,
   );
 
-  const {isEmployeeChecked, toggleCheckEmployee} = useEmployeeTimesheetAction();
+  const {
+    checkedEmployees,
+    isEmployeeChecked,
+    isErroredEmployee,
+    isActionMode,
+    toggleCheckEmployee,
+    performAction,
+  } = useEmployeeTimesheetAction();
 
   const userData = prepareFlatSectionListData(data?.user_data || []);
 
@@ -43,6 +52,25 @@ const EmployeeList = () => {
     }
   }, []);
 
+  const handleApprove = () => {
+    performAction({
+      from_date: dateRange.startDate,
+      to_date: dateRange.endDate,
+      users: checkedEmployees,
+      action: 'Approved',
+    });
+  };
+
+  const handleReject = (reason: string) => {
+    performAction({
+      from_date: dateRange.startDate,
+      to_date: dateRange.endDate,
+      users: checkedEmployees,
+      action: 'Approved',
+      reject_reason: reason,
+    });
+  };
+
   const renderItem = useCallback(
     (item: Employee, superSection: string, subSectionId?: number) => {
       const {name, email, user_id, worked_minutes} = item;
@@ -53,6 +81,7 @@ const EmployeeList = () => {
       }
 
       const isChecked = isEmployeeChecked(user_id, subSectionId, status);
+      const isErrored = isErroredEmployee(user_id, subSectionId, status);
       const toggleCheckbox = () => {
         toggleCheckEmployee(user_id, subSectionId, status);
       };
@@ -68,11 +97,13 @@ const EmployeeList = () => {
           status={status}
           showCheckbox={true}
           isChecked={isChecked}
+          isErrored={isErrored}
           toggleCheckbox={toggleCheckbox}
         />
       );
     },
     [
+      isErroredEmployee,
       dateRange.startDate,
       dateRange.endDate,
       isEmployeeChecked,
@@ -115,6 +146,12 @@ const EmployeeList = () => {
           renderItem={renderItem}
           onRefresh={refetch}
         />
+      )}
+
+      {isActionMode ? (
+        <ManagerActionBar onApprove={handleApprove} onReject={handleReject} />
+      ) : (
+        <CreateTimesheetButton />
       )}
     </View>
   );

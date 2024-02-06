@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
-import CreateTimesheetButton from './createTimesheetButton';
+// import CreateTimesheetButton from './createTimesheetButton';
 import EditTimesheetModal from '../../component/editTimesheetModal';
 import Typography from '../../../../components/typography';
 import Header from '../../../../components/header';
@@ -31,6 +31,8 @@ import colors from '../../../../constant/colors';
 import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
 import {toTimesheetFilterStatus} from '../../utils';
+import CreateTimesheetButton from '../../component/CreateTimesheetButton';
+import ManagerActionBar from '../../component/ManagerActionBar';
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -55,7 +57,8 @@ const TimesheetList = () => {
     dateRange.endDate,
   );
 
-  const {isTimesheetChecked, toggleCheckTimesheet} = useTimesheetAction();
+  const {isTimesheetChecked, isActionMode, toggleCheckTimesheet} =
+    useTimesheetAction();
 
   // user_id can be either string or number type
   // using == to check only value
@@ -188,11 +191,14 @@ const TimesheetList = () => {
         />
       )}
 
-      {params?.user_id && (
-        <View style={styles.buttonContainer}>
-          <CreateTimesheetButton userId={params?.user_id} name={params?.name} />
-        </View>
+      {params?.user_id && !isActionMode && (
+        <CreateTimesheetButton
+          userId={params?.user_id}
+          userName={params?.name}
+        />
       )}
+
+      {isActionMode && <ManagerActionBar />}
 
       <EditTimesheetModal
         isVisible={isEditModalVisible}
