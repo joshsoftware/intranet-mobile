@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 
 // import CreateTimesheetButton from './createTimesheetButton';
@@ -19,10 +13,10 @@ import {
   useTimesheetAction,
   useTimesheets,
 } from '../../timesheet.hooks';
+import useUserData from '../../../../hooks/useUserData';
 
 import {getParams} from '../../../../navigation';
 import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
-import UserContext from '../../../../context/user.context';
 import {IGetTimesheetsResponse} from '../../../../services/timesheet/types';
 import {isManagement} from '../../../../utils/user';
 
@@ -36,12 +30,13 @@ import ManagerActionBar from '../../component/ManagerActionBar';
 
 const TimesheetList = () => {
   const params: any = getParams();
-  const [userContextData] = useContext(UserContext);
+  // const [userContextData] = useContext(UserContext);
+  const userData = useUserData();
 
-  const isManager = isManagement(userContextData?.userData.role);
+  const isManager = isManagement(userData.role);
   const userId = useMemo(
-    () => params?.user_id ?? userContextData?.userData.userId ?? '',
-    [params?.user_id, userContextData?.userData.userId],
+    () => params?.user_id ?? userData.userId ?? '',
+    [params?.user_id, userData.userId],
   );
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -69,9 +64,7 @@ const TimesheetList = () => {
 
   // user_id can be either string or number type
   // using == to check only value
-  const {mutate} = useDeleteTimesheet(
-    params?.user_id == userContextData?.userData.userId,
-  );
+  const {mutate} = useDeleteTimesheet(params?.user_id == userData.userId);
 
   const toggleEditModal = useCallback(() => {
     setIsEditModalVisible(v => !v);
