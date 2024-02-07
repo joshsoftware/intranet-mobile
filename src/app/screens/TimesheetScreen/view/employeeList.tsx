@@ -36,6 +36,7 @@ const EmployeeList = () => {
     isActionMode,
     toggleCheckEmployee,
     performAction,
+    clearAllChecked,
   } = useEmployeeTimesheetAction();
 
   const userData = prepareFlatSectionListData(data?.user_data || []);
@@ -149,7 +150,11 @@ const EmployeeList = () => {
       )}
 
       {isActionMode ? (
-        <ManagerActionBar onApprove={handleApprove} onReject={handleReject} />
+        <ManagerActionBar
+          onApprove={handleApprove}
+          onReject={handleReject}
+          onCancel={clearAllChecked}
+        />
       ) : (
         <CreateTimesheetButton />
       )}

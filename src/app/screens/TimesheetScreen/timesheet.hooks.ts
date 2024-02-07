@@ -246,19 +246,27 @@ export const useEmployeeTimesheetAction = () => {
     status: TimesheetStatus,
   ) => {
     if (isEmployeeChecked(userId, projectId, status)) {
-      setCheckedEmployees(
-        checkedEmployees.filter(
-          obj =>
-            !(
-              obj.status === status &&
-              obj.userId === userId &&
-              obj.projectId === projectId
-            ),
-        ),
+      const filteredCheckedEmployees = checkedEmployees.filter(
+        obj =>
+          !(
+            obj.status === status &&
+            obj.userId === userId &&
+            obj.projectId === projectId
+          ),
       );
+      setCheckedEmployees(filteredCheckedEmployees);
+
+      if (filteredCheckedEmployees.length === 0) {
+        setErroredEmployees([]);
+      }
     } else {
       setCheckedEmployees([...checkedEmployees, {userId, projectId, status}]);
     }
+  };
+
+  const clearAllChecked = () => {
+    setCheckedEmployees([]);
+    setErroredEmployees([]);
   };
 
   const isActionMode = checkedEmployees.length !== 0;
@@ -270,6 +278,7 @@ export const useEmployeeTimesheetAction = () => {
     isActionMode,
     toggleCheckEmployee,
     performAction: mutate,
+    clearAllChecked,
   };
 };
 
@@ -306,10 +315,22 @@ export const useTimesheetAction = () => {
 
   const toggleCheckTimesheet = (timesheetId: string) => {
     if (isTimesheetChecked(timesheetId)) {
-      setCheckedTimesheets(checkedTimesheets.filter(id => id !== timesheetId));
+      const filteredCheckedTimesheets = checkedTimesheets.filter(
+        id => id !== timesheetId,
+      );
+      setCheckedTimesheets(filteredCheckedTimesheets);
+
+      if (filteredCheckedTimesheets.length === 0) {
+        setErroredTimesheets({});
+      }
     } else {
       setCheckedTimesheets([...checkedTimesheets, timesheetId]);
     }
+  };
+
+  const clearAllChecked = () => {
+    setCheckedTimesheets([]);
+    setErroredTimesheets({});
   };
 
   const isActionMode = checkedTimesheets.length !== 0;
@@ -321,5 +342,6 @@ export const useTimesheetAction = () => {
     isActionMode,
     toggleCheckTimesheet,
     performAction: mutate,
+    clearAllChecked,
   };
 };

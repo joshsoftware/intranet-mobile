@@ -64,6 +64,7 @@ const TimesheetList = () => {
     isTimesheetChecked,
     toggleCheckTimesheet,
     performAction,
+    clearAllChecked,
   } = useTimesheetAction();
 
   // user_id can be either string or number type
@@ -227,7 +228,11 @@ const TimesheetList = () => {
       )}
 
       {isActionMode && (
-        <ManagerActionBar onApprove={handleApprove} onReject={handleReject} />
+        <ManagerActionBar
+          onApprove={handleApprove}
+          onReject={handleReject}
+          onCancel={clearAllChecked}
+        />
       )}
 
       <EditTimesheetModal

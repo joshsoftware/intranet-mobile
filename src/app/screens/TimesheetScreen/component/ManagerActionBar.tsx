@@ -20,10 +20,11 @@ const rejectFormSchema = yup.object().shape({
 interface IProps {
   onApprove: () => void;
   onReject: (reason: string) => void;
+  onCancel: () => void;
 }
 
 const ManagerActionBar = (props: IProps) => {
-  const {onApprove, onReject} = props;
+  const {onApprove, onReject, onCancel} = props;
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -64,6 +65,10 @@ const ManagerActionBar = (props: IProps) => {
           title="Approve"
           onPress={() => setShowApproveModal(true)}
         />
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Button type="secondary" title="Cancel" onPress={onCancel} />
       </View>
 
       <BottomModal
