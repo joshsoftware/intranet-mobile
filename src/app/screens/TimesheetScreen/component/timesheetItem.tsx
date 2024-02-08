@@ -7,7 +7,7 @@ import Touchable from '../../../components/touchable';
 
 import {dateFormate} from '../../../utils/date';
 
-import {Delete, Edit} from '../../../constant/icons';
+import {Delete, Edit, Lock} from '../../../constant/icons';
 import {Timesheet} from '../interface';
 import colors from '../../../constant/colors';
 
@@ -54,7 +54,7 @@ const TimesheetItem = ({
 
   return (
     <View style={styles.container}>
-      {showCheckbox && (
+      {!timesheetData.is_freezed && showCheckbox && (
         <View style={styles.checkboxContainer}>
           <CheckBox
             value={isChecked}
@@ -75,18 +75,25 @@ const TimesheetItem = ({
               {hours}:{minutes}
             </Typography>
           </View>
-          <View style={styles.buttons}>
-            {onEdit && (
-              <Touchable type="opacity" onPress={handleEdit}>
-                <Edit width={20} height={20} />
-              </Touchable>
-            )}
-            {onDelete && isDeleteVisible && (
-              <Touchable type="opacity" onPress={handleDelete}>
-                <Delete width={20} height={20} />
-              </Touchable>
-            )}
-          </View>
+          {timesheetData.is_freezed ? (
+            <View style={styles.freezedContainer}>
+              <Lock height={18} fill={colors.PRIMARY} />
+              <Text style={styles.freezedText}>Freezed</Text>
+            </View>
+          ) : (
+            <View style={styles.buttons}>
+              {onEdit && (
+                <Touchable type="opacity" onPress={handleEdit}>
+                  <Edit width={20} height={20} />
+                </Touchable>
+              )}
+              {onDelete && isDeleteVisible && (
+                <Touchable type="opacity" onPress={handleDelete}>
+                  <Delete width={20} height={20} />
+                </Touchable>
+              )}
+            </View>
+          )}
         </View>
         <Typography type="description">{timesheetData.description}</Typography>
         {error && <Text style={styles.errorText}>{error}</Text>}
@@ -104,6 +111,17 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
+  },
+  freezedContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 5,
+    borderRadius: 10,
+  },
+  freezedText: {
+    fontSize: 12,
+    color: colors.PRIMARY,
+    fontWeight: 'bold',
   },
   checkboxContainer: {
     justifyContent: 'flex-start',

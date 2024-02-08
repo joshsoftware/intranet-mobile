@@ -11,6 +11,7 @@ export interface Timesheet {
   description: string;
   worked_minutes: number;
   project_id: string;
+  is_freezed?: boolean;
 }
 
 export interface ITimesheetSectionListItem {
