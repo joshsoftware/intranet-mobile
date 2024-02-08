@@ -182,10 +182,13 @@ const TimesheetList = () => {
     ],
   );
 
-  let timesheetData = processTimesheetData(data?.time_sheet_data || []);
+  let timesheetData = useMemo(
+    () => processTimesheetData(data?.time_sheet_data || []),
+    [data],
+  );
   timesheetData = useMemo(
     () => filterTimesheetBySearch(timesheetData, projectSearchText),
-    [data, projectSearchText],
+    [timesheetData, projectSearchText],
   );
 
   return (
@@ -224,14 +227,14 @@ const TimesheetList = () => {
       {data && (
         <StatusFilterList
           data={timesheetData}
-          defaultStatus={toTimesheetFilterStatus(params.status)}
+          defaultStatus={toTimesheetFilterStatus(params?.status)}
           refreshing={isRefetching}
           renderItem={renderItem}
           onRefresh={refetch}
         />
       )}
 
-      {params?.user_id && !isActionMode && (
+      {!isActionMode && (
         <CreateTimesheetButton
           userId={params?.user_id}
           userName={params?.name}

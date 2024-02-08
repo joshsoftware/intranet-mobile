@@ -1,9 +1,11 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 
 import Button from '../../../components/button';
-import UserContext from '../../../context/user.context';
 import CreateTimesheet from '../view/createTimesheet';
+import UserContext from '../../../context/user.context';
+import {UserTimesheetRouteProp} from '../../../navigation/types';
 
 interface IProps {
   userId?: string;
@@ -11,12 +13,19 @@ interface IProps {
 }
 
 const CreateTimesheetButton = (props: IProps) => {
+  const route = useRoute<UserTimesheetRouteProp>();
   const {userId, userName} = props;
 
   const [userContext] = useContext(UserContext);
   const [showModal, setShowModal] = useState(false);
 
   const toggleModal = useCallback(() => setShowModal(v => !v), []);
+
+  useEffect(() => {
+    if (route.params?.isAddModalOpen) {
+      toggleModal();
+    }
+  }, [route.params, toggleModal]);
 
   if (!userContext) {
     return null;
@@ -41,6 +50,7 @@ const CreateTimesheetButton = (props: IProps) => {
         userName={userName}
         isVisible={showModal}
         toggleModal={toggleModal}
+        defaultDate={route.params?.endDate}
       />
     </View>
   );
