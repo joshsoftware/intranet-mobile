@@ -8,6 +8,7 @@ import StatusFilterList from '../component/StatusFilterList';
 import CreateTimesheetButton from '../component/CreateTimesheetButton';
 import ManagerActionBar from '../component/ManagerActionBar';
 import UserProjectSearchBox from '../component/UserProjectSearchBox';
+import EmployeeListEmptyComponent from '../component/EmployeeListEmptyComponent';
 import {useEmployees, useEmployeeTimesheetAction} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
@@ -164,6 +165,7 @@ const EmployeeList = () => {
           refreshing={isRefetching}
           renderItem={renderItem}
           onRefresh={refetch}
+          ListEmptyComponent={EmployeeListEmptyComponent}
         />
       )}
 

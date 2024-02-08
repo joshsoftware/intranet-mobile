@@ -28,6 +28,7 @@ import CreateTimesheetButton from '../../component/CreateTimesheetButton';
 import ManagerActionBar from '../../component/ManagerActionBar';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import {Search} from '../../../../constant/icons';
+import TimesheetListEmptyComponent from '../../component/TimesheetListEmptyComponent';
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -229,6 +230,7 @@ const TimesheetList = () => {
           data={timesheetData}
           defaultStatus={toTimesheetFilterStatus(params?.status)}
           refreshing={isRefetching}
+          ListEmptyComponent={TimesheetListEmptyComponent}
           renderItem={renderItem}
           onRefresh={refetch}
         />

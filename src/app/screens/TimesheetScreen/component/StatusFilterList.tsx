@@ -11,6 +11,7 @@ interface IProps<T> {
   data: FlatSectionListData<T>;
   defaultStatus: TimesheetStatusFilter;
   refreshing: boolean;
+  ListEmptyComponent: React.FC;
   onRefresh: () => void;
   renderItem: (
     item: T,
@@ -20,7 +21,14 @@ interface IProps<T> {
 }
 
 const StatusFilterList = <T,>(props: IProps<T>) => {
-  const {data, defaultStatus, refreshing, onRefresh, renderItem} = props;
+  const {
+    data,
+    defaultStatus,
+    refreshing,
+    ListEmptyComponent,
+    onRefresh,
+    renderItem,
+  } = props;
 
   const [selectedStatus, setSelectedStatus] =
     useState<TimesheetStatusFilter>(defaultStatus);
@@ -47,6 +55,7 @@ const StatusFilterList = <T,>(props: IProps<T>) => {
       <FlatSectionList
         data={filteredData}
         refreshing={refreshing}
+        ListEmptyComponent={ListEmptyComponent}
         renderItem={renderItem}
         onRefresh={onRefresh}
       />

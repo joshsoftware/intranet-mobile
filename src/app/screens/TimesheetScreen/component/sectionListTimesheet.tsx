@@ -48,12 +48,12 @@ const SectionListTimesheet = ({
   ...props
 }: Props) => {
   const renderItem = useCallback(
-    ({item, section}: SectionListRenderItemInfo<Timesheet>) => (
+    ({item}: SectionListRenderItemInfo<Timesheet>) => (
       <TimesheetItem
         timesheetData={item}
         onEdit={onEdit}
         onDelete={onDelete}
-        title={section.title}
+        // title={section.title}
         isDeleteVisible={isDeleteVisible}
         showCheckbox={false}
         toggleCheckbox={() => {}}

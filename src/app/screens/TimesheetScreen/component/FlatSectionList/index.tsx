@@ -17,12 +17,23 @@ export type FlatSectionListData<T> = {
 interface IProps<T> {
   data: FlatSectionListData<T>;
   refreshing: boolean;
+  ListEmptyComponent: React.FC;
   onRefresh: () => void;
-  renderItem: (item: T, superSection: string, subSectionId?: number) => React.ReactElement;
+  renderItem: (
+    item: T,
+    superSection: string,
+    subSectionId?: number,
+  ) => React.ReactElement;
 }
 
 const FlatSectionList = <T,>(props: IProps<T>) => {
-  const {data, refreshing, onRefresh, renderItem: renderNestedItem} = props;
+  const {
+    data,
+    refreshing,
+    ListEmptyComponent,
+    onRefresh,
+    renderItem: renderNestedItem,
+  } = props;
 
   const renderItem = ({
     item,
@@ -35,6 +46,7 @@ const FlatSectionList = <T,>(props: IProps<T>) => {
         <NestedSectionList
           data={item.data}
           renderItem={renderNestedItem}
+          ListEmptyComponent={ListEmptyComponent}
           superSection={item.title}
         />
       </>
@@ -47,6 +59,7 @@ const FlatSectionList = <T,>(props: IProps<T>) => {
       refreshing={refreshing}
       renderItem={renderItem}
       onRefresh={onRefresh}
+      ListEmptyComponent={ListEmptyComponent}
     />
   );
 };
