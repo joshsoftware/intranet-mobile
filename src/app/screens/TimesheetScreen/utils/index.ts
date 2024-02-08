@@ -1,6 +1,11 @@
 import {FlatSectionListData} from '../component/FlatSectionList';
 
-import {TimesheetStatus, TimesheetStatusFilter} from '../interface';
+import {
+  Employee,
+  Timesheet,
+  TimesheetStatus,
+  TimesheetStatusFilter,
+} from '../interface';
 
 export const filterDataByStatus = <T>(
   data: FlatSectionListData<T>,
@@ -70,4 +75,58 @@ export const toTimesheetFilterStatus = (status: TimesheetStatus) => {
     default:
       return TimesheetStatusFilter.All;
   }
+};
+
+export const filterDataBySearch = (
+  data: FlatSectionListData<Employee>,
+  userText: string,
+  projectText: string,
+) => {
+  data = data.map(statusObj => ({
+    title: statusObj.title,
+    data: statusObj.data.map(projectObj => ({
+      title: projectObj.title,
+      id: projectObj.id,
+      data: projectObj.data.filter(
+        userObj =>
+          userObj.name.toLowerCase().includes(userText.toLowerCase()) ||
+          userObj.email.toLowerCase().includes(userText.toLowerCase()),
+      ),
+    })),
+  }));
+
+  data = data.map(statusObj => ({
+    title: statusObj.title,
+    data: statusObj.data.filter(
+      projectObj =>
+        projectObj.title.toLowerCase().includes(projectText.toLowerCase()) &&
+        projectObj.data.length > 0,
+    ),
+  }));
+
+  data = data.filter(statusObj => statusObj.data.length > 0);
+
+  sortData(data);
+
+  return data;
+};
+
+export const filterTimesheetBySearch = (
+  data: FlatSectionListData<Timesheet>,
+  projectText: string,
+) => {
+  data = data.map(statusObj => ({
+    title: statusObj.title,
+    data: statusObj.data.filter(
+      projectObj =>
+        projectObj.title.toLowerCase().includes(projectText.toLowerCase()) &&
+        projectObj.data.length > 0,
+    ),
+  }));
+
+  data = data.filter(statusObj => statusObj.data.length > 0);
+
+  sortData(data);
+
+  return data;
 };

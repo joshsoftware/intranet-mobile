@@ -1,17 +1,19 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import DateRangePicker from '../../../components/pickers/DateRangePicker';
 import EmployeeCard from '../component/employeeCard';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import StatusFilterList from '../component/StatusFilterList';
+import CreateTimesheetButton from '../component/CreateTimesheetButton';
+import ManagerActionBar from '../component/ManagerActionBar';
+import UserProjectSearchBox from '../component/UserProjectSearchBox';
 import {useEmployees, useEmployeeTimesheetAction} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
 import {TEmpListTSResponse} from '../../../services/timesheet/types';
 import {Employee, TimesheetStatus, TimesheetStatusFilter} from '../interface';
-import CreateTimesheetButton from '../component/CreateTimesheetButton';
-import ManagerActionBar from '../component/ManagerActionBar';
+import {filterDataBySearch} from '../utils';
 
 type DateRangeProps = {
   startDate: Date;
@@ -19,6 +21,9 @@ type DateRangeProps = {
 };
 
 const EmployeeList = () => {
+  const [userText, setUserText] = useState('');
+  const [projectText, setProjectText] = useState('');
+
   const [dateRange, setDateRange] = useState<DateRangeProps>({
     startDate: startOfMonth,
     endDate: todaysDate,
@@ -40,6 +45,10 @@ const EmployeeList = () => {
   } = useEmployeeTimesheetAction();
 
   const userData = prepareFlatSectionListData(data?.user_data || []);
+  const searchFilterUserData = useMemo(
+    () => filterDataBySearch(userData, userText, projectText),
+    [userData, userText, projectText],
+  );
 
   // on date range change
   const onDateRangeSubmit = useCallback((startDate: Date, endDate: Date) => {
@@ -126,6 +135,15 @@ const EmployeeList = () => {
       {isLoading && <LoadingSpinner />}
 
       {data && (
+        <UserProjectSearchBox
+          userText={userText}
+          projectText={projectText}
+          onUserTextChange={setUserText}
+          onProjectTextChange={setProjectText}
+        />
+      )}
+
+      {data && (
         <EmployeeCard
           name={data.name}
           email={data.email}
@@ -141,7 +159,7 @@ const EmployeeList = () => {
 
       {data && (
         <StatusFilterList
-          data={userData}
+          data={searchFilterUserData}
           defaultStatus={TimesheetStatusFilter.Pending}
           refreshing={isRefetching}
           renderItem={renderItem}

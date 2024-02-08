@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet, View, TextInput} from 'react-native';
 
-// import CreateTimesheetButton from './createTimesheetButton';
 import EditTimesheetModal from '../../component/editTimesheetModal';
 import Typography from '../../../../components/typography';
 import Header from '../../../../components/header';
@@ -24,13 +23,14 @@ import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
 import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
-import {toTimesheetFilterStatus} from '../../utils';
+import {filterTimesheetBySearch, toTimesheetFilterStatus} from '../../utils';
 import CreateTimesheetButton from '../../component/CreateTimesheetButton';
 import ManagerActionBar from '../../component/ManagerActionBar';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
+import {Search} from '../../../../constant/icons';
 
 const TimesheetList = () => {
   const params: any = getParams();
-  // const [userContextData] = useContext(UserContext);
   const userData = useUserData();
 
   const isManager = isManagement(userData.role);
@@ -39,6 +39,7 @@ const TimesheetList = () => {
     [params?.user_id, userData.userId],
   );
 
+  const [projectSearchText, setProjectSearchText] = useState('');
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editTimesheetData, setEditTimesheetData] = useState<Timesheet>();
   const [dateRange, setDateRange] = useState<TDateRange>({
@@ -181,7 +182,11 @@ const TimesheetList = () => {
     ],
   );
 
-  const timesheetData = processTimesheetData(data?.time_sheet_data || []);
+  let timesheetData = processTimesheetData(data?.time_sheet_data || []);
+  timesheetData = useMemo(
+    () => filterTimesheetBySearch(timesheetData, projectSearchText),
+    [data, projectSearchText],
+  );
 
   return (
     <>
@@ -204,6 +209,17 @@ const TimesheetList = () => {
           </View>
         )}
       </View>
+
+      <View style={styles.projectSearchBox}>
+        <Search />
+        <TextInput
+          placeholder="Search Project"
+          value={projectSearchText}
+          onChangeText={setProjectSearchText}
+        />
+      </View>
+
+      {isLoading && <LoadingSpinner />}
 
       {data && (
         <StatusFilterList
@@ -298,6 +314,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingHorizontal: 16,
     paddingVertical: 5,
+  },
+  projectSearchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginHorizontal: 16,
+    borderBottomColor: colors.TEXT_INPUT_BORDER,
+    borderBottomWidth: 1,
   },
 });
 
