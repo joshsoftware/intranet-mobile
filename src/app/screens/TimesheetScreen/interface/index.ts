@@ -10,12 +10,12 @@ export interface Timesheet {
   date: string;
   description: string;
   worked_minutes: number;
-  project: string;
+  project_id: string;
 }
 
 export interface ITimesheetSectionListItem {
   title: string;
-  data: Timesheet[];
+  data: (Timesheet & {project: string})[];
 }
 
 export enum TimesheetStatus {

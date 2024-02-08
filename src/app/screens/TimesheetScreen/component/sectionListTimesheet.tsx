@@ -55,6 +55,8 @@ const SectionListTimesheet = ({
         onDelete={onDelete}
         title={section.title}
         isDeleteVisible={isDeleteVisible}
+        showCheckbox={false}
+        toggleCheckbox={() => {}}
       />
     ),
     [isDeleteVisible, onDelete, onEdit],
@@ -72,7 +74,7 @@ const SectionListTimesheet = ({
   return (
     <SectionList
       {...props}
-      keyExtractor={(item, index) => item.timesheet_id + index}
+      keyExtractor={(item, index) => item.time_sheet_id + index}
       renderItem={renderItem}
       renderSectionHeader={sectionHeader}
       style={styles.list}

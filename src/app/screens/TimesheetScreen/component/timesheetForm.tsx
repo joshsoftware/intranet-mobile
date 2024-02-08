@@ -21,9 +21,9 @@ import strings from '../../../constant/strings';
 import {workHoursData} from '../../../constant/timesheet';
 
 const timesheetFormSchema = yup.object().shape({
-  project: yup.string().required('Project is a required field'),
+  project_id: yup.string().required('Project is a required field'),
   date: yup.date().required('Date is a required field'),
-  work_in_hours: yup.string().required('Work hours is a required field'),
+  worked_minutes: yup.number().required('Work hours is a required field'),
   description: yup
     .string()
     .required('Description is a required field')
@@ -61,9 +61,9 @@ const TimesheetForm = ({
   } = useForm({
     mode: 'onSubmit',
     values: defaultData ?? {
-      project: undefined,
+      project_id: undefined,
       date: defaultDate ?? undefined,
-      work_in_hours: undefined,
+      worked_minutes: undefined,
       description: undefined,
     },
     resolver: yupResolver(timesheetFormSchema),
@@ -87,13 +87,14 @@ const TimesheetForm = ({
     () =>
       handleSubmit((data: any) => {
         let project = projects?.find(value => {
-          return data.project === value.value;
+          return data.project_id === value.value;
         });
+
         onSubmit({
           ...data,
           timesheet_id: data.project + dateFormater(data.date),
           project: project?.label,
-          project_id: data.project,
+          project_id: data.project_id,
         });
       }),
     [handleSubmit, onSubmit, projects],
@@ -123,10 +124,10 @@ const TimesheetForm = ({
                 onValueChange={onChange}
                 value={value}
                 items={projects}
-                error={errors?.project?.message}
+                error={errors?.project_id?.message}
               />
             )}
-            name="project"
+            name="project_id"
           />
         </View>
 
@@ -162,10 +163,10 @@ const TimesheetForm = ({
                   onValueChange={onChange}
                   value={value}
                   items={workHoursData}
-                  error={errors?.work_in_hours?.message}
+                  error={errors?.worked_minutes?.message}
                 />
               )}
-              name="work_in_hours"
+              name="worked_minutes"
             />
           </View>
         </View>

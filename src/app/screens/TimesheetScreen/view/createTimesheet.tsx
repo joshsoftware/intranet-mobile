@@ -10,7 +10,7 @@ import Button from '../../../components/button';
 import Touchable from '../../../components/touchable';
 import {useAddTimesheet} from '../timesheet.hooks';
 
-import {convertToMins, dateFormate} from '../../../utils/date';
+import {dateFormate} from '../../../utils/date';
 import {convertFailedTimesheetsResponse} from '../../../utils/timesheet';
 import toast from '../../../utils/toast';
 
@@ -63,7 +63,7 @@ const CreateTimesheet = ({
         section.data.map(value => ({
           project_id: value.project_id,
           date: dateFormate(value.date, ISO_DATE_FROMAT),
-          duration: convertToMins(value.work_in_hours),
+          duration: value.worked_minutes,
           description: value.description,
         })),
       );
@@ -84,9 +84,11 @@ const CreateTimesheet = ({
   const toggleForm = useCallback(() => setIsFormVisible(v => !v), []);
 
   // helps to add a timesheet item to addedTimesheet state
-  const onAddTimesheet = useCallback((data: Timesheet) => {
+  const onAddTimesheet = useCallback((data: Timesheet & {project: string}) => {
     const isDuplicateEntry = (section: ITimesheetSectionListItem) => {
-      return section.data.some(item => item.timesheet_id === data.timesheet_id);
+      return section.data.some(
+        item => item.time_sheet_id === data.time_sheet_id,
+      );
     };
 
     const updateSections = (sections: ITimesheetSectionListItem[]) => {
@@ -121,7 +123,7 @@ const CreateTimesheet = ({
       const updatedSections = sections.reduce(
         (prevVal: ITimesheetSectionListItem[], currVal) => {
           const data = currVal.data.filter(
-            item => item.timesheet_id !== timesheetData.timesheet_id,
+            item => item.time_sheet_id !== timesheetData.time_sheet_id,
           );
           if (data.length !== 0) {
             prevVal.push({title: currVal.title, data: data});
@@ -140,7 +142,7 @@ const CreateTimesheet = ({
       const updatedSections = sections.reduce(
         (prevVal: ITimesheetSectionListItem[], currVal) => {
           const data = currVal.data.filter(
-            item => item.timesheet_id !== timesheetData.timesheet_id,
+            item => item.time_sheet_id !== timesheetData.time_sheet_id,
           );
           if (data.length !== 0) {
             prevVal.push({title: currVal.title, data: data});
@@ -152,15 +154,15 @@ const CreateTimesheet = ({
 
       const updatedTimesheet = sections.find(section =>
         section.data.some(
-          item => item.timesheet_id === timesheetData.timesheet_id,
+          item => item.time_sheet_id === timesheetData.time_sheet_id,
         ),
       );
 
       if (updatedTimesheet) {
         setFormDefaultData({
           ...timesheetData,
-          project: timesheetData.project_id,
-          work_in_hours: timesheetData.work_in_hours,
+          project_id: timesheetData.project_id,
+          worked_minutes: timesheetData.worked_minutes,
           description: timesheetData.description,
           date: timesheetData.date,
         });

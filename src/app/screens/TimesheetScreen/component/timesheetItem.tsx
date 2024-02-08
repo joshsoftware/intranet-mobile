@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   checkboxContainer: {
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   titleContent: {

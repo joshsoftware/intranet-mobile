@@ -1,4 +1,7 @@
-import {Timesheet, TimesheetStatus} from '../../screens/TimesheetScreen/interface';
+import {
+  Timesheet,
+  TimesheetStatus,
+} from '../../screens/TimesheetScreen/interface';
 
 export interface Employee {
   name: string;
@@ -6,15 +9,6 @@ export interface Employee {
   user_id: string;
   worked_minutes: number;
 }
-
-// export type Timesheet = {
-//   project_id: string | number;
-//   date: string;
-//   duration: string | number;
-//   description: string;
-//   timesheet_id?: string;
-//   id?: string;
-// };
 
 export type TDateRange = {
   from_date: string;
@@ -32,12 +26,23 @@ export interface ITimesheetSectionList {
 }
 
 export type TimesheetRequestBody = {
-  time_sheets_attributes: Timesheet[];
+  time_sheets_attributes: {
+    project_id: string;
+    date: string;
+    duration: number;
+    description: string;
+  }[];
   user_id: string;
 };
 
 export type TEditTimesheetRquestBody = {
-  time_sheets_attributes: Timesheet;
+  time_sheets_attributes: {
+    project_id: string;
+    date: string;
+    duration: number;
+    description: string;
+    id: string;
+  };
   user_id: string;
 };
 
@@ -75,13 +80,6 @@ export type TEmpListTSResponse = {
 };
 
 export type TAssignedProjectList = {data: TSelectData[]};
-
-type GetTimesheetAPIData = {
-  projects: number;
-  total_work: string;
-  leaves: number;
-  data: ITimesheetSectionList[];
-};
 
 export type IGetTimesheetsResponse = {
   message: string;

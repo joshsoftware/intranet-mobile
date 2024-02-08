@@ -9,7 +9,7 @@ import Typography from '../../../components/typography';
 import {useEditTimesheet} from '../timesheet.hooks';
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 
-import {convertToMins, dateFormate} from '../../../utils/date';
+import {dateFormate} from '../../../utils/date';
 import toast from '../../../utils/toast';
 
 import {Timesheet} from '../interface';
@@ -46,11 +46,11 @@ const EditTimesheetModal = ({
   const onEditSave = (data: Timesheet) => {
     mutate({
       time_sheets_attributes: {
-        project_id: parseInt(data?.project + '', 10),
+        project_id: data.project_id,
         date: dateFormate(data.date, ISO_DATE_FROMAT),
-        duration: convertToMins(data.work_in_hours),
+        duration: data.worked_minutes,
         description: data.description,
-        id: data.timesheet_id,
+        id: data.time_sheet_id,
       },
       user_id: userId,
     });
