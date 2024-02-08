@@ -13,7 +13,7 @@ import colors from '../../../constant/colors';
 
 type Props = {
   timesheetData: Timesheet;
-  title: string;
+  // title: string;
   onEdit?: Function;
   onDelete?: Function;
   isDeleteVisible?: boolean;
@@ -25,7 +25,7 @@ type Props = {
 
 const TimesheetItem = ({
   timesheetData,
-  title,
+  // title,
   onEdit,
   onDelete,
   isDeleteVisible = true,
@@ -37,13 +37,13 @@ const TimesheetItem = ({
   const handleEdit = () =>
     onEdit?.({
       ...timesheetData,
-      project_title: title,
+      // project_title: title,
     });
 
   const handleDelete = () =>
     onDelete?.({
       ...timesheetData,
-      project_title: title,
+      // project_title: title,
     });
 
   const hours = Math.floor(timesheetData.worked_minutes / 60);

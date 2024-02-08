@@ -64,7 +64,9 @@ const TimesheetList = () => {
 
   // user_id can be either string or number type
   // using == to check only value
-  const {mutate} = useDeleteTimesheet(params?.user_id == userData.userId);
+  const isSelf = params?.user_id == userData.userId;
+
+  const {mutate} = useDeleteTimesheet(isSelf);
 
   const toggleEditModal = useCallback(() => {
     setIsEditModalVisible(v => !v);
@@ -160,9 +162,8 @@ const TimesheetList = () => {
           timesheetData={item}
           onEdit={timesheetEditCall}
           onDelete={timesheetDeleteCall}
-          title={item.project}
           isDeleteVisible={isManager}
-          showCheckbox={true}
+          showCheckbox={!isSelf}
           isChecked={isChecked}
           error={errorMessage}
           toggleCheckbox={toggleChecked}
@@ -170,6 +171,7 @@ const TimesheetList = () => {
       );
     },
     [
+      isSelf,
       isManager,
       erroredTimesheets,
       timesheetDeleteCall,
