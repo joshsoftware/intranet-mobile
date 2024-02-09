@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.PRIMARY,
+    fontWeight: 'bold',
   },
   icon: {
     marginTop: 20,

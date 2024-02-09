@@ -106,7 +106,7 @@ export const employeeTimesheetAction = async (
   const body: EmployeeTimesheetActionRequestBody = {
     from_date: dateFormate(payload.from_date),
     to_date: dateFormate(payload.to_date),
-    action: payload.action,
+    action_type: payload.action,
     reject_reason: payload.reject_reason,
     users: [],
   };
@@ -134,6 +134,8 @@ export const employeeTimesheetAction = async (
 
     return acc;
   }, body.users);
+
+  console.log(body);
 
   const response = await apiCall<
     EmployeeTimesheetActionRequestBody,

@@ -169,6 +169,8 @@ export const useAddTimesheet = () => {
 };
 
 export const useEmployeeTimesheetAction = () => {
+  const queryClient = useQueryClient();
+
   const [checkedEmployees, setCheckedEmployees] = useState<
     {userId: string; projectId: number; status: TimesheetStatus}[]
   >([]);
@@ -177,10 +179,17 @@ export const useEmployeeTimesheetAction = () => {
     {userId: string; projectId: number; status: TimesheetStatus}[]
   >([]);
 
+  const clearAllChecked = () => {
+    setCheckedEmployees([]);
+    setErroredEmployees([]);
+  };
+
   const {mutate} = useMutation(employeeTimesheetAction, {
     onSuccess: data => {
       if (data?.data?.message) {
         toast(data.data.message);
+        queryClient.invalidateQueries(['timesheet']);
+        clearAllChecked();
       }
     },
     onError: (err: AxiosError) => {
@@ -200,13 +209,17 @@ export const useEmployeeTimesheetAction = () => {
       };
 
       toast(data.message, 'error');
-      setErroredEmployees(
-        data.data.error_data.map(obj => ({
-          userId: obj.user_id,
-          projectId: obj.project_id,
-          status: obj.status,
-        })),
-      );
+      const checkedList = data.data.error_data.map(obj => ({
+        userId: obj.user_id,
+        projectId: obj.project_id,
+        status: obj.status,
+      }));
+
+      console.log(checkedList);
+      setCheckedEmployees([...checkedList]);
+      setErroredEmployees(checkedList);
+
+      queryClient.invalidateQueries(['timesheet']);
     },
   });
 
@@ -219,8 +232,8 @@ export const useEmployeeTimesheetAction = () => {
       checkedEmployees.findIndex(
         obj =>
           obj.status === status &&
-          obj.userId === userId &&
-          obj.projectId === projectId,
+          obj.userId.toString() === userId.toString() &&
+          obj.projectId.toString() === projectId.toString(),
       ) !== -1
     );
   };
@@ -264,11 +277,6 @@ export const useEmployeeTimesheetAction = () => {
     }
   };
 
-  const clearAllChecked = () => {
-    setCheckedEmployees([]);
-    setErroredEmployees([]);
-  };
-
   const isActionMode = checkedEmployees.length !== 0;
 
   return {
@@ -283,14 +291,23 @@ export const useEmployeeTimesheetAction = () => {
 };
 
 export const useTimesheetAction = () => {
+  const queryClient = useQueryClient();
+
   const [checkedTimesheets, setCheckedTimesheets] = useState<string[]>([]);
   const [erroredTimesheets, setErroredTimesheets] = useState<
     Record<string, string>
   >({});
 
+  const clearAllChecked = () => {
+    setCheckedTimesheets([]);
+    setErroredTimesheets({});
+  };
+
   const {mutate} = useMutation(timesheetAction, {
     onSuccess(data) {
       toast(data.data.message);
+      queryClient.invalidateQueries(['timesheet']);
+      clearAllChecked();
     },
     onError(error: AxiosError) {
       if (!error.response) {
@@ -305,7 +322,11 @@ export const useTimesheetAction = () => {
       };
 
       toast(data.message, 'error');
+
+      setCheckedTimesheets(Object.keys(data.data.error_data));
       setErroredTimesheets(data.data.error_data);
+
+      queryClient.invalidateQueries(['timesheet']);
     },
   });
 
@@ -326,11 +347,6 @@ export const useTimesheetAction = () => {
     } else {
       setCheckedTimesheets([...checkedTimesheets, timesheetId]);
     }
-  };
-
-  const clearAllChecked = () => {
-    setCheckedTimesheets([]);
-    setErroredTimesheets({});
   };
 
   const isActionMode = checkedTimesheets.length !== 0;

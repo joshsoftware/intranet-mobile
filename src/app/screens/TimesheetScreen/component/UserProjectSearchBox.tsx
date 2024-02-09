@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.TEXT_INPUT_BORDER,
   },
   seperatorText: {
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '900',
   },
   textInput: {
     flex: 1,

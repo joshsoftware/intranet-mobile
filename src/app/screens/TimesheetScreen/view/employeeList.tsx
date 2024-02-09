@@ -77,7 +77,7 @@ const EmployeeList = () => {
       from_date: dateRange.startDate,
       to_date: dateRange.endDate,
       users: checkedEmployees,
-      action: 'Approved',
+      action: 'Rejected',
       reject_reason: reason,
     });
   };
@@ -109,6 +109,7 @@ const EmployeeList = () => {
           showCheckbox={true}
           isChecked={isChecked}
           isErrored={isErrored}
+          projectFilter={projectText}
           toggleCheckbox={toggleCheckbox}
         />
       );
@@ -133,41 +134,43 @@ const EmployeeList = () => {
         />
       </View>
 
-      {isLoading && <LoadingSpinner />}
+      <View style={styles.main}>
+        {isLoading && <LoadingSpinner />}
 
-      {data && (
-        <UserProjectSearchBox
-          userText={userText}
-          projectText={projectText}
-          onUserTextChange={setUserText}
-          onProjectTextChange={setProjectText}
-        />
-      )}
+        {data && (
+          <UserProjectSearchBox
+            userText={userText}
+            projectText={projectText}
+            onUserTextChange={setUserText}
+            onProjectTextChange={setProjectText}
+          />
+        )}
 
-      {data && (
-        <EmployeeCard
-          name={data.name}
-          email={data.email}
-          userId={data.user_id}
-          worked_minutes={data.worked_minutes}
-          startDate={dateRange.startDate}
-          endDate={dateRange.endDate}
-          showCheckbox={false}
-          isChecked={false}
-          toggleCheckbox={() => {}}
-        />
-      )}
+        {data && (
+          <EmployeeCard
+            name={data.name}
+            email={data.email}
+            userId={data.user_id}
+            worked_minutes={data.worked_minutes}
+            startDate={dateRange.startDate}
+            endDate={dateRange.endDate}
+            showCheckbox={false}
+            isChecked={false}
+            toggleCheckbox={() => {}}
+          />
+        )}
 
-      {data && (
-        <StatusFilterList
-          data={searchFilterUserData}
-          defaultStatus={TimesheetStatusFilter.Pending}
-          refreshing={isRefetching}
-          renderItem={renderItem}
-          onRefresh={refetch}
-          ListEmptyComponent={EmployeeListEmptyComponent}
-        />
-      )}
+        {data && (
+          <StatusFilterList
+            data={searchFilterUserData}
+            defaultStatus={TimesheetStatusFilter.Pending}
+            refreshing={isRefetching}
+            renderItem={renderItem}
+            onRefresh={refetch}
+            ListEmptyComponent={EmployeeListEmptyComponent}
+          />
+        )}
+      </View>
 
       {isActionMode ? (
         <ManagerActionBar

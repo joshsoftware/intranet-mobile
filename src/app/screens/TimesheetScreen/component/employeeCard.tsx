@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
 import Touchable from '../../../components/touchable';
@@ -8,7 +8,7 @@ import Typography from '../../../components/typography';
 import {navigate} from '../../../navigation';
 import {dateFormate} from '../../../utils/date';
 
-import {Arrow} from '../../../constant/icons';
+import {Arrow, Lock} from '../../../constant/icons';
 import {USER_TIMESHEET} from '../../../constant/screenNames';
 import {ISO_DATE_FROMAT} from '../../../constant/date';
 import {TimesheetStatus} from '../interface';
@@ -25,6 +25,7 @@ type Props = {
   status?: TimesheetStatus;
   showCheckbox?: boolean;
   isChecked?: boolean;
+  projectFilter?: string;
   toggleCheckbox: () => void;
 };
 
@@ -40,6 +41,7 @@ const EmployeeCard = (props: Props) => {
     isErrored = false,
     isChecked = false,
     showCheckbox = false,
+    projectFilter = '',
     toggleCheckbox,
   } = props;
 
@@ -51,7 +53,10 @@ const EmployeeCard = (props: Props) => {
       startDate: dateFormate(startDate, ISO_DATE_FROMAT),
       endDate: dateFormate(endDate, ISO_DATE_FROMAT),
       status: status,
+      projectFilter: projectFilter,
     });
+
+  const isFreezed = worked_minutes === 0;
 
   const hours = Math.floor(worked_minutes / 60);
   const minutes = Math.floor(worked_minutes % 60);
@@ -59,7 +64,7 @@ const EmployeeCard = (props: Props) => {
   return (
     <Touchable type="native" onPress={handleNavigation}>
       <View style={styles.container}>
-        {showCheckbox && (
+        {showCheckbox && !isFreezed && (
           <View style={styles.checkBoxContainer}>
             <CheckBox
               value={isChecked}
@@ -71,16 +76,26 @@ const EmployeeCard = (props: Props) => {
           </View>
         )}
         <View
-          style={[styles.main, showCheckbox ? styles.mainWithCheckbox : {}]}>
+          style={[
+            styles.main,
+            showCheckbox && !isFreezed ? styles.mainWithCheckbox : {},
+          ]}>
           <View>
             <Typography type="header" style={styles.empName}>
               {name} {formatTimeString(hours, minutes)}
             </Typography>
             <Typography type="description">{email}</Typography>
           </View>
-          <View style={styles.arrowContainer}>
-            <Arrow />
-          </View>
+          {isFreezed ? (
+            <View style={styles.freezedContainer}>
+              <Lock height={18} fill={colors.PRIMARY} />
+              <Text style={styles.freezedText}>Freezed</Text>
+            </View>
+          ) : (
+            <View style={styles.arrowContainer}>
+              <Arrow />
+            </View>
+          )}
         </View>
       </View>
     </Touchable>
@@ -122,6 +137,17 @@ const styles = StyleSheet.create({
   arrowContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  freezedContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 5,
+    borderRadius: 10,
+  },
+  freezedText: {
+    fontSize: 12,
+    color: colors.PRIMARY,
+    fontWeight: 'bold',
   },
 });
 

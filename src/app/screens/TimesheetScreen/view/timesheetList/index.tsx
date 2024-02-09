@@ -7,6 +7,10 @@ import Header from '../../../../components/header';
 import DateRangePicker from '../../../../components/pickers/DateRangePicker';
 import TimesheetItem from '../../component/timesheetItem';
 import StatusFilterList from '../../component/StatusFilterList';
+import TimesheetListEmptyComponent from '../../component/TimesheetListEmptyComponent';
+import CreateTimesheetButton from '../../component/CreateTimesheetButton';
+import ManagerActionBar from '../../component/ManagerActionBar';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 import {
   useDeleteTimesheet,
   useTimesheetAction,
@@ -17,18 +21,14 @@ import useUserData from '../../../../hooks/useUserData';
 import {getParams} from '../../../../navigation';
 import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
 import {IGetTimesheetsResponse} from '../../../../services/timesheet/types';
+import {filterTimesheetBySearch, toTimesheetFilterStatus} from '../../utils';
 import {isManagement} from '../../../../utils/user';
 
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
+import {Search} from '../../../../constant/icons';
 import {Timesheet} from '../../interface';
 import {TDateRange} from '../../../../../types';
-import {filterTimesheetBySearch, toTimesheetFilterStatus} from '../../utils';
-import CreateTimesheetButton from '../../component/CreateTimesheetButton';
-import ManagerActionBar from '../../component/ManagerActionBar';
-import LoadingSpinner from '../../../../components/LoadingSpinner';
-import {Search} from '../../../../constant/icons';
-import TimesheetListEmptyComponent from '../../component/TimesheetListEmptyComponent';
 
 const TimesheetList = () => {
   const params: any = getParams();
@@ -40,7 +40,11 @@ const TimesheetList = () => {
     [params?.user_id, userData.userId],
   );
 
-  const [projectSearchText, setProjectSearchText] = useState('');
+  console.log(params);
+
+  const [projectSearchText, setProjectSearchText] = useState(
+    params?.projectFilter || '',
+  );
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editTimesheetData, setEditTimesheetData] = useState<Timesheet>();
   const [dateRange, setDateRange] = useState<TDateRange>({
@@ -66,7 +70,7 @@ const TimesheetList = () => {
 
   // user_id can be either string or number type
   // using == to check only value
-  const isSelf = params?.user_id == userData.userId;
+  const isSelf = params?.user_id.toString() === userData.userId.toString();
 
   const {mutate} = useDeleteTimesheet(isSelf);
 
@@ -137,7 +141,7 @@ const TimesheetList = () => {
       from_date: dateFormate(dateRange.startDate),
       to_date: dateFormate(dateRange.endDate),
       timesheet_ids: checkedTimesheets,
-      action: 'Approved',
+      action_type: 'Approved',
     });
   };
 
@@ -146,7 +150,7 @@ const TimesheetList = () => {
       from_date: dateFormate(dateRange.startDate),
       to_date: dateFormate(dateRange.endDate),
       timesheet_ids: checkedTimesheets,
-      action: 'Approved',
+      action_type: 'Rejected',
       reject_reason: reason,
     });
   };
@@ -165,7 +169,7 @@ const TimesheetList = () => {
           onEdit={timesheetEditCall}
           onDelete={timesheetDeleteCall}
           isDeleteVisible={isManager}
-          showCheckbox={!isSelf}
+          showCheckbox={!isSelf && isManager}
           isChecked={isChecked}
           error={errorMessage}
           toggleCheckbox={toggleChecked}

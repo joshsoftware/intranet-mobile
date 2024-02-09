@@ -115,7 +115,7 @@ export interface EmployeeTimesheetActionRequestBody {
       user_ids: string[];
     }[];
   }[];
-  action: 'Approved' | 'Rejected';
+  action_type: 'Approved' | 'Rejected';
   reject_reason?: string;
 }
 
@@ -131,6 +131,6 @@ export interface TimesheetActionRequestBody {
   from_date: string;
   to_date: string;
   timesheet_ids: string[];
-  action: 'Approved' | 'Rejected';
+  action_type: 'Approved' | 'Rejected';
   reject_reason?: string;
 }
