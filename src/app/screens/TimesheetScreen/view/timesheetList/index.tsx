@@ -71,7 +71,9 @@ const TimesheetList = () => {
 
   // user_id can be either string or number type
   // using == to check only value
-  const isSelf = params?.user_id.toString() === userData.userId.toString();
+  const isSelf =
+    !params?.user_id ||
+    params?.user_id.toString() === userData.userId.toString();
 
   const {mutate} = useDeleteTimesheet(isSelf);
 
