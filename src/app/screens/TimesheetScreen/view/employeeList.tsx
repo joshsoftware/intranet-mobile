@@ -13,7 +13,12 @@ import {useEmployees, useEmployeeTimesheetAction} from '../timesheet.hooks';
 
 import {startOfMonth, todaysDate} from '../../../utils/date';
 import {TEmpListTSResponse} from '../../../services/timesheet/types';
-import {Employee, TimesheetStatus, TimesheetStatusFilter} from '../interface';
+import {
+  Employee,
+  TimesheetAction,
+  TimesheetStatus,
+  TimesheetStatusFilter,
+} from '../interface';
 import {filterDataBySearch} from '../utils';
 
 type DateRangeProps = {
@@ -36,6 +41,9 @@ const EmployeeList = () => {
   );
 
   const {
+    isLoading: isActionLoading,
+    isApproved,
+    isRejected,
     checkedEmployees,
     isEmployeeChecked,
     isErroredEmployee,
@@ -68,7 +76,7 @@ const EmployeeList = () => {
       from_date: dateRange.startDate,
       to_date: dateRange.endDate,
       users: checkedEmployees,
-      action: 'Approved',
+      action: TimesheetAction.Approve,
     });
   };
 
@@ -77,13 +85,18 @@ const EmployeeList = () => {
       from_date: dateRange.startDate,
       to_date: dateRange.endDate,
       users: checkedEmployees,
-      action: 'Rejected',
+      action: TimesheetAction.Reject,
       reject_reason: reason,
     });
   };
 
   const renderItem = useCallback(
-    (item: Employee, superSection: string, subSectionId?: number) => {
+    (
+      item: Employee,
+      superSection: string,
+      subSectionId?: number,
+      subSection?: string,
+    ) => {
       const {name, email, user_id, worked_minutes} = item;
       const status = superSection as TimesheetStatus;
 
@@ -109,7 +122,7 @@ const EmployeeList = () => {
           showCheckbox={true}
           isChecked={isChecked}
           isErrored={isErrored}
-          projectFilter={projectText}
+          projectFilter={subSection}
           toggleCheckbox={toggleCheckbox}
         />
       );
@@ -131,6 +144,7 @@ const EmployeeList = () => {
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
           maximumDate={todaysDate}
+          disabled={isActionMode}
         />
       </View>
 
@@ -174,6 +188,9 @@ const EmployeeList = () => {
 
       {isActionMode ? (
         <ManagerActionBar
+          isApproved={isApproved}
+          isRejected={isRejected}
+          disabled={isActionLoading}
           onApprove={handleApprove}
           onReject={handleReject}
           onCancel={clearAllChecked}

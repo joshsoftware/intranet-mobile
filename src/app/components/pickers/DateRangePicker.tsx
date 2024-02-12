@@ -9,11 +9,13 @@ type Props = {
   endDate: Date;
   minimumDate?: Date;
   maximumDate?: Date;
+  disabled?: boolean;
   onChange: (startDate: Date, endDate: Date) => void;
 };
 
 function DateRangePicker(props: Props) {
-  const {onChange, startDate, endDate, minimumDate, maximumDate} = props;
+  const {onChange, startDate, endDate, minimumDate, maximumDate, disabled} =
+    props;
 
   const handleStartDateChange = (date?: Date) => {
     if (date) {
@@ -37,6 +39,7 @@ function DateRangePicker(props: Props) {
           onDateChange={handleStartDateChange}
           minimumDate={minimumDate}
           maximumDate={endDate}
+          disabled={disabled}
         />
       </View>
 
@@ -48,6 +51,7 @@ function DateRangePicker(props: Props) {
           onDateChange={handleEndDateChange}
           minimumDate={startDate}
           maximumDate={maximumDate}
+          disabled={disabled}
         />
       </View>
     </View>

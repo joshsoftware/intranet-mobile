@@ -10,6 +10,7 @@ interface IProps<T> {
     item: T,
     superSection: string,
     subSectionId?: number,
+    subSection?: string,
   ) => React.ReactElement;
 }
 
@@ -26,12 +27,12 @@ const NestedSectionList = <T,>(props: IProps<T>) => {
 
   const renderItemWrapper = ({
     item,
-    section: {id},
+    section: {id, title},
   }: {
     item: T;
-    section: {id?: number};
+    section: {id?: number; title: string};
   }) => {
-    return renderItem(item, superSection, id);
+    return renderItem(item, superSection, id, title);
   };
 
   return (

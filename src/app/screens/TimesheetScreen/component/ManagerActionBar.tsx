@@ -18,13 +18,17 @@ const rejectFormSchema = yup.object().shape({
 });
 
 interface IProps {
+  isApproved: boolean;
+  isRejected: boolean;
+  disabled: boolean;
   onApprove: () => void;
   onReject: (reason: string) => void;
   onCancel: () => void;
 }
 
 const ManagerActionBar = (props: IProps) => {
-  const {onApprove, onReject, onCancel} = props;
+  const {isApproved, isRejected, disabled, onApprove, onReject, onCancel} =
+    props;
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -32,6 +36,7 @@ const ManagerActionBar = (props: IProps) => {
   const {
     control,
     formState: {errors},
+    reset,
     handleSubmit,
   } = useForm({
     resolver: yupResolver(rejectFormSchema),
@@ -50,6 +55,12 @@ const ManagerActionBar = (props: IProps) => {
 
     setShowRejectModal(false);
     onReject(rejectReason);
+    reset();
+  };
+
+  const handleRejectCancel = () => {
+    reset();
+    setShowRejectModal(false);
   };
 
   return (
@@ -58,17 +69,26 @@ const ManagerActionBar = (props: IProps) => {
         <Button
           type="primary"
           title="Reject"
+          disabled={disabled}
+          isLoading={isRejected && disabled}
           onPress={() => setShowRejectModal(true)}
         />
         <Button
           type="primary"
           title="Approve"
+          disabled={disabled}
+          isLoading={isApproved && disabled}
           onPress={() => setShowApproveModal(true)}
         />
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button type="secondary" title="Cancel" onPress={onCancel} />
+        <Button
+          type="secondary"
+          title="Cancel"
+          disabled={disabled}
+          onPress={onCancel}
+        />
       </View>
 
       <BottomModal
@@ -112,7 +132,7 @@ const ManagerActionBar = (props: IProps) => {
             <Button
               type="secondary"
               title="Cancel"
-              onPress={() => setShowRejectModal(false)}
+              onPress={handleRejectCancel}
             />
             <Button
               type="primary"

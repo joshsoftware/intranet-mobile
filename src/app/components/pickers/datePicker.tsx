@@ -21,6 +21,7 @@ type Props = {
   onDateChange: (date?: Date) => void;
   hideIcon?: boolean;
   error?: string;
+  disabled?: boolean;
 };
 
 const DatePicker = (props: Props) => {
@@ -42,10 +43,12 @@ const DatePicker = (props: Props) => {
       <Touchable
         type="opacity"
         onPress={openPicker}
+        disabled={props.disabled}
         style={[
           styles.picker,
           props.error ? styles.error : {},
           props.hideIcon ? styles.pickerHiddenIcon : {},
+          props.disabled ? styles.disabledPicker : {},
         ]}>
         <Typography
           type="header"
@@ -100,6 +103,9 @@ const styles = StyleSheet.create({
   },
   pickerHiddenIcon: {
     justifyContent: 'center',
+  },
+  disabledPicker: {
+    backgroundColor: colors.LIGHT_GREY_BACKGROUND,
   },
 });
 

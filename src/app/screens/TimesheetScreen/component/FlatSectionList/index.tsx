@@ -23,6 +23,7 @@ interface IProps<T> {
     item: T,
     superSection: string,
     subSectionId?: number,
+    subSection?: string,
   ) => React.ReactElement;
 }
 

@@ -33,3 +33,8 @@ export enum TimesheetStatusFilter {
   Approved = 'Approved',
   Rejected = 'Rejected',
 }
+
+export enum TimesheetAction {
+  Approve = 'Approved',
+  Reject = 'Rejected',
+}

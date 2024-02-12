@@ -27,7 +27,7 @@ import {isManagement} from '../../../../utils/user';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
 import {Search} from '../../../../constant/icons';
-import {Timesheet} from '../../interface';
+import {Timesheet, TimesheetAction} from '../../interface';
 import {TDateRange} from '../../../../../types';
 
 const TimesheetList = () => {
@@ -39,8 +39,6 @@ const TimesheetList = () => {
     () => params?.user_id ?? userData.userId ?? '',
     [params?.user_id, userData.userId],
   );
-
-  console.log(params);
 
   const [projectSearchText, setProjectSearchText] = useState(
     params?.projectFilter || '',
@@ -59,6 +57,9 @@ const TimesheetList = () => {
   );
 
   const {
+    isLoading: isActionLoading,
+    isApproved,
+    isRejected,
     isActionMode,
     checkedTimesheets,
     erroredTimesheets,
@@ -141,7 +142,7 @@ const TimesheetList = () => {
       from_date: dateFormate(dateRange.startDate),
       to_date: dateFormate(dateRange.endDate),
       timesheet_ids: checkedTimesheets,
-      action_type: 'Approved',
+      action_type: TimesheetAction.Approve,
     });
   };
 
@@ -150,7 +151,7 @@ const TimesheetList = () => {
       from_date: dateFormate(dateRange.startDate),
       to_date: dateFormate(dateRange.endDate),
       timesheet_ids: checkedTimesheets,
-      action_type: 'Rejected',
+      action_type: TimesheetAction.Reject,
       reject_reason: reason,
     });
   };
@@ -249,6 +250,9 @@ const TimesheetList = () => {
 
       {isActionMode && (
         <ManagerActionBar
+          disabled={isActionLoading}
+          isApproved={isApproved}
+          isRejected={isRejected}
           onApprove={handleApprove}
           onReject={handleReject}
           onCancel={clearAllChecked}

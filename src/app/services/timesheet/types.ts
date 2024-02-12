@@ -1,5 +1,6 @@
 import {
   Timesheet,
+  TimesheetAction,
   TimesheetStatus,
 } from '../../screens/TimesheetScreen/interface';
 
@@ -115,7 +116,7 @@ export interface EmployeeTimesheetActionRequestBody {
       user_ids: string[];
     }[];
   }[];
-  action_type: 'Approved' | 'Rejected';
+  action_type: TimesheetAction;
   reject_reason?: string;
 }
 
@@ -123,7 +124,7 @@ export interface EmployeeTimesheetActionPayload {
   from_date: Date;
   to_date: Date;
   users: {userId: string; projectId: number; status: TimesheetStatus}[];
-  action: 'Approved' | 'Rejected';
+  action: TimesheetAction;
   reject_reason?: string;
 }
 
@@ -131,6 +132,6 @@ export interface TimesheetActionRequestBody {
   from_date: string;
   to_date: string;
   timesheet_ids: string[];
-  action_type: 'Approved' | 'Rejected';
+  action_type: TimesheetAction;
   reject_reason?: string;
 }

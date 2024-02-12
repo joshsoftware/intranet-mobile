@@ -19,16 +19,16 @@ const UserProjectSearchBox = (props: IProps) => {
       <Search />
       <TextInput
         style={styles.textInput}
-        placeholder="Search User"
-        value={userText}
-        onChangeText={onUserTextChange}
+        placeholder="Search Project"
+        value={projectText}
+        onChangeText={onProjectTextChange}
       />
       <Text style={styles.seperatorText}>-</Text>
       <TextInput
         style={styles.textInput}
-        placeholder="Search Project"
-        value={projectText}
-        onChangeText={onProjectTextChange}
+        placeholder="Search User"
+        value={userText}
+        onChangeText={onUserTextChange}
       />
     </View>
   );

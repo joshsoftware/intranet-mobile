@@ -11,4 +11,3 @@ export interface IUpdateSkillFormData {
   ternaryTechnicalSkill?: string;
   otherSkills?: string;
 }
-

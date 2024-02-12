@@ -15,14 +15,16 @@ import {
 } from '../../services/timesheet';
 
 import {
+  EmployeeTimesheetActionPayload,
   TDeleteTimesheetRequest,
   TEditTimesheetRquestBody,
+  TimesheetActionRequestBody,
   TimesheetError,
   TimesheetRequestBody,
 } from '../../services/timesheet/types';
 import {ISO_DATE_FROMAT} from '../../constant/date';
 import {useState} from 'react';
-import {TimesheetStatus} from './interface';
+import {TimesheetAction, TimesheetStatus} from './interface';
 
 export const useEmployees = (startDate: Date, endDate: Date) => {
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
@@ -171,6 +173,10 @@ export const useAddTimesheet = () => {
 export const useEmployeeTimesheetAction = () => {
   const queryClient = useQueryClient();
 
+  const [actionType, setActionType] = useState<TimesheetAction>(
+    TimesheetAction.Approve,
+  );
+
   const [checkedEmployees, setCheckedEmployees] = useState<
     {userId: string; projectId: number; status: TimesheetStatus}[]
   >([]);
@@ -184,7 +190,7 @@ export const useEmployeeTimesheetAction = () => {
     setErroredEmployees([]);
   };
 
-  const {mutate} = useMutation(employeeTimesheetAction, {
+  const {mutate, isLoading} = useMutation(employeeTimesheetAction, {
     onSuccess: data => {
       if (data?.data?.message) {
         toast(data.data.message);
@@ -215,7 +221,6 @@ export const useEmployeeTimesheetAction = () => {
         status: obj.status,
       }));
 
-      console.log(checkedList);
       setCheckedEmployees([...checkedList]);
       setErroredEmployees(checkedList);
 
@@ -263,8 +268,8 @@ export const useEmployeeTimesheetAction = () => {
         obj =>
           !(
             obj.status === status &&
-            obj.userId === userId &&
-            obj.projectId === projectId
+            obj.userId.toString() === userId.toString() &&
+            obj.projectId.toString() === projectId.toString()
           ),
       );
       setCheckedEmployees(filteredCheckedEmployees);
@@ -279,19 +284,31 @@ export const useEmployeeTimesheetAction = () => {
 
   const isActionMode = checkedEmployees.length !== 0;
 
+  const performAction = (payload: EmployeeTimesheetActionPayload) => {
+    setActionType(payload.action);
+    mutate(payload);
+  };
+
   return {
+    isApproved: actionType === TimesheetAction.Approve,
+    isRejected: actionType === TimesheetAction.Reject,
     checkedEmployees,
     isEmployeeChecked,
     isErroredEmployee,
     isActionMode,
     toggleCheckEmployee,
-    performAction: mutate,
+    performAction,
     clearAllChecked,
+    isLoading,
   };
 };
 
 export const useTimesheetAction = () => {
   const queryClient = useQueryClient();
+
+  const [actionType, setActionType] = useState<TimesheetAction>(
+    TimesheetAction.Approve,
+  );
 
   const [checkedTimesheets, setCheckedTimesheets] = useState<string[]>([]);
   const [erroredTimesheets, setErroredTimesheets] = useState<
@@ -303,7 +320,7 @@ export const useTimesheetAction = () => {
     setErroredTimesheets({});
   };
 
-  const {mutate} = useMutation(timesheetAction, {
+  const {mutate, isLoading} = useMutation(timesheetAction, {
     onSuccess(data) {
       toast(data.data.message);
       queryClient.invalidateQueries(['timesheet']);
@@ -349,15 +366,23 @@ export const useTimesheetAction = () => {
     }
   };
 
+  const performAction = (payload: TimesheetActionRequestBody) => {
+    setActionType(payload.action_type);
+    mutate(payload);
+  };
+
   const isActionMode = checkedTimesheets.length !== 0;
 
   return {
+    isLoading,
+    isApproved: actionType === TimesheetAction.Approve,
+    isRejected: actionType === TimesheetAction.Reject,
     checkedTimesheets,
     erroredTimesheets,
     isTimesheetChecked,
     isActionMode,
     toggleCheckTimesheet,
-    performAction: mutate,
+    performAction,
     clearAllChecked,
   };
 };

@@ -6,7 +6,6 @@ import {
   GET_EMPLOYEE_LIST_ROUTE,
   GET_PROJECT_LIST_ROUTE,
   GET_TIMESHEET_ROUTE,
-  MANAGER_TIMESHEET_ACTION_ROUTE,
   POST_TIMESHEET_ROUTE,
   PUT_TIMESHEET_ROUTE,
 } from '../../constant/apiRoutes';
@@ -24,10 +23,6 @@ import {
   TimesheetActionRequestBody,
   TimesheetRequestBody,
 } from './types';
-import {
-  Timesheet,
-  TimesheetStatus,
-} from '../../screens/TimesheetScreen/interface';
 import {dateFormate} from '../../utils/date';
 
 export const createTimesheetRequest = async (payload: TimesheetRequestBody) => {
@@ -134,8 +129,6 @@ export const employeeTimesheetAction = async (
 
     return acc;
   }, body.users);
-
-  console.log(body);
 
   const response = await apiCall<
     EmployeeTimesheetActionRequestBody,
