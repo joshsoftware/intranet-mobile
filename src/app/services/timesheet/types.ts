@@ -135,3 +135,13 @@ export interface TimesheetActionRequestBody {
   action_type: TimesheetAction;
   reject_reason?: string;
 }
+
+export interface TimesheetWarningParams {
+  user_id: string;
+  project_id: string;
+  duration: number;
+}
+
+export interface TimesheetWarningResponseBody {
+  message: string;
+}

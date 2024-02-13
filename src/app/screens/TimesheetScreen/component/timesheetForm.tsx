@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useMemo, useRef} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -10,7 +10,7 @@ import PickerSelect from '../../../components/pickers/pickerSelect';
 import DatePicker from '../../../components/pickers/datePicker';
 import Input from '../../../components/input';
 import Button from '../../../components/button';
-import {useAssignedProjects} from '../timesheet.hooks';
+import {useAssignedProjects, useTimesheetWarning} from '../timesheet.hooks';
 
 import {todaysDate} from '../../../utils/date';
 import {dateFormater} from '../../../utils/dateFormater';
@@ -57,6 +57,7 @@ const TimesheetForm = ({
     handleSubmit,
     control,
     reset,
+    watch,
     formState: {errors, isSubmitted, isSubmitSuccessful},
   } = useForm({
     mode: 'onSubmit',
@@ -69,7 +70,10 @@ const TimesheetForm = ({
     resolver: yupResolver(timesheetFormSchema),
   });
 
+  const watchFields = watch(['project_id', 'worked_minutes']);
+
   const {data: projects} = useAssignedProjects(userId);
+  const {warningMessage} = useTimesheetWarning(userId, watchFields);
 
   // Workaround for issue: https://github.com/facebook/react-native/issues/36494
   const iOSTextInputWorkaroundRef = useRef(false);
@@ -199,6 +203,10 @@ const TimesheetForm = ({
             name="description"
           />
         </View>
+
+        {warningMessage && (
+          <Text style={styles.warningStyle}>{warningMessage}</Text>
+        )}
       </Collapsible>
       {!isEditForm ? (
         <View style={styles.addButton}>
@@ -279,6 +287,10 @@ const styles = StyleSheet.create({
   },
   save: {
     width: '45%',
+  },
+  warningStyle: {
+    textAlign: 'center',
+    color: colors.PRIMARY,
   },
 });
 

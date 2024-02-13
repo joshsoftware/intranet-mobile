@@ -8,6 +8,7 @@ import {
   GET_TIMESHEET_ROUTE,
   POST_TIMESHEET_ROUTE,
   PUT_TIMESHEET_ROUTE,
+  TIMESHEET_WARNING_ROUTE,
 } from '../../constant/apiRoutes';
 import {
   EmployeeTimesheetActionPayload,
@@ -22,6 +23,8 @@ import {
   TEmpListTSResponse,
   TimesheetActionRequestBody,
   TimesheetRequestBody,
+  TimesheetWarningParams,
+  TimesheetWarningResponseBody,
 } from './types';
 import {dateFormate} from '../../utils/date';
 
@@ -150,6 +153,16 @@ export const timesheetAction = async (payload: TimesheetActionRequestBody) => {
     method: 'PATCH',
     url: GET_TIMESHEET_ROUTE,
     data: payload,
+  });
+
+  return response;
+};
+
+export const timesheetWarning = async (payload: TimesheetWarningParams) => {
+  const response = await apiCall<void, TimesheetWarningResponseBody>({
+    method: 'GET',
+    url: TIMESHEET_WARNING_ROUTE,
+    params: payload,
   });
 
   return response;

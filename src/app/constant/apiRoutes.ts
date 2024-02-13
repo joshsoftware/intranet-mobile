@@ -31,3 +31,5 @@ export const TEAM_MEMBERS_UPCOMING_LEAVES_ROUTE =
 
 export const TEAM_MEMBERS_UPCOMING_BIRTHDAYS_ROUTE =
   '/api/mobile/v1/employee_birthdays';
+
+export const TIMESHEET_WARNING_ROUTE = '/api/mobile/v2/time_sheets/warning';

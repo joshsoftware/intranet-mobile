@@ -1,5 +1,6 @@
-import {AxiosError} from 'axios';
+import {useCallback, useEffect, useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {AxiosError} from 'axios';
 
 import toast from '../../utils/toast';
 import {dateFormate, getMonthYearFromISO} from '../../utils/date';
@@ -11,6 +12,7 @@ import {
   getProjectListRequest,
   getTimesheetRequest,
   timesheetAction,
+  timesheetWarning,
   updateTimesheetRequest,
 } from '../../services/timesheet';
 
@@ -23,7 +25,6 @@ import {
   TimesheetRequestBody,
 } from '../../services/timesheet/types';
 import {ISO_DATE_FROMAT} from '../../constant/date';
-import {useState} from 'react';
 import {TimesheetAction, TimesheetStatus} from './interface';
 
 export const useEmployees = (startDate: Date, endDate: Date) => {
@@ -385,4 +386,38 @@ export const useTimesheetAction = () => {
     performAction,
     clearAllChecked,
   };
+};
+
+export const useTimesheetWarning = (
+  userId: string,
+  watchFileds: [string | undefined, number | undefined],
+) => {
+  const [projectId, workedMinutes] = watchFileds;
+
+  const [warningMessage, setWarningMessage] = useState('');
+
+  const getTimesheetWarning = useCallback(
+    async (project_id: string, duration: number) => {
+      const response = await timesheetWarning({
+        user_id: userId,
+        project_id: project_id,
+        duration: duration,
+      });
+
+      return response?.data?.message || '';
+    },
+    [userId],
+  );
+
+  useEffect(() => {
+    if (userId && projectId && workedMinutes) {
+      try {
+        getTimesheetWarning(projectId, workedMinutes).then(message =>
+          setWarningMessage(message || ''),
+        );
+      } catch {}
+    }
+  }, [userId, projectId, workedMinutes, getTimesheetWarning]);
+
+  return {warningMessage};
 };
