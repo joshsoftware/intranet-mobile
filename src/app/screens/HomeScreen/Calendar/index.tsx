@@ -106,17 +106,17 @@ function Calendar() {
       <View style={styles.labelContainer}>
         <Label
           count={filled.length}
-          text="Filled"
+          text="Approved"
           color={colors.LIGHT_GREEN_BACKGROUND}
         />
         <Label
           count={notFilled.length}
-          text="Not Filled"
+          text="Action Required"
           color={colors.LIGHT_RED_BACKGROUND}
         />
         <Label
           count={incompleteFilled.length}
-          text="< 8hrs"
+          text="Pending"
           color={colors.YELLOW_BACKGROUND}
         />
         <Label

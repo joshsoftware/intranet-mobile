@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingVertical: 8,
     gap: 5,
   },
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontSize: 12,
+    textAlign: 'center',
   },
 });
 
