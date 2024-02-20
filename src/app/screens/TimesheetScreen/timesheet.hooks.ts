@@ -97,7 +97,7 @@ export const useAssignedProjects = (userId: string) => {
     {
       onError: (err: AxiosError) => {
         const error = err.response?.data as TimesheetError;
-        toast(error.message || 'Failed to fetch the projects.', 'error');
+        toast(error?.message || 'Failed to fetch the projects.', 'error');
       },
     },
   );
