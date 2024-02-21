@@ -2,17 +2,21 @@ import colors from '../../constant/colors';
 import {GetTeamMembersLeavesResponse} from '../../services/home/types';
 
 const dateTypes: Record<string, {color: string; type: string}> = {
-  filled: {
+  approved: {
     color: colors.LIGHT_GREEN_BACKGROUND,
-    type: 'filled',
+    type: 'approved',
   },
-  notFilled: {
+  not_filled: {
     color: colors.LIGHT_RED_BACKGROUND,
-    type: 'unfilled',
+    type: 'not_filled',
   },
-  incompleteFilled: {
+  rejected: {
+    color: colors.LIGHT_RED_BACKGROUND,
+    type: 'rejected',
+  },
+  pending: {
     color: colors.YELLOW_BACKGROUND,
-    type: 'partiallyFilled',
+    type: 'pending',
   },
   leaves: {
     color: colors.LIGHT_BLUE_BACKGROUND,
@@ -44,7 +48,7 @@ export const generateMarkedDates = (data: Record<string, string[]>) => {
     });
   });
 
-  ['filled', 'notFilled', 'incompleteFilled'].forEach(dateType => {
+  ['approved', 'not_filled', 'pending', 'rejected'].forEach(dateType => {
     const {color, type} = dateTypes[dateType];
 
     data[dateType].forEach(date => {

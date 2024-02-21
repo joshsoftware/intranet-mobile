@@ -25,11 +25,12 @@ export const useHomeCalendar = (month: string, year: number) => {
   });
 
   return {
-    filled: data?.data.data.filled || [],
-    notFilled: data?.data.data.not_filled || [],
-    incompleteFilled: data?.data.data.incomplete_filled || [],
-    leaves: data?.data.data.leaves || [],
-    holidays: data?.data.data.holidays || [],
+    approved: data?.data?.data?.approved || [],
+    pending: data?.data?.data?.pending || [],
+    rejected: data?.data?.data?.rejected || [],
+    not_filled: data?.data?.data?.not_filled || [],
+    leaves: data?.data?.data?.leaves || [],
+    holidays: data?.data?.data?.holidays || [],
     isLoading,
   };
 };

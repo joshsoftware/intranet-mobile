@@ -45,7 +45,7 @@ function Calendar() {
   );
   const [year, setYear] = useState(todaysDate.getFullYear());
 
-  const {filled, notFilled, incompleteFilled, leaves, holidays, isLoading} =
+  const {approved, pending, not_filled, rejected, leaves, holidays, isLoading} =
     useHomeCalendar(month, year);
 
   const handleMonthChange = (date: DateData) => {
@@ -57,13 +57,14 @@ function Calendar() {
 
   const markedDates = useMemo(() => {
     return generateMarkedDates({
-      filled,
-      notFilled,
-      incompleteFilled,
+      approved,
+      pending,
+      rejected,
+      not_filled,
       leaves,
       holidays,
     });
-  }, [filled, notFilled, incompleteFilled, leaves, holidays]);
+  }, [approved, pending, rejected, not_filled, leaves, holidays]);
 
   const onDatePress = useCallback(
     ({dateString}: DateData) => {
@@ -75,18 +76,22 @@ function Calendar() {
         : commonParams;
 
       switch (markedDates[dateString]?.type) {
-        case 'filled':
+        case 'approved':
           navigation.navigate(screen, params);
           return;
 
-        case 'unfilled':
+        case 'not_filled':
           navigation.navigate(screen, {
             ...params,
             isAddModalOpen: true,
           });
           return;
 
-        case 'partiallyFilled':
+        case 'pending':
+          navigation.navigate(screen, params);
+          return;
+
+        case 'rejected':
           navigation.navigate(screen, params);
           return;
 
@@ -105,17 +110,17 @@ function Calendar() {
 
       <View style={styles.labelContainer}>
         <Label
-          count={filled.length}
+          count={approved.length}
           text="Approved"
           color={colors.LIGHT_GREEN_BACKGROUND}
         />
         <Label
-          count={notFilled.length}
+          count={not_filled.length + rejected.length}
           text="Action Required"
           color={colors.LIGHT_RED_BACKGROUND}
         />
         <Label
-          count={incompleteFilled.length}
+          count={pending.length}
           text="Pending"
           color={colors.YELLOW_BACKGROUND}
         />
