@@ -16,6 +16,7 @@ type Props = {
   // title: string;
   onEdit?: Function;
   onDelete?: Function;
+  isEditVisible?: boolean;
   isDeleteVisible?: boolean;
   showCheckbox?: boolean;
   isChecked?: boolean;
@@ -28,6 +29,7 @@ const TimesheetItem = ({
   // title,
   onEdit,
   onDelete,
+  isEditVisible = true,
   isDeleteVisible = true,
   showCheckbox = true,
   isChecked = false,
@@ -82,7 +84,7 @@ const TimesheetItem = ({
             </View>
           ) : (
             <View style={styles.buttons}>
-              {onEdit && (
+              {onEdit && isEditVisible && (
                 <Touchable type="opacity" onPress={handleEdit}>
                   <Edit width={20} height={20} />
                 </Touchable>

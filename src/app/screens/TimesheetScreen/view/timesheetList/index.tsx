@@ -27,7 +27,7 @@ import {isManagement} from '../../../../utils/user';
 import {TIMESHEET_SCREEN} from '../../../../constant/screenNames';
 import colors from '../../../../constant/colors';
 import {Search} from '../../../../constant/icons';
-import {Timesheet, TimesheetAction} from '../../interface';
+import {Timesheet, TimesheetAction, TimesheetStatus} from '../../interface';
 import {TDateRange} from '../../../../../types';
 
 const TimesheetList = () => {
@@ -159,19 +159,28 @@ const TimesheetList = () => {
   };
 
   const renderItem = useCallback(
-    (item: Timesheet) => {
+    (item: Timesheet, superSection: string) => {
       const isChecked = isTimesheetChecked(item.time_sheet_id);
       const errorMessage = erroredTimesheets[item.time_sheet_id];
       const toggleChecked = () => {
         toggleCheckTimesheet(item.time_sheet_id);
       };
 
+      const canDelete =
+        superSection === TimesheetStatus.Pending ||
+        superSection === TimesheetStatus.ReviewPending ||
+        superSection === TimesheetStatus.RejectedPending;
+
+      const canEdit =
+        canDelete || (isSelf && superSection === TimesheetStatus.Rejected);
+
       return (
         <TimesheetItem
           timesheetData={item}
           onEdit={timesheetEditCall}
           onDelete={timesheetDeleteCall}
-          isDeleteVisible={isManager}
+          isEditVisible={canEdit}
+          isDeleteVisible={isManager && canDelete}
           showCheckbox={!isSelf && isManager}
           isChecked={isChecked}
           error={errorMessage}
