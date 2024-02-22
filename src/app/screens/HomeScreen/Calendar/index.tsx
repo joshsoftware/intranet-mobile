@@ -67,13 +67,29 @@ function Calendar() {
   }, [approved, pending, rejected, not_filled, leaves, holidays]);
 
   const onDatePress = useCallback(
-    ({dateString}: DateData) => {
+    ({
+      dateString,
+      day: selected_day,
+      month: selected_month,
+      year: selected_year,
+    }: DateData) => {
       const commonParams = {startDate: dateString, endDate: dateString};
 
       const screen = isManager ? USER_TIMESHEET : TIMESHEET_SCREEN;
       const params = isManager
         ? {...commonParams, user_id: userData?.userData.userId}
         : commonParams;
+
+      const today = new Date();
+
+      if (
+        selected_day === today.getDate() &&
+        selected_month === today.getMonth() + 1 &&
+        selected_year === today.getFullYear()
+      ) {
+        navigation.navigate(screen, params);
+        return;
+      }
 
       switch (markedDates[dateString]?.type) {
         case 'approved':
