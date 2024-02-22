@@ -43,7 +43,7 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
     },
     onError: (err: AxiosError) => {
       const response = err.response?.data as any;
-      toast(response.message, 'error');
+      toast(response?.message || 'Failed to fetch leaves', 'error');
     },
   });
 
@@ -52,7 +52,7 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
 
   leaves =
     pages.reduce((acc, group) => {
-      const groupLeaves = group.data.data.leaves || [];
+      const groupLeaves = group?.data?.data?.leaves || [];
       return [...acc, ...groupLeaves];
     }, leaves) || [];
 
@@ -76,7 +76,7 @@ export function useLeaveDetail(leaveID: number) {
   });
 
   return {
-    data: data?.data.data || {},
+    data: data?.data?.data || {},
     isLoading,
     isError,
   };
@@ -88,7 +88,7 @@ export function useProjectList() {
     queryFn: async () => getAllProjectsRequest(),
   });
 
-  const projects = data?.data.data.projects || [];
+  const projects = data?.data?.data?.projects || [];
 
   return {
     data:
@@ -108,7 +108,7 @@ export function useUserList() {
     queryFn: async () => getAllUsersRequest(),
   });
 
-  const users = data?.data.data.users || [];
+  const users = data?.data?.data?.users || [];
 
   return {
     data:
@@ -144,6 +144,6 @@ export const useLeavesList = (
     refetch,
     isError,
     isRefetching,
-    error: data?.data.message,
+    error: data?.data?.message,
   };
 };
