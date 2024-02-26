@@ -11,7 +11,7 @@ import UserProjectSearchBox from '../component/UserProjectSearchBox';
 import EmployeeListEmptyComponent from '../component/EmployeeListEmptyComponent';
 import {useEmployees, useEmployeeTimesheetAction} from '../timesheet.hooks';
 
-import {startOfMonth, todaysDate} from '../../../utils/date';
+import {getTimesheetCycleStartDate, todaysDate} from '../../../utils/date';
 import {TEmpListTSResponse} from '../../../services/timesheet/types';
 import {
   Employee,
@@ -31,7 +31,7 @@ const EmployeeList = () => {
   const [projectText, setProjectText] = useState('');
 
   const [dateRange, setDateRange] = useState<DateRangeProps>({
-    startDate: startOfMonth,
+    startDate: getTimesheetCycleStartDate(),
     endDate: todaysDate,
   });
 
@@ -65,7 +65,7 @@ const EmployeeList = () => {
       setDateRange({startDate, endDate});
     } else {
       setDateRange({
-        startDate: startOfMonth,
+        startDate: getTimesheetCycleStartDate(),
         endDate: todaysDate,
       });
     }

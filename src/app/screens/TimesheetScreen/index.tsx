@@ -11,12 +11,6 @@ const TimesheetScreen = () => {
 
   const isManager = isManagement(userContextData?.userData.role);
 
-  // useEffect(() => {
-  //   if (route.params?.isAddModalOpen) {
-  //     toggleModal();
-  //   }
-  // }, [route.params, toggleModal]);
-
   return <>{isManager ? <EmployeeList /> : <TimesheetList />}</>;
 };
 

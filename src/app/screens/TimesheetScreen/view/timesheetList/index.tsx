@@ -19,7 +19,11 @@ import {
 import useUserData from '../../../../hooks/useUserData';
 
 import {getParams} from '../../../../navigation';
-import {dateFormate, startOfMonth, todaysDate} from '../../../../utils/date';
+import {
+  dateFormate,
+  getTimesheetCycleStartDate,
+  todaysDate,
+} from '../../../../utils/date';
 import {IGetTimesheetsResponse} from '../../../../services/timesheet/types';
 import {filterTimesheetBySearch, toTimesheetFilterStatus} from '../../utils';
 import {isManagement} from '../../../../utils/user';
@@ -46,7 +50,9 @@ const TimesheetList = () => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editTimesheetData, setEditTimesheetData] = useState<Timesheet>();
   const [dateRange, setDateRange] = useState<TDateRange>({
-    startDate: params?.startDate ? new Date(params.startDate) : startOfMonth,
+    startDate: params?.startDate
+      ? new Date(params.startDate)
+      : getTimesheetCycleStartDate(),
     endDate: params?.endDate ? new Date(params.endDate) : todaysDate,
   });
 
@@ -87,7 +93,7 @@ const TimesheetList = () => {
       setDateRange({startDate, endDate});
     } else {
       setDateRange({
-        startDate: startOfMonth,
+        startDate: getTimesheetCycleStartDate(),
         endDate: todaysDate,
       });
     }
@@ -133,7 +139,7 @@ const TimesheetList = () => {
       });
     } else {
       setDateRange({
-        startDate: startOfMonth,
+        startDate: getTimesheetCycleStartDate(),
         endDate: todaysDate,
       });
     }

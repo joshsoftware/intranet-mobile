@@ -46,3 +46,13 @@ export const getMonthYearFromISO = (dateString: string) => {
     year: Number(date.format('YYYY')),
   };
 };
+
+export const getTimesheetCycleStartDate = () => {
+  const currentDate = moment();
+
+  if (currentDate.date() <= 14) {
+    return moment().subtract(2, 'months').date(26).toDate();
+  }
+
+  return moment().subtract(1, 'months').date(26).toDate();
+};
