@@ -16,7 +16,6 @@ import {
 } from '../../services/api/login';
 import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
 import {appleSignIn} from '../../services/auth/apple.auth';
-import {logEvent} from '../../services/firebase/analytics';
 import toast from '../../utils/toast';
 
 import {RootStackParamList} from '../../navigation/types';
@@ -31,10 +30,6 @@ export const useLogin = () => {
   const {mutate, isLoading} = useMutation(sendLoginRequest, {
     onSuccess: async response => {
       const responseData = response.data.data;
-      await logEvent('INTRANET_SIGNIN_SUCCESS', {
-        role: response?.data?.data?.role,
-        userId: response?.data?.data?.user_id,
-      });
 
       const authToken = responseData.jwtToken;
       const userData: UserData = {
@@ -48,10 +43,6 @@ export const useLogin = () => {
       setUserContextData({authToken, userData});
     },
     onError: async (error: AxiosError<LoginResponseBody>) => {
-      await logEvent('INTRANET_SIGNIN_FAILED', {
-        message: error?.response?.data?.message || '',
-      });
-
       await googleSignOut();
 
       if (error.response) {
@@ -94,7 +85,6 @@ export const useLogin = () => {
   );
 
   const googleSignInHandler = useCallback(async () => {
-    await logEvent('GOOGLE_SIGNIN_BUTTON_CLICK');
     const response = await googleSignIn();
     if (response) {
       mutate(response);
@@ -103,7 +93,6 @@ export const useLogin = () => {
   }, [mutate]);
 
   const appleSignInHandler = useCallback(async () => {
-    await logEvent('APPLE_SIGNIN_BUTTON_CLICK');
     const response = await appleSignIn();
     if (response) {
       mutate(response);

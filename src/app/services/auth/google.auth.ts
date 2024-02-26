@@ -5,7 +5,6 @@ import {
 import Config from 'react-native-config';
 
 import toast from '../../utils/toast';
-import {logEvent} from '../firebase/analytics';
 import {AuthType} from '../api/login';
 
 GoogleSignin.configure({
@@ -18,11 +17,6 @@ export const googleSignIn = async () => {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
 
-    await logEvent('GOOGLE_SIGNIN_SUCCESS', {
-      idToken: userInfo.idToken,
-      email: userInfo.user.email,
-    });
-
     return {
       type: AuthType.GOOGLE,
       idToken: userInfo.idToken,
@@ -31,10 +25,6 @@ export const googleSignIn = async () => {
       },
     };
   } catch (error: any) {
-    await logEvent('GOOGLE_SIGNIN_FAILED', {
-      code: error?.code,
-      message: error?.message,
-    });
     await googleSignOut();
 
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
