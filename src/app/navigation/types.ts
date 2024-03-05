@@ -19,11 +19,13 @@ export type RootStackParamList = {
     status?: TimesheetStatus;
     projectFilter?: string;
   };
-  Drawer: NavigatorScreenParams<DrawerParamList>;
+  Drawer: undefined;
   Profile: undefined;
   LeaveDetail: {leaveID: number};
   LoginInstruction: {code: IntranetErrorCode; type: AuthType; email: string};
   OTPAuthentication: {email: string};
+  UpdateVersion: undefined;
+  NoVersion: undefined;
 };
 
 export type MainTabParamList = {
@@ -49,6 +51,11 @@ export type LeaveDetailScreenNavigationProp = NativeStackScreenProps<
 export type OTPAuthenticationScreenNavigationProp = NativeStackScreenProps<
   RootStackParamList,
   'OTPAuthentication'
+>;
+
+export type NoVersionScreenNavigationProp = NativeStackScreenProps<
+  RootStackParamList,
+  'NoVersion'
 >;
 
 export type UserTimesheetRouteProp = RouteProp<

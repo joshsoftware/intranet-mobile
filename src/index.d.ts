@@ -7,9 +7,9 @@ declare module '*.svg' {
   export default content;
 }
 
-declare module '*.png';
-
 declare global {
+  declare module '*.png';
+
   namespace ReactNavigation {
     interface RootParamList extends RootStackParamList {}
   }

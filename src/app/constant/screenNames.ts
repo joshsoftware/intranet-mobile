@@ -11,3 +11,6 @@ export const USER_PROFILE_SCREEN = 'Profile';
 export const LEAVE_DETAIL_SCREEN = 'LeaveDetail';
 
 export const DRAWER = 'Drawer';
+
+export const UPDATE_VERSION = 'UpdateVersion';
+export const NO_VERSION = 'NoVersion';
