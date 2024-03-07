@@ -18,10 +18,10 @@ function NativeDatePicker(props: Props) {
 
   const handleDateChange = useCallback(
     (event: DateTimePickerEvent, date: Date | undefined) => {
+      togglePicker();
       event.type === 'neutralButtonPressed'
         ? onDateChange(undefined)
         : onDateChange(date);
-      togglePicker();
     },
     [togglePicker, onDateChange],
   );
@@ -33,7 +33,7 @@ function NativeDatePicker(props: Props) {
   return (
     <DateTimePicker
       mode="date"
-      value={props.selectedDate || todaysDate}
+      value={props.selectedDate || todaysDate()}
       onChange={handleDateChange}
       neutralButton={{label: 'Clear', textColor: 'grey'}}
       minimumDate={minimumDate}

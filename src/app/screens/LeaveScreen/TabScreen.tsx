@@ -23,8 +23,8 @@ function TabScreen({route}: Props) {
 
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [dateRange, setDateRange] = useState<TDateRange>({
-    startDate: startOfMonth,
-    endDate: endOfMonth,
+    startDate: startOfMonth(),
+    endDate: endOfMonth(),
   });
 
   const isManagementRole = isManagement(userContext?.userData.role);
@@ -37,8 +37,8 @@ function TabScreen({route}: Props) {
       }));
     } else {
       setDateRange(() => ({
-        startDate: startOfMonth,
-        endDate: endOfMonth,
+        startDate: startOfMonth(),
+        endDate: endOfMonth(),
       }));
     }
   }, []);
@@ -49,8 +49,8 @@ function TabScreen({route}: Props) {
 
   const resetDateRange = () => {
     setDateRange({
-      startDate: startOfMonth,
-      endDate: endOfMonth,
+      startDate: startOfMonth(),
+      endDate: endOfMonth(),
     });
   };
 

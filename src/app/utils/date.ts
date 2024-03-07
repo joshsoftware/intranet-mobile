@@ -13,19 +13,19 @@ export const dateFormate = (date: moment.MomentInput, format = 'DD-MM-YYYY') =>
  * Retrieves the start of the current month as a Date object.
  * @returns The start of the current month as a Date object.
  */
-export const startOfMonth = moment().startOf('month').toDate();
+export const startOfMonth = () => moment().startOf('month').toDate();
 
 /**
  * Retrieves the current date as a Date object.
  * @returns The current date as a Date object.
  */
-export const todaysDate = moment().toDate();
+export const todaysDate = () => moment().toDate();
 
 /**
  * Retrieves end of the current month as a Date object.
  * @returns The end of the current month as a Date object.
  */
-export const endOfMonth = moment().endOf('month').toDate();
+export const endOfMonth = () => moment().endOf('month').toDate();
 
 /**
  * Converts a time string to minutes.

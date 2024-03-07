@@ -67,7 +67,6 @@ const DateRange = ({
           <Typography style={styles.secondaryText}>{strings.FROM}</Typography>
 
           <DatePicker
-            value={startDate ?? todaysDate}
             selectedDate={startDate}
             placeholder={strings.SELECT}
             onDateChange={onChangeStart}
@@ -81,7 +80,6 @@ const DateRange = ({
           <Typography style={styles.secondaryText}>{strings.TO}</Typography>
 
           <DatePicker
-            value={endDate ?? todaysDate}
             selectedDate={endDate}
             placeholder={strings.SELECT}
             onDateChange={onChangeEnd}

@@ -41,9 +41,9 @@ function Calendar() {
   const isManager = isManagement(userData?.userData.role);
 
   const [month, setMonth] = useState(
-    todaysDate.toLocaleString('indian', {month: 'long'}),
+    todaysDate().toLocaleString('indian', {month: 'long'}),
   );
-  const [year, setYear] = useState(todaysDate.getFullYear());
+  const [year, setYear] = useState(todaysDate().getFullYear());
 
   const {approved, pending, not_filled, rejected, leaves, holidays, isLoading} =
     useHomeCalendar(month, year);

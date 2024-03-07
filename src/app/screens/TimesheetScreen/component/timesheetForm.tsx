@@ -148,7 +148,7 @@ const TimesheetForm = ({
                   hideIcon={false}
                   selectedDate={value ? new Date(value) : undefined}
                   placeholder="Select date"
-                  maximumDate={todaysDate}
+                  maximumDate={todaysDate()}
                   error={errors?.date?.message}
                 />
               )}

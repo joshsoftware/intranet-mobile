@@ -32,7 +32,7 @@ const EmployeeList = () => {
 
   const [dateRange, setDateRange] = useState<DateRangeProps>({
     startDate: getTimesheetCycleStartDate(),
-    endDate: todaysDate,
+    endDate: todaysDate(),
   });
 
   const {data, isLoading, refetch, isRefetching} = useEmployees(
@@ -66,7 +66,7 @@ const EmployeeList = () => {
     } else {
       setDateRange({
         startDate: getTimesheetCycleStartDate(),
-        endDate: todaysDate,
+        endDate: todaysDate(),
       });
     }
   }, []);
@@ -143,7 +143,7 @@ const EmployeeList = () => {
           onChange={onDateRangeSubmit}
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
-          maximumDate={todaysDate}
+          maximumDate={todaysDate()}
           disabled={isActionMode}
         />
       </View>

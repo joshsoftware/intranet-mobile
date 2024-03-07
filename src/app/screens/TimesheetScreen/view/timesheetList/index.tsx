@@ -53,7 +53,7 @@ const TimesheetList = () => {
     startDate: params?.startDate
       ? new Date(params.startDate)
       : getTimesheetCycleStartDate(),
-    endDate: params?.endDate ? new Date(params.endDate) : todaysDate,
+    endDate: params?.endDate ? new Date(params.endDate) : todaysDate(),
   });
 
   const {data, isRefetching, refetch, isLoading} = useTimesheets(
@@ -94,7 +94,7 @@ const TimesheetList = () => {
     } else {
       setDateRange({
         startDate: getTimesheetCycleStartDate(),
-        endDate: todaysDate,
+        endDate: todaysDate(),
       });
     }
   }, []);
@@ -140,7 +140,7 @@ const TimesheetList = () => {
     } else {
       setDateRange({
         startDate: getTimesheetCycleStartDate(),
-        endDate: todaysDate,
+        endDate: todaysDate(),
       });
     }
   }, [params?.endDate, params?.startDate]);
@@ -224,7 +224,7 @@ const TimesheetList = () => {
             onChange={onDateRangeSubmit}
             startDate={dateRange.startDate}
             endDate={dateRange.endDate}
-            maximumDate={todaysDate}
+            maximumDate={todaysDate()}
           />
         </View>
 

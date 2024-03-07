@@ -57,7 +57,7 @@ const DatePicker = (props: Props) => {
         </Typography>
         {!props.hideIcon && <Calendar height={20} width={20} />}
         <NativeDatePicker
-          selectedDate={props.selectedDate ?? todaysDate}
+          selectedDate={props.selectedDate ?? todaysDate()}
           open={isVisible}
           onDateChange={props.onDateChange}
           togglePicker={closePicker}

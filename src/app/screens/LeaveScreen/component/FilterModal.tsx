@@ -163,10 +163,10 @@ function FilterModal({
       project_id: null,
       user_id: null,
       active_or_all_flags: 'active',
-      from: startOfMonth,
+      from: startOfMonth(),
       leave_type: '',
       pending_flag: filters.pending_flag,
-      to: endOfMonth,
+      to: endOfMonth(),
     });
 
     resetDateRange();
