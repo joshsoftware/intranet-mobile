@@ -1,8 +1,7 @@
 import React, {memo} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Platform} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-import Touchable from '../../../components/touchable';
 import Typography from '../../../components/typography';
 
 import {navigate} from '../../../navigation';
@@ -13,6 +12,7 @@ import {USER_TIMESHEET} from '../../../constant/screenNames';
 import {ISO_DATE_FROMAT} from '../../../constant/date';
 import {TimesheetStatus} from '../interface';
 import colors from '../../../constant/colors';
+import Touchable from '../../../components/touchable';
 
 type Props = {
   name: string;
@@ -62,25 +62,32 @@ const EmployeeCard = (props: Props) => {
   const minutes = Math.floor(worked_minutes % 60);
 
   return (
-    <Touchable type="native" onPress={handleNavigation}>
+    <Touchable
+      type={Platform.OS === 'ios' ? 'opacity' : 'native'}
+      onPress={handleNavigation}>
       <View style={styles.container}>
         {showCheckbox && !isFreezed && (
           <View style={styles.checkBoxContainer}>
-            <CheckBox
-              value={isChecked}
-              onChange={toggleCheckbox}
-              tintColors={{
-                true: isErrored ? colors.ERROR_RED : colors.PRIMARY,
-              }}
-            />
+            <Touchable type="none" onPress={e => e.stopPropagation()}>
+              <CheckBox
+                value={isChecked}
+                onTintColor={isErrored ? colors.ERROR_RED : colors.PRIMARY}
+                onCheckColor={isErrored ? colors.ERROR_RED : colors.PRIMARY}
+                onValueChange={toggleCheckbox}
+                tintColors={{
+                  true: isErrored ? colors.ERROR_RED : colors.PRIMARY,
+                }}
+              />
+            </Touchable>
           </View>
         )}
+
         <View
           style={[
             styles.main,
             showCheckbox && !isFreezed ? styles.mainWithCheckbox : {},
           ]}>
-          <View>
+          <View style={styles.infoContainer}>
             <Typography type="header" style={styles.empName}>
               {name} {formatTimeString(hours, minutes)}
             </Typography>
@@ -121,7 +128,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 16,
-    gap: 16,
     paddingHorizontal: 16,
   },
   mainWithCheckbox: {
@@ -133,6 +139,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     paddingHorizontal: 10,
+  },
+  infoContainer: {
+    flex: 1,
   },
   arrowContainer: {
     alignItems: 'center',

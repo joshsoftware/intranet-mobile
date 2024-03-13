@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {Alert, StyleSheet, View, TextInput} from 'react-native';
+import {Alert, StyleSheet, View, TextInput, Platform} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import EditTimesheetModal from '../../component/editTimesheetModal';
 import Typography from '../../../../components/typography';
@@ -37,6 +38,7 @@ import {TDateRange} from '../../../../../types';
 const TimesheetList = () => {
   const params: any = getParams();
   const userData = useUserData();
+  const insets = useSafeAreaInsets();
 
   const isManager = isManagement(userData.role);
   const userId = useMemo(
@@ -282,6 +284,8 @@ const TimesheetList = () => {
         formData={editTimesheetData}
         userId={userId}
       />
+
+      {params?.user_id && <View style={{paddingBottom: insets.bottom}} />}
     </>
   );
 };
@@ -352,6 +356,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderBottomColor: colors.TEXT_INPUT_BORDER,
     borderBottomWidth: 1,
+    padding: Platform.OS === 'ios' ? 10 : 0,
   },
 });
 

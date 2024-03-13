@@ -1,5 +1,5 @@
 import React, {useState, useMemo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableWithoutFeedback} from 'react-native';
 
 import {filterDataByStatus} from '../utils';
 
@@ -35,15 +35,24 @@ const StatusFilterList = <T,>(props: IProps<T>) => {
     useState<TimesheetStatusFilter>(defaultStatus);
 
   const statusTiles = Object.values(TimesheetStatusFilter).map(text => (
-    <Text
+    <TouchableWithoutFeedback
       key={text}
-      onPress={() => setSelectedStatus(text)}
-      style={[
-        styles.tile,
-        selectedStatus === text ? styles.activeTile : styles.inactiveTile,
-      ]}>
-      {text}
-    </Text>
+      onPress={() => setSelectedStatus(text)}>
+      <View
+        style={[
+          styles.tile,
+          selectedStatus === text ? styles.activeTile : styles.inactiveTile,
+        ]}>
+        <Text
+          style={
+            selectedStatus === text
+              ? styles.activeTileText
+              : styles.inactiveTileText
+          }>
+          {text}
+        </Text>
+      </View>
+    </TouchableWithoutFeedback>
   ));
 
   const filteredData = useMemo(() => {
@@ -75,17 +84,22 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingVertical: 5,
     paddingHorizontal: 16,
+    overflow: 'hidden',
   },
   activeTile: {
-    fontWeight: 'bold',
-    color: colors.WHITE,
     backgroundColor: colors.PRIMARY,
   },
   inactiveTile: {
     borderWidth: 1,
-    color: colors.SECONDARY,
     backgroundColor: colors.LIGHT_GREY_BACKGROUND,
     borderColor: colors.GREY_BORDER_COLOR,
+  },
+  activeTileText: {
+    fontWeight: 'bold',
+    color: colors.WHITE,
+  },
+  inactiveTileText: {
+    color: colors.SECONDARY,
   },
 });
 

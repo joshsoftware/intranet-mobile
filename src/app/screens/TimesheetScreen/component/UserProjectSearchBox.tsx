@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Platform} from 'react-native';
 
 import colors from '../../../constant/colors';
 import {Search} from '../../../constant/icons';
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
+    padding: 10,
   },
 });
 
