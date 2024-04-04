@@ -87,7 +87,9 @@ const CreateTimesheet = ({
   const onAddTimesheet = useCallback((data: Timesheet & {project: string}) => {
     const isDuplicateEntry = (section: ITimesheetSectionListItem) => {
       return section.data.some(
-        item => item.time_sheet_id === data.time_sheet_id,
+        item =>
+          item.project_id === data.project_id &&
+          dateFormate(item.date) === dateFormate(data.date),
       );
     };
 
@@ -188,6 +190,10 @@ const CreateTimesheet = ({
     }
   };
 
+  const timesheetSectionListKeyExtractor = (item: Timesheet) => {
+    return item.project_id + dateFormate(item.date);
+  };
+
   // if add timesheet is succeed then reset all the states
   useEffect(() => {
     if (isSuccess) {
@@ -256,6 +262,7 @@ const CreateTimesheet = ({
           sections={addedTimesheet}
           onEdit={onEdit}
           onDelete={onDelete}
+          keyExtractor={timesheetSectionListKeyExtractor}
           emptyListMessage={strings.NO_TIMESHEET_ADDED}
         />
       </View>

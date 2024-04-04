@@ -96,7 +96,6 @@ const TimesheetForm = ({
 
         onSubmit({
           ...data,
-          timesheet_id: data.project + dateFormater(data.date),
           project: project?.label,
           project_id: data.project_id,
         });

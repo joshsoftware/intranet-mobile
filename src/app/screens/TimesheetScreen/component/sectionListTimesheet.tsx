@@ -24,6 +24,7 @@ type Props = SectionListProps<any, any> & {
   showEmptyListIcon: boolean;
   isDeleteVisible?: boolean;
   isLoading: boolean;
+  keyExtractor: (item: Timesheet) => void;
 };
 
 const footer = () => <View style={styles.footer} />;
@@ -45,6 +46,7 @@ const SectionListTimesheet = ({
   showEmptyListIcon,
   emptyListMessage,
   isLoading,
+  keyExtractor,
   ...props
 }: Props) => {
   const renderItem = useCallback(
@@ -74,7 +76,7 @@ const SectionListTimesheet = ({
   return (
     <SectionList
       {...props}
-      keyExtractor={(item, index) => item.time_sheet_id + index}
+      keyExtractor={keyExtractor}
       renderItem={renderItem}
       renderSectionHeader={sectionHeader}
       style={styles.list}
