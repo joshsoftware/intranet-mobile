@@ -2,8 +2,10 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 
 import Calendar from './Calendar';
+import UpcomingEventBanners from './EventBanners/UpcomingEventBanners';
 import TeamMembersLeaves from './teamMembersLeaves';
 import TeamMembersBirthdays from './TeamMembersBirthdays';
+import LiveEventBanners from './EventBanners/LiveEventBanners';
 
 import colors from '../../constant/colors';
 
@@ -12,6 +14,8 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         <Calendar />
+        <LiveEventBanners />
+        <UpcomingEventBanners />
         <TeamMembersLeaves />
         <TeamMembersBirthdays />
       </ScrollView>
