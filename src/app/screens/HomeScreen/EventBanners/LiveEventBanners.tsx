@@ -10,6 +10,10 @@ import colors from '../../../constant/colors';
 const LiveEventBanners = () => {
   const {events} = useLiveEvents();
 
+  if (events.length === 0) {
+    return null;
+  }
+
   const handleOpenEvent = async (url: string) => {
     try {
       const canOpen = await Linking.canOpenURL(url);
@@ -28,21 +32,34 @@ const LiveEventBanners = () => {
       onPress={() => handleOpenEvent(event.google_form_link)}
       activeOpacity={0.5}>
       <View>
-        <Text style={styles.title}>{event.title}</Text>
         <EventBanner uri={event.live_banner} />
       </View>
     </TouchableOpacity>
   ));
 
-  return <View>{bannerCards}</View>;
+  return (
+    <View style={styles.container}>
+      <Text style={styles.mainTitle}>Live Events</Text>
+      {bannerCards}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 16,
+    gap: 10,
+  },
   title: {
     fontWeight: 'bold',
     color: colors.SECONDARY,
     textAlign: 'center',
     padding: 10,
+  },
+  mainTitle: {
+    fontWeight: 'bold',
+    color: colors.SECONDARY,
+    paddingHorizontal: 16,
   },
 });
 

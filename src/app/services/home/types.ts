@@ -1,3 +1,5 @@
+import {LiveEvent, UpcomingEvent} from '../../screens/HomeScreen/types';
+
 export type GetHomeTimesheetDataResponse = {
   message: string;
   data: {
@@ -27,4 +29,14 @@ export type GetTeamMembersBirthdaysResponse = {
     name: string;
     date: string;
   }[];
+};
+
+export type GetLiveEventsResponse = {
+  message: string;
+  data: LiveEvent[];
+};
+
+export type GetUpcomingEventsResponse = {
+  message: string;
+  data: UpcomingEvent[];
 };

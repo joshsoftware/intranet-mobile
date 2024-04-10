@@ -8,5 +8,5 @@ export interface LiveEvent {
 export interface UpcomingEvent {
   id: number;
   title: string;
-  promotional_banner: string;
+  promotion_banner: string;
 }

@@ -5,12 +5,13 @@ import {
   getTimesheetCalendar,
   getTeamMembersUpcomingLeaves,
   getTeamMembersUpcomingBirthdays,
+  getLiveEvents,
+  getUpcomingEvents,
 } from '../../services/home';
 import toast from '../../utils/toast';
 import {filterWFHFromLeaves} from '../../utils/home';
 
 import {GetHomeTimesheetDataResponse} from '../../services/home/types';
-import {LiveEvent, UpcomingEvent} from './types';
 
 export const useHomeCalendar = (month: string, year: number) => {
   const {data, isLoading} = useQuery({
@@ -55,26 +56,13 @@ export const useTeamMembersBirthdays = () => {
 };
 
 export const useUpcomingEvents = () => {
-  const events: UpcomingEvent[] = [
-    {
-      id: 65,
-      title: 'Secret Santa',
-      promotional_banner: 'https://chetan-satpute-josh.github.io/banner.png',
-    },
-  ];
+  const {data} = useQuery(['upcoming-events'], getUpcomingEvents);
 
-  return {events};
+  return {events: data?.data?.data || []};
 };
 
 export const useLiveEvents = () => {
-  const events: LiveEvent[] = [
-    {
-      id: 66,
-      title: 'Secret Santa Live',
-      live_banner: 'https://chetan-satpute-josh.github.io/banner.png',
-      google_form_link: 'https://forms.gle/M7WubwFSaVxW2Xu5A',
-    },
-  ];
+  const {data} = useQuery(['live-events'], getLiveEvents);
 
-  return {events};
+  return {events: data?.data?.data || []};
 };
