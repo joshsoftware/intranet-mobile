@@ -56,13 +56,27 @@ export const useTeamMembersBirthdays = () => {
 };
 
 export const useUpcomingEvents = () => {
-  const {data} = useQuery(['upcoming-events'], getUpcomingEvents);
+  const {data, isLoading, isRefetching, refetch} = useQuery(
+    ['upcoming-events'],
+    getUpcomingEvents,
+  );
 
-  return {events: data?.data?.data || []};
+  return {
+    events: data?.data?.data || [],
+    isLoading: isLoading || isRefetching,
+    refetch,
+  };
 };
 
 export const useLiveEvents = () => {
-  const {data} = useQuery(['live-events'], getLiveEvents);
+  const {data, isLoading, isRefetching, refetch} = useQuery(
+    ['live-events'],
+    getLiveEvents,
+  );
 
-  return {events: data?.data?.data || []};
+  return {
+    events: data?.data?.data || [],
+    isLoading: isLoading || isRefetching,
+    refetch,
+  };
 };

@@ -1,14 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import EventBanner from '../../../components/EventBanner';
 import {useUpcomingEvents} from '../dashboard.hooks';
 import colors from '../../../constant/colors';
 
 const UpcomingEventBanners = () => {
-  const {events} = useUpcomingEvents();
+  const navigation = useNavigation();
+  const {events, isLoading, refetch} = useUpcomingEvents();
 
-  if (events.length === 0) {
+  useEffect(() => {
+    return navigation.addListener('focus', () => refetch());
+  }, [navigation, refetch]);
+
+  if (events.length === 0 || isLoading) {
     return null;
   }
 

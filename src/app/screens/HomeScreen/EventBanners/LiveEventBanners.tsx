@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import EventBanner from '../../../components/EventBanner';
 import {useLiveEvents} from '../dashboard.hooks';
@@ -8,9 +9,14 @@ import toast from '../../../utils/toast';
 import colors from '../../../constant/colors';
 
 const LiveEventBanners = () => {
-  const {events} = useLiveEvents();
+  const navigation = useNavigation();
+  const {events, isLoading, refetch} = useLiveEvents();
 
-  if (events.length === 0) {
+  useEffect(() => {
+    return navigation.addListener('focus', () => refetch());
+  }, [navigation, refetch]);
+
+  if (events.length === 0 || isLoading) {
     return null;
   }
 
