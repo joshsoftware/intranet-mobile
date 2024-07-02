@@ -9,15 +9,18 @@ import {StyleProp, ViewStyle} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import LeaveScreen from '../screens/LeaveScreen';
 import TimesheetScreen from '../screens/TimesheetScreen';
+import PeerlyScreen from '../screens/PeerlyScreen';
 import TabBar from '../components/TabBar';
 import Header from '../components/header';
 
 import {
   HOME_SCREEN,
   LEAVE_SCREEN,
+  PEERLY_SCREEN,
   TIMESHEET_SCREEN,
 } from '../constant/screenNames';
 import {MainTabParamList} from './types';
+
 
 const MainTab = createBottomTabNavigator<MainTabParamList>();
 
@@ -43,6 +46,7 @@ const MainNavigator = () => {
       <MainTab.Screen name={HOME_SCREEN} component={HomeScreen} />
       <MainTab.Screen name={LEAVE_SCREEN} component={LeaveScreen} />
       <MainTab.Screen name={TIMESHEET_SCREEN} component={TimesheetScreen} />
+      <MainTab.Screen name={PEERLY_SCREEN} component={PeerlyScreen} />
     </MainTab.Navigator>
   );
 };

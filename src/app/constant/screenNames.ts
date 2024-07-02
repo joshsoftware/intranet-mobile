@@ -1,6 +1,7 @@
 export const HOME_SCREEN = 'Home';
 export const LEAVE_SCREEN = 'Leave';
 export const TIMESHEET_SCREEN = 'Timesheet';
+export const PEERLY_SCREEN = 'Peerly';
 
 export const MAIN_SCREEN = 'Dashboard';
 export const LOGIN_SCREEN = 'Login';

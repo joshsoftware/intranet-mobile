@@ -1,10 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {
-  DrawerActions,
-  NavigationHelpers,
-  TabNavigationState,
-} from '@react-navigation/native';
+import {NavigationHelpers, TabNavigationState} from '@react-navigation/native';
 import {
   BottomTabBarProps,
   BottomTabNavigationEventMap,
@@ -31,6 +27,7 @@ const screenIcons: Record<keyof MainTabParamList, React.FC<SvgProps>> = {
   Home: Home,
   Leave: Calendar,
   Timesheet: Clock,
+  Peerly: Calendar,
 };
 
 const TabBar = (props: BottomTabBarProps) => {
@@ -81,22 +78,9 @@ const TabBar = (props: BottomTabBarProps) => {
     );
   });
 
-  const handleMenuButtonPress = () => {
-    navigation.dispatch(DrawerActions.toggleDrawer());
-  };
-
   return (
     <View style={[styles.container, {paddingBottom: inset.bottom}]}>
-      <View style={styles.contentContainer}>
-        {tabButtons}
-
-        <TabBarButton
-          icon={MenuIcon}
-          title="Menu"
-          active={false}
-          onPress={handleMenuButtonPress}
-        />
-      </View>
+      <View style={styles.contentContainer}>{tabButtons}</View>
     </View>
   );
 };

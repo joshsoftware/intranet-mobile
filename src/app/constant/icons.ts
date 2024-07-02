@@ -20,6 +20,7 @@ import TaskAlt from '../../assets/svg/taskAlt.svg';
 import Warning from '../../assets/svg/warning.svg';
 import Lock from '../../assets/svg/lock.svg';
 import Employees from '../../assets/svg/employees.svg';
+import DrawerMenuIcon from '../../assets/svg/drawerIcon.svg';
 
 export {
   Calendar,
@@ -44,4 +45,5 @@ export {
   Warning,
   Lock,
   Employees,
+  DrawerMenuIcon,
 };

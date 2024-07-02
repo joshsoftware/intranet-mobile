@@ -32,6 +32,7 @@ export type MainTabParamList = {
   Home: undefined;
   Leave: undefined;
   Timesheet: {startDate?: string; endDate?: string; isAddModalOpen?: boolean};
+  Peerly: undefined;
 };
 
 export type DrawerParamList = {
