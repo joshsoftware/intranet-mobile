@@ -5,7 +5,6 @@ import {loginPeerlySystemRequest} from '../../services/Peerly';
 import toast from '../../utils/toast';
 import {PeerlyError} from '../../services/Peerly/types';
 
-
 export const loginPeerlySystem = () => {
   const queryClient = useQueryClient();
 

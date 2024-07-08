@@ -1,4 +1,4 @@
-import {User} from '../../screens/PeerlyScreen/types';
+import {User} from '../../screens/PeerlyScreens/types';
 
 interface Data {
   User: User;
@@ -14,8 +14,3 @@ export type PeerlyError = {
   status: string;
   message: string;
 };
-
-
-
-
-
