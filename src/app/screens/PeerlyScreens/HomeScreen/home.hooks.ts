@@ -1,9 +1,9 @@
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {useMutation, useQueryClient} from 'react-query';
 import {AxiosError} from 'axios';
 
-import {loginPeerlySystemRequest} from '../../services/Peerly';
-import toast from '../../utils/toast';
-import {PeerlyError} from '../../services/Peerly/types';
+import {loginPeerlySystemRequest} from '../../../services/Peerly';
+import toast from '../../../utils/toast';
+import {PeerlyError} from '../../../services/Peerly/types';
 
 export const loginPeerlySystem = () => {
   const queryClient = useQueryClient();
