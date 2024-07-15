@@ -8,10 +8,10 @@ type Props = {
   onPress: () => void;
 };
 
-const FloatingGiveAppriciationButton = ({style, onPress}: Props) => {
+const FloatingGiveAppreciationButton = ({style, onPress}: Props) => {
   return (
     <TouchableOpacity style={[style, styles.floating]} onPress={onPress}>
-      <Text style={styles.buttonText}>Give Appriciation</Text>
+      <Text style={styles.buttonText}>Give Appreciation</Text>
     </TouchableOpacity>
   );
 };
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(FloatingGiveAppriciationButton);
+export default memo(FloatingGiveAppreciationButton);

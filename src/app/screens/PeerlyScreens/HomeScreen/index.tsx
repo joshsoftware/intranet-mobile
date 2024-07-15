@@ -15,7 +15,7 @@ import colors from '../../../constant/colors';
 import AppreciationCard from '.././Components/AppreciationCard';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import fonts from '../../../constant/fonts';
-import FloatingGiveAppriciationButton from '../../../components/button/floatingGiveAppriciationButton';
+import FloatingGiveAppreciationButton from '../../../components/button/floatingGiveAppreciationButton';
 import LeaderBoardCard from '.././Components/LeaderBoardCard';
 import {
   useGetProfileDetails,
@@ -23,8 +23,9 @@ import {
   useGetActiveUsersList,
   useGetTopUsersList,
 } from './home.hooks';
+import {APPRECIATION} from '../../../constant/screenNames';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const layout = useWindowDimensions();
   const {data: profileDetails} = useGetProfileDetails();
 
@@ -120,7 +121,9 @@ const HomeScreen = () => {
         />
       </View>
 
-      <FloatingGiveAppriciationButton onPress={() => console.log('Here tap')} />
+      <FloatingGiveAppreciationButton
+        onPress={() => navigation.navigate(APPRECIATION)}
+      />
     </>
   );
 };
