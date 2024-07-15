@@ -79,7 +79,6 @@ const AppreciationScreen = () => {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.header}>Appreciation</Text>
         <View style={styles.fieldWrapper}>
           <Typography type="header" style={styles.labelText}>
             Co-worker Name
@@ -158,7 +157,7 @@ const AppreciationScreen = () => {
             'Your appreciation has been submitted successfully. We appreciate your feedback.'
           }
           svgImage={SuccessIcon}
-          btnTitle="Confirm"
+          btnTitle="Okay"
           onClose={() => {
             resetPostAppreciation();
             resetForm();
