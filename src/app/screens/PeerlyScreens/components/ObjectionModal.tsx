@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from 'react-native';
-import Button from '../../../components/button/index';
+import Button from './button/index';
 
 interface CenteredModalProps {
   visible: boolean;
@@ -41,7 +41,7 @@ const ObjectionModal: React.FC<CenteredModalProps> = ({
             <Text style={styles.modalText}>
               Please give the reason behind this objection?
             </Text>
-            <Text style={styles.modalText}> HR team will contact shortly.</Text>
+            <Text style={styles.modalText}> HR team will contact you shortly.</Text>
             <TextInput
               style={styles.description}
               placeholder="Enter you text here"
@@ -49,16 +49,28 @@ const ObjectionModal: React.FC<CenteredModalProps> = ({
               value={reason}
               multiline
             />
-            <View style={styles.buttonRow}>
-              <View style={styles.buttonContainer}>
+            {/* <View style={styles.buttonRow}>
+              <View style={styles.buttonContainer}> */}
                 <Button
                   title="Confirm"
                   type="primary"
                   onPress={onConfirm}
                   disabled={isDisabled}
+                  buttonStyle={{
+                    borderRadius: 12,
+                    borderColor: "#3069F6",
+                    // paddingBottom: '10%',
+                    paddingHorizontal: '25%', 
+                    paddingVertical: '5%',
+                  }}
+                  textStyle1={{
+                    color:"white",
+                    fontSize:16,
+                    // alignSelf:'center'
+                  }}
                 />
-              </View>
-            </View>
+              {/* </View>
+            </View> */}
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -77,31 +89,31 @@ const styles = StyleSheet.create({
     width: '80%',
     height: '50%',
     borderRadius: 12,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    padding: 20,
+    padding: "5%",
     backgroundColor: '#F4F4F4',
   },
   modalText: {
     fontWeight: '500',
     color: '#000000',
     fontSize: 16,
-    marginBottom: 20,
+    textAlign:'center',
   },
-  buttonRow: {
-    flexDirection: 'row',
-  },
-  buttonContainer: {
-    flex: 1,
-    paddingHorizontal: 40,
-  },
+  // buttonRow: {
+  //   flexDirection: 'row',
+  // },
+  // buttonContainer: {
+  //   flex: 1,
+  //   paddingHorizontal: 40,
+  // },
   description: {
     textAlignVertical: 'top',
-    borderRadius: 4,
+    borderRadius: 12,
     borderWidth: 1,
-    height: 200,
-    width: 250,
-    borderColor: 'black',
+    height: "40%",
+    width: "90%",
+    borderColor: 'transparent',
     marginBottom: 16,
     backgroundColor: 'white',
   },

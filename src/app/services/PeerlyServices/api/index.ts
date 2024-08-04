@@ -4,7 +4,8 @@ import AsyncStore from '../../asyncStorage';
 import PeerlyAsyncStore from '../peerlyAsyncStorage';
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: Config.PEERLY_API_BASE_URL,
+  // baseURL: Config.PEERLY_API_BASE_URL,
+  baseURL: 'http://10.0.2.2:33001',
   headers: {
     'Accept-Version': 'application/vnd.peerly.v1',
     'Content-Type': 'application/json',
