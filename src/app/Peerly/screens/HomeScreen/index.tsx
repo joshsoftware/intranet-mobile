@@ -58,8 +58,8 @@ const HomeScreen = () => {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    {key: 'top10', title: 'Top 10'},
-    {key: 'activeUser', title: 'Active user'},
+    {key: 'leaderboard', title: 'Leaderboard'},
+    {key: 'dynamicEngagers', title: 'Dynamic Engagers'},
   ]);
 
   const FirstRoute = useCallback(
@@ -91,8 +91,8 @@ const HomeScreen = () => {
   );
 
   const renderScene = SceneMap({
-    top10: FirstRoute,
-    activeUser: SecondRoute,
+    leaderboard: FirstRoute,
+    dynamicEngagers: SecondRoute,
   });
 
   const renderTabBar = (props: any) => (
