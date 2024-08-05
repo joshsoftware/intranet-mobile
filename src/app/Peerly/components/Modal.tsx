@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import {Modal, View, Text, StyleSheet} from 'react-native';
-import Button from '../../components/button/index';
 import {SvgProps} from 'react-native-svg';
+import Button from './button/button';
 
 interface CenteredModalProps {
   visible: boolean;
@@ -31,11 +31,9 @@ const CenteredModal: React.FC<CenteredModalProps> = ({
         <View style={styles.modalContainer}>
           <SvgImage />
           <Text style={styles.modalText}>{message}</Text>
-          {children}
-          <View style={styles.buttonRow}>
-            <View style={styles.buttonContainer}>
-              <Button title={btnTitle} type="secondary" onPress={onClose} />
-            </View>
+          {children}  
+          <View style={styles.buttonContainer}>
+          <Button  title={btnTitle} type="secondary" onPress={onClose} />
           </View>
         </View>
       </View>
@@ -60,20 +58,21 @@ const styles = StyleSheet.create({
     height: '40%',
     backgroundColor: 'white',
     borderRadius: 12,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    padding: 20,
+    padding: "5%",
   },
   modalText: {
     fontSize: 16,
-    marginBottom: 20,
+    textAlign: 'center',
+    color: '#000'
   },
   buttonRow: {
     flexDirection: 'row',
     paddingBottom: 40,
   },
   buttonContainer: {
-    flex: 1,
+    width: '100%',
     paddingHorizontal: 40,
   },
 });

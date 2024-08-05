@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from 'react-native';
-import Button from '../../components/button/index';
+import Button from './button/button';
 
 interface CenteredModalProps {
   visible: boolean;
@@ -37,11 +37,12 @@ const ObjectionModal: React.FC<CenteredModalProps> = ({
       onRequestClose={onClose}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
+        <TouchableWithoutFeedback>
           <View style={styles.modalContainer}>
             <Text style={styles.modalText}>
               Please give the reason behind this objection?
             </Text>
-            <Text style={styles.modalText}> HR team will contact shortly.</Text>
+            <Text style={styles.modalText}> HR team will contact you shortly.</Text>
             <TextInput
               style={styles.description}
               placeholder="Enter you text here"
@@ -49,7 +50,6 @@ const ObjectionModal: React.FC<CenteredModalProps> = ({
               value={reason}
               multiline
             />
-            <View style={styles.buttonRow}>
               <View style={styles.buttonContainer}>
                 <Button
                   title="Confirm"
@@ -58,8 +58,8 @@ const ObjectionModal: React.FC<CenteredModalProps> = ({
                   disabled={isDisabled}
                 />
               </View>
-            </View>
           </View>
+          </TouchableWithoutFeedback>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
@@ -77,33 +77,34 @@ const styles = StyleSheet.create({
     width: '80%',
     height: '50%',
     borderRadius: 12,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    padding: 20,
+    padding: "5%",
     backgroundColor: '#F4F4F4',
   },
   modalText: {
     fontWeight: '500',
     color: '#000000',
     fontSize: 16,
-    marginBottom: 20,
+    textAlign:'center',
   },
   buttonRow: {
     flexDirection: 'row',
   },
   buttonContainer: {
-    flex: 1,
+    width: '100%',
     paddingHorizontal: 40,
   },
   description: {
     textAlignVertical: 'top',
-    borderRadius: 4,
+    borderRadius: 12,
     borderWidth: 1,
-    height: 200,
-    width: 250,
-    borderColor: 'black',
+    height: "40%",
+    width: "90%",
+    borderColor: 'transparent',
     marginBottom: 16,
     backgroundColor: 'white',
+    padding:10,
   },
 });
 
