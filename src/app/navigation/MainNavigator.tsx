@@ -42,7 +42,7 @@ const MainNavigator = () => {
       tabBar={getTabBar}
       sceneContainerStyle={sceneContainerStyle}
       initialRouteName={HOME_SCREEN}>
-      <MainTab.Screen name={HOME_SCREEN} component={PeerlyHomeScreen} />
+      <MainTab.Screen name={HOME_SCREEN} component={HomeScreen} />
       <MainTab.Screen name={LEAVE_SCREEN} component={LeaveScreen} />
       <MainTab.Screen name={TIMESHEET_SCREEN} component={TimesheetScreen} />
       <MainTab.Screen name={PEERLY_SCREEN} component={PeerlyHomeScreen} />
