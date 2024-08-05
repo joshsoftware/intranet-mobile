@@ -32,23 +32,7 @@ const CenteredModal: React.FC<CenteredModalProps> = ({
           <SvgImage />
           <Text style={styles.modalText}>{message}</Text>
           {children}  
-          {/* <View style={styles.buttonRow}> */}
-            {/* <View style={styles.buttonContainer}> */}
-              <Button  title={btnTitle} type="secondary" onPress={onClose} buttonStyle={{
-                // padding:2,
-                borderRadius: 12,
-                borderWidth:1,
-                borderColor: "#3069F6",
-                // paddingBottom: '10%',
-                paddingHorizontal: '25%', 
-                paddingVertical: '5%',
-              }}
-              textStyle1={{
-                color:"#3069F6",
-                // alignSelf:'center'
-              }}/>
-            {/* </View> */}
-          {/* </View> */}
+              <Button  title={btnTitle} type="secondary" onPress={onClose} />
         </View>
       </View>
     </Modal>
@@ -82,21 +66,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000'
   },
-  // buttonRow: {
-  //   flexDirection: 'row',
-  //   paddingBottom: '10%',
-  //   paddingHorizontal: '25%', 
-  //   paddingVertical: '5%',
-  //   borderWidth:1,
-  // },
-  // buttonContainer: {
-  //   flex: 1,
-  //   borderWidth:1,
-  //   flexDirection: 'row',
-  //   paddingBottom: '10%',
-  //   paddingHorizontal: '25%', 
-  //   paddingVertical: '5%',
-  // },
 });
 
 export default CenteredModal;
