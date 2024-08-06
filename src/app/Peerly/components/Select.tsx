@@ -1,60 +1,94 @@
-import React, {memo} from 'react';
-import {StyleSheet, View, ViewStyle} from 'react-native';
-import RNPickerSelect, {
-  PickerSelectProps,
-  PickerStyle,
-} from 'react-native-picker-select';
-
 import Typography from '../../components/typography';
+import React, {memo} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {Dropdown} from 'react-native-element-dropdown';
+import colors from '../constants/colors';
 
-import colors from '../../constant/colors';
-
-type Props = PickerSelectProps & {
-  containerStyle?: ViewStyle;
-  error?: string;
-  textStyle?: PickerStyle;
+interface SelectProp {
+  value: string;
+  onChange: (value: string) => void;
   placeholder: string;
-};
+  items: {label: string; value: string}[];
+  search?: boolean;
+  error?: string;
+  disable?: boolean;
+}
 
-const Select = ({
-  containerStyle,
+const Select: React.FC<SelectProp> = ({
   value,
-  error,
-  textStyle,
+  onChange,
   placeholder,
-  ...props
-}: Props) => {
+  items,
+  search = false,
+  disable,
+  error,
+}) => {
   return (
-    <>
-      <View
-        style={[styles.container, error ? styles.error : {}, containerStyle]}>
-        <RNPickerSelect
-          value={value ? value : null}
-          style={{...textStyle}}
-          placeholder={{
-            label: placeholder,
-          }}
-          {...props}
-        />
-      </View>
+    <View style={styles.container}>
+      <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={items}
+        search={search}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={placeholder}
+        searchPlaceholder="Search..."
+        value={value}
+        onChange={item => {
+          onChange(item.value);
+        }}
+        disable={disable}
+      />
       {error && (
         <Typography style={styles.errorText} type="description">
           {error}
         </Typography>
       )}
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.WHITE,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: colors.WHITE,
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
     height: 40,
-    justifyContent: 'center',
-    width: '100%',
-    borderColor: '#A0A0A0',
-    borderWidth: 1,
-    color: colors.SECONDARY,
-    borderRadius: 4,
+    fontSize: 16,
   },
   errorText: {
     color: colors.ERROR_RED,

@@ -33,8 +33,8 @@ const paginationData = {
 };
 
 const schema = yup.object().shape({
-  receiver: yup.number().required('Co-worker name is required'),
-  core_value_id: yup.number().required('Core Value is required'),
+  receiver: yup.string().required('Co-worker name is required'),
+  core_value_id: yup.string().required('Core Value is required'),
   description: yup.string().required('Description is required'),
 });
 
@@ -77,7 +77,12 @@ const AppreciationScreen = () => {
   });
 
   const onSubmit: SubmitHandler<FormInput> = data => {
-    postAppriciation(data);
+    let payload = {
+      receiver: Number(data.receiver),
+      core_value_id: Number(data.core_value_id),
+      description: data.description,
+    };
+    postAppriciation(payload);
   };
   const handleSuccessModalClose = useCallback(() => {
     resetPostAppreciation();
@@ -97,11 +102,12 @@ const AppreciationScreen = () => {
             render={({field: {onChange, value}}) => (
               <Select
                 placeholder="Select Co-worker"
-                onValueChange={onChange}
+                onChange={onChange}
                 value={value}
                 items={coworkerList}
+                search
                 error={errors?.receiver?.message}
-                disabled={isCorworkerListLoading || isCorworkerListError}
+                disable={isCorworkerListLoading || isCorworkerListError}
               />
             )}
             name="receiver"
@@ -119,10 +125,10 @@ const AppreciationScreen = () => {
             render={({field: {onChange, value}}) => (
               <Select
                 placeholder="Select Core Value"
-                onValueChange={onChange}
+                onChange={onChange}
                 value={value}
                 items={coreKeyValueList}
-                disabled={isCoreValueListSuccess || isCoreValueListError}
+                disable={isCoreValueListSuccess || isCoreValueListError}
                 error={errors?.core_value_id?.message}
               />
             )}
@@ -185,7 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: colors.WHITE,
   },
   header: {
     fontSize: 24,

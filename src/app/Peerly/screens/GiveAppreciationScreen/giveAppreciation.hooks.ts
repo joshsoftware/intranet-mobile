@@ -30,7 +30,7 @@ export function useGetCoworkerList(payload: GetCoworkersListRequest) {
   let coworkerList = data?.data?.user_list?.map((item: UserDetails) => {
     return {
       label: `${item.first_name} ${item.last_name}`,
-      value: item.id,
+      value: String(item.id),
     };
   });
 
@@ -53,7 +53,7 @@ export function useGetCoreValuesList() {
   let coreKeyValueList = data?.data?.map((item: CoreValue) => {
     return {
       label: item.name,
-      value: item.id,
+      value: String(item.id),
     };
   });
 
