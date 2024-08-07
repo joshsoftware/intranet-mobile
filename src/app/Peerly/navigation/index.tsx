@@ -34,7 +34,8 @@ function PeerlyScreen() {
   if (isError) {
     return (
       <SafeAreaView style={styles.centerContainer}>
-        <Text style={styles.errorMessage}>Something went Wrong</Text>
+        <Text style={styles.errorMessage}>Oops, Something Went Wrong!</Text>
+        <Text style={styles.errorMessage}>Plese Try After Sometime</Text>
         <Button title="retry" type="secondary" onPress={() => refetch()} />
       </SafeAreaView>
     );
