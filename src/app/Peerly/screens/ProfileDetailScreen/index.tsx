@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { BadgeMetaData } from './types';
+import {BadgeMetaData} from './types';
 import {
   PlatinumIcon,
   GoldIcon,
@@ -17,14 +17,14 @@ import {
   InfoIcon,
   StarIcon,
 } from '../../constants/icons';
-import { dateFormat } from '../../utils';
-import { CircularProgressBase } from 'react-native-circular-progress-indicator';
-import { useGetAppreciationList } from '../HomeScreen/home.hooks';
+import {dateFormat} from '../../utils';
+import {CircularProgressBase} from 'react-native-circular-progress-indicator';
+import {useGetAppreciationList} from '../HomeScreen/home.hooks';
 import RewardInfoModal from '../../components/RewardInfoModal';
-import { useGetProfileDetails } from './profileDetail.hooks';
+import {useGetProfileDetails} from './profileDetail.hooks';
 import GivenAndReceivedAppriciation from '../../components/GivenAndReceivedAppreciation';
-import { useRoute } from '@react-navigation/native';
-import { ProfileScreenRouteProp } from '../../navigation/types';
+import {useRoute} from '@react-navigation/native';
+import {ProfileScreenRouteProp} from '../../navigation/types';
 import InitialAvatar from '../../components/InitialAvatar';
 import colors from '../../constants/colors';
 
@@ -67,7 +67,7 @@ const initialProfileDetails = {
 
 const ProfileDetailScreen = () => {
   const route = useRoute<ProfileScreenRouteProp>();
-  const { userId } = route.params;
+  const {userId} = route.params;
   const [isModalVisible, setModalVisible] = useState(false);
 
   const {
@@ -105,13 +105,11 @@ const ProfileDetailScreen = () => {
   const badgeType = badge.toLowerCase() || '';
   const member = badgeType ? (
     <Text>{badgeData[badgeType.toLowerCase()].member}</Text>
-  ) : (
-    null
-  );
+  ) : null;
   const userNameLowerCase = `${(first_name || '').toLowerCase()} ${(
     last_name || ''
   ).toLowerCase()}`;
-  const rewardPointMargin = { marginTop: badgeType ? 30 : 0 };
+  const rewardPointMargin = {marginTop: badgeType ? 30 : 0};
 
   const receivedAppriciationList = appreciationList.filter(item => {
     const fname = (item?.receiver_first_name || '').toLowerCase();
@@ -139,7 +137,7 @@ const ProfileDetailScreen = () => {
             {profile_image_url !== '' ? (
               <Image
                 style={styles.profileImage}
-                source={{ uri: profile_image_url }}
+                source={{uri: profile_image_url}}
               />
             ) : (
               <InitialAvatar name={userName} size={60} />
@@ -224,6 +222,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 32,
+    borderWidth: 1,
+    borderColor: colors.PRIMARY,
   },
   name: {
     lineHeight: 19,
