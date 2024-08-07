@@ -31,6 +31,8 @@ export interface AppreciationDetails {
   receiver_last_name: string;
   receiver_image_url: string;
   receiver_designation: string;
+  receiver_id: number;
+  sender_id: number;
   created_at: number;
   updated_at: number;
 }

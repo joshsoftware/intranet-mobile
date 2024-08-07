@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -12,17 +12,24 @@ import RatingBar from '../../components/RatingBar';
 import ObjectionModal from '../../components/ObjectionModal';
 import {usePostReward, usePostObjection} from './appreciationDetails.hooks';
 import CenteredModal from '../../components/Modal';
-import {InfoIcon, RewardSuccessIcon, SuccessIcon} from '../../constants/icons';
+import {
+  FlagIcon,
+  InfoIcon,
+  RewardSuccessIcon,
+  SuccessIcon,
+} from '../../constants/icons';
 import {AppreciationDetails} from '../../services/home/types';
 import {useRoute} from '@react-navigation/native';
 import {AppreciationDetailScreenRouteProp} from '../../navigation/types';
 import InitialAvatar from '../../components/InitialAvatar';
 import Typography from '../../components/typography';
 import RewardInfoModal from '../../components/RewardInfoModal';
+import RewardAcknowledgementModal from '../../components/RewardAcknowledgementModal';
+import {useGetProfileDetails} from '../ProfileDetailScreen/profileDetail.hooks';
 
 const AppreciationDetailsScreen = () => {
   const route = useRoute<AppreciationDetailScreenRouteProp>();
-  const {cardId, appriciationList, self} = route.params;
+  const {cardId, appriciationList} = route.params;
   const cardDetails = appriciationList.find(
     (item: AppreciationDetails) => item.id === cardId,
   );
@@ -31,10 +38,14 @@ const AppreciationDetailsScreen = () => {
   const [reason, setReason] = useState('');
   const [isObjectionModalVisible, setObjectionModalVisible] = useState(false);
   const [isRewardInfoModalVisible, setRewardInfoModal] = useState(false);
+  const [isOpenRewardAckModal, setOpenAckRewardModal] = useState(false);
+  const [isRewardAlreadyGiven, setRewardAlreadyGivenStatus] = useState(false);
+  const {data: profileDetails} = useGetProfileDetails();
   const {
     mutate: postReward,
     isLoading: isLoadingPostReward,
     isSuccess: isSuccessPostReward,
+    isError: isErrorPostReward,
     reset: resetPostReward,
   } = usePostReward();
 
@@ -45,11 +56,75 @@ const AppreciationDetailsScreen = () => {
     reset: resetPostObjection,
   } = usePostObjection();
 
-  useEffect(() => {
-    if (cardDetails) {
-      setReward(cardDetails.given_reward_point);
+  const selfAppreciations = useMemo(() => {
+    if (
+      profileDetails?.user_id === cardDetails?.sender_id ||
+      profileDetails?.user_id === cardDetails?.receiver_id
+    ) {
+      return true;
+    } else {
+      return false;
     }
-  }, [cardDetails]);
+  }, [
+    cardDetails?.receiver_id,
+    cardDetails?.sender_id,
+    profileDetails?.user_id,
+  ]);
+
+  const getRewardConversion = useMemo(() => {
+    if (cardDetails?.given_reward_point === 5) {
+      return 3;
+    }
+    if (cardDetails?.given_reward_point === 3) {
+      return 2;
+    }
+    if (cardDetails?.given_reward_point === 1) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }, [cardDetails?.given_reward_point]);
+
+  const getRewardConversionForAPI = useMemo(() => {
+    if (reward === 3) {
+      return 5;
+    }
+    if (reward === 2) {
+      return 3;
+    } else {
+      return 1;
+    }
+  }, [reward]);
+
+  const rewardLabel = useMemo(() => {
+    if (reward === 3) {
+      return 'love';
+    }
+    if (reward === 2) {
+      return 'nice';
+    } else {
+      return 'good';
+    }
+  }, [reward]);
+
+  useEffect(() => {
+    if (cardDetails?.given_reward_point) {
+      setReward(getRewardConversion);
+    }
+  }, [cardDetails?.given_reward_point, getRewardConversion]);
+
+  useEffect(() => {
+    if (isSuccessPostReward) {
+      setRewardAlreadyGivenStatus(true);
+    }
+  }, [isSuccessPostReward]);
+
+  useEffect(() => {
+    if (isErrorPostReward) {
+      setReward(0);
+      resetPostReward();
+    }
+  }, [getRewardConversion, isErrorPostReward, resetPostReward]);
 
   useEffect(() => {
     if (isSuccessPostObjection && isObjectionModalVisible) {
@@ -58,15 +133,26 @@ const AppreciationDetailsScreen = () => {
   }, [isSuccessPostObjection, isObjectionModalVisible]);
 
   const handleReward = (point: number) => {
+    setOpenAckRewardModal(true);
+    setReward(point);
+  };
+
+  const handleRewardAckReset = () => {
+    setOpenAckRewardModal(false);
+    setReward(0);
+  };
+
+  const handleRewardAckSubmit = () => {
     if (cardDetails) {
       const payload = {
         params: {
           id: cardDetails.id,
         },
-        body: {point: point},
+        body: {point: getRewardConversionForAPI},
       };
       postReward(payload);
     }
+    setOpenAckRewardModal(false);
   };
 
   const handleObjectionReason = () => {
@@ -107,7 +193,7 @@ const AppreciationDetailsScreen = () => {
               style={styles.receiverImage}
             />
           ) : (
-            <View style={styles.receiverImage}>
+            <View style={styles.receiverImageAvatar}>
               <InitialAvatar name={receiverName} size={95} />
             </View>
           )}
@@ -119,7 +205,7 @@ const AppreciationDetailsScreen = () => {
               style={styles.senderImage}
             />
           ) : (
-            <View style={styles.senderImage}>
+            <View style={styles.senderImageAvatar}>
               <InitialAvatar name={senderName} size={66} />
             </View>
           )}
@@ -164,14 +250,19 @@ const AppreciationDetailsScreen = () => {
               Rewards given by {cardDetails?.total_rewards} people
             </Text>
           </View>
-          {self ? null : (
-            <RatingBar
-              onPressObjection={() => setObjectionModalVisible(true)}
-              reward={reward}
-              setReward={handleReward}
-              disableSlider={isLoadingPostReward}
-              isRewardAlreadyGiven={cardDetails?.given_reward_point > 0}
-            />
+          {selfAppreciations ? null : (
+            <View style={styles.rewardAndReportWrapper}>
+              <Pressable onPress={() => setObjectionModalVisible(true)}>
+                <View style={styles.flagIcon}>
+                  <FlagIcon />
+                </View>
+              </Pressable>
+              <RatingBar
+                reward={reward}
+                setReward={handleReward}
+                disabled={getRewardConversion > 0 || isRewardAlreadyGiven}
+              />
+            </View>
           )}
         </View>
         <RewardInfoModal
@@ -198,6 +289,15 @@ const AppreciationDetailsScreen = () => {
             resetPostObjection();
           }}
         />
+        <View>
+          <RewardAcknowledgementModal
+            visible={isOpenRewardAckModal}
+            resetModal={() => handleRewardAckReset()}
+            handleConfirm={() => handleRewardAckSubmit()}
+            isLoading={isLoadingPostReward}
+            rewardLabel={rewardLabel}
+          />
+        </View>
         <View>
           <CenteredModal
             visible={isSuccessPostReward}
@@ -244,15 +344,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 70,
   },
+  receiverImageAvatar: {
+    marginTop: -60,
+  },
   receiverImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.PRIMARY,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: -60,
+  },
+  senderImageAvatar: {
+    marginTop: -10,
   },
   senderImage: {
     width: 70,
@@ -260,7 +366,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     marginTop: -10,
     borderColor: colors.PRIMARY,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   avatarContainer: {
     flexDirection: 'row',
@@ -355,6 +461,19 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginLeft: 15,
     marginRight: 5,
+  },
+  rewardAndReportWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  flagIcon: {
+    marginTop: 20,
+    backgroundColor: '#EE3E54',
+    height: 25,
+    width: 25,
+    borderRadius: 5,
+    padding: 5,
   },
 });
 

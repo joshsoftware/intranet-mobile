@@ -10,7 +10,6 @@ export type RootStackParamList = {
   AppreciationDetail: {
     cardId: number;
     appriciationList: AppreciationDetails[];
-    self?: boolean;
   };
 };
 

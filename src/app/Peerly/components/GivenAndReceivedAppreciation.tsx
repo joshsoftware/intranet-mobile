@@ -68,7 +68,6 @@ const GivenAndReceivedAppriciation = ({
       navigation.navigate(APPRECIATION_DETAILS_SCREEN, {
         cardId: id,
         appriciationList: self ? getAppriciationDetails(id) : appreciationList,
-        self,
       });
     },
     [appreciationList, getAppriciationDetails, navigation, self],

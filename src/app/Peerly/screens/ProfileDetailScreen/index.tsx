@@ -184,7 +184,6 @@ const ProfileDetailScreen = () => {
 
       <View style={styles.appreciationList}>
         <GivenAndReceivedAppriciation
-          self={true}
           appreciationList={appreciationList}
           receivedList={receivedAppriciationList}
           expressedList={expressedAppriciationList}
