@@ -1,8 +1,8 @@
-import Typography from '../../components/typography';
+import Typography from '../../../components/typography';
 import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
-import colors from '../constants/colors';
+import colors from '../../constants/colors';
 
 interface SelectProp {
   value: string;

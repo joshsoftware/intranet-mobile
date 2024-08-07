@@ -12,7 +12,7 @@ import {
   usePostAppreciation,
 } from './giveAppreciation.hooks';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form';
-import Select from '../../components/Select';
+import Select from '../../components/select/Select';
 import CenteredModal from '../../components/Modal';
 import {ScrollView} from 'react-native-gesture-handler';
 import * as yup from 'yup';
