@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 import Slider from '@react-native-community/slider';
-import {RatingStarIcon} from '../constants/icons';
+import {GoldenStar} from '../constants/icons';
 
 interface RatingBarProps {
   reward: number;
@@ -19,7 +19,7 @@ const RatingBar: React.FC<RatingBarProps> = ({reward, setReward, disabled}) => {
         step={1}
         value={reward}
         onSlidingComplete={value => setReward(value)}
-        thumbImage={RatingStarIcon}
+        thumbImage={GoldenStar}
         minimumTrackTintColor="#FFD700"
         maximumTrackTintColor="#DDD"
         disabled={disabled || false}
