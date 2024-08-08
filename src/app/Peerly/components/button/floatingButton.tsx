@@ -19,7 +19,7 @@ const FloatingButton = ({style, onPress, title}: Props) => {
 const styles = StyleSheet.create({
   floating: {
     justifyContent: 'center',
-    padding: 15,
+    padding: 10,
     alignItems: 'center',
     borderRadius: 12,
     position: 'absolute',
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.WHITE,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'normal',
   },
 });
