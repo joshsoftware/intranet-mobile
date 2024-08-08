@@ -36,19 +36,18 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 4,
   },
   searchInput: {
     flex: 1,
     height: 40,
     paddingLeft: 40,
     backgroundColor: colors.SECONDARY_BACKGROUND_FIRST,
-    margin: 10,
+    paddingVertical: 10,
     borderRadius: 10,
   },
   icon: {
     position: 'absolute',
-    left: 20,
+    left: 10,
     zIndex: 1,
   },
 });
