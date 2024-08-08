@@ -67,20 +67,6 @@ const HomeScreen = () => {
     () => (
       <View style={styles.activeAndTopTenTab}>
         <FlatList
-          data={activeUsersList}
-          renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
-          keyExtractor={item => String(item.id)}
-          horizontal={true}
-        />
-      </View>
-    ),
-    [activeUsersList],
-  );
-
-  const SecondRoute = useCallback(
-    () => (
-      <View style={styles.activeAndTopTenTab}>
-        <FlatList
           data={topUsersList}
           renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
           keyExtractor={item => String(item.id)}
@@ -89,6 +75,20 @@ const HomeScreen = () => {
       </View>
     ),
     [topUsersList],
+  );
+
+  const SecondRoute = useCallback(
+    () => (
+      <View style={styles.activeAndTopTenTab}>
+        <FlatList
+          data={activeUsersList}
+          renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
+          keyExtractor={item => String(item.id)}
+          horizontal={true}
+        />
+      </View>
+    ),
+    [activeUsersList],
   );
 
   const renderScene = SceneMap({
