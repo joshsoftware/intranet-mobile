@@ -91,106 +91,113 @@ const AppreciationScreen = () => {
   }, [navigation, resetForm, resetPostAppreciation]);
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.fieldWrapper}>
-          <Typography type="header" style={styles.labelText}>
-            Co-worker Name
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Select
-                placeholder="Select Co-worker"
-                onChange={onChange}
-                value={value}
-                items={coworkerList}
-                search
-                error={errors?.receiver?.message}
-                disable={isCorworkerListLoading || isCorworkerListError}
-              />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.fieldWrapper}>
+            <Typography type="header" style={styles.labelText}>
+              Co-worker Name
+            </Typography>
+            <Controller
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Select
+                  placeholder="Select Co-worker"
+                  onChange={onChange}
+                  value={value}
+                  items={coworkerList}
+                  search
+                  error={errors?.receiver?.message}
+                  disable={isCorworkerListLoading || isCorworkerListError}
+                />
+              )}
+              name="receiver"
+            />
+          </View>
+          <View style={styles.fieldWrapper}>
+            <Typography type="header" style={styles.labelText}>
+              Core Value{' '}
+              <Pressable onPress={() => setCoreValueModalVisible(true)}>
+                <InfoIcon width={16} height={16} />
+              </Pressable>
+            </Typography>
+            <Controller
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Select
+                  placeholder="Select Core Value"
+                  onChange={onChange}
+                  value={value}
+                  items={coreKeyValueList}
+                  disable={isCoreValueListSuccess || isCoreValueListError}
+                  error={errors?.core_value_id?.message}
+                />
+              )}
+              name="core_value_id"
+            />
+          </View>
+          <View style={styles.fieldWrapper}>
+            <Typography type="header" style={styles.labelText}>
+              Description
+            </Typography>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  style={styles.description}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  multiline
+                />
+              )}
+              name="description"
+            />
+            {errors.description && (
+              <Typography type="error">{errors.description.message}</Typography>
             )}
-            name="receiver"
+          </View>
+          <Button
+            title="Submit"
+            type="primary"
+            onPress={handleSubmit(onSubmit)}
+            disabled={isAppreciationLoading}
+            isLoading={isAppreciationLoading}
           />
-        </View>
-        <View style={styles.fieldWrapper}>
-          <Typography type="header" style={styles.labelText}>
-            Core Value{' '}
-            <Pressable onPress={() => setCoreValueModalVisible(true)}>
-              <InfoIcon width={16} height={16} />
-            </Pressable>
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Select
-                placeholder="Select Core Value"
-                onChange={onChange}
-                value={value}
-                items={coreKeyValueList}
-                disable={isCoreValueListSuccess || isCoreValueListError}
-                error={errors?.core_value_id?.message}
-              />
-            )}
-            name="core_value_id"
-          />
-        </View>
-        <View style={styles.fieldWrapper}>
-          <Typography type="header" style={styles.labelText}>
-            Description
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <TextInput
-                style={styles.description}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                multiline
-              />
-            )}
-            name="description"
-          />
-          {errors.description && (
-            <Typography type="error">{errors.description.message}</Typography>
-          )}
-        </View>
-        <Button
-          title="Submit"
-          type="primary"
-          onPress={handleSubmit(onSubmit)}
-          disabled={isAppreciationLoading}
-          isLoading={isAppreciationLoading}
-        />
-      </SafeAreaView>
-      <View>
-        <CenteredModal
-          visible={isAppreciationSuccess}
-          message={
-            'Your appreciation has been submitted successfully. We appreciate your feedback.'
-          }
-          svgImage={SuccessIcon}
-          btnTitle="Okay"
-          onClose={handleSuccessModalClose}
-        />
+          <View>
+            <CenteredModal
+              visible={isAppreciationSuccess}
+              message={
+                'Your appreciation has been submitted successfully. We appreciate your feedback.'
+              }
+              svgImage={SuccessIcon}
+              btnTitle="Okay"
+              onClose={handleSuccessModalClose}
+            />
+          </View>
+          <View>
+            <CoreValueInfoModal
+              visible={
+                isCoreValueModalVisible && coreValuesDetails.length !== 0
+              }
+              onClose={() => setCoreValueModalVisible(false)}
+              coreValuesDetails={coreValuesDetails}
+            />
+          </View>
+        </ScrollView>
       </View>
-      <View>
-        <CoreValueInfoModal
-          visible={isCoreValueModalVisible && coreValuesDetails.length !== 0}
-          onClose={() => setCoreValueModalVisible(false)}
-          coreValuesDetails={coreValuesDetails}
-        />
-      </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.WHITE,
+  },
   container: {
     flex: 1,
-    justifyContent: 'space-around',
-    padding: 16,
+    padding: 15,
     backgroundColor: colors.WHITE,
   },
   header: {
@@ -211,7 +218,8 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     borderRadius: 4,
     borderWidth: 1,
-    height: 300,
+    minHeight: 300,
+    maxHeight: 600,
     borderColor: colors.MEDIUM_GRAY,
     padding: 10,
   },
