@@ -34,7 +34,7 @@ import Search from '../../components/Search';
 import InitialsAvatar from '../../components/InitialAvatar';
 import FloatingButton from '../../components/button/floatingButton';
 import SkeletonLoader from '../../components/skeleton/skeleton';
-import { formatNumber } from '../../utils';
+import {formatNumber} from '../../utils';
 
 const paginationData = {
   page: 1,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   flatListAppreciation: {
-    marginBottom: 50,
+    backgroundColor: 'transparent',
   },
 });
 export default HomeScreen;

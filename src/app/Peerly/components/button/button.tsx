@@ -66,13 +66,13 @@ const Button: React.FC<ButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
-    padding: 15,
+    padding: 10,
     alignItems: 'center',
     borderRadius: 12,
   },
   text: {
     color: colors.WHITE,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '500',
     fontFamily: fonts.POPPINS,
   },
