@@ -34,6 +34,7 @@ import Search from '../../components/Search';
 import InitialsAvatar from '../../components/InitialAvatar';
 import FloatingButton from '../../components/button/floatingButton';
 import SkeletonLoader from '../../components/skeleton/skeleton';
+import { formatNumber } from '../../utils';
 
 const paginationData = {
   page: 1,
@@ -154,7 +155,7 @@ const HomeScreen = () => {
                   <>
                     <StarIcon width={18} height={18} />
                     <Text style={styles.scoreText}>
-                      {profileDetails.total_points}
+                      {formatNumber(profileDetails.total_points)}
                     </Text>
                   </>
                 ) : null}
@@ -183,8 +184,11 @@ const HomeScreen = () => {
           />
         </View>
         <View style={styles.appreciationListWrapper}>
-          <Text style={styles.totalAppreciationCount}>
-            Total: {appreciationListMeta?.total_records} Appreciations
+          <Text style={styles.totalAppreciationCountWrapper}>
+            Total:{' '}
+            <Text style={styles.totalAppreciationCount}>
+              {appreciationListMeta?.total_records} Appreciations
+            </Text>
           </Text>
           {isLoadingAppreciations || isFetchingAppreciations ? (
             <SkeletonLoader />
@@ -248,9 +252,9 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
   },
   userAvatar: {
-    width: 35,
-    height: 35,
-    borderRadius: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     paddingBottom: 18,
   },
   searchWrapper: {
@@ -293,9 +297,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     paddingHorizontal: 10,
   },
-  totalAppreciationCount: {
+  totalAppreciationCountWrapper: {
     paddingLeft: 10,
     paddingBottom: 10,
+  },
+  totalAppreciationCount: {
+    color: colors.BLACK,
+    fontWeight: 'bold',
   },
   flatListAppreciation: {
     marginBottom: 50,
