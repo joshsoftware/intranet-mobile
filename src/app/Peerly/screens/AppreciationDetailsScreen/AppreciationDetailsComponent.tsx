@@ -19,9 +19,6 @@ import {
   RewardSuccessIcon,
   SuccessIcon,
 } from '../../constants/icons';
-import {AppreciationDetails} from '../../services/home/types';
-import {useRoute} from '@react-navigation/native';
-import {AppreciationDetailScreenRouteProp} from '../../navigation/types';
 import InitialAvatar from '../../components/InitialAvatar';
 import Typography from '../../components/typography';
 import RewardInfoModal from '../../components/RewardInfoModal';
@@ -222,12 +219,17 @@ const AppreciationDetailsComponent = ({
             </Typography>
           </View>
 
-          <Typography type="h4" style={styles.coreValue}>
-            {cardDetails.core_value_name}
-          </Typography>
-          <Text style={styles.description}>
-            {cardDetails.core_value_description}
-          </Text>
+          <View style={styles.coreValueView}>
+            <Typography type="h4" style={styles.coreValue}>
+              {cardDetails.core_value_name}
+            </Typography>
+          </View>
+
+          <View style={styles.descriptionView}>
+            <Text style={styles.description}>
+              {cardDetails.core_value_description}
+            </Text>
+          </View>
           <View style={styles.senderNameWrap}>
             <Text style={styles.authorByText}>Words by </Text>
             <Text style={styles.author}>{senderName}</Text>
@@ -254,7 +256,15 @@ const AppreciationDetailsComponent = ({
           </View>
 
           <View style={styles.rewardAndReportWrapper}>
-            <Pressable onPress={() =>  selfAppreciations ?  toast('For self appreciations you are not allowed to give rating', 'success') : setObjectionModalVisible(true)} >
+            <Pressable
+              onPress={() =>
+                selfAppreciations
+                  ? toast(
+                      'For self appreciations you are not allowed to give rating',
+                      'success',
+                    )
+                  : setObjectionModalVisible(true)
+              }>
               <View style={styles.flagIcon}>
                 <FlagIcon />
               </View>
@@ -324,7 +334,8 @@ const AppreciationDetailsComponent = ({
 const styles = StyleSheet.create({
   screen: {
     backgroundColor: colors.WHITE,
-    flex: 1,
+    maxHeight: 1000,
+    minHeight: 670,
   },
   container: {
     flex: 1,
@@ -339,7 +350,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
-    padding: 25,
+    paddingHorizontal: 25,
+    paddingTop: 25,
   },
   receiverImageBox: {
     alignItems: 'center',
@@ -401,24 +413,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   coreValue: {
-    backgroundColor: colors.WARM_CREAM,
     fontWeight: '400',
     padding: 10,
     lineHeight: 18,
-    borderRadius: 12,
-    marginTop: 15,
     textAlign: 'center',
     minWidth: 80,
+  },
+  descriptionView: {
+    backgroundColor: colors.WARM_CREAM,
+    borderRadius: 12,
+    marginTop: 8,
+    marginBottom: 15,
+  },
+  coreValueView: {
+    backgroundColor: colors.WARM_CREAM,
+    borderRadius: 999,
+    marginTop: 15,
   },
   description: {
     textAlign: 'center',
     fontSize: 12,
-    backgroundColor: colors.WARM_CREAM,
     color: colors.BLACK,
     padding: 10,
-    borderRadius: 12,
-    marginTop: 8,
-    marginBottom: 15,
     lineHeight: 15,
   },
   senderNameWrap: {
@@ -443,7 +459,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 15,
     backgroundColor: colors.WHITE,
-    padding: 15,
+    padding: 10,
     borderRadius: 10,
     borderWidth: 0.25,
   },
@@ -473,7 +489,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   flagIcon: {
-    marginTop: 0,
+    marginTop: 7,
     backgroundColor: '#EE3E54',
     height: 25,
     width: 25,

@@ -65,12 +65,6 @@ const AppreciationDetailsScreen = () => {
     };
   });
 
-  const nextCardStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{translateX: translationX.value + SCREEN_WIDTH}],
-    };
-  });
-
   return (
     <View style={styles.container}>
       <PanGestureHandler onGestureEvent={gestureHandler}>

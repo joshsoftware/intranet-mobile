@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -45,6 +45,8 @@ const paginationData = {
 const HomeScreen = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const layout = useWindowDimensions();
+  const [refreshing, setRefreshing] = useState(false);
+
   const {data: profileDetails} = useGetProfileDetails();
 
   const {
@@ -52,6 +54,7 @@ const HomeScreen = () => {
     metadata: appreciationListMeta,
     isLoading: isLoadingAppreciations,
     isFetching: isFetchingAppreciations,
+    refetch: refetchAppreciations,
   } = useGetAppreciationList(paginationData);
 
   const {data: activeUsersList} = useGetActiveUsersList();
@@ -63,6 +66,13 @@ const HomeScreen = () => {
     {key: 'leaderboard', title: 'Leaderboard'},
     {key: 'dynamicEngagers', title: 'Dynamic Engagers'},
   ]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetchAppreciations().finally(() => {
+      setRefreshing(false);
+    });
+  }, [refetchAppreciations]);
 
   const FirstRoute = useCallback(
     () => (
@@ -172,9 +182,13 @@ const HomeScreen = () => {
           </Pressable>
         </View>
         <Pressable onPressIn={handleSearchPress} style={styles.searchWrapper}>
-          <Search placeholder="Search Co-Worker" editable={false} />
+          <Search
+            placeholder="Search Co-Worker"
+            editable={false}
+            onPress={handleSearchPress}
+          />
         </Pressable>
-        <View style={{height: layout.height * 0.23}}>
+        <View style={styles.tabViewWrapper}>
           <TabView
             navigationState={{index, routes}}
             renderScene={renderScene}
@@ -204,6 +218,8 @@ const HomeScreen = () => {
               keyExtractor={item => String(item.id)}
               numColumns={2}
               style={styles.flatListAppreciation}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
             />
           )}
         </View>
@@ -308,5 +324,6 @@ const styles = StyleSheet.create({
   flatListAppreciation: {
     backgroundColor: 'transparent',
   },
+  tabViewWrapper: {height: 190},
 });
 export default HomeScreen;

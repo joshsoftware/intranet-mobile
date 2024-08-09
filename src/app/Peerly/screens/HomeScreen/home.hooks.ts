@@ -60,7 +60,7 @@ export function useGetActiveUsersList() {
 }
 
 export function useGetAppreciationList(payload: GetAppreciationListRequest) {
-  const {data, isLoading, isFetching, isSuccess, isError} = useQuery({
+  const {data, isLoading, isFetching, isSuccess, isError, refetch} = useQuery({
     queryKey: [
       'appreciation_list',
       payload.page,
@@ -84,5 +84,6 @@ export function useGetAppreciationList(payload: GetAppreciationListRequest) {
     isFetching,
     isSuccess,
     isError,
+    refetch,
   };
 }

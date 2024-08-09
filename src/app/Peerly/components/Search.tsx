@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 import colors from '../constants/colors';
 import {SearchIcon} from '../constants/icons';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface SearchProps {
   onChange?: (value: string) => void;
@@ -9,6 +10,7 @@ interface SearchProps {
   placeholder: string;
   editable?: boolean;
   autoFocus?: boolean;
+  onPress?: () => void;
 }
 const Search: React.FC<SearchProps> = ({
   onChange,
@@ -16,19 +18,22 @@ const Search: React.FC<SearchProps> = ({
   placeholder,
   editable,
   autoFocus,
+  onPress,
 }) => {
   return (
-    <View style={styles.searchContainer}>
-      <SearchIcon name="ios-search" size={20} style={styles.icon} />
-      <TextInput
-        onChangeText={onChange}
-        style={styles.searchInput}
-        placeholder={placeholder}
-        value={value}
-        editable={editable}
-        autoFocus={autoFocus}
-      />
-    </View>
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.searchContainer}>
+        <SearchIcon name="ios-search" size={20} style={styles.icon} />
+        <TextInput
+          onChangeText={onChange}
+          style={styles.searchInput}
+          placeholder={placeholder}
+          value={value}
+          editable={editable}
+          autoFocus={autoFocus}
+        />
+      </View>
+    </TouchableOpacity>
   );
 };
 

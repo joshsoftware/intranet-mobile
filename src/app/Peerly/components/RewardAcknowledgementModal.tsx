@@ -21,12 +21,11 @@ const RewardAcknowledgementModal: React.FC<RewardAcknowledgementModalProps> = ({
     <Modal transparent={true} visible={visible} onRequestClose={resetModal}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.text}>
-            You have given <Text style={styles.highlight}>{rewardLabel}</Text>
-            reward.
-          </Text>
+          <Text style={styles.text}>You have given {rewardLabel} reward.</Text>
           <View style={styles.btnWrapper}>
-            <Button title="Reset" type="secondary" onPress={resetModal} />
+            <View style={styles.btnMargin}>
+              <Button title="Reset" type="secondary" onPress={resetModal} />
+            </View>
             <Button
               title="Confirm"
               type="primary"
@@ -69,9 +68,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#4CAF50',
   },
+  btnMargin: {
+    marginRight: 20,
+  },
   btnWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
   },
 });

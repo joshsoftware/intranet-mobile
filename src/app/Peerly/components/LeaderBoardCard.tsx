@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   nameContainer: {
-    marginTop: 5,
+    marginTop: 10,
   },
   profileImage: {
     width: 60,
@@ -114,17 +114,15 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 1,
     borderColor: 'white',
-    marginBottom: 5,
   },
   starContainer: {
     position: 'absolute',
-    bottom: 57,
+    bottom: 59,
     borderRadius: 12,
     paddingHorizontal: 5,
     paddingVertical: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    width: '95%',
   },
   starIcon: {
     width: 12,
