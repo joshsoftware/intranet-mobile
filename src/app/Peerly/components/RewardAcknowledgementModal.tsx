@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, StyleSheet, Text, View } from 'react-native';
+import {Modal, StyleSheet, Text, View} from 'react-native';
 import Button from './button/button';
 
 interface RewardAcknowledgementModalProps {
@@ -22,7 +22,8 @@ const RewardAcknowledgementModal: React.FC<RewardAcknowledgementModalProps> = ({
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.text}>
-            You have given <Text style={styles.highlight}>{rewardLabel}</Text> reward.
+            You have given <Text style={styles.highlight}>{rewardLabel}</Text>
+            reward.
           </Text>
           <View style={styles.btnWrapper}>
             <Button title="Reset" type="secondary" onPress={resetModal} />
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
   },
   text: {
     fontSize: 18,
