@@ -17,6 +17,7 @@ import ProfileDetailScreen from '../screens/ProfileDetailScreen';
 import SearchScreen from '../screens/SearchScreen';
 import {RootStackParamList} from './types';
 import Button from '../components/button/button';
+import { getNotificationToken } from '../services/firebase/messaging';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

@@ -14,7 +14,7 @@ export const axiosInstance: AxiosInstance = axios.create({
 
 export const apiCall = async <T, D>(config: AxiosRequestConfig<T>) => {
   let authToken: string | null;
-  if (config.url === PEERLY_LOGIN_ROUTE) {
+  if (config.url?.includes(PEERLY_LOGIN_ROUTE)) {
     authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
     config.headers = {
       'Intranet-Auth': authToken,
