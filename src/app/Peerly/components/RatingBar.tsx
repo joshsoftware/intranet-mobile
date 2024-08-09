@@ -58,23 +58,26 @@ const styles = StyleSheet.create({
   labelsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '85%',
+    width: '90%',
   },
   sliderGood: {
     fontSize: 14,
     color: 'black',
     marginLeft: 60,
+    fontWeight : 'bold'
   },
   sliderNice: {
     fontSize: 14,
     color: 'black',
     paddingLeft: 25,
+    fontWeight : 'bold'
   },
   sliderLove: {
     fontSize: 14,
     color: 'black',
     paddingLeft: 10,
     paddingRight: 10,
+    fontWeight : 'bold'
   },
 });
 
