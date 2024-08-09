@@ -10,7 +10,7 @@ import CustFocusIcon from '../assets/peerly/svg/custfocus.svg';
 import SuccessIcon from '../assets/peerly/svg/Vector.svg';
 import InfoIcon from '../assets/peerly/svg/info.svg';
 import StarIcon from '../assets/peerly/svg/star.svg';
-import RatingStarIcon from '../assets/peerly/svg/ratingStar.png';
+import GoldenStar from '../assets/peerly/svg/goldenStar.png';
 import WhiteStar from '../assets/peerly/svg/whiteStar.svg';
 import BlackStar from '../assets/peerly/svg/blackStar.svg';
 import FlagIcon from '../assets/peerly/svg/flagIcon.svg';
@@ -31,7 +31,7 @@ export {
   SuccessIcon,
   InfoIcon,
   StarIcon,
-  RatingStarIcon,
+  GoldenStar,
   WhiteStar,
   BlackStar,
   FlagIcon,

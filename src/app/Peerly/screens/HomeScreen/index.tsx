@@ -34,6 +34,7 @@ import Search from '../../components/Search';
 import InitialsAvatar from '../../components/InitialAvatar';
 import FloatingButton from '../../components/button/floatingButton';
 import SkeletonLoader from '../../components/skeleton/skeleton';
+import {formatNumber} from '../../utils';
 
 const paginationData = {
   page: 1,
@@ -67,20 +68,6 @@ const HomeScreen = () => {
     () => (
       <View style={styles.activeAndTopTenTab}>
         <FlatList
-          data={activeUsersList}
-          renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
-          keyExtractor={item => String(item.id)}
-          horizontal={true}
-        />
-      </View>
-    ),
-    [activeUsersList],
-  );
-
-  const SecondRoute = useCallback(
-    () => (
-      <View style={styles.activeAndTopTenTab}>
-        <FlatList
           data={topUsersList}
           renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
           keyExtractor={item => String(item.id)}
@@ -89,6 +76,20 @@ const HomeScreen = () => {
       </View>
     ),
     [topUsersList],
+  );
+
+  const SecondRoute = useCallback(
+    () => (
+      <View style={styles.activeAndTopTenTab}>
+        <FlatList
+          data={activeUsersList}
+          renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
+          keyExtractor={item => String(item.id)}
+          horizontal={true}
+        />
+      </View>
+    ),
+    [activeUsersList],
   );
 
   const renderScene = SceneMap({
@@ -140,87 +141,95 @@ const HomeScreen = () => {
   }`;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Peerly</Text>
-        <Pressable onPress={() => handleProfileIconClick()}>
-          {!profileDetails?.total_points &&
-          profileDetails?.profile_image_url === '' ? (
-            <InitialsAvatar name={userName} size={40} />
-          ) : (
-            <View style={[styles.userScoreBox, profileIconPadding]}>
-              {profileDetails?.total_points ? (
-                <>
-                  <StarIcon width={18} height={18} />
-                  <Text style={styles.scoreText}>
-                    {profileDetails.total_points}
-                  </Text>
-                </>
-              ) : null}
-              {profileDetails?.profile_image_url !== '' ? (
-                <Image
-                  source={{uri: profileDetails?.profile_image_url}}
-                  style={styles.userAvatar}
-                />
-              ) : (
-                <InitialsAvatar name={userName} size={40} />
-              )}
-            </View>
-          )}
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Peerly</Text>
+          <Pressable onPress={() => handleProfileIconClick()}>
+            {!profileDetails?.total_points &&
+            profileDetails?.profile_image_url === '' ? (
+              <InitialsAvatar name={userName} size={40} />
+            ) : (
+              <View style={[styles.userScoreBox, profileIconPadding]}>
+                {profileDetails?.total_points ? (
+                  <>
+                    <StarIcon width={18} height={18} />
+                    <Text style={styles.scoreText}>
+                      {formatNumber(profileDetails.total_points)}
+                    </Text>
+                  </>
+                ) : null}
+                {profileDetails?.profile_image_url !== '' ? (
+                  <Image
+                    source={{uri: profileDetails?.profile_image_url}}
+                    style={styles.userAvatar}
+                  />
+                ) : (
+                  <InitialsAvatar name={userName} size={40} />
+                )}
+              </View>
+            )}
+          </Pressable>
+        </View>
+        <Pressable onPressIn={handleSearchPress} style={styles.searchWrapper}>
+          <Search placeholder="Search Co-Worker" editable={false} />
         </Pressable>
-      </View>
-      <Pressable onPressIn={handleSearchPress}>
-        <Search placeholder="Search Co-Worker" editable={false} />
-      </Pressable>
-      <View style={{height: layout.height * 0.23}}>
-        <TabView
-          navigationState={{index, routes}}
-          renderScene={renderScene}
-          renderTabBar={renderTabBar}
-          onIndexChange={setIndex}
-          initialLayout={{width: layout.width}}
+        <View style={{height: layout.height * 0.23}}>
+          <TabView
+            navigationState={{index, routes}}
+            renderScene={renderScene}
+            renderTabBar={renderTabBar}
+            onIndexChange={setIndex}
+            initialLayout={{width: layout.width}}
+          />
+        </View>
+        <View style={styles.appreciationListWrapper}>
+          <Text style={styles.totalAppreciationCountWrapper}>
+            Total:{' '}
+            <Text style={styles.totalAppreciationCount}>
+              {appreciationListMeta?.total_records} Appreciations
+            </Text>
+          </Text>
+          {isLoadingAppreciations || isFetchingAppreciations ? (
+            <SkeletonLoader />
+          ) : (
+            <FlatList
+              data={appreciationList || []}
+              renderItem={({item}) => (
+                <AppreciationCard
+                  appreciationDetails={item}
+                  onPress={handleAppreciationCardClick}
+                />
+              )}
+              keyExtractor={item => String(item.id)}
+              numColumns={2}
+              style={styles.flatListAppreciation}
+            />
+          )}
+        </View>
+        <FloatingButton
+          title="Give Appreciation"
+          onPress={() => navigation.navigate(GIVE_APPRECIATION_SCREEN)}
         />
       </View>
-
-      <View style={styles.appreciationListWrapper}>
-        <Text style={styles.totalAppreciationCount}>
-          Total: {appreciationListMeta?.total_records} Appreciations
-        </Text>
-        {isLoadingAppreciations || isFetchingAppreciations ? (
-          <SkeletonLoader />
-        ) : (
-          <FlatList
-            data={appreciationList || []}
-            renderItem={({item}) => (
-              <AppreciationCard
-                appreciationDetails={item}
-                onPress={handleAppreciationCardClick}
-              />
-            )}
-            keyExtractor={item => String(item.id)}
-            numColumns={2}
-            style={styles.flatListAppreciation}
-          />
-        )}
-      </View>
-      <FloatingButton
-        title="Give Appreciation"
-        onPress={() => navigation.navigate(GIVE_APPRECIATION_SCREEN)}
-      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: colors.WHITE,
+  },
+  container: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    paddingHorizontal: 15,
+    marginTop: 15,
   },
   title: {
     fontSize: 18,
@@ -243,10 +252,14 @@ const styles = StyleSheet.create({
     color: colors.WHITE,
   },
   userAvatar: {
-    width: 35,
-    height: 35,
-    borderRadius: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     paddingBottom: 18,
+  },
+  searchWrapper: {
+    paddingHorizontal: 15,
+    marginVertical: 15,
   },
   activeAndTopTenTab: {
     flex: 1,
@@ -282,13 +295,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flex: 1,
     backgroundColor: colors.WHITE,
+    paddingHorizontal: 10,
   },
-  totalAppreciationCount: {
+  totalAppreciationCountWrapper: {
     paddingLeft: 10,
     paddingBottom: 10,
   },
+  totalAppreciationCount: {
+    color: colors.BLACK,
+    fontWeight: 'bold',
+  },
   flatListAppreciation: {
-    marginBottom: 50,
+    backgroundColor: 'transparent',
   },
 });
 export default HomeScreen;

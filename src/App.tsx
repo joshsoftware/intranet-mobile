@@ -15,6 +15,8 @@ import colors from './app/constant/colors';
 import VersionContext from './app/context/version.context';
 import {CheckVersionResponse} from 'react-native-check-version';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -100,7 +102,7 @@ const App = () => {
   }
  
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <VersionContext.Provider value={versionContextValue}>
         <UserContext.Provider value={userContextValue}>
           <Interceptor>
@@ -115,7 +117,7 @@ const App = () => {
         </UserContext.Provider>
       </VersionContext.Provider>
       <Toast />
-    </>
+    </GestureHandlerRootView>
   );
 };
 

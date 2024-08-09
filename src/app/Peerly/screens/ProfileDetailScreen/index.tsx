@@ -83,9 +83,9 @@ const ProfileDetailScreen = () => {
 
   if (isLoadingProfileDetail || isFetchingProfileDetail) {
     return (
-      <View>
+      <SafeAreaView style={styles.pageLoader}>
         <ActivityIndicator size="large" />
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -130,82 +130,91 @@ const ProfileDetailScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <View style={styles.profileDetailsBox}>
-          <View style={styles.profileDetails}>
-            {profile_image_url !== '' ? (
-              <Image
-                style={styles.profileImage}
-                source={{uri: profile_image_url}}
-              />
-            ) : (
-              <InitialAvatar name={userName} size={60} />
-            )}
-            <View style={styles.userNameWrapper}>
-              <Text style={[styles.name, styles.bold]}>{userName}</Text>
-              <Text>{designation}</Text>
-              {member}
-            </View>
-          </View>
-          <View style={[styles.totalPoints, rewardPointMargin]}>
-            <Text style={[styles.name, styles.bold]}>{total_points}</Text>
-            <Text style={[styles.name, styles.bold]}>Reward Points</Text>
-          </View>
-        </View>
-        {badgeType && (
-          <View style={styles.badgeWrapper}>{badgeData[badgeType]?.icon}</View>
-        )}
-      </View>
-      <View style={styles.rewardDetailsBox}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
         <View>
-          <Text style={[styles.name, styles.bold]}>
-            Reward Balance{' '}
-            <TouchableOpacity onPress={openModal}>
-              <InfoIcon width={16} height={16} />
-            </TouchableOpacity>
-          </Text>
-          <Text>Refill on {dateFormat(refil_date, 'MMMM YYYY')}</Text>
-        </View>
-        <View style={styles.progressBar}>
-          <CircularProgressBase
-            clockwise={false}
-            value={reward_quota_balance}
-            radius={30}
-            maxValue={total_reward_quota}
-            activeStrokeColor={'#F3A552'}
-            inActiveStrokeColor={'#F5F8FF'}>
-            <View>
-              <StarIcon width={25} height={25} />
+          <View style={styles.profileDetailsBox}>
+            <View style={styles.profileDetails}>
+              {profile_image_url !== '' ? (
+                <Image
+                  style={styles.profileImage}
+                  source={{uri: profile_image_url}}
+                />
+              ) : (
+                <InitialAvatar name={userName} size={60} />
+              )}
+              <View style={styles.userNameWrapper}>
+                <Text style={[styles.name, styles.bold]}>{userName}</Text>
+                <Text>{designation}</Text>
+                {member}
+              </View>
             </View>
-          </CircularProgressBase>
+            <View style={[styles.totalPoints, rewardPointMargin]}>
+              <Text style={[styles.name, styles.bold]}>{total_points}</Text>
+              <Text style={[styles.name, styles.bold]}>Reward Points</Text>
+            </View>
+          </View>
+          {badgeType && (
+            <View style={styles.badgeWrapper}>
+              {badgeData[badgeType]?.icon}
+            </View>
+          )}
         </View>
-      </View>
-
-      <View style={styles.appreciationList}>
-        <GivenAndReceivedAppriciation
-          appreciationList={appreciationList}
-          receivedList={receivedAppriciationList}
-          expressedList={expressedAppriciationList}
-          isLoading={isLoadingAppreciations || isFetchingAppreciations}
+        <View style={styles.rewardDetailsBox}>
+          <View>
+            <Text style={[styles.name, styles.bold]}>
+              Reward Balance{' '}
+              <TouchableOpacity onPress={openModal}>
+                <InfoIcon width={16} height={16} />
+              </TouchableOpacity>
+            </Text>
+            <Text>Refill on {dateFormat(refil_date, 'MMMM YYYY')}</Text>
+          </View>
+          <View style={styles.progressBar}>
+            <CircularProgressBase
+              clockwise={false}
+              value={reward_quota_balance}
+              radius={30}
+              maxValue={total_reward_quota}
+              activeStrokeColor={colors.GOLD}
+              inActiveStrokeColor={colors.WHITE}>
+              <View>
+                <StarIcon width={25} height={25} />
+              </View>
+            </CircularProgressBase>
+          </View>
+        </View>
+        <View style={styles.appreciationList}>
+          <GivenAndReceivedAppriciation
+            appreciationList={appreciationList}
+            receivedList={receivedAppriciationList}
+            expressedList={expressedAppriciationList}
+            isLoading={isLoadingAppreciations || isFetchingAppreciations}
+          />
+        </View>
+        <RewardInfoModal
+          visible={isModalVisible}
+          closeModal={() => setModalVisible(false)}
         />
       </View>
-      <RewardInfoModal
-        visible={isModalVisible}
-        closeModal={() => setModalVisible(false)}
-      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.WHITE,
+  },
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    padding: 20,
+    padding: 15,
+  },
+  pageLoader: {
+    flex: 1,
+    justifyContent: 'center',
   },
   profileDetailsBox: {
-    marginTop: 10,
     flexDirection: 'row',
     backgroundColor: colors.LIGHT_PASTEL_BLUE,
     padding: 15,
@@ -250,7 +259,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     backgroundColor: 'white',
-    marginTop: 30,
+    marginTop: 20,
     borderRadius: 10,
     alignItems: 'center',
   },
@@ -264,7 +273,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   appreciationList: {
-    marginTop: 15,
+    marginTop: 10,
     flex: 1,
     width: '100%',
     height: '100%',

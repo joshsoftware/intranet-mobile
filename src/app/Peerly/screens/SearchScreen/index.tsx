@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {useGetSearchAppreciationList} from './search.hooks';
 import {useDebounce} from '../../utils';
 import GivenAndReceivedAppriciation from '../../components/GivenAndReceivedAppreciation';
@@ -53,35 +53,40 @@ const SearchScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Search
-          autoFocus={true}
-          onChange={handleSearch}
-          value={searchName}
-          placeholder={'Search Co-Worker'}
-        />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View>
+          <Search
+            autoFocus={true}
+            onChange={handleSearch}
+            value={searchName}
+            placeholder={'Search Co-Worker'}
+          />
+        </View>
+        <View style={styles.appreciationWrapper}>
+          <GivenAndReceivedAppriciation
+            appreciationList={appreciationList}
+            receivedList={receivedAppriciationList}
+            expressedList={expressedAppriciationList}
+            isLoading={isLoading || isFetching}
+          />
+        </View>
       </View>
-      <View style={styles.appreciationWrapper}>
-        <GivenAndReceivedAppriciation
-          appreciationList={appreciationList}
-          receivedList={receivedAppriciationList}
-          expressedList={expressedAppriciationList}
-          isLoading={isLoading || isFetching}
-        />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    paddingHorizontal: 10,
     backgroundColor: colors.WHITE,
   },
+  container: {
+    flex: 1,
+    padding: 15,
+  },
   appreciationWrapper: {
-    paddingHorizontal: 10,
+    marginTop: 10,
     marginBottom: 50,
   },
 });

@@ -8,5 +8,5 @@ export const GET_ACTIVE_USERS_ROUTE = '/users/active';
 export const GET_TOP_USERS_ROUTE = '/users/top10';
 export const POST_OBJECTION_ROUTE = '/report_appreciation';
 export const POST_REWARD_ROUTE = '/reward';
-export const GET_COWORKER_LIST = '/users/all';
+export const GET_COWORKER_LIST = '/users';
 export const GET_CORE_VALUES = '/core_values';

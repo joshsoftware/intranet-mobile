@@ -78,20 +78,20 @@ const LeaderBoardCard: React.FC<LeaderBoardCardProps> = ({userDetail}) => {
           }
         />
       )}
-      {BadgeIcon !== '' && (
+      {BadgeIcon !== '' ? (
         <View style={[styles.badgeIconWrapper]}>
           <BadgeIcon width={21} height={21} />
         </View>
-      )}
-      {userDetail?.appreciation_points > 0 && (
+      ) : null}
+      {userDetail?.appreciation_points > 0 ? (
         <View style={[styles.starContainer, avatarStyle.backgroundColor]}>
-          <WhiteStar color={colors.SECONDARY} />
+          <WhiteStar color={colors.SECONDARY} width={11} height={11} />
           <Text style={styles.leadText}>
             {formatNumber(userDetail.appreciation_points)}
           </Text>
         </View>
-      )}
-      <View style={styles.nameContainer}>
+      ) : null}
+      <View style={[styles.nameContainer]}>
         <Text style={styles.useName}>{userName}</Text>
       </View>
     </View>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: 'white',
     marginBottom: 5,
   },
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     bottom: 57,
     borderRadius: 12,
     paddingHorizontal: 5,
+    paddingVertical: 1,
     flexDirection: 'row',
     alignItems: 'center',
     width: '95%',
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
     color: colors.CHARCOAL,
   },
   leadText: {
-    fontSize: 14,
+    fontSize: 11,
     marginTop: 1,
     marginLeft: 2,
     color: colors.WHITE,
