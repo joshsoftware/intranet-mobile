@@ -1,5 +1,11 @@
 import React from 'react';
-import {Modal, StyleSheet, Text, View} from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import Button from './button/button';
 
 interface RewardInfoModalProps {
@@ -12,16 +18,23 @@ const RewardInfoModal: React.FC<RewardInfoModalProps> = ({
 }) => {
   return (
     <Modal transparent={true} visible={visible} onRequestClose={closeModal}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-            posuere faucibus est non blandit. Maecenas in dolor vulputate ante
-            commodo ultricies.
-          </Text>
-          <Button title="Close" type="secondary" onPress={closeModal} />
+      <TouchableWithoutFeedback onPress={closeModal}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback>
+            <View style={styles.modalContent}>
+              <Text style={styles.text}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                posuere faucibus est non blandit. Maecenas in dolor vulputate
+                ante commodo ultricies. Lorem ipsum dolor sit amet, consectetur
+                adipiscing elit. Mauris posuere faucibus est non blandit.
+                Maecenas in dolor vulputate ante commodo ultricies.
+              </Text>
+
+              <Button title="Close" type="tertiary" onPress={closeModal} />
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -36,12 +49,13 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
+    paddingBottom: 0,
     borderRadius: 10,
     width: '80%',
     alignItems: 'center',
   },
   text: {
-    marginBottom: 15,
+    fontSize: 14,
   },
 });
 
