@@ -14,6 +14,7 @@ import {useIsKeyboardShown} from '../hooks/useIsKeyboardShown';
 import {Home, Calendar, Clock, Menu as MenuIcon} from '../constant/icons';
 import {MainTabParamList} from '../navigation/types';
 import colors from '../constant/colors';
+import {PeerlyIcon} from '../Peerly/constants/icons';
 
 // Defining specific types because
 // ButtonTabBarProps is not generic in the library
@@ -27,7 +28,7 @@ const screenIcons: Record<keyof MainTabParamList, React.FC<SvgProps>> = {
   Home: Home,
   Leave: Calendar,
   Timesheet: Clock,
-  Peerly: Calendar,
+  Peerly: PeerlyIcon,
 };
 
 const TabBar = (props: BottomTabBarProps) => {
