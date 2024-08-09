@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
-    paddingBottom: 0,
+    paddingBottom: 5,
     borderRadius: 10,
     width: '80%',
     alignItems: 'center',

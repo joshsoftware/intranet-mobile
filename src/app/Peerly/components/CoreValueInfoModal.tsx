@@ -66,34 +66,32 @@ const CoreValueInfoModal: React.FC<CoreValueInfoModalProp> = ({
       onRequestClose={onClose}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback>
-            <View style={styles.modalContainer}>
-              <ScrollView contentContainerStyle={styles.scrollView}>
-                {coreValuesDetails.map((item, key) => {
-                  const IconComponent = coreValuesMeta[key].icon;
-                  return (
-                    <View
-                      key={item.id}
-                      style={[
-                        styles.card,
-                        {backgroundColor: coreValuesMeta[key].backgroundColor},
-                      ]}>
-                      <View style={styles.iconWrapper}>
-                        <IconComponent />
-                      </View>
-
-                      <View style={styles.cardContent}>
-                        <Text style={styles.cardTitle}>{item.name}</Text>
-                        <Text style={styles.cardDescription}>
-                          {item.description}
-                        </Text>
-                      </View>
+          <View style={styles.modalContainer}>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+              {coreValuesDetails.map((item, key) => {
+                const IconComponent = coreValuesMeta[key].icon;
+                return (
+                  <View
+                    key={item.id}
+                    style={[
+                      styles.card,
+                      {backgroundColor: coreValuesMeta[key].backgroundColor},
+                    ]}>
+                    <View style={styles.iconWrapper}>
+                      <IconComponent />
                     </View>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          </TouchableWithoutFeedback>
+
+                    <View style={styles.cardContent}>
+                      <Text style={styles.cardTitle}>{item.name}</Text>
+                      <Text style={styles.cardDescription}>
+                        {item.description}
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
