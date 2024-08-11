@@ -15,6 +15,7 @@ const SearchScreen = () => {
     data: appreciationList,
     isLoading,
     isFetching,
+    isError,
   } = useGetSearchAppreciationList({
     name: debounceValue,
   });
@@ -33,6 +34,14 @@ const SearchScreen = () => {
     }
     return '';
   }, [debounceValue]);
+
+  const isDisableTabBtn = useMemo(() => {
+    if (!appreciationList?.length || isError || isLoading) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [appreciationList?.length, isError, isLoading]);
 
   const receivedAppriciationList = appreciationList.filter(
     (item: AppreciationDetails) => {
@@ -69,6 +78,7 @@ const SearchScreen = () => {
             receivedList={receivedAppriciationList}
             expressedList={expressedAppriciationList}
             isLoading={isLoading || isFetching}
+            disableBtn={isDisableTabBtn}
           />
         </View>
       </View>

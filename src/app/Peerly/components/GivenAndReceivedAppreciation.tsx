@@ -29,6 +29,7 @@ type GivenAndReceivedAppriciationProps = {
   expressedList: AppreciationDetails[];
   self?: boolean;
   isLoading?: boolean;
+  disableBtn: boolean;
 };
 
 interface tabBarRoute extends Route {
@@ -44,6 +45,7 @@ const GivenAndReceivedAppriciation = ({
   receivedList,
   expressedList,
   isLoading,
+  disableBtn,
 }: GivenAndReceivedAppriciationProps) => {
   const navigation = useNavigation<AppreciationDetailScreenNavigationProp>();
   const layout = useWindowDimensions();
@@ -139,7 +141,9 @@ const GivenAndReceivedAppriciation = ({
               styles.tab,
               isFocused ? styles.activeTab : styles.inactiveTab,
               i === 0 ? styles.leftTab : styles.rightTab,
-            ]}>
+              disableBtn && styles.btnOpacity,
+            ]}
+            disabled={disableBtn}>
             <Text
               style={[
                 styles.tabText,
@@ -212,6 +216,9 @@ const styles = StyleSheet.create({
   },
   flatListWrapper: {
     backgroundColor: colors.WHITE,
+  },
+  btnOpacity: {
+    opacity: 0.5,
   },
 });
 

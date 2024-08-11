@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -79,7 +79,20 @@ const ProfileDetailScreen = () => {
     data: appreciationList,
     isLoading: isLoadingAppreciations,
     isFetching: isFetchingAppreciations,
+    isError: isErrorAppreciations,
   } = useGetAppreciationList(paginationData);
+
+  const isDisableTabBtn = useMemo(() => {
+    if (
+      !appreciationList?.length ||
+      isErrorAppreciations ||
+      isLoadingAppreciations
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [appreciationList?.length, isErrorAppreciations, isLoadingAppreciations]);
 
   if (isLoadingProfileDetail || isFetchingProfileDetail) {
     return (
@@ -190,6 +203,7 @@ const ProfileDetailScreen = () => {
             receivedList={receivedAppriciationList}
             expressedList={expressedAppriciationList}
             isLoading={isLoadingAppreciations || isFetchingAppreciations}
+            disableBtn={isDisableTabBtn}
           />
         </View>
         <RewardInfoModal
