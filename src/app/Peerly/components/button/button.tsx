@@ -38,7 +38,7 @@ const Button: React.FC<ButtonProps> = ({
       textStyle.push(styles.secondaryText);
       break;
     case 'tertiary':
-      style.push([styles.tertiary]);
+      textStyle.push(styles.tertiaryText);
       break;
     default:
       style.push([styles.primary]);
@@ -90,8 +90,9 @@ const styles = StyleSheet.create({
   secondaryText: {
     color: colors.PRIMARY,
   },
-  tertiary: {
-    backgroundColor: colors.TERTIARY,
+  tertiaryText: {
+    fontWeight: 'bold',
+    color: colors.PRIMARY,
   },
 });
 export default memo(Button);
