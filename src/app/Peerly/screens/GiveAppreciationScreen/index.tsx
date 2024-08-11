@@ -5,6 +5,7 @@ import {
   TextInput,
   SafeAreaView,
   Pressable,
+  Text,
 } from 'react-native';
 import {
   useGetCoworkerList,
@@ -26,6 +27,7 @@ import {GiveAppreciationScreenNavigationProp} from '../../navigation/types';
 import Button from '../../components/button/button';
 import Typography from '../../components/typography';
 import colors from '../../constants/colors';
+import messages from '../../constants/message';
 
 const paginationData = {
   page: 1,
@@ -33,9 +35,9 @@ const paginationData = {
 };
 
 const schema = yup.object().shape({
-  receiver: yup.string().required('Co-worker name is required'),
-  core_value_id: yup.string().required('Core Value is required'),
-  description: yup.string().required('Description is required'),
+  receiver: yup.string().required(messages.SELECT_COWORKER_NAME),
+  core_value_id: yup.string().required(messages.SELECT_CORE_VALUE),
+  description: yup.string().required(messages.ENTER_DESCIPTION),
 });
 
 const AppreciationScreen = () => {
@@ -69,9 +71,9 @@ const AppreciationScreen = () => {
     reset: resetForm,
   } = useForm({
     defaultValues: {
-      receiver: undefined,
-      core_value_id: undefined,
-      description: undefined,
+      receiver: '',
+      core_value_id: '',
+      description: '',
     },
     resolver: yupResolver(schema),
   });
@@ -96,7 +98,7 @@ const AppreciationScreen = () => {
         <ScrollView>
           <View style={styles.fieldWrapper}>
             <Typography type="header" style={styles.labelText}>
-              Co-worker Name
+              Co-worker Name <Typography style={styles.asterisk}>*</Typography>
             </Typography>
             <Controller
               control={control}
@@ -115,12 +117,16 @@ const AppreciationScreen = () => {
             />
           </View>
           <View style={styles.fieldWrapper}>
-            <Typography type="header" style={styles.labelText}>
-              Core Value{' '}
-              <Pressable onPress={() => setCoreValueModalVisible(true)}>
+            <View style={styles.coreValueLabelWrapper}>
+              <Typography type="header" style={styles.labelText}>
+                Core Value <Text style={styles.asterisk}>*</Text>{' '}
+              </Typography>
+              <Pressable
+                style={styles.infoIconWrapper}
+                onPress={() => setCoreValueModalVisible(true)}>
                 <InfoIcon width={16} height={16} />
               </Pressable>
-            </Typography>
+            </View>
             <Controller
               control={control}
               render={({field: {onChange, value}}) => (
@@ -138,14 +144,13 @@ const AppreciationScreen = () => {
           </View>
           <View style={styles.fieldWrapper}>
             <Typography type="header" style={styles.labelText}>
-              Description
+              Description <Typography style={styles.asterisk}>*</Typography>
             </Typography>
             <Controller
               control={control}
-              render={({field: {onChange, onBlur, value}}) => (
+              render={({field: {onChange, value}}) => (
                 <TextInput
                   style={styles.description}
-                  onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                   multiline
@@ -213,6 +218,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.BLACK,
     marginBottom: 10,
+  },
+  asterisk: {
+    color: colors.ERROR_RED,
+  },
+  coreValueLabelWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  infoIconWrapper: {
+    paddingHorizontal: 5,
   },
   description: {
     textAlignVertical: 'top',
