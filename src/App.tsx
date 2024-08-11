@@ -33,9 +33,7 @@ const App = () => {
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
  
- 
       if (enabled) {
-        console.log('Authorization status:', authStatus);
         getToken();
       }
     }
@@ -44,36 +42,21 @@ const App = () => {
         let fcmToken = await messaging().getToken();
         if (fcmToken) {
           setToken(fcmToken);
-          console.log('Your Firebase Token is:', fcmToken);
-        } else {
-          console.log('Failed to get token');
-        }
+        } 
       } catch (error) {
         console.error('Error getting token:', error);
       }
     };
- 
- 
     requestUserPermission();
- 
- 
+
     // Handle foreground messages
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
       onDisplayNotification(remoteMessage)
     });
  
- 
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log('Notification caused app to open from background state:', remoteMessage);
-    });
- 
- 
-    messaging().getInitialNotification().then(remoteMessage => {
-      if (remoteMessage) {
-        console.log('Notification caused app to open from quit state:', remoteMessage);
-      }
-    });
+    messaging().onNotificationOpenedApp(() => {});
+
+    messaging().getInitialNotification();
  
  
     return unsubscribe;

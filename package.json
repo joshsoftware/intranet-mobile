@@ -25,7 +25,7 @@
     "@react-native-community/slider": "^4.5.2",
     "@react-native-firebase/app": "^18.3.0",
     "@react-native-firebase/crashlytics": "^18.3.0",
-    "@react-native-firebase/messaging": "^18.9.0",
+    "@react-native-firebase/messaging": "^18.3.0",
     "@react-native-google-signin/google-signin": "^10.0.1",
     "@react-native-picker/picker": "^2.4.10",
     "@react-navigation/bottom-tabs": "^6.5.8",
