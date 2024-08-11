@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.WHITE,
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '500',
     fontFamily: fonts.POPPINS,
   },
