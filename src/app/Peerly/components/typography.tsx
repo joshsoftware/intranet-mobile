@@ -38,8 +38,7 @@ const Typography = ({
     numberOfLines={numberOfLines}
     ellipsizeMode={ellipsizeMode}
     onPress={onPress}
-    {...rest}
-  >
+    {...rest}>
     {children}
   </Text>
 );

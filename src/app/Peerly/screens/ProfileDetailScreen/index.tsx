@@ -158,8 +158,15 @@ const ProfileDetailScreen = () => {
                 <InitialAvatar name={userName} size={60} />
               )}
               <View style={styles.userNameWrapper}>
-                <Text style={[styles.name, styles.bold]}>{userName}</Text>
-                <Text>{designation}</Text>
+                <Text
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={[styles.name, styles.bold]}>
+                  {userName}
+                </Text>
+                <Text ellipsizeMode="tail" numberOfLines={1}>
+                  {designation ? designation : null}
+                </Text>
                 {member}
               </View>
             </View>
@@ -178,7 +185,9 @@ const ProfileDetailScreen = () => {
           <View>
             <Text style={[styles.name, styles.bold]}>
               Reward Balance{' '}
-              <TouchableOpacity onPress={openModal}>
+              <TouchableOpacity
+                onPress={openModal}
+                style={styles.infoIconWrapper}>
                 <InfoIcon width={16} height={16} />
               </TouchableOpacity>
             </Text>
@@ -263,16 +272,17 @@ const styles = StyleSheet.create({
   },
   userNameWrapper: {
     marginLeft: 15,
+    maxWidth: 160,
   },
   badgeWrapper: {
     position: 'absolute',
     top: -20,
-    right: 15,
+    right: 18,
   },
   totalPoints: {
     marginLeft: 0,
     alignItems: 'center',
-    maxWidth: 55,
+    width: 70,
   },
   rewardDetailsBox: {
     flexDirection: 'row',
@@ -296,6 +306,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+  },
+  infoIconWrapper: {
+    paddingHorizontal: 5,
   },
 });
 export default ProfileDetailScreen;
