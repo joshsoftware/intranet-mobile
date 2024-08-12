@@ -28,6 +28,7 @@ import {ProfileScreenRouteProp} from '../../navigation/types';
 import InitialAvatar from '../../components/InitialAvatar';
 import colors from '../../constants/colors';
 import message from '../../constants/message';
+import ImageWithFallback from '../../components/imageWithFallback/ImageWithFallback';
 
 const paginationData = {
   page: 1,
@@ -150,9 +151,10 @@ const ProfileDetailScreen = () => {
           <View style={styles.profileDetailsBox}>
             <View style={styles.profileDetails}>
               {profile_image_url !== '' ? (
-                <Image
-                  style={styles.profileImage}
-                  source={{uri: profile_image_url}}
+                <ImageWithFallback
+                  imageUrl={profile_image_url}
+                  initials={<InitialAvatar name={userName} size={60} />}
+                  imageStyle={styles.profileImage}
                 />
               ) : (
                 <InitialAvatar name={userName} size={60} />

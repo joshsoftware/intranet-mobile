@@ -7,6 +7,7 @@ import {formatNumber, timeFromNow} from '../utils';
 import {BlackStar} from '../constants/icons';
 import InitialAvatar from './InitialAvatar';
 import Typography from './typography';
+import ImageWithFallback from './imageWithFallback/ImageWithFallback';
 
 type Props = {
   onPress?: (id: number) => void;
@@ -30,9 +31,14 @@ const AppreciationCard = ({onPress, appreciationDetails}: Props) => {
         <View style={styles.header}>
           <View style={styles.avatarContainer}>
             {appreciationDetails.receiver_image_url !== '' ? (
-              <Image
-                source={{uri: appreciationDetails.receiver_image_url}}
-                style={styles.avatar}
+              <ImageWithFallback
+                imageUrl={appreciationDetails.receiver_image_url}
+                initials={
+                  <View style={styles.initialAvatarBig}>
+                    <InitialAvatar name={receiverName} size={60} />
+                  </View>
+                }
+                imageStyle={styles.avatar}
               />
             ) : (
               <View style={styles.initialAvatarBig}>
@@ -40,9 +46,14 @@ const AppreciationCard = ({onPress, appreciationDetails}: Props) => {
               </View>
             )}
             {appreciationDetails?.sender_image_url !== '' ? (
-              <Image
-                source={{uri: appreciationDetails.sender_image_url}}
-                style={[styles.smallAvatar]}
+              <ImageWithFallback
+                imageUrl={appreciationDetails.sender_image_url}
+                initials={
+                  <View style={styles.initialAvatarSmall}>
+                    <InitialAvatar name={senderName} size={47} />
+                  </View>
+                }
+                imageStyle={styles.smallAvatar}
               />
             ) : (
               <View style={styles.initialAvatarSmall}>
@@ -68,8 +79,7 @@ const AppreciationCard = ({onPress, appreciationDetails}: Props) => {
               style={styles.receiverName}
               numberOfLines={1}
               ellipsizeMode="tail"
-              onPress={() => setShowReceiverTooltip(true)}
-            >
+              onPress={() => setShowReceiverTooltip(true)}>
               {receiverName}
             </Typography>
           </Tooltip>

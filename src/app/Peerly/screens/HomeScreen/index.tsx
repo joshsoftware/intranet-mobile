@@ -45,6 +45,7 @@ import {formatNumber} from '../../utils';
 import FallbackUI from '../../components/fallbackUI/NoDataScreen';
 import message from '../../constants/message';
 import {SvgProps} from 'react-native-svg';
+import ImageWithFallback from '../../components/imageWithFallback/ImageWithFallback';
 
 const paginationData = {
   page: 1,
@@ -206,9 +207,14 @@ const HomeScreen = () => {
                 ) : null}
                 {profileDetails?.profile_image_url !== '' ? (
                   <View style={styles.profileIconWrapper}>
-                    <Image
-                      source={{uri: profileDetails?.profile_image_url}}
-                      style={styles.userAvatar}
+                    <ImageWithFallback
+                      imageUrl={profileDetails?.profile_image_url || ''}
+                      initials={
+                        <View style={styles.profileIconWrapper}>
+                          <InitialsAvatar name={userName} size={37} />
+                        </View>
+                      }
+                      imageStyle={styles.userAvatar}
                     />
                   </View>
                 ) : (

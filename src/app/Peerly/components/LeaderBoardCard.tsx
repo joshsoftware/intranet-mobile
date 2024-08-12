@@ -11,6 +11,7 @@ import {
 import {formatNumber} from '../utils';
 import InitialsAvatar from './InitialAvatar';
 import colors from '../constants/colors';
+import ImageWithFallback from './imageWithFallback/ImageWithFallback';
 
 const userBadgeProperty = {
   platinum: {
@@ -63,19 +64,22 @@ const LeaderBoardCard: React.FC<LeaderBoardCardProps> = ({userDetail}) => {
   return (
     <View style={styles.container}>
       {userDetail?.profile_image_url ? (
-        <Image
-          source={{uri: userDetail.profile_image_url}}
-          style={[styles.profileImage, avatarStyle.border]}
+        <ImageWithFallback
+          imageUrl={userDetail.profile_image_url}
+          initials={
+            <InitialsAvatar
+              name={userName}
+              size={60}
+              borderColor={avatarStyle.border.borderColor}
+            />
+          }
+          imageStyle={[styles.profileImage, avatarStyle.border]}
         />
       ) : (
         <InitialsAvatar
           name={userName}
           size={60}
-          borderColor={
-            userDetail?.appreciation_points > 0
-              ? avatarStyle.border.borderColor
-              : ''
-          }
+          borderColor={avatarStyle.border.borderColor}
         />
       )}
       {BadgeIcon !== '' ? (
