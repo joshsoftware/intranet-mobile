@@ -8,13 +8,15 @@ import {
 } from 'react-native';
 import Button from './button/button';
 
-interface RewardInfoModalProps {
+interface InfoModalProps {
   visible: boolean;
   closeModal: () => void;
+  message: string;
 }
-const RewardInfoModal: React.FC<RewardInfoModalProps> = ({
+const InfoModal: React.FC<InfoModalProps> = ({
   visible,
   closeModal,
+  message,
 }) => {
   return (
     <Modal transparent={true} visible={visible} onRequestClose={closeModal}>
@@ -22,14 +24,7 @@ const RewardInfoModal: React.FC<RewardInfoModalProps> = ({
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
-              <Text style={styles.text}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                posuere faucibus est non blandit. Maecenas in dolor vulputate
-                ante commodo ultricies. Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit. Mauris posuere faucibus est non blandit.
-                Maecenas in dolor vulputate ante commodo ultricies.
-              </Text>
-
+              <Text style={styles.text}>{message}</Text>
               <Button title="Close" type="tertiary" onPress={closeModal} />
             </View>
           </TouchableWithoutFeedback>
@@ -59,4 +54,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RewardInfoModal;
+export default InfoModal;

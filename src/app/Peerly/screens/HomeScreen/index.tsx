@@ -238,9 +238,7 @@ const HomeScreen = () => {
                     style={styles.flatListAppreciation}
                     refreshing={refreshing}
                     onRefresh={onRefresh}
-                    contentContainerStyle={{
-                      paddingBottom: 50
-                    }}
+                    contentContainerStyle={styles.flatListContainerStyle}
                   />
                 )}
               </View>
@@ -353,6 +351,11 @@ const styles = StyleSheet.create({
   flatListAppreciation: {
     backgroundColor: 'transparent',
   },
-  tabViewWrapper: {height: 190},
+  tabViewWrapper: {
+    height: 190,
+  },
+  flatListContainerStyle: {
+    paddingBottom: 50,
+  },
 });
 export default HomeScreen;

@@ -21,10 +21,11 @@ import {
 } from '../../constants/icons';
 import InitialAvatar from '../../components/InitialAvatar';
 import Typography from '../../components/typography';
-import RewardInfoModal from '../../components/RewardInfoModal';
+import InfoModal from '../../components/InfoModal';
 import RewardAcknowledgementModal from '../../components/RewardAcknowledgementModal';
 import {useGetProfileDetails} from '../ProfileDetailScreen/profileDetail.hooks';
 import toast from '../../../utils/toast';
+import message from '../../constants/message';
 
 const AppreciationDetailsComponent = ({
   currentIndex,
@@ -35,7 +36,7 @@ const AppreciationDetailsComponent = ({
   const [reward, setReward] = useState(0);
   const [reason, setReason] = useState('');
   const [isObjectionModalVisible, setObjectionModalVisible] = useState(false);
-  const [isRewardInfoModalVisible, setRewardInfoModal] = useState(false);
+  const [isInfoModalVisible, setInfoModal] = useState(false);
   const [isOpenRewardAckModal, setOpenAckRewardModal] = useState(false);
   const [isRewardAlreadyGiven, setRewardAlreadyGivenStatus] = useState(false);
   const {data: profileDetails} = useGetProfileDetails();
@@ -246,7 +247,7 @@ const AppreciationDetailsComponent = ({
           <View style={styles.ratingCountContainer}>
             <Text style={styles.label}>Rewards</Text>
             <Pressable
-              onPress={() => setRewardInfoModal(true)}
+              onPress={() => setInfoModal(true)}
               style={styles.infoWrapper}>
               <InfoIcon width={16} height={16} />
             </Pressable>
@@ -280,9 +281,10 @@ const AppreciationDetailsComponent = ({
             />
           </View>
         </View>
-        <RewardInfoModal
-          visible={isRewardInfoModalVisible}
-          closeModal={() => setRewardInfoModal(false)}
+        <InfoModal
+          message={message.REWARD_INFO}
+          visible={isInfoModalVisible}
+          closeModal={() => setInfoModal(false)}
         />
         <ObjectionModal
           visible={isObjectionModalVisible}

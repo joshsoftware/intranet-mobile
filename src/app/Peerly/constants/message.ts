@@ -7,4 +7,8 @@ export default {
   SOMETHING_WENT_WRONG: 'Something went wrong!',
   NO_APPRECIATIONS_RECEIVED: 'No appreciations received.',
   NO_APPRECIATIONS_EXPRESSED: 'No appreciations expressed.',
+  REWARD_BALANCE_INFO:
+    "The reward progress bar reflects an individual's remaining balance available for rewarding or appreciating others.",
+  REWARD_INFO:
+    'Rewards are points that individuals can use to recognize and appreciate others.',
 };

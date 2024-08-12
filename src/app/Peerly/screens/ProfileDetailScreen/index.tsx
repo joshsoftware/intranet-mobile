@@ -20,13 +20,14 @@ import {
 import {dateFormat} from '../../utils';
 import {CircularProgressBase} from 'react-native-circular-progress-indicator';
 import {useGetAppreciationList} from '../HomeScreen/home.hooks';
-import RewardInfoModal from '../../components/RewardInfoModal';
+import InfoModal from '../../components/InfoModal';
 import {useGetProfileDetails} from './profileDetail.hooks';
 import GivenAndReceivedAppriciation from '../../components/GivenAndReceivedAppreciation';
 import {useRoute} from '@react-navigation/native';
 import {ProfileScreenRouteProp} from '../../navigation/types';
 import InitialAvatar from '../../components/InitialAvatar';
 import colors from '../../constants/colors';
+import message from '../../constants/message';
 
 const paginationData = {
   page: 1,
@@ -68,7 +69,7 @@ const initialProfileDetails = {
 const ProfileDetailScreen = () => {
   const route = useRoute<ProfileScreenRouteProp>();
   const {userId} = route.params;
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isInfoModalVisible, setInfoModal] = useState(false);
 
   const {
     data: profileDetails,
@@ -139,13 +140,13 @@ const ProfileDetailScreen = () => {
   });
 
   const openModal = () => {
-    setModalVisible(true);
+    setInfoModal(true);
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View>
+        <View style={styles.profileDetailsWrapper}>
           <View style={styles.profileDetailsBox}>
             <View style={styles.profileDetails}>
               {profile_image_url !== '' ? (
@@ -206,9 +207,10 @@ const ProfileDetailScreen = () => {
             disableBtn={isDisableTabBtn}
           />
         </View>
-        <RewardInfoModal
-          visible={isModalVisible}
-          closeModal={() => setModalVisible(false)}
+        <InfoModal
+          message={message.REWARD_BALANCE_INFO}
+          visible={isInfoModalVisible}
+          closeModal={() => setInfoModal(false)}
         />
       </View>
     </SafeAreaView>
@@ -227,6 +229,9 @@ const styles = StyleSheet.create({
   pageLoader: {
     flex: 1,
     justifyContent: 'center',
+  },
+  profileDetailsWrapper: {
+    marginTop: 5,
   },
   profileDetailsBox: {
     flexDirection: 'row',
