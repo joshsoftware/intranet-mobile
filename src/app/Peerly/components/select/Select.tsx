@@ -1,6 +1,6 @@
 import Typography from '../../../components/typography';
 import React, {memo} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Dimensions} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import colors from '../../constants/colors';
 
@@ -13,6 +13,8 @@ interface SelectProp {
   error?: string;
   disable?: boolean;
 }
+
+const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
 const Select: React.FC<SelectProp> = ({
   value,
@@ -31,6 +33,7 @@ const Select: React.FC<SelectProp> = ({
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
+        containerStyle={styles.containerStyle}
         data={items}
         search={search}
         maxHeight={300}
@@ -89,6 +92,11 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  containerStyle: {
+    borderRadius: 10,
+    paddingBottom: 10,
+    maxHeight: SCREEN_HEIGHT / 1.5,
   },
   errorText: {
     color: colors.ERROR_RED,
