@@ -48,7 +48,11 @@ const MainNavigator = () => {
       <MainTab.Screen name={HOME_SCREEN} component={HomeScreen} />
       <MainTab.Screen name={LEAVE_SCREEN} component={LeaveScreen} />
       <MainTab.Screen name={TIMESHEET_SCREEN} component={TimesheetScreen} />
-      <MainTab.Screen name={PEERLY_SCREEN} component={PeerlyScreen} />
+      <MainTab.Screen
+        options={{unmountOnBlur: true}}
+        name={PEERLY_SCREEN}
+        component={PeerlyScreen}
+      />
     </MainTab.Navigator>
   );
 };
