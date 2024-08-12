@@ -29,12 +29,14 @@ import {
 } from '../../constants/screenNames';
 import {useNavigation} from '@react-navigation/native';
 import {HomeScreenNavigationProp} from '../../navigation/types';
-import {StarIcon} from '../../constants/icons';
+import {NoAppreciationIcon, StarIcon} from '../../constants/icons';
 import Search from '../../components/Search';
 import InitialsAvatar from '../../components/InitialAvatar';
 import FloatingButton from '../../components/button/floatingButton';
 import SkeletonLoader from '../../components/skeleton/skeleton';
 import {formatNumber} from '../../utils';
+import FallbackUI from '../../components/fallbackUI/NoDataScreen';
+import message from '../../constants/message';
 
 const paginationData = {
   page: 1,
@@ -54,6 +56,8 @@ const HomeScreen = () => {
     metadata: appreciationListMeta,
     isLoading: isLoadingAppreciations,
     isFetching: isFetchingAppreciations,
+    isError: isErrorAppreciation,
+    isSuccess: isSuccessAppreciation,
     refetch: refetchAppreciations,
   } = useGetAppreciationList(paginationData);
 
@@ -188,41 +192,58 @@ const HomeScreen = () => {
             onPress={handleSearchPress}
           />
         </Pressable>
-        <View style={styles.tabViewWrapper}>
-          <TabView
-            navigationState={{index, routes}}
-            renderScene={renderScene}
-            renderTabBar={renderTabBar}
-            onIndexChange={setIndex}
-            initialLayout={{width: layout.width}}
-          />
-        </View>
-        <View style={styles.appreciationListWrapper}>
-          <Text style={styles.totalAppreciationCountWrapper}>
-            Total:{' '}
-            <Text style={styles.totalAppreciationCount}>
-              {appreciationListMeta?.total_records} Appreciations
-            </Text>
-          </Text>
-          {isLoadingAppreciations || isFetchingAppreciations ? (
-            <SkeletonLoader />
-          ) : (
-            <FlatList
-              data={appreciationList || []}
-              renderItem={({item}) => (
-                <AppreciationCard
-                  appreciationDetails={item}
-                  onPress={handleAppreciationCardClick}
-                />
-              )}
-              keyExtractor={item => String(item.id)}
-              numColumns={2}
-              style={styles.flatListAppreciation}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
+        {isSuccessAppreciation && !appreciationList?.length ? (
+          <View style={styles.noAppreciatonUi}>
+            <FallbackUI
+              message={message.NO_APPRECIATION_YET}
+              icon={NoAppreciationIcon}
             />
-          )}
-        </View>
+          </View>
+        ) : (
+          <>
+            <View style={styles.tabViewWrapper}>
+              <TabView
+                navigationState={{index, routes}}
+                renderScene={renderScene}
+                renderTabBar={renderTabBar}
+                onIndexChange={setIndex}
+                initialLayout={{width: layout.width}}
+              />
+            </View>
+            {isErrorAppreciation ? (
+              <View style={styles.noAppreciatonUi}>
+                <FallbackUI message={message.SOMETHING_WENT_WRONG} />
+              </View>
+            ) : (
+              <View style={styles.appreciationListWrapper}>
+                <Text style={styles.totalAppreciationCountWrapper}>
+                  Total:{' '}
+                  <Text style={styles.totalAppreciationCount}>
+                    {appreciationListMeta?.total_records} Appreciations
+                  </Text>
+                </Text>
+                {isLoadingAppreciations || isFetchingAppreciations ? (
+                  <SkeletonLoader />
+                ) : (
+                  <FlatList
+                    data={appreciationList || []}
+                    renderItem={({item}) => (
+                      <AppreciationCard
+                        appreciationDetails={item}
+                        onPress={handleAppreciationCardClick}
+                      />
+                    )}
+                    keyExtractor={item => String(item.id)}
+                    numColumns={2}
+                    style={styles.flatListAppreciation}
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                )}
+              </View>
+            )}
+          </>
+        )}
         <FloatingButton
           title="Give Appreciation"
           onPress={() => navigation.navigate(GIVE_APPRECIATION_SCREEN)}
@@ -276,6 +297,11 @@ const styles = StyleSheet.create({
   searchWrapper: {
     paddingHorizontal: 15,
     marginVertical: 15,
+  },
+  noAppreciatonUi: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   activeAndTopTenTab: {
     flex: 1,

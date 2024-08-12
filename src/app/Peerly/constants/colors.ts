@@ -41,4 +41,5 @@ export default {
   WARM_CREAM: '#F5E6D6',
   LIGHT_PERIWINKLE: '#B7BFEC',
   MEDIUM_GRAY: '#A0A0A0',
+  LIGHT_GRAY: '#BDBDBD',
 };

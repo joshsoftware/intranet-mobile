@@ -18,6 +18,7 @@ import RewardSuccessIcon from '../assets/peerly/svg/rewardSuccess.svg';
 import SearchIcon from '../assets/peerly/svg/search.svg';
 import ProfileIcon from '../assets/peerly/svg/defaultProfileIcon.svg';
 import PeerlyIcon from '../assets/peerly/svg/peerly.svg';
+import NoAppreciationIcon from '../assets/peerly/svg/noAppreciation.svg';
 
 export {
   PlatinumIcon,
@@ -40,4 +41,5 @@ export {
   SearchIcon,
   ProfileIcon,
   PeerlyIcon,
+  NoAppreciationIcon,
 };
