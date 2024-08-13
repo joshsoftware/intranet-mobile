@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {View, StyleSheet, Dimensions, FlatList} from 'react-native';
+import {View, StyleSheet, Dimensions, FlatList, ScrollView} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import AppreciationDetailsComponent from './AppreciationDetailsComponent';
 import colors from '../../constants/colors';
@@ -8,7 +8,7 @@ const {width: SCREEN_WIDTH} = Dimensions.get('window');
 
 const AppreciationDetailsScreen = () => {
   const route = useRoute();
-  const {appriciationList, cardId} : any = route.params;
+  const {appriciationList, cardId}: any = route.params;
 
   const [currentIndex, setCurrentIndex] = useState(
     appriciationList.findIndex((item: any) => item.id === cardId),
@@ -17,12 +17,12 @@ const AppreciationDetailsScreen = () => {
   const flatListRef = useRef(null);
 
   const renderItem = ({index}: any) => (
-    <View style={styles.card}>
+    <ScrollView style={styles.card}>
       <AppreciationDetailsComponent
         currentIndex={index}
         appriciationList={appriciationList}
       />
-    </View>
+    </ScrollView>
   );
 
   const onMomentumScrollEnd = (event: any) => {
