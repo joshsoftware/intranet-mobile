@@ -202,7 +202,9 @@ const ProfileDetailScreen = () => {
               radius={30}
               maxValue={total_reward_quota}
               activeStrokeColor={colors.GOLD}
-              inActiveStrokeColor={colors.WHITE}>
+              inActiveStrokeColor={colors.WHITE}
+              activeStrokeWidth={8}
+              inActiveStrokeWidth={8}>
               <View>
                 <StarIcon width={25} height={25} />
               </View>
@@ -216,6 +218,7 @@ const ProfileDetailScreen = () => {
             expressedList={expressedAppriciationList}
             isLoading={isLoadingAppreciations || isFetchingAppreciations}
             disableBtn={isDisableTabBtn}
+            self={true}
           />
         </View>
         <InfoModal

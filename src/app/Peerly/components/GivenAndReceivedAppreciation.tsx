@@ -22,6 +22,7 @@ import {AppreciationDetails} from '../services/home/types';
 import {useNavigation} from '@react-navigation/native';
 import {AppreciationDetailScreenNavigationProp} from '../navigation/types';
 import SkeletonLoader from './skeleton/skeleton';
+import message from '../constants/message';
 
 type GivenAndReceivedAppriciationProps = {
   appreciationList: AppreciationDetails[];
@@ -82,9 +83,13 @@ const GivenAndReceivedAppriciation = ({
           <SkeletonLoader />
         ) : (
           <>
-            {receivedList.length == 0 ? (
+            {!receivedList?.length ? (
               <View style={styles.noDataTextView}>
-                <Text style={styles.noDataText}>No search result found !</Text>
+                <Text style={styles.noDataText}>
+                  {self
+                    ? message.NO_APPRECIATIONS_RECEIVED
+                    : message.NO_SEARCHE_RESULT_FOUND}
+                </Text>
               </View>
             ) : (
               <FlatList
@@ -103,7 +108,7 @@ const GivenAndReceivedAppriciation = ({
         )}
       </View>
     ),
-    [isLoading, receivedList, handleAppreciationCardClick],
+    [isLoading, receivedList, self, handleAppreciationCardClick],
   );
 
   const SecondRoute = useCallback(
@@ -113,9 +118,13 @@ const GivenAndReceivedAppriciation = ({
           <SkeletonLoader />
         ) : (
           <>
-            {expressedList.length == 0 ? (
+            {!expressedList?.length ? (
               <View style={styles.noDataTextView}>
-                <Text>No search reult found !</Text>
+                <Text style={styles.noDataText}>
+                  {self
+                    ? message.NO_APPRECIATIONS_EXPRESSED
+                    : message.NO_SEARCHE_RESULT_FOUND}
+                </Text>
               </View>
             ) : (
               <FlatList
@@ -134,7 +143,7 @@ const GivenAndReceivedAppriciation = ({
         )}
       </View>
     ),
-    [expressedList, handleAppreciationCardClick, isLoading],
+    [expressedList, handleAppreciationCardClick, isLoading, self],
   );
 
   const renderScene = SceneMap({

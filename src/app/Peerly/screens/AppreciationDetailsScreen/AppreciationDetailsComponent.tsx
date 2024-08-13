@@ -26,6 +26,7 @@ import RewardAcknowledgementModal from '../../components/RewardAcknowledgementMo
 import {useGetProfileDetails} from '../ProfileDetailScreen/profileDetail.hooks';
 import toast from '../../../utils/toast';
 import message from '../../constants/message';
+import ImageWithFallback from '../../components/imageWithFallback/ImageWithFallback';
 
 const AppreciationDetailsComponent = ({
   currentIndex,
@@ -188,9 +189,14 @@ const AppreciationDetailsComponent = ({
       <View style={styles.container}>
         <View style={styles.receiverImageBox}>
           {cardDetails?.receiver_image_url ? (
-            <Image
-              source={{uri: cardDetails.receiver_image_url}}
-              style={styles.receiverImage}
+            <ImageWithFallback
+              imageUrl={cardDetails.receiver_image_url}
+              imageStyle={styles.receiverImage}
+              initials={
+                <View style={styles.receiverImageAvatar}>
+                  <InitialAvatar name={receiverName} size={95} />
+                </View>
+              }
             />
           ) : (
             <View style={styles.receiverImageAvatar}>
@@ -200,9 +206,14 @@ const AppreciationDetailsComponent = ({
         </View>
         <View style={styles.senderImageBox}>
           {cardDetails?.sender_image_url ? (
-            <Image
-              source={{uri: cardDetails.sender_image_url}}
-              style={styles.senderImage}
+            <ImageWithFallback
+              imageUrl={cardDetails.sender_image_url}
+              imageStyle={styles.senderImage}
+              initials={
+                <View style={styles.senderImageAvatar}>
+                  <InitialAvatar name={senderName} size={66} />
+                </View>
+              }
             />
           ) : (
             <View style={styles.senderImageAvatar}>

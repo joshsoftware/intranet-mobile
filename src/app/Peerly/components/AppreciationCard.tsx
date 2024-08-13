@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     backgroundColor: colors.LIGHT_GREY_BACKGROUND,
+    zIndex: -1,
   },
   receiverName: {
     lineHeight: 21,

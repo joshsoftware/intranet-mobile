@@ -11,4 +11,5 @@ export default {
     "The reward progress bar reflects an individual's remaining balance available for rewarding or appreciating others.",
   REWARD_INFO:
     'Rewards are points that individuals can use to recognize and appreciate others.',
+  NO_SEARCHE_RESULT_FOUND: 'No search result found!',
 };
