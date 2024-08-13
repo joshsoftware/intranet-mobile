@@ -96,7 +96,9 @@ const LeaderBoardCard: React.FC<LeaderBoardCardProps> = ({userDetail}) => {
         </View>
       ) : null}
       <View style={[styles.nameContainer]}>
-        <Text style={styles.useName}>{userName}</Text>
+        <Text style={styles.useName} ellipsizeMode="tail" numberOfLines={2}>
+          {userName}
+        </Text>
       </View>
     </View>
   );

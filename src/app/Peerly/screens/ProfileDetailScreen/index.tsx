@@ -161,9 +161,9 @@ const ProfileDetailScreen = () => {
               )}
               <View style={styles.userNameWrapper}>
                 <Text
+                  style={[styles.name, styles.bold]}
                   ellipsizeMode="tail"
-                  numberOfLines={1}
-                  style={[styles.name, styles.bold]}>
+                  numberOfLines={1}>
                   {userName}
                 </Text>
                 <Text ellipsizeMode="tail" numberOfLines={1}>

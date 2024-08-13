@@ -27,6 +27,7 @@ import {useGetProfileDetails} from '../ProfileDetailScreen/profileDetail.hooks';
 import toast from '../../../utils/toast';
 import message from '../../constants/message';
 import ImageWithFallback from '../../components/imageWithFallback/ImageWithFallback';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const AppreciationDetailsComponent = ({
   currentIndex,
@@ -267,30 +268,28 @@ const AppreciationDetailsComponent = ({
             </Text>
           </View>
 
-          <View style={styles.rewardAndReportWrapper}>
-            <Pressable
-              onPress={() =>
-                selfAppreciations
-                  ? toast(
-                      'For self appreciations you are not allowed to give rating',
-                      'success',
-                    )
-                  : setObjectionModalVisible(true)
-              }>
-              <View style={styles.flagIcon}>
-                <FlagIcon />
-              </View>
-            </Pressable>
-            <RatingBar
-              reward={reward}
-              setReward={handleReward}
-              disabled={
-                getRewardConversion > 0 ||
-                isRewardAlreadyGiven ||
-                selfAppreciations
-              }
-            />
-          </View>
+          {!selfAppreciations && (
+            <View style={styles.rewardAndReportWrapper}>
+              <Pressable
+                onPress={() =>
+                  selfAppreciations
+                    ? toast(
+                        'For self appreciations you are not allowed to give rating',
+                        'success',
+                      )
+                    : setObjectionModalVisible(true)
+                }>
+                <View style={styles.flagIcon}>
+                  <FlagIcon />
+                </View>
+              </Pressable>
+              <RatingBar
+                reward={reward}
+                setReward={handleReward}
+                disabled={getRewardConversion > 0 || isRewardAlreadyGiven}
+              />
+            </View>
+          )}
         </View>
         <InfoModal
           message={message.REWARD_INFO}
@@ -340,6 +339,7 @@ const AppreciationDetailsComponent = ({
           />
         </View>
       </View>
+      {isLoadingPostReward && <LoadingSpinner />}
     </View>
   );
 };
