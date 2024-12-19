@@ -39,7 +39,8 @@ const paginationData = {
 const schema = yup.object().shape({
   receiver: yup.string().required(messages.SELECT_COWORKER_NAME),
   core_value_id: yup.string().required(messages.SELECT_CORE_VALUE),
-  description: yup.string().required(messages.ENTER_DESCIPTION),
+  description: yup.string().required(messages.ENTER_DESCIPTION)
+  .min(150, 'Description must be at least 150 characters long.'),
 });
 
 const AppreciationScreen = () => {
@@ -159,12 +160,17 @@ const AppreciationScreen = () => {
             <Controller
               control={control}
               render={({field: {onChange, value}}) => (
-                <TextInput
-                  style={styles.description}
-                  onChangeText={onChange}
-                  value={value}
-                  multiline
-                />
+                <>
+                  <TextInput
+                    style={styles.description}
+                    onChangeText={onChange}
+                    value={value}
+                    multiline
+                  />
+                  <Typography style={styles.noteText}>
+                    <Text style={styles.noteBold}>Note:</Text>  Description must be at least 150 characters.
+                  </Typography>
+                </>
               )}
               name="description"
             />
@@ -258,6 +264,14 @@ const styles = StyleSheet.create({
     height: 20,
     fontSize: 16,
     borderRadius: 12,
+  },
+  noteText: {
+    color: 'gray',
+    fontSize: 12,
+    marginTop: 4,
+  },
+  noteBold: {
+    fontWeight: 'bold',
   },
 });
 
