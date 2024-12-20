@@ -19,4 +19,5 @@ export default {
     'Your objection reason has been submitted successfully. We appreciate your feedback.',
   REWARD_SUCCESS:
     'Your rewards has been submitted successfully. We appreciate your feedback.',
+  MIN_DESCRIPTION_LENGTH: 'Description must be at least 150 characters long.',
 };

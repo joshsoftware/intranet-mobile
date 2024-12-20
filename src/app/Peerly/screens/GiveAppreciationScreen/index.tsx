@@ -40,7 +40,7 @@ const schema = yup.object().shape({
   receiver: yup.string().required(messages.SELECT_COWORKER_NAME),
   core_value_id: yup.string().required(messages.SELECT_CORE_VALUE),
   description: yup.string().required(messages.ENTER_DESCIPTION)
-  .min(150, 'Description must be at least 150 characters long.'),
+  .min(150, messages.MIN_DESCRIPTION_LENGTH),
 });
 
 const AppreciationScreen = () => {
