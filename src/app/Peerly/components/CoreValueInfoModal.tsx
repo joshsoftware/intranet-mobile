@@ -1,12 +1,6 @@
 import React, {useMemo} from 'react';
-import {
-  Modal,
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import ReactNativeModal from 'react-native-modal';
 
 import {
   TrustIcon,
@@ -64,46 +58,37 @@ const CoreValueInfoModal: React.FC<CoreValueInfoModalProp> = ({
   onClose,
   coreValuesDetails,
 }) => {
-  const coreValues = useMemo(() => {
-    return coreValuesDetails.map((item, key) => {
-      const IconComponent = coreValuesMeta[key].icon;
-      return (
-        <View
-          key={item.id}
-          style={[
-            styles.card,
-            {backgroundColor: coreValuesMeta[key].backgroundColor},
-          ]}>
-          <View style={styles.iconWrapper}>
-            <IconComponent />
+  const items = useMemo(
+    () =>
+      coreValuesDetails.map((item, key) => {
+        const IconComponent = coreValuesMeta[key].icon;
+        return (
+          <View
+            key={item.id}
+            style={[
+              styles.card,
+              {backgroundColor: coreValuesMeta[key].backgroundColor},
+            ]}>
+            <View style={styles.iconWrapper}>
+              <IconComponent />
+            </View>
+
+            <View style={styles.cardContent}>
+              <Text style={styles.cardTitle}>{item.name}</Text>
+              <Text style={styles.cardDescription}>{item.description}</Text>
+            </View>
           </View>
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>{item.name}</Text>
-            <Text style={styles.cardDescription}>{item.description}</Text>
-          </View>
-        </View>
-      );
-    });
-  }, [coreValuesDetails]);
+        );
+      }),
+    [coreValuesDetails],
+  );
 
   return (
-    <Modal
-      visible={visible}
-      transparent={true}
-      animationType="slide"
-      onRequestClose={onClose}>
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback>
-            <View style={styles.modalContainer}>
-              <ScrollView contentContainerStyle={styles.scrollView}>
-                {coreValues}
-              </ScrollView>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+    <ReactNativeModal isVisible={visible} onBackdropPress={onClose}>
+      <View style={styles.modalContainer}>
+        <ScrollView>{items}</ScrollView>
+      </View>
+    </ReactNativeModal>
   );
 };
 
@@ -115,8 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
-    width: '90%',
-    height: '80%',
+    flex: 0.8,
     backgroundColor: colors.WHITE,
     borderRadius: 12,
     padding: 10,
@@ -126,14 +110,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    paddingTop: 10,
-    paddingRight: 10,
     flexGrow: 1,
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
+    paddingTop: 10,
+    paddingRight: 10,
   },
   cardContent: {
     paddingLeft: 10,
