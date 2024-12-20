@@ -168,7 +168,7 @@ const AppreciationScreen = () => {
                     multiline
                   />
                   <Typography style={styles.noteText}>
-                    <Text style={styles.noteBold}>Note:</Text>  Description must be at least 150 characters.
+                    <Text style={styles.noteBold}>{messages.NOTE}</Text>  {messages.MIN_DESCRIPTION_LENGTH}
                   </Typography>
                 </>
               )}
