@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   },
   noteText: {
     color: 'gray',
-    fontSize: 12,
+    fontSize: 10,
     marginTop: 4,
   },
   noteBold: {
