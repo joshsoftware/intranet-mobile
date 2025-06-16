@@ -16,6 +16,7 @@ import {CheckVersionResponse} from 'react-native-check-version';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import ErrorBoundary from './app/components/ErrorBoundary';
 
 const queryClient = new QueryClient();
 
@@ -70,22 +71,25 @@ const App = () => {
   }
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <VersionContext.Provider value={versionContextValue}>
-        <UserContext.Provider value={userContextValue}>
-          <Interceptor>
-            <QueryClientProvider client={queryClient}>
-              <StatusBar
-                backgroundColor={colors.PRIMARY}
-                barStyle="light-content"
-              />
-              <RootNavigator />
-            </QueryClientProvider>
-          </Interceptor>
-        </UserContext.Provider>
-      </VersionContext.Provider>
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <VersionContext.Provider value={versionContextValue}>
+          <UserContext.Provider value={userContextValue}>
+            <Interceptor>
+              <QueryClientProvider client={queryClient}>
+                <StatusBar
+                  backgroundColor={colors.PRIMARY}
+                  barStyle="light-content"
+                />
+                <RootNavigator />
+              </QueryClientProvider>
+            </Interceptor>
+          </UserContext.Provider>
+        </VersionContext.Provider>
       <Toast />
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
+    
   );
 };
 
