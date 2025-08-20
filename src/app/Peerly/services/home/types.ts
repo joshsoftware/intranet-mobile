@@ -36,6 +36,7 @@ export interface AppreciationDetails {
   reported_flag: boolean;
   created_at: number;
   updated_at: number;
+  by_management: boolean;
 }
 
 export type GetAppreciationListRequest = {

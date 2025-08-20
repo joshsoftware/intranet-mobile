@@ -88,13 +88,13 @@ const RootNavigator = () => {
 
   useEffect(() => {
     const run = async () => {
-      // try {
-      //   const version = await checkVersion({
-      //     bundleId: BUNDLE_ID,
-      //   });
+      try {
+        const version = await checkVersion({
+          bundleId: BUNDLE_ID,
+        });
 
-      //   setVersionContextData(version);
-      // } catch {}
+        setVersionContextData(version);
+      } catch {}
 
       const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
       const userData = await AsyncStore.getItem(AsyncStore.USER_DATA);
@@ -125,17 +125,16 @@ const RootNavigator = () => {
         screenOptions={screenOptions}
         initialRouteName={DRAWER}>
         {
-        // versionContextData === null || versionContextData.version === null ? (
-        //   <RootStack.Screen name={NO_VERSION} component={NoVersionScreen} />
-        // ) 
-        // : versionContextData.needsUpdate ? (
-        //   <RootStack.Screen
-        //     name={UPDATE_VERSION}
-        //     component={UpdateVersionScreen}
-        //   />
-        // ) 
-        // : 
-        userContextData ? (
+        versionContextData === null || versionContextData.version === null ? (
+          <RootStack.Screen name={NO_VERSION} component={NoVersionScreen} />
+        ) 
+        : versionContextData.needsUpdate ? (
+          <RootStack.Screen
+            name={UPDATE_VERSION}
+            component={UpdateVersionScreen}
+          />
+        ) 
+        : userContextData ? (
           <>
             <RootStack.Screen name={DRAWER} component={DrawerNavigator} />
 

@@ -31,6 +31,7 @@ type GivenAndReceivedAppriciationProps = {
   self?: boolean;
   isLoading?: boolean;
   disableBtn: boolean;
+  fromSearch?: boolean;
 };
 
 interface tabBarRoute extends Route {
@@ -47,6 +48,7 @@ const GivenAndReceivedAppriciation = ({
   expressedList,
   isLoading,
   disableBtn,
+  fromSearch
 }: GivenAndReceivedAppriciationProps) => {
   const navigation = useNavigation<AppreciationDetailScreenNavigationProp>();
   const layout = useWindowDimensions();
@@ -99,6 +101,7 @@ const GivenAndReceivedAppriciation = ({
                     appreciationDetails={item}
                     onPress={handleAppreciationCardClick}
                     showAppreciatorName={true}
+                    fromSearch={fromSearch}
                   />
                 )}
                 keyExtractor={item => String(item.id)}

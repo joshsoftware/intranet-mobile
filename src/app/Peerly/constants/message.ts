@@ -27,5 +27,6 @@ export default {
     { label: 'Part of routine roles and responsibilities', value: 'Part of routine roles and responsibilities' },
     { label: 'Action is not from current quarter', value: 'Action is not from current quarter' },
     { label: 'Others', value: 'Others' },
-  ]
+  ],
+  MANAGEMENT_APPRECIATOR: 'Management',
 };

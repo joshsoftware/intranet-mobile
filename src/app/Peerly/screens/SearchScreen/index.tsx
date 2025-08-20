@@ -83,6 +83,7 @@ const SearchScreen = () => {
             expressedList={expressedAppriciationList}
             isLoading={isLoadingAppreciations || isFetchingAppreciations}
             disableBtn={isDisableTabBtn}
+            fromSearch={true}
           />
         </View>
       </View>
