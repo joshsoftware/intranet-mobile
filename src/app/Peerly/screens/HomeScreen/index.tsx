@@ -277,7 +277,7 @@ const HomeScreen = () => {
                       <AppreciationCard
                         appreciationDetails={item}
                         onPress={handleAppreciationCardClick}
-                        showAppreciatorName={false}
+                        showAppreciatorName={true}
                       />
                     )}
                     keyExtractor={item => String(item.id)}

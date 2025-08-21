@@ -184,6 +184,7 @@ const ProfileDetailScreen = () => {
             isLoading={isLoadingAppreciations || isFetchingAppreciations}
             disableBtn={isDisableTabBtn}
             self={true}
+            fromSearch={false}
           />
         </View>
         <InfoModal
