@@ -11,8 +11,7 @@ import message from '../constants/message';
 interface AppreciationCardProps {
   onPress?: (id: number) => void;
   appreciationDetails: AppreciationDetails;
-  showAppreciatorName: boolean;
-  fromSearch?: boolean;
+  showAppreciatorName?: boolean;
 }
 
 enum CoreValue {
@@ -28,7 +27,6 @@ const AppreciationCard = ({
   onPress,
   appreciationDetails,
   showAppreciatorName,
-  fromSearch
 }: AppreciationCardProps) => {
   const receiverName = `${appreciationDetails.receiver_first_name || ''} ${
     appreciationDetails.receiver_last_name || ''
@@ -76,7 +74,7 @@ const AppreciationCard = ({
                 <InitialAvatar name={receiverName} size={60} />
               </View>
             )}
-            { showAppreciatorName &&  !fromSearch && (
+            { !showAppreciatorName && (
               <>
                 {appreciationDetails?.sender_image_url !== '' ? (
                   <ImageWithFallback
@@ -120,16 +118,20 @@ const AppreciationCard = ({
               {appreciationDetails.receiver_designation}
             </Typography>
           </View>
-            <>
+          <>
+          <View style={{ minHeight: 18 }}> 
+            {(!showAppreciatorName || (showAppreciatorName && !appreciationDetails.by_management)) && (
               <Typography type="h5" style={styles.appreciation}>
                 Appreciated by
               </Typography>
+            )}
+          </View>
               <Typography
                 type="h4"
                 style={styles.senderName}
                 numberOfLines={1}
                 ellipsizeMode="tail">
-                {appreciationDetails.by_management ? message.MANAGEMENT_APPRECIATOR : senderName}
+                {showAppreciatorName ? appreciationDetails.by_management ? message.MANAGEMENT_APPRECIATOR : senderName : senderName}
                 </Typography>
             </>
          

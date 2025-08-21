@@ -28,5 +28,5 @@ export default {
     { label: 'Action is not from current quarter', value: 'Action is not from current quarter' },
     { label: 'Others', value: 'Others' },
   ],
-  MANAGEMENT_APPRECIATOR: 'Management',
+  MANAGEMENT_APPRECIATOR: 'Leader\'s Applause',
 };

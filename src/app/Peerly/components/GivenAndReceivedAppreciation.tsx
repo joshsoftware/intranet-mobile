@@ -100,8 +100,7 @@ const GivenAndReceivedAppriciation = ({
                   <AppreciationCard
                     appreciationDetails={item}
                     onPress={handleAppreciationCardClick}
-                    showAppreciatorName={true}
-                    fromSearch={fromSearch}
+                    showAppreciatorName={fromSearch}
                   />
                 )}
                 keyExtractor={item => String(item.id)}
@@ -137,7 +136,7 @@ const GivenAndReceivedAppriciation = ({
                   <AppreciationCard
                     appreciationDetails={item}
                     onPress={handleAppreciationCardClick}
-                    showAppreciatorName={true}
+                    showAppreciatorName={fromSearch}
                   />
                 )}
                 keyExtractor={item => String(item.id)}
