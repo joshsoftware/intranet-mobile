@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,7 +12,7 @@ import {
 
 import colors from '../../constants/colors';
 import AppreciationCard from '../../components/AppreciationCard';
-import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import fonts from '../../../constant/fonts';
 import LeaderBoardCard from '../../components/LeaderBoard/LeaderBoardCard';
 import {
@@ -20,15 +20,15 @@ import {
   useGetActiveUsersList,
   useGetTopUsersList,
 } from './home.hooks';
-import {useGetProfileDetails} from '../ProfileDetailScreen/profileDetail.hooks';
+import { useGetProfileDetails } from '../ProfileDetailScreen/profileDetail.hooks';
 import {
   GIVE_APPRECIATION_SCREEN,
   APPRECIATION_DETAILS_SCREEN,
   APPRECIATION_SEARCH_SCREEN,
   PROFILE_DETAILS_SCREEN,
 } from '../../constants/screenNames';
-import {useNavigation} from '@react-navigation/native';
-import {HomeScreenNavigationProp} from '../../navigation/types';
+import { useNavigation } from '@react-navigation/native';
+import { HomeScreenNavigationProp } from '../../navigation/types';
 import {
   BronzeIcon,
   GoldIcon,
@@ -41,10 +41,10 @@ import Search from '../../components/Search';
 import InitialsAvatar from '../../components/InitialAvatar';
 import FloatingButton from '../../components/button/floatingButton';
 import SkeletonLoader from '../../components/skeleton/skeleton';
-import {formatNumber} from '../../utils';
+import { formatNumber } from '../../utils';
 import FallbackUI from '../../components/fallbackUI/NoDataScreen';
 import message from '../../constants/message';
-import {SvgProps} from 'react-native-svg';
+import { SvgProps } from 'react-native-svg';
 import ImageWithFallback from '../../components/imageWithFallback/ImageWithFallback';
 
 const paginationData = {
@@ -53,7 +53,7 @@ const paginationData = {
   sort_order: 'DESC',
 };
 
-const userBadgeProperty: {[key: string]: React.FC<SvgProps>} = {
+const userBadgeProperty: { [key: string]: React.FC<SvgProps> } = {
   platinum: PlatinumIcon,
   gold: GoldIcon,
   silver: SilverIcon,
@@ -67,7 +67,7 @@ const HomeScreen = () => {
   const layout = useWindowDimensions();
   const [refreshing, setRefreshing] = useState(false);
 
-  const {data: profileDetails} = useGetProfileDetails();
+  const { data: profileDetails } = useGetProfileDetails();
 
   const {
     data: appreciationList,
@@ -79,15 +79,15 @@ const HomeScreen = () => {
     refetch: refetchAppreciations,
   } = useGetAppreciationList(paginationData);
 
-  const {data: activeUsersList} = useGetActiveUsersList();
+  const { data: activeUsersList } = useGetActiveUsersList();
 
-  const {data: topUsersList} = useGetTopUsersList();
-  const topUsers = topUsersList.slice(0,3);
+  const { data: topUsersList } = useGetTopUsersList();
+  const topUsers = topUsersList.slice(0, 3);
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    {key: 'leaderboard', title: 'Leaderboard'},
-    {key: 'dynamicEngagers', title: 'Dynamic Engagers'},
+    { key: 'leaderboard', title: 'Leaderboard' },
+    { key: 'dynamicEngagers', title: 'Dynamic Engagers' },
   ]);
 
   const onRefresh = useCallback(() => {
@@ -100,12 +100,16 @@ const HomeScreen = () => {
   const FirstRoute = useCallback(
     () => (
       <View style={styles.activeAndTopTenTab}>
-        <FlatList
-          data={topUsers}
-          renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
-          keyExtractor={item => String(item.id)}
-          horizontal={true}
-        />
+        {topUsersList && topUsersList.length > 0 ? (
+          <FlatList
+            data={topUsersList}
+            renderItem={({ item }) => <LeaderBoardCard userDetail={item} />}
+            keyExtractor={item => String(item.id)}
+            horizontal
+          />
+        ) : (
+          <Text style={{ paddingLeft: 10 }}>No Appreciation for this month</Text>
+        )}
       </View>
     ),
     [topUsersList],
@@ -116,7 +120,7 @@ const HomeScreen = () => {
       <View style={styles.activeAndTopTenTab}>
         <FlatList
           data={activeUsersList}
-          renderItem={({item}) => <LeaderBoardCard userDetail={item} />}
+          renderItem={({ item }) => <LeaderBoardCard userDetail={item} />}
           keyExtractor={item => String(item.id)}
           horizontal={true}
         />
@@ -169,9 +173,8 @@ const HomeScreen = () => {
     });
   };
 
-  const userName = `${profileDetails?.first_name || ''}  ${
-    profileDetails?.last_name || ''
-  }`;
+  const userName = `${profileDetails?.first_name || ''}  ${profileDetails?.last_name || ''
+    }`;
 
   const userBadge = useMemo(() => {
     if (profileDetails?.badge) {
@@ -194,7 +197,7 @@ const HomeScreen = () => {
           <Text style={styles.title}>Peerly</Text>
           <Pressable onPress={() => handleProfileIconClick()}>
             {!profileDetails?.total_points &&
-            profileDetails?.profile_image_url === '' ? (
+              profileDetails?.profile_image_url === '' ? (
               <InitialsAvatar name={userName} size={37} />
             ) : (
               <View style={[styles.userScoreBox, profileIconPadding]}>
@@ -246,11 +249,11 @@ const HomeScreen = () => {
           <>
             <View style={styles.tabViewWrapper}>
               <TabView
-                navigationState={{index, routes}}
+                navigationState={{ index, routes }}
                 renderScene={renderScene}
                 renderTabBar={renderTabBar}
                 onIndexChange={setIndex}
-                initialLayout={{width: layout.width}}
+                initialLayout={{ width: layout.width }}
               />
             </View>
             {isErrorAppreciation ? (
@@ -273,7 +276,7 @@ const HomeScreen = () => {
                 ) : (
                   <FlatList
                     data={appreciationList || []}
-                    renderItem={({item}) => (
+                    renderItem={({ item }) => (
                       <AppreciationCard
                         appreciationDetails={item}
                         onPress={handleAppreciationCardClick}
@@ -362,7 +365,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.ARIAL,
     textTransform: 'none',
   },
-  indicatorStyle: {backgroundColor: colors.PRIMARY},
+  indicatorStyle: { backgroundColor: colors.PRIMARY },
   tabBarContainer: {
     backgroundColor: colors.LIGHT_PASTEL_BLUE,
     elevation: 0,
