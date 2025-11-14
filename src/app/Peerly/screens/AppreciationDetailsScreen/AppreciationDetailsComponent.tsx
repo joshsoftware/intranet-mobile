@@ -192,9 +192,8 @@ const AppreciationDetailsComponent = ({
     );
   }
 
-  const receiverName = `${cardDetails?.receiver_first_name || ''} ${
-    cardDetails?.receiver_last_name || ''
-  } `;
+  const receiverName = `${cardDetails?.receiver_first_name || ''} ${cardDetails?.receiver_last_name || ''
+    } `;
 
   return (
     <View style={styles.screen}>
@@ -264,9 +263,9 @@ const AppreciationDetailsComponent = ({
                 onPress={() =>
                   selfAppreciations
                     ? toast(
-                        'For self appreciations you are not allowed to give rating',
-                        'success',
-                      )
+                      'For self appreciations you are not allowed to give rating',
+                      'success',
+                    )
                     : setObjectionModalVisible(true)
                 }
                 disabled={
@@ -276,11 +275,32 @@ const AppreciationDetailsComponent = ({
                   <FlagIcon />
                 </View>
               </Pressable>
-              <RatingBar
-                reward={reward}
-                setReward={handleReward}
-                disabled={getRewardConversion > 0 || isRewardAlreadyGiven}
-              />
+              <View
+                style={{
+                  opacity:
+                    getRewardConversion > 0 ||
+                      isRewardAlreadyGiven ||
+                      profileDetails?.reward_quota_balance === 0
+                      ? 0.5
+                      : 1,
+                  pointerEvents:
+                    getRewardConversion > 0 ||
+                      isRewardAlreadyGiven ||
+                      profileDetails?.reward_quota_balance === 0
+                      ? "none"
+                      : "auto",
+                }}
+              >
+                <RatingBar
+                  reward={reward}
+                  setReward={handleReward}
+                  disabled={
+                    getRewardConversion > 0 ||
+                    isRewardAlreadyGiven ||
+                    profileDetails?.reward_quota_balance === 0
+                  }
+                />
+              </View>
             </View>
           )}
         </View>

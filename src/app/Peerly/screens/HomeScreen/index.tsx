@@ -108,8 +108,9 @@ const HomeScreen = () => {
             horizontal
           />
         ) : (
-          <Text style={{ paddingLeft: 10 }}>No Appreciation for this month</Text>
-        )}
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ paddingLeft: 10 }}>No appreciations received yet. Appreciate Now!</Text>
+          </View>)}
       </View>
     ),
     [topUsersList],
@@ -118,12 +119,18 @@ const HomeScreen = () => {
   const SecondRoute = useCallback(
     () => (
       <View style={styles.activeAndTopTenTab}>
-        <FlatList
-          data={activeUsersList}
-          renderItem={({ item }) => <LeaderBoardCard userDetail={item} />}
-          keyExtractor={item => String(item.id)}
-          horizontal={true}
-        />
+        {activeUsersList && activeUsersList.length > 0 ? (
+          <FlatList
+            data={activeUsersList}
+            renderItem={({ item }) => <LeaderBoardCard userDetail={item} />}
+            keyExtractor={item => String(item.id)}
+            horizontal={true}
+          />
+        ) : (
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ paddingLeft: 10 }}>No appreciations received yet. Appreciate Now!</Text>
+          </View>
+        )}
       </View>
     ),
     [activeUsersList],
