@@ -29,4 +29,5 @@ export default {
     { label: 'Others', value: 'Others' },
   ],
   MANAGEMENT_APPRECIATOR: 'Leader\'s Applause',
+  NO_APPRECIATIONS_YET_MESSAGE: 'No appreciations received yet. Appreciate Now!',
 };

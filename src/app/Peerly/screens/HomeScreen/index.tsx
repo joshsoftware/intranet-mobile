@@ -109,7 +109,7 @@ const HomeScreen = () => {
           />
         ) : (
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ paddingLeft: 10 }}>No appreciations received yet. Appreciate Now!</Text>
+            <Text style={{ paddingLeft: 10 }}>{message.NO_APPRECIATIONS_YET_MESSAGE}</Text>
           </View>)}
       </View>
     ),
@@ -128,7 +128,7 @@ const HomeScreen = () => {
           />
         ) : (
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ paddingLeft: 10 }}>No appreciations received yet. Appreciate Now!</Text>
+            <Text style={{ paddingLeft: 10 }}>{message.NO_APPRECIATIONS_YET_MESSAGE}</Text>
           </View>
         )}
       </View>

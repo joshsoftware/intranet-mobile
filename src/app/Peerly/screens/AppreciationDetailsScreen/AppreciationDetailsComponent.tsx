@@ -195,6 +195,16 @@ const AppreciationDetailsComponent = ({
   const receiverName = `${cardDetails?.receiver_first_name || ''} ${cardDetails?.receiver_last_name || ''
     } `;
 
+
+  const isRewardDisabled = useMemo(() => {
+    return (
+      getRewardConversion > 0 ||
+      isRewardAlreadyGiven ||
+      profileDetails?.reward_quota_balance === 0
+    );
+  }, [getRewardConversion, isRewardAlreadyGiven, profileDetails?.reward_quota_balance]);
+
+
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
@@ -277,28 +287,14 @@ const AppreciationDetailsComponent = ({
               </Pressable>
               <View
                 style={{
-                  opacity:
-                    getRewardConversion > 0 ||
-                      isRewardAlreadyGiven ||
-                      profileDetails?.reward_quota_balance === 0
-                      ? 0.5
-                      : 1,
-                  pointerEvents:
-                    getRewardConversion > 0 ||
-                      isRewardAlreadyGiven ||
-                      profileDetails?.reward_quota_balance === 0
-                      ? "none"
-                      : "auto",
+                  opacity: isRewardDisabled ? 0.5 : 1,
+                  pointerEvents: isRewardDisabled ? "none" : "auto",
                 }}
               >
                 <RatingBar
                   reward={reward}
                   setReward={handleReward}
-                  disabled={
-                    getRewardConversion > 0 ||
-                    isRewardAlreadyGiven ||
-                    profileDetails?.reward_quota_balance === 0
-                  }
+                  disabled={isRewardDisabled}
                 />
               </View>
             </View>
