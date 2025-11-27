@@ -81,6 +81,8 @@ const ProfileDetailScreen = () => {
   ).toLowerCase()}`;
   const rewardPointMargin = {marginTop: badgeType ? 30 : 0};
 
+  appreciationList.reverse();
+
   const receivedAppriciationList = appreciationList.filter(item => {
     const fname = (item?.receiver_first_name || '').toLowerCase();
     const lname = (item?.receiver_last_name || '').toLowerCase();

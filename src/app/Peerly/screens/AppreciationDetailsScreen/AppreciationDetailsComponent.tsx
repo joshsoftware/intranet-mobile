@@ -192,9 +192,18 @@ const AppreciationDetailsComponent = ({
     );
   }
 
-  const receiverName = `${cardDetails?.receiver_first_name || ''} ${
-    cardDetails?.receiver_last_name || ''
-  } `;
+  const receiverName = `${cardDetails?.receiver_first_name || ''} ${cardDetails?.receiver_last_name || ''
+    } `;
+
+
+  const isRewardDisabled = useMemo(() => {
+    return (
+      getRewardConversion > 0 ||
+      isRewardAlreadyGiven ||
+      profileDetails?.reward_quota_balance === 0
+    );
+  }, [getRewardConversion, isRewardAlreadyGiven, profileDetails?.reward_quota_balance]);
+
 
   return (
     <View style={styles.screen}>
@@ -264,9 +273,9 @@ const AppreciationDetailsComponent = ({
                 onPress={() =>
                   selfAppreciations
                     ? toast(
-                        'For self appreciations you are not allowed to give rating',
-                        'success',
-                      )
+                      'For self appreciations you are not allowed to give rating',
+                      'success',
+                    )
                     : setObjectionModalVisible(true)
                 }
                 disabled={
@@ -276,11 +285,18 @@ const AppreciationDetailsComponent = ({
                   <FlagIcon />
                 </View>
               </Pressable>
-              <RatingBar
-                reward={reward}
-                setReward={handleReward}
-                disabled={getRewardConversion > 0 || isRewardAlreadyGiven}
-              />
+              <View
+                style={{
+                  opacity: isRewardDisabled ? 0.5 : 1,
+                  pointerEvents: isRewardDisabled ? "none" : "auto",
+                }}
+              >
+                <RatingBar
+                  reward={reward}
+                  setReward={handleReward}
+                  disabled={isRewardDisabled}
+                />
+              </View>
             </View>
           )}
         </View>
