@@ -112,8 +112,8 @@ android {
         applicationId "com.joshsoftware.intranet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "2.5.0"
+        versionCode 24
+        versionName "2.6.1"
     }
     signingConfigs {
         release {
