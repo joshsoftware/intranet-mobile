@@ -18,7 +18,7 @@
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
-- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+- (NSURL *)bundleURL
 {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
@@ -27,16 +27,8 @@
 #endif
 }
 
-- (UIView *)createRootViewWithBridge:(RCTBridge *)bridge
-                          moduleName:(NSString *)moduleName
-                           initProps:(NSDictionary *)initProps {
-  UIView *rootView = [super createRootViewWithBridge:bridge
-                                          moduleName:moduleName
-                                           initProps:initProps];
-
+- (void)customizeRootView:(RCTRootView *)rootView {
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView]; // ⬅️ initialize the splash screen
-
-  return rootView;
 }
 
 - (BOOL)application:(UIApplication *)application
