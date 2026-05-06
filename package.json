@@ -13,11 +13,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "updateversion": "react-native-version --never-amend",
-    "test": "jest",
-    "clean": "./android/gradlew -p android clean",
-    "bundle:prod": "./android/gradlew -p android bundleProdRelease",
-    "assemble:prod": "./android/gradlew -p android assembleProdRelease",
-    "build:prod": "npm run bundle:prod && npm run assemble:prod"
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -58,7 +54,7 @@
     "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "3.17.1",
     "react-native-safe-area-context": "^5.1.0",
-    "react-native-screens": "^4.9.0",
+    "react-native-screens": "4.9.0",
     "react-native-svg": "^15.10.1",
     "react-native-svg-transformer": "^1.1.0",
     "react-native-tab-view": "^4.0.5",
