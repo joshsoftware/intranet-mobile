@@ -1,8 +1,8 @@
-import {useMutation, useQueryClient} from 'react-query';
-import {postReward, postObjection} from '../../services/appreciationDetails';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { postReward, postObjection } from '../../services/appreciationDetails';
 import toast from '../../../utils/toast';
-import {AxiosError} from 'axios';
-import {APIError} from '../../types';
+import { AxiosError } from 'axios';
+import { APIError } from '../../types';
 import {
   PostObjectionRequest,
   PostRewardRequest,
@@ -14,7 +14,7 @@ export function usePostReward() {
     mutationKey: ['post_reward'],
     mutationFn: (payload: PostRewardRequest) => postReward(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries(['appreciation_list']);
+      queryClient.invalidateQueries({ queryKey: ['appreciation_list'] });
     },
     onError: (error: AxiosError<APIError>) => {
       if (error.response?.data.message) {

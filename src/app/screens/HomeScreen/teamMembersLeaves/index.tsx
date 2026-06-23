@@ -14,8 +14,10 @@ const TeamMembersLeaves = () => {
     return null;
   }
 
+  const AnimatedView = Animated.View as any;
+
   return (
-    <Animated.View entering={FadeInDown} style={styles.container}>
+    <AnimatedView entering={FadeInDown} style={styles.container}>
       <Typography type="header" style={styles.title}>
         Upcoming Leaves Of Your Team Members
       </Typography>
@@ -33,7 +35,7 @@ const TeamMembersLeaves = () => {
           />
         </Fragment>
       ))}
-    </Animated.View>
+    </AnimatedView>
   );
 };
 

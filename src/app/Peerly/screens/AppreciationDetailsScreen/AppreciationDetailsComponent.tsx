@@ -45,7 +45,7 @@ const AppreciationDetailsComponent = ({
 
   const {
     mutate: postReward,
-    isLoading: isLoadingPostReward,
+    isPending: isLoadingPostReward,
     isSuccess: isSuccessPostReward,
     isError: isErrorPostReward,
     reset: resetPostReward,
@@ -53,7 +53,7 @@ const AppreciationDetailsComponent = ({
 
   const {
     mutate: postObjection,
-    isLoading: isLoadingPostObjection,
+    isPending: isLoadingPostObjection,
     isSuccess: isSuccessPostObjection,
     reset: resetPostObjection,
   } = usePostObjection();

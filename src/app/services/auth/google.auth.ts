@@ -5,7 +5,7 @@ import {
 import Config from 'react-native-config';
 
 import toast from '../../utils/toast';
-import {AuthType} from '../api/login';
+import { AuthType } from '../api/login';
 
 GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
@@ -17,11 +17,13 @@ export const googleSignIn = async () => {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
 
+    if (!userInfo.data) return
+
     return {
       type: AuthType.GOOGLE,
-      idToken: userInfo.idToken,
+      idToken: userInfo.data.idToken,
       user: {
-        email: userInfo.user.email,
+        email: userInfo.data.user.email,
       },
     };
   } catch (error: any) {

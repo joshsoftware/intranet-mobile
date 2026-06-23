@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, TextInput} from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import colors from '../constants/colors';
-import {SearchIcon} from '../constants/icons';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { SearchIcon } from '../constants/icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface SearchProps {
   onChange?: (value: string) => void;
@@ -23,7 +23,7 @@ const Search: React.FC<SearchProps> = ({
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.searchContainer}>
-        <SearchIcon name="ios-search" size={20} style={styles.icon} />
+        <SearchIcon width={20} height={20} style={styles.icon} />
         <TextInput
           onChangeText={onChange}
           style={styles.searchInput}

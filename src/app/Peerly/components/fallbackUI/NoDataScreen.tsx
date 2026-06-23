@@ -1,14 +1,14 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import colors from '../../constants/colors';
-import {SvgProps} from 'react-native-svg';
+import { SvgProps } from 'react-native-svg';
 
 interface FallbackUIProp {
   message: string;
   icon?: React.FC<SvgProps>;
 }
 
-const FallbackUI: React.FC<FallbackUIProp> = ({message, icon: SvgIcon}) => {
+const FallbackUI: React.FC<FallbackUIProp> = ({ message, icon: SvgIcon }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
   },
   container: {
-    alignitems: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   imageWrapper: {

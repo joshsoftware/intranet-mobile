@@ -1,9 +1,9 @@
-import React, {useMemo} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useMemo } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import colors from '../constants/colors';
-import {AppreciationDetails} from '../services/home/types';
-import {formatNumber, timeFromNow} from '../utils';
-import {StarIcon} from '../constants/icons';
+import { AppreciationDetails } from '../services/home/types';
+import { formatNumber, timeFromNow } from '../utils';
+import { StarIcon } from '../constants/icons';
 import InitialAvatar from './InitialAvatar';
 import Typography from './typography';
 import ImageWithFallback from './imageWithFallback/ImageWithFallback';
@@ -28,35 +28,33 @@ const AppreciationCard = ({
   appreciationDetails,
   showAppreciatorName,
 }: AppreciationCardProps) => {
-  const receiverName = `${appreciationDetails.receiver_first_name || ''} ${
-    appreciationDetails.receiver_last_name || ''
-  }`;
-  const senderName = `${appreciationDetails.sender_first_name || ''} ${
-    appreciationDetails.sender_last_name || ''
-  }`;
+  const receiverName = `${appreciationDetails.receiver_first_name || ''} ${appreciationDetails.receiver_last_name || ''
+    }`;
+  const senderName = `${appreciationDetails.sender_first_name || ''} ${appreciationDetails.sender_last_name || ''
+    }`;
 
   const coreValueColors = useMemo(() => {
     switch (appreciationDetails?.core_value_name) {
       case CoreValue.TRUST:
-        return {backgroundColor: colors.LIGHT_PINK};
+        return { backgroundColor: colors.LIGHT_PINK };
       case CoreValue.TECHNICALEXCELLENCE:
-        return {backgroundColor: colors.LIGHT_LIME};
+        return { backgroundColor: colors.LIGHT_LIME };
       case CoreValue.INTEGRITYANDETHICS:
-        return {backgroundColor: colors.LIGHT_AQUA};
+        return { backgroundColor: colors.LIGHT_AQUA };
       case CoreValue.EMPFOCUS:
-        return {backgroundColor: colors.LIGHT_SKYBLUE};
+        return { backgroundColor: colors.LIGHT_SKYBLUE };
       case CoreValue.CUSTFOCUS:
-        return {backgroundColor: colors.LIGHT_TEAL};
+        return { backgroundColor: colors.LIGHT_TEAL };
       case CoreValue.RESPECT:
-        return {backgroundColor: colors.LIGHT_PEACH};
+        return { backgroundColor: colors.LIGHT_PEACH };
       default:
-        return {backgroundColor: colors.WARM_CREAM};
+        return { backgroundColor: colors.WARM_CREAM };
     }
   }, [appreciationDetails.core_value_name]);
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity onPress={() => onPress(appreciationDetails.id)}>
+      <TouchableOpacity onPress={() => onPress?.(appreciationDetails?.id)}>
         <View style={styles.header}>
           <View style={styles.avatarContainer}>
             {appreciationDetails.receiver_image_url !== '' ? (
@@ -74,7 +72,7 @@ const AppreciationCard = ({
                 <InitialAvatar name={receiverName} size={60} />
               </View>
             )}
-            { !showAppreciatorName && (
+            {!showAppreciatorName && (
               <>
                 {appreciationDetails?.sender_image_url !== '' ? (
                   <ImageWithFallback
@@ -119,22 +117,22 @@ const AppreciationCard = ({
             </Typography>
           </View>
           <>
-          <View style={{ minHeight: 18 }}> 
-            {(!showAppreciatorName || (showAppreciatorName && !appreciationDetails.by_management)) && (
-              <Typography type="h5" style={styles.appreciation}>
-                Appreciated by
-              </Typography>
-            )}
-          </View>
-              <Typography
-                type="h4"
-                style={styles.senderName}
-                numberOfLines={1}
-                ellipsizeMode="tail">
-                {showAppreciatorName ? appreciationDetails.by_management ? message.MANAGEMENT_APPRECIATOR : senderName : senderName}
+            <View style={{ minHeight: 18 }}>
+              {(!showAppreciatorName || (showAppreciatorName && !appreciationDetails.by_management)) && (
+                <Typography type="h5" style={styles.appreciation}>
+                  Appreciated by
                 </Typography>
-            </>
-         
+              )}
+            </View>
+            <Typography
+              type="h4"
+              style={styles.senderName}
+              numberOfLines={1}
+              ellipsizeMode="tail">
+              {showAppreciatorName ? appreciationDetails.by_management ? message.MANAGEMENT_APPRECIATOR : senderName : senderName}
+            </Typography>
+          </>
+
           <Typography type="h6" style={styles.days}>
             {timeFromNow(appreciationDetails.created_at)}
           </Typography>

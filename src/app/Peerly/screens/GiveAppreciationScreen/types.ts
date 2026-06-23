@@ -4,8 +4,8 @@ export type APIError = {
 };
 
 export type FormInput = {
-  receiver: number;
-  core_value_id: number;
+  receiver: string;
+  core_value_id: string;
   description: string;
 };
 

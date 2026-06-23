@@ -1,4 +1,5 @@
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import {
   getCoreValuesList,
   getCoworkerList,
@@ -11,21 +12,25 @@ import {
   CoreValue,
 } from '../../services/giveAppreciation/types';
 import toast from '../../../utils/toast';
-import {AxiosError} from 'axios';
-import {APIError} from './types';
+import { AxiosError } from 'axios';
+import { APIError } from './types';
 
 export function useGetCoworkerList(payload: GetCoworkersListRequest) {
-  const {data, isLoading, isError} = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['coworker_list'],
     queryFn: () => getCoworkerList(payload),
-    onError: (error: AxiosError<APIError>) => {
-      if (error.response?.data.message) {
-        toast(error.response.data.message, 'error');
+  });
+
+  useEffect(() => {
+    if (isError) {
+      const axiosError = error as AxiosError<APIError>;
+      if (axiosError.response?.data.message) {
+        toast(axiosError.response.data.message, 'error');
       } else {
         toast('Something went wrong while fetching co-workers list', 'error');
       }
-    },
-  });
+    }
+  }, [isError, error]);
 
   let coworkerList = data?.data?.user_list?.map((item: UserDetails) => {
     return {
@@ -34,21 +39,25 @@ export function useGetCoworkerList(payload: GetCoworkersListRequest) {
     };
   });
 
-  return {data: coworkerList || [], isLoading, isError};
+  return { data: coworkerList || [], isLoading, isError };
 }
 
 export function useGetCoreValuesList() {
-  const {data, isLoading, isError} = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['profile_core_values'],
     queryFn: getCoreValuesList,
-    onError: (error: AxiosError<APIError>) => {
-      if (error.response?.data.message) {
-        toast(error.response.data.message, 'error');
+  });
+
+  useEffect(() => {
+    if (isError) {
+      const axiosError = error as AxiosError<APIError>;
+      if (axiosError.response?.data.message) {
+        toast(axiosError.response.data.message, 'error');
       } else {
         toast('Something went wrong while fetching core values', 'error');
       }
-    },
-  });
+    }
+  }, [isError, error]);
 
   let coreKeyValueList = data?.data?.map((item: CoreValue) => {
     return {
@@ -72,9 +81,9 @@ export function usePostAppreciation() {
     mutationFn: (payload: PostAppreciationRequestBody) =>
       postAppreciationRequest(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries(['appreciation_list']);
-      queryClient.invalidateQueries(['top_users_list']);
-      queryClient.invalidateQueries(['active_user_list']);
+      queryClient.invalidateQueries({ queryKey: ['appreciation_list'] });
+      queryClient.invalidateQueries({ queryKey: ['top_users_list'] });
+      queryClient.invalidateQueries({ queryKey: ['active_user_list'] });
     },
     onError: (error: AxiosError<APIError>) => {
       if (error.response?.data.message) {

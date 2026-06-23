@@ -1,20 +1,20 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {NavigationHelpers, TabNavigationState} from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native';
+import { NavigationHelpers, TabNavigationState } from '@react-navigation/native';
 import {
   BottomTabBarProps,
   BottomTabNavigationEventMap,
 } from '@react-navigation/bottom-tabs';
-import {SvgProps} from 'react-native-svg';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { SvgProps } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import TabBarButton from './button/TabBarButton';
-import {useIsKeyboardShown} from '../hooks/useIsKeyboardShown';
+import { useIsKeyboardShown } from '../hooks/useIsKeyboardShown';
 
-import {Home, Calendar, Clock, Menu as MenuIcon} from '../constant/icons';
-import {MainTabParamList} from '../navigation/types';
+import { Home, Calendar, Clock, Menu as MenuIcon } from '../constant/icons';
+import { MainTabParamList } from '../navigation/types';
 import colors from '../constant/colors';
-import {PeerlyIcon} from '../Peerly/constants/icons';
+import { PeerlyIcon } from '../Peerly/constants/icons';
 
 // Defining specific types because
 // ButtonTabBarProps is not generic in the library
@@ -32,7 +32,7 @@ const screenIcons: Record<keyof MainTabParamList, React.FC<SvgProps>> = {
 };
 
 const TabBar = (props: BottomTabBarProps) => {
-  const {isKeyboardShown} = useIsKeyboardShown();
+  const { isKeyboardShown } = useIsKeyboardShown();
   const inset = useSafeAreaInsets();
 
   const state = props.state as StateType;
@@ -43,7 +43,7 @@ const TabBar = (props: BottomTabBarProps) => {
   const focusedDescriptor = descriptors[focusedRoute.key];
   const focusedOptions = focusedDescriptor.options;
 
-  const {tabBarHideOnKeyboard = false} = focusedOptions;
+  const { tabBarHideOnKeyboard = false } = focusedOptions;
   const tabBarHidden = tabBarHideOnKeyboard && isKeyboardShown;
 
   if (tabBarHidden) {
@@ -62,7 +62,7 @@ const TabBar = (props: BottomTabBarProps) => {
       });
 
       if (!isFocused && !event.defaultPrevented) {
-        navigation.navigate(route.name);
+        navigation.navigate(route.name as never, undefined as never);
       }
     };
 
@@ -80,7 +80,7 @@ const TabBar = (props: BottomTabBarProps) => {
   });
 
   return (
-    <View style={[styles.container, {paddingBottom: inset.bottom}]}>
+    <View style={[styles.container, { paddingBottom: inset.bottom }]}>
       <View style={styles.contentContainer}>{tabButtons}</View>
     </View>
   );

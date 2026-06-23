@@ -1,9 +1,9 @@
-import {useCallback, useEffect, useState} from 'react';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
-import {AxiosError} from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 import toast from '../../utils/toast';
-import {dateFormate, getMonthYearFromISO} from '../../utils/date';
+import { dateFormate, getMonthYearFromISO } from '../../utils/date';
 import {
   createTimesheetRequest,
   deleteTimesheetRequest,
@@ -24,23 +24,23 @@ import {
   TimesheetError,
   TimesheetRequestBody,
 } from '../../services/timesheet/types';
-import {ISO_DATE_FROMAT} from '../../constant/date';
-import {TimesheetAction, TimesheetStatus} from './interface';
+import { ISO_DATE_FROMAT } from '../../constant/date';
+import { TimesheetAction, TimesheetStatus } from './interface';
 
 export const useEmployees = (startDate: Date, endDate: Date) => {
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
   const toDate = dateFormate(endDate, ISO_DATE_FROMAT);
 
-  const {data, isLoading, refetch, isRefetching} = useQuery(
-    ['timesheet', 'employee', fromDate, toDate],
-    () =>
+  const { data, isLoading, refetch, isRefetching } = useQuery({
+    queryKey: ['timesheet', 'employee', fromDate, toDate],
+    queryFn: () =>
       getEmployeeListRequest({
         from_date: fromDate,
         to_date: toDate,
       }),
-  );
+  });
 
-  return {data: data?.data?.data, isLoading, refetch, isRefetching};
+  return { data: data?.data?.data, isLoading, refetch, isRefetching };
 };
 
 export const useTimesheets = (
@@ -51,56 +51,56 @@ export const useTimesheets = (
   const fromDate = dateFormate(startDate, ISO_DATE_FROMAT);
   const toDate = dateFormate(endDate, ISO_DATE_FROMAT);
 
-  const {data, isRefetching, refetch, isLoading} = useQuery(
-    ['timesheet', userId, startDate, endDate],
-    () =>
+  const { data, isRefetching, refetch, isLoading } = useQuery({
+    queryKey: ['timesheet', userId, startDate, endDate],
+    queryFn: () =>
       getTimesheetRequest({
         user_id: userId,
         from_date: fromDate,
         to_date: toDate,
       }),
-  );
+  });
 
-  return {data: data?.data?.data, refetch, isRefetching, isLoading};
+  return { data: data?.data?.data, refetch, isRefetching, isLoading };
 };
 
 export const useDeleteTimesheet = (isSelf: boolean) => {
   const queryClient = useQueryClient();
 
-  const {mutate, isLoading} = useMutation(
-    (payload: TDeleteTimesheetRequest) => deleteTimesheetRequest(payload),
-    {
-      onSuccess: (successData, variables) => {
-        toast(successData.data.message);
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: (payload: TDeleteTimesheetRequest) => deleteTimesheetRequest(payload),
+    onSuccess: (successData, variables) => {
+      toast(successData.data.message);
 
-        if (isSelf && variables.time_sheet_date) {
-          const {month, year} = getMonthYearFromISO(variables.time_sheet_date);
-          queryClient.invalidateQueries(['home_calendar_data', month, year]);
-        }
+      if (isSelf && variables.time_sheet_date) {
+        const { month, year } = getMonthYearFromISO(variables.time_sheet_date);
+        queryClient.invalidateQueries({ queryKey: ['home_calendar_data', month, year] });
+      }
 
-        queryClient.invalidateQueries(['timesheet']);
-      },
-      onError: (err: AxiosError) => {
-        const error = err.response?.data as TimesheetError;
-        toast(error.message || 'Failed to delete timesheet.', 'error');
-      },
+      queryClient.invalidateQueries({ queryKey: ['timesheet'] });
     },
-  );
+    onError: (err: AxiosError) => {
+      const error = err.response?.data as TimesheetError;
+      toast(error.message || 'Failed to delete timesheet.', 'error');
+    },
+  });
 
-  return {mutate, isLoading};
+  return { mutate, isLoading };
 };
 
 export const useAssignedProjects = (userId: string) => {
-  const {data, isLoading} = useQuery(
-    ['assigned-projects', userId],
-    () => getProjectListRequest({user_id: userId}),
-    {
-      onError: (err: AxiosError) => {
-        const error = err.response?.data as TimesheetError;
-        toast(error?.message || 'Failed to fetch the projects.', 'error');
-      },
-    },
-  );
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['assigned-projects', userId],
+    queryFn: () => getProjectListRequest({ user_id: userId }),
+  });
+
+  useEffect(() => {
+    if (isError) {
+      const axiosError = error as AxiosError;
+      const timesheetError = axiosError.response?.data as TimesheetError;
+      toast(timesheetError?.message || 'Failed to fetch the projects.', 'error');
+    }
+  }, [isError, error]);
 
   return {
     data: data?.data?.data ?? [],
@@ -111,56 +111,52 @@ export const useAssignedProjects = (userId: string) => {
 export const useEditTimesheet = () => {
   const queryClient = useQueryClient();
 
-  const {mutate, isLoading, isSuccess, data, reset} = useMutation(
-    (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
-    {
-      onSuccess: (_, variables) => {
-        const {month, year} = getMonthYearFromISO(
-          variables.time_sheets_attributes.date,
-        );
+  const { mutate, isPending: isLoading, isSuccess, data, reset } = useMutation({
+    mutationFn: (payload: TEditTimesheetRquestBody) => updateTimesheetRequest(payload),
+    onSuccess: (_, variables) => {
+      const { month, year } = getMonthYearFromISO(
+        variables.time_sheets_attributes.date,
+      );
 
-        queryClient.invalidateQueries(['home_calendar_data', month, year]);
-        queryClient.invalidateQueries(['timesheet']);
-      },
-      onError: (err: AxiosError) => {
-        const error = err.response?.data as TimesheetError;
-        toast(error.message || 'Failed to edit the timesheet.', 'error');
-      },
+      queryClient.invalidateQueries({ queryKey: ['home_calendar_data', month, year] });
+      queryClient.invalidateQueries({ queryKey: ['timesheet'] });
     },
-  );
-  return {mutate, isLoading, isSuccess, message: data?.data.message, reset};
+    onError: (err: AxiosError) => {
+      const error = err.response?.data as TimesheetError;
+      toast(error.message || 'Failed to edit the timesheet.', 'error');
+    },
+  });
+  return { mutate, isLoading, isSuccess, message: data?.data.message, reset };
 };
 
 export const useAddTimesheet = (setDisableSave: (v: boolean) => void) => {
   const queryClient = useQueryClient();
 
-  const {mutate, data, isLoading, isSuccess, reset} = useMutation(
-    (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
-    {
-      onSuccess: (_, variables) => {
-        const monthYearSet = new Set<string>();
+  const { mutate, data, isPending: isLoading, isSuccess, reset } = useMutation({
+    mutationFn: (payload: TimesheetRequestBody) => createTimesheetRequest(payload),
+    onSuccess: (_, variables) => {
+      const monthYearSet = new Set<string>();
 
-        variables.time_sheets_attributes.forEach(({date}) => {
-          const {month, year} = getMonthYearFromISO(date);
+      variables.time_sheets_attributes.forEach(({ date }) => {
+        const { month, year } = getMonthYearFromISO(date);
 
-          if (!monthYearSet.has(month + year)) {
-            queryClient.invalidateQueries(['home_calendar_data', month, year]);
-            monthYearSet.add(month + year);
-          }
-        });
+        if (!monthYearSet.has(month + year)) {
+          queryClient.invalidateQueries({ queryKey: ['home_calendar_data', month, year] });
+          monthYearSet.add(month + year);
+        }
+      });
 
-        queryClient.invalidateQueries(['timesheet']);
+      queryClient.invalidateQueries({ queryKey: ['timesheet'] });
 
-        setDisableSave(false);
-      },
-      onError: (err: AxiosError) => {
-        const error = err.response?.data as TimesheetError;
-        toast(error.message || 'Failed to add the timesheet.', 'error');
-
-        setDisableSave(false);
-      },
+      setDisableSave(false);
     },
-  );
+    onError: (err: AxiosError) => {
+      const error = err.response?.data as TimesheetError;
+      toast(error.message || 'Failed to add the timesheet.', 'error');
+
+      setDisableSave(false);
+    },
+  });
 
   const isEmpty = !Object.keys(data?.data.data ?? {}).length;
 
@@ -183,11 +179,11 @@ export const useEmployeeTimesheetAction = () => {
   );
 
   const [checkedEmployees, setCheckedEmployees] = useState<
-    {userId: string; projectId: number; status: TimesheetStatus}[]
+    { userId: string; projectId: number; status: TimesheetStatus }[]
   >([]);
 
   const [erroredEmployees, setErroredEmployees] = useState<
-    {userId: string; projectId: number; status: TimesheetStatus}[]
+    { userId: string; projectId: number; status: TimesheetStatus }[]
   >([]);
 
   const clearAllChecked = () => {
@@ -195,11 +191,12 @@ export const useEmployeeTimesheetAction = () => {
     setErroredEmployees([]);
   };
 
-  const {mutate, isLoading} = useMutation(employeeTimesheetAction, {
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: employeeTimesheetAction,
     onSuccess: data => {
       if (data?.data?.message) {
         toast(data.data.message);
-        queryClient.invalidateQueries(['timesheet']);
+        queryClient.invalidateQueries({ queryKey: ['timesheet'] });
         clearAllChecked();
       }
     },
@@ -229,7 +226,7 @@ export const useEmployeeTimesheetAction = () => {
       setCheckedEmployees([...checkedList]);
       setErroredEmployees(checkedList);
 
-      queryClient.invalidateQueries(['timesheet']);
+      queryClient.invalidateQueries({ queryKey: ['timesheet'] });
     },
   });
 
@@ -283,7 +280,7 @@ export const useEmployeeTimesheetAction = () => {
         setErroredEmployees([]);
       }
     } else {
-      setCheckedEmployees([...checkedEmployees, {userId, projectId, status}]);
+      setCheckedEmployees([...checkedEmployees, { userId, projectId, status }]);
     }
   };
 
@@ -325,10 +322,11 @@ export const useTimesheetAction = () => {
     setErroredTimesheets({});
   };
 
-  const {mutate, isLoading} = useMutation(timesheetAction, {
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: timesheetAction,
     onSuccess(data) {
       toast(data.data.message);
-      queryClient.invalidateQueries(['timesheet']);
+      queryClient.invalidateQueries({ queryKey: ['timesheet'] });
       clearAllChecked();
     },
     onError(error: AxiosError) {
@@ -348,7 +346,7 @@ export const useTimesheetAction = () => {
       setCheckedTimesheets(Object.keys(data.data.error_data));
       setErroredTimesheets(data.data.error_data);
 
-      queryClient.invalidateQueries(['timesheet']);
+      queryClient.invalidateQueries({ queryKey: ['timesheet'] });
     },
   });
 
@@ -419,7 +417,7 @@ export const useTimesheetWarning = (
         getTimesheetWarning(projectId, workedMinutes).then(message =>
           setWarningMessage(message || ''),
         );
-      } catch {}
+      } catch { }
     }
   }, [userId, projectId, workedMinutes, getTimesheetWarning]);
 
@@ -427,5 +425,5 @@ export const useTimesheetWarning = (
     setWarningMessage('');
   };
 
-  return {warningMessage, resetWarning};
+  return { warningMessage, resetWarning };
 };

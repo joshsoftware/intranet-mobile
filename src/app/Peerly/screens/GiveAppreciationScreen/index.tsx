@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,18 +12,18 @@ import {
   useGetCoreValuesList,
   usePostAppreciation,
 } from './giveAppreciation.hooks';
-import {useForm, Controller, SubmitHandler} from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import Select from '../../components/select/Select';
 import CenteredModal from '../../components/Modal';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import * as yup from 'yup';
-import {yupResolver} from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import CoreValueInfoModal from '../../components/CoreValueInfoModal';
-import {FormInput} from './types';
+import { FormInput } from './types';
 
-import {SuccessIcon, InfoIcon} from '../../constants/icons';
-import {useNavigation} from '@react-navigation/native';
-import {GiveAppreciationScreenNavigationProp} from '../../navigation/types';
+import { SuccessIcon, InfoIcon } from '../../constants/icons';
+import { useNavigation } from '@react-navigation/native';
+import { GiveAppreciationScreenNavigationProp } from '../../navigation/types';
 import Button from '../../components/button/button';
 import Typography from '../../components/typography';
 import colors from '../../constants/colors';
@@ -40,7 +40,7 @@ const schema = yup.object().shape({
   receiver: yup.string().required(messages.SELECT_COWORKER_NAME),
   core_value_id: yup.string().required(messages.SELECT_CORE_VALUE),
   description: yup.string().required(messages.ENTER_DESCIPTION)
-  .min(150, messages.MIN_DESCRIPTION_LENGTH),
+    .min(150, messages.MIN_DESCRIPTION_LENGTH),
 });
 
 const AppreciationScreen = () => {
@@ -63,7 +63,7 @@ const AppreciationScreen = () => {
 
   const {
     mutate: postAppriciation,
-    isLoading: isAppreciationLoading,
+    isPending: isAppreciationLoading,
     isSuccess: isAppreciationSuccess,
     reset: resetPostAppreciation,
   } = usePostAppreciation();
@@ -72,7 +72,7 @@ const AppreciationScreen = () => {
     control,
     getValues,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
     reset: resetForm,
   } = useForm({
     defaultValues: {
@@ -113,7 +113,7 @@ const AppreciationScreen = () => {
             </Typography>
             <Controller
               control={control}
-              render={({field: {onChange, value}}) => (
+              render={({ field: { onChange, value } }) => (
                 <Select
                   placeholder="Select Co-worker"
                   onChange={onChange}
@@ -140,7 +140,7 @@ const AppreciationScreen = () => {
             </View>
             <Controller
               control={control}
-              render={({field: {onChange, value}}) => (
+              render={({ field: { onChange, value } }) => (
                 <Select
                   placeholder="Select Core Value"
                   onChange={onChange}
@@ -159,20 +159,20 @@ const AppreciationScreen = () => {
             </Typography>
             <Controller
               control={control}
-              render={({field: {onChange, value}}) => (
-                  <TextInput
-                    style={styles.description}
-                    onChangeText={onChange}
-                    value={value}
-                    multiline
-                  />           
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.description}
+                  onChangeText={onChange}
+                  value={value}
+                  multiline
+                />
               )}
               name="description"
             />
             <Typography type={errors.description ? "error" : "title"} style={errors.description ? {} : styles.noteText}>
-                {errors.description ? errors.description.message : messages.MIN_DESCRIPTION_LENGTH
+              {errors.description ? errors.description.message : messages.MIN_DESCRIPTION_LENGTH
               }
-            </Typography>  
+            </Typography>
           </View>
           <Button
             title="Submit"

@@ -1,10 +1,10 @@
-import {useCallback, useContext, useState} from 'react';
-import {useMutation} from 'react-query';
-import {AxiosError} from 'axios';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import { useCallback, useContext, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import UserContext, {UserData} from '../../context/user.context';
+import UserContext, { UserData } from '../../context/user.context';
 import AsyncStore from '../../services/asyncStorage';
 import {
   LoginResponseBody,
@@ -13,13 +13,16 @@ import {
   LoginErrorResponseBody,
   IntranetErrorCode,
   sendGenerateOTPRequest,
+  PayloadType,
+  GeneratteOTPRequestBody,
+  GenerateOTPResponseBody,
 } from '../../services/api/login';
-import {googleSignIn, googleSignOut} from '../../services/auth/google.auth';
-import {appleSignIn} from '../../services/auth/apple.auth';
+import { googleSignIn, googleSignOut } from '../../services/auth/google.auth';
+import { appleSignIn } from '../../services/auth/apple.auth';
 import toast from '../../utils/toast';
 
-import {RootStackParamList} from '../../navigation/types';
-import {LOGIN_INSTRUCTION_SCREEN} from '../../constant/screenNames';
+import { RootStackParamList } from '../../navigation/types';
+import { LOGIN_INSTRUCTION_SCREEN } from '../../constant/screenNames';
 
 export const useLogin = () => {
   const [, setUserContextData] = useContext(UserContext);
@@ -27,7 +30,12 @@ export const useLogin = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const {mutate, isLoading} = useMutation(sendLoginRequest, {
+  const { mutate, isPending: isLoading } = useMutation<
+    AxiosResponse<LoginResponseBody>,
+    AxiosError<LoginResponseBody>,
+    PayloadType
+  >({
+    mutationFn: sendLoginRequest,
     onSuccess: async response => {
       const responseData = response.data.data;
 
@@ -40,7 +48,7 @@ export const useLogin = () => {
       await AsyncStore.setItem(AsyncStore.AUTH_TOKEN_KEY, authToken);
       await AsyncStore.setItem(AsyncStore.USER_DATA, JSON.stringify(userData));
 
-      setUserContextData({authToken, userData});
+      setUserContextData({ authToken, userData });
     },
     onError: async (error: AxiosError<LoginResponseBody>) => {
       await googleSignOut();
@@ -112,7 +120,12 @@ export const useLogin = () => {
 };
 
 export const useGenerateOTP = (successCallback: () => void) => {
-  const {mutate, isLoading} = useMutation(sendGenerateOTPRequest, {
+  const { mutate, isPending: isLoading } = useMutation<
+    AxiosResponse<GenerateOTPResponseBody>,
+    AxiosError<LoginResponseBody>,
+    GeneratteOTPRequestBody
+  >({
+    mutationFn: sendGenerateOTPRequest,
     onSuccess: response => {
       if (response === undefined) {
         toast('Network Error: Please try again.', 'error');

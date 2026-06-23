@@ -1,5 +1,6 @@
-import {useQuery} from 'react-query';
-import {AxiosError} from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { AxiosError } from 'axios';
 
 import {
   getTimesheetCalendar,
@@ -9,22 +10,26 @@ import {
   getUpcomingEvents,
 } from '../../services/home';
 import toast from '../../utils/toast';
-import {filterWFHFromLeaves} from '../../utils/home';
+import { filterWFHFromLeaves } from '../../utils/home';
 
-import {GetHomeTimesheetDataResponse} from '../../services/home/types';
+import { GetHomeTimesheetDataResponse } from '../../services/home/types';
 
 export const useHomeCalendar = (month: string, year: number) => {
-  const {data, isLoading} = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['home_calendar_data', month, year],
     queryFn: () => getTimesheetCalendar(month, year),
-    onError: (error: AxiosError<GetHomeTimesheetDataResponse>) => {
-      if (error.response?.data.message) {
-        toast(error.response.data.message, 'error');
+  });
+
+  useEffect(() => {
+    if (isError) {
+      const axiosError = error as AxiosError<GetHomeTimesheetDataResponse>;
+      if (axiosError.response?.data.message) {
+        toast(axiosError.response.data.message, 'error');
       } else {
         toast('Something went wrong while fetching calendar data', 'error');
       }
-    },
-  });
+    }
+  }, [isError, error]);
 
   return {
     approved: data?.data?.data?.approved || [],
@@ -39,28 +44,28 @@ export const useHomeCalendar = (month: string, year: number) => {
 };
 
 export const useTeamMembersLeaves = () => {
-  const {data, isLoading} = useQuery(
-    ['teamMembersLeaves'],
-    getTeamMembersUpcomingLeaves,
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ['teamMembersLeaves'],
+    queryFn: getTeamMembersUpcomingLeaves,
+  });
 
-  return {data: filterWFHFromLeaves(data?.data.data ?? []), isLoading};
+  return { data: filterWFHFromLeaves(data?.data.data ?? []), isLoading };
 };
 
 export const useTeamMembersBirthdays = () => {
-  const {data, isLoading} = useQuery(
-    ['teamMembersBirthdays'],
-    getTeamMembersUpcomingBirthdays,
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ['teamMembersBirthdays'],
+    queryFn: getTeamMembersUpcomingBirthdays,
+  });
 
-  return {data: data?.data.data ?? [], isLoading};
+  return { data: data?.data.data ?? [], isLoading };
 };
 
 export const useUpcomingEvents = () => {
-  const {data, isLoading, isRefetching, refetch} = useQuery(
-    ['upcoming-events'],
-    getUpcomingEvents,
-  );
+  const { data, isLoading, isRefetching, refetch } = useQuery({
+    queryKey: ['upcoming-events'],
+    queryFn: getUpcomingEvents,
+  });
 
   return {
     events: data?.data?.data || [],
@@ -70,10 +75,10 @@ export const useUpcomingEvents = () => {
 };
 
 export const useLiveEvents = () => {
-  const {data, isLoading, isRefetching, refetch} = useQuery(
-    ['live-events'],
-    getLiveEvents,
-  );
+  const { data, isLoading, isRefetching, refetch } = useQuery({
+    queryKey: ['live-events'],
+    queryFn: getLiveEvents,
+  });
 
   return {
     events: data?.data?.data || [],

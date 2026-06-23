@@ -76,8 +76,10 @@ const EmployeeLeaveScreen: React.FC<Props> = ({
     );
   }
 
+  const AccordionView = Accordion as any;
+
   return (
-    <Accordion
+    <AccordionView
       activeSections={activeSections}
       onChange={setActiveSections}
       sections={data}

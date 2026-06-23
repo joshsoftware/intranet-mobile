@@ -28,9 +28,12 @@ const Deployments = (data: IDeploymentDetails) => {
         <DetailRow label="CV Link" value={cvLink} />
         <DetailRow
           label="Deployment Owner Emails"
-          value={deploymentOwnerEmails}
+          value={deploymentOwnerEmails?.join(', ')}
         />
-        <DetailRow label="Owned by Emails" value={ownedByEmails} />
+        <DetailRow
+          label="Owned by Emails"
+          value={ownedByEmails?.join(', ')}
+        />
         <DetailRow label="OETA" value={oeta} />
         <DetailRow label="NETA" value={neta} />
         <DetailRow label="Available Hours" value={`${availableHours}`} />

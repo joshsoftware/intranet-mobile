@@ -117,10 +117,15 @@ const ProfileScreen = () => {
 };
 
 const renderTabBar = (props: TabBarProps<{key: string; title: string}>) => {
+  const TabBarView = TabBar as any;
   return (
-    <TabBar
+    <TabBarView
       {...props}
-      labelStyle={styles.labelStyle}
+      renderLabel={({ route, color }: { route: any, color: string }) => (
+        <Typography style={[styles.labelStyle, { color }]}>
+          {route.title}
+        </Typography>
+      )}
       scrollEnabled={true}
       inactiveColor={colors.SECONDARY}
       activeColor={colors.PRIMARY}

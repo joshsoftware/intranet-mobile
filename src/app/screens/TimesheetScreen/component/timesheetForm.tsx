@@ -22,7 +22,7 @@ import {workHoursData} from '../../../constant/timesheet';
 
 const timesheetFormSchema = yup.object().shape({
   project_id: yup.string().required('Project is a required field'),
-  date: yup.date().required('Date is a required field'),
+  date: yup.mixed().required('Date is a required field'),
   worked_minutes: yup.number().required('Work hours is a required field'),
   description: yup
     .string()
@@ -67,7 +67,7 @@ const TimesheetForm = ({
       worked_minutes: undefined,
       description: undefined,
     },
-    resolver: yupResolver(timesheetFormSchema),
+    resolver: yupResolver(timesheetFormSchema as any),
   });
 
   const watchFields = watch(['project_id', 'worked_minutes']);

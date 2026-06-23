@@ -1,4 +1,3 @@
-// It moves plugin resolution from the buildscript to the settings file.
 pluginManagement {
     repositories {
         google()
@@ -12,13 +11,16 @@ plugins {
     id("com.facebook.react.settings")
 }
 
-// In 0.77, this is the most reliable way to trigger autolinking
-// if the previous methods failed.
-def reactSettings = extensions.getByType(com.facebook.react.ReactSettingsExtension)
-reactSettings.autolinkLibrariesFromCommand()
+includeBuild("../node_modules/@react-native/gradle-plugin") {
+    dependencySubstitution {
+        substitute(module("com.facebook.react:react-native-gradle-plugin")).using(project(":react-native-gradle-plugin"))
+    }
+}
+
+reactSettings {
+    autolinkLibrariesFromCommand()
+}
 
 rootProject.name = 'Intranet'
 include ':app'
-include ':react-native-config'
-project(':react-native-config').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-config/android')
 
