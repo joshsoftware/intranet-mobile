@@ -17,7 +17,7 @@ export function useLoginPeerly() {
   const response = data as PeerlyLoginResponse | undefined;
 
   useEffect(() => {
-    if (isSuccess && response) {
+    if (isSuccess && response?.data?.AuthToken) {
       PeerlyAsyncStore.setItem(
         PeerlyAsyncStore.PEERLY_AUTH_TOKEN_KEY,
         response.data.AuthToken,

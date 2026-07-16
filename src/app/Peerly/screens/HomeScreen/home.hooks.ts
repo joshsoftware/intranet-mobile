@@ -91,8 +91,8 @@ export function useGetAppreciationList(payload: GetAppreciationListRequest) {
     }
   }, [isError, error]);
   return {
-    data: data?.data.appreciations || [],
-    metadata: data?.data.metadata,
+    data: data?.data?.appreciations || [],
+    metadata: data?.data?.metadata,
     isLoading,
     isFetching,
     isSuccess,

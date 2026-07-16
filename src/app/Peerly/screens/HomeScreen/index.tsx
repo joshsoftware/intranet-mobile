@@ -3,15 +3,17 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
   useWindowDimensions,
   FlatList,
   Pressable,
   SafeAreaView,
+  Platform,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import colors from '../../constants/colors';
 import AppreciationCard from '../../components/AppreciationCard';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import fonts from '../../../constant/fonts';
 import LeaderBoardCard from '../../components/LeaderBoard/LeaderBoardCard';
@@ -27,7 +29,6 @@ import {
   APPRECIATION_SEARCH_SCREEN,
   PROFILE_DETAILS_SCREEN,
 } from '../../constants/screenNames';
-import { useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigationProp } from '../../navigation/types';
 import {
   BronzeIcon,
@@ -41,7 +42,6 @@ import Search from '../../components/Search';
 import InitialsAvatar from '../../components/InitialAvatar';
 import FloatingButton from '../../components/button/floatingButton';
 import SkeletonLoader from '../../components/skeleton/skeleton';
-import { formatNumber } from '../../utils';
 import FallbackUI from '../../components/fallbackUI/NoDataScreen';
 import message from '../../constants/message';
 import { SvgProps } from 'react-native-svg';
@@ -53,11 +53,12 @@ const paginationData = {
   sort_order: 'DESC',
 };
 
-const userBadgeProperty: { [key: string]: React.FC<SvgProps> } = {
+const userBadgeProperty: { [key: string]: React.FC<SvgProps> | null } = {
   platinum: PlatinumIcon,
   gold: GoldIcon,
   silver: SilverIcon,
   bronze: BronzeIcon,
+  basicuser: null,
 };
 
 type BadgeType = 'platinum' | 'gold' | 'silver' | 'bronze';
@@ -66,6 +67,7 @@ const HomeScreen = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const layout = useWindowDimensions();
   const [refreshing, setRefreshing] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const { data: profileDetails } = useGetProfileDetails();
 
@@ -82,7 +84,7 @@ const HomeScreen = () => {
   const { data: activeUsersList } = useGetActiveUsersList();
 
   const { data: topUsersList } = useGetTopUsersList();
-  const topUsers = topUsersList.slice(0, 3);
+  const topUsers = topUsersList.slice(0, 5);
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -97,12 +99,18 @@ const HomeScreen = () => {
     });
   }, [refetchAppreciations]);
 
+  useFocusEffect(
+    useCallback(() => {
+      refetchAppreciations();
+    }, [refetchAppreciations]),
+  );
+
   const FirstRoute = useCallback(
     () => (
       <View style={styles.activeAndTopTenTab}>
-        {topUsersList && topUsersList.length > 0 ? (
+        {topUsers && topUsers.length > 0 ? (
           <FlatList
-            data={topUsersList}
+            data={topUsers}
             renderItem={({ item }) => <LeaderBoardCard userDetail={item} />}
             keyExtractor={item => String(item.id)}
             horizontal
@@ -113,7 +121,7 @@ const HomeScreen = () => {
           </View>)}
       </View>
     ),
-    [topUsersList],
+    [topUsers],
   );
 
   const SecondRoute = useCallback(
@@ -170,10 +178,6 @@ const HomeScreen = () => {
     navigation.navigate(APPRECIATION_SEARCH_SCREEN);
   };
 
-  const profileIconPadding = {
-    paddingLeft: profileDetails?.total_points ? 7 : 0,
-  };
-
   const handleProfileIconClick = () => {
     navigation.navigate(PROFILE_DETAILS_SCREEN, {
       userId: profileDetails?.employee_id,
@@ -184,58 +188,36 @@ const HomeScreen = () => {
     }`;
 
   const userBadge = useMemo(() => {
-    if (profileDetails?.badge) {
-      const badge = profileDetails.badge.toLowerCase();
-      const BadgeIcon = userBadgeProperty[badge as BadgeType];
-      return (
-        <View style={styles.userBadgePosition}>
-          <BadgeIcon width={14} height={14} />
-        </View>
-      );
-    } else {
-      <View>{null}</View>;
+    const badge = (profileDetails?.badge || 'basicuser').toLowerCase();
+    const BadgeIcon = userBadgeProperty[badge];
+    if (!BadgeIcon) {
+      return null;
     }
+    return (
+      <View style={styles.userBadgePosition}>
+        <BadgeIcon width={14} height={14} />
+      </View>
+    );
   }, [profileDetails?.badge]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { paddingTop: Platform.OS === 'android' ? insets.top : 0 }]}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Peerly</Text>
           <Pressable onPress={() => handleProfileIconClick()}>
-            {!profileDetails?.total_points &&
-              profileDetails?.profile_image_url === '' ? (
-              <InitialsAvatar name={userName} size={37} />
-            ) : (
-              <View style={[styles.userScoreBox, profileIconPadding]}>
-                {profileDetails?.total_points ? (
-                  <>
-                    <StarIcon width={18} height={18} />
-                    <Text style={styles.scoreText}>
-                      {formatNumber(profileDetails.total_points)}
-                    </Text>
-                  </>
-                ) : null}
-                {profileDetails?.profile_image_url !== '' ? (
-                  <View style={styles.profileIconWrapper}>
-                    <ImageWithFallback
-                      imageUrl={profileDetails?.profile_image_url || ''}
-                      initials={
-                        <View style={styles.profileIconWrapper}>
-                          <InitialsAvatar name={userName} size={37} />
-                        </View>
-                      }
-                      imageStyle={styles.userAvatar}
-                    />
-                  </View>
-                ) : (
-                  <View style={styles.profileIconWrapper}>
-                    <InitialsAvatar name={userName} size={37} />
-                  </View>
-                )}
-                {userBadge}
-              </View>
-            )}
+            <View style={styles.profileContainer}>
+              {profileDetails?.profile_image_url ? (
+                <ImageWithFallback
+                  imageUrl={profileDetails.profile_image_url}
+                  initials={<InitialsAvatar name={userName} size={37} />}
+                  imageStyle={styles.userAvatar}
+                />
+              ) : (
+                <InitialsAvatar name={userName} size={37} />
+              )}
+              {userBadge}
+            </View>
           </Pressable>
         </View>
         <Pressable onPressIn={handleSearchPress} style={styles.searchWrapper}>
@@ -414,10 +396,15 @@ const styles = StyleSheet.create({
   flatListContainerStyle: {
     paddingBottom: 50,
   },
+  profileContainer: {
+    position: 'relative',
+    width: 37,
+    height: 37,
+  },
   userBadgePosition: {
     position: 'absolute',
-    left: 90,
-    top: -8,
+    right: -4,
+    bottom: -4,
   },
   profileIconWrapper: {
     marginBottom: 4,

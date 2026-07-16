@@ -5,7 +5,7 @@ const SkeletonCard = () => {
   const shimmerValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
         Animated.timing(shimmerValue, {
           toValue: 1,
@@ -18,7 +18,13 @@ const SkeletonCard = () => {
           useNativeDriver: true,
         }),
       ]),
-    ).start();
+    );
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
   }, [shimmerValue]);
 
   const shimmerStyle = {

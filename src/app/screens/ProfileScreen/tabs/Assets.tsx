@@ -20,8 +20,8 @@ const Assets = ({currentAsset, previousAsset}: IAssetData) => {
               <Typography style={styles.padding} type="text">
                 Name
               </Typography>
-              {currentAssetReducedData.name.map(name => (
-                <Typography style={styles.padding} type="secondaryText">
+              {currentAssetReducedData.name.map((name, index) => (
+                <Typography key={`curr-name-${index}`} style={styles.padding} type="secondaryText">
                   {name}
                 </Typography>
               ))}
@@ -30,8 +30,8 @@ const Assets = ({currentAsset, previousAsset}: IAssetData) => {
               <Typography style={styles.padding} type="text">
                 Start Date
               </Typography>
-              {currentAssetReducedData.startDate.map(date => (
-                <Typography style={styles.padding} type="text">
+              {currentAssetReducedData.startDate.map((date, index) => (
+                <Typography key={`curr-start-${index}`} style={styles.padding} type="text">
                   {date}
                 </Typography>
               ))}
@@ -40,8 +40,8 @@ const Assets = ({currentAsset, previousAsset}: IAssetData) => {
               <Typography style={styles.padding} type="text">
                 Active
               </Typography>
-              {currentAssetReducedData.isActive.map(isActive => (
-                <Typography style={styles.padding} type="text">
+              {currentAssetReducedData.isActive.map((isActive, index) => (
+                <Typography key={`curr-active-${index}`} style={styles.padding} type="text">
                   {isActive ? 'yes' : 'no'}
                 </Typography>
               ))}
@@ -59,8 +59,8 @@ const Assets = ({currentAsset, previousAsset}: IAssetData) => {
               <Typography style={styles.padding} type="text">
                 Name
               </Typography>
-              {previousAssetReducedData.name.map(name => (
-                <Typography style={styles.padding} type="secondaryText">
+              {previousAssetReducedData.name.map((name, index) => (
+                <Typography key={`prev-name-${index}`} style={styles.padding} type="secondaryText">
                   {name}
                 </Typography>
               ))}
@@ -69,8 +69,8 @@ const Assets = ({currentAsset, previousAsset}: IAssetData) => {
               <Typography style={styles.padding} type="text">
                 Start Date
               </Typography>
-              {previousAssetReducedData.startDate.map(date => (
-                <Typography style={styles.padding} type="text">
+              {previousAssetReducedData.startDate.map((date, index) => (
+                <Typography key={`prev-start-${index}`} style={styles.padding} type="text">
                   {date}
                 </Typography>
               ))}
@@ -79,8 +79,8 @@ const Assets = ({currentAsset, previousAsset}: IAssetData) => {
               <Typography style={styles.padding} type="text">
                 End Date
               </Typography>
-              {previousAssetReducedData.endDate.map(date => (
-                <Typography style={styles.padding} type="text">
+              {previousAssetReducedData.endDate.map((date, index) => (
+                <Typography key={`prev-end-${index}`} style={styles.padding} type="text">
                   {date}
                 </Typography>
               ))}
@@ -89,8 +89,8 @@ const Assets = ({currentAsset, previousAsset}: IAssetData) => {
               <Typography style={styles.padding} type="text">
                 Active
               </Typography>
-              {previousAssetReducedData.isActive.map(isActive => (
-                <Typography style={styles.padding} type="text">
+              {previousAssetReducedData.isActive.map((isActive, index) => (
+                <Typography key={`prev-active-${index}`} style={styles.padding} type="text">
                   {isActive ? 'yes' : 'no'}
                 </Typography>
               ))}

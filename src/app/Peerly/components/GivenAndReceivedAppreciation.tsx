@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -17,10 +17,10 @@ import {
 } from 'react-native-tab-view';
 import colors from '../constants/colors';
 import AppreciationCard from './AppreciationCard';
-import {APPRECIATION_DETAILS_SCREEN} from '../constants/screenNames';
-import {AppreciationDetails} from '../services/home/types';
-import {useNavigation} from '@react-navigation/native';
-import {AppreciationDetailScreenNavigationProp} from '../navigation/types';
+import { APPRECIATION_DETAILS_SCREEN } from '../constants/screenNames';
+import { AppreciationDetails } from '../services/home/types';
+import { useNavigation } from '@react-navigation/native';
+import { AppreciationDetailScreenNavigationProp } from '../navigation/types';
 import SkeletonLoader from './skeleton/skeleton';
 import message from '../constants/message';
 
@@ -39,7 +39,7 @@ interface tabBarRoute extends Route {
   title: string;
 }
 
-interface tabBarState extends NavigationState<tabBarRoute> {}
+interface tabBarState extends NavigationState<tabBarRoute> { }
 
 const GivenAndReceivedAppriciation = ({
   appreciationList,
@@ -55,8 +55,8 @@ const GivenAndReceivedAppriciation = ({
   const [index, setIndex] = useState(0);
 
   const [routes] = React.useState<tabBarRoute[]>([
-    {key: 'received', title: 'Received'},
-    {key: 'expressed', title: 'Expressed'},
+    { key: 'received', title: 'Received' },
+    { key: 'expressed', title: 'Expressed' },
   ]);
 
   const getAppriciationDetails = useCallback(
@@ -96,7 +96,7 @@ const GivenAndReceivedAppriciation = ({
             ) : (
               <FlatList
                 data={receivedList || []}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <AppreciationCard
                     appreciationDetails={item}
                     onPress={handleAppreciationCardClick}
@@ -111,7 +111,7 @@ const GivenAndReceivedAppriciation = ({
         )}
       </View>
     ),
-    [isLoading, receivedList, self, handleAppreciationCardClick],
+    [isLoading, receivedList, self, handleAppreciationCardClick, fromSearch],
   );
 
   const SecondRoute = useCallback(
@@ -132,7 +132,7 @@ const GivenAndReceivedAppriciation = ({
             ) : (
               <FlatList
                 data={expressedList || []}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <AppreciationCard
                     appreciationDetails={item}
                     onPress={handleAppreciationCardClick}
@@ -147,7 +147,7 @@ const GivenAndReceivedAppriciation = ({
         )}
       </View>
     ),
-    [expressedList, handleAppreciationCardClick, isLoading, self],
+    [expressedList, handleAppreciationCardClick, isLoading, self, fromSearch],
   );
 
   const renderScene = SceneMap({
@@ -156,7 +156,7 @@ const GivenAndReceivedAppriciation = ({
   });
 
   const renderCustomTabBar = (
-    props: SceneRendererProps & {navigationState: tabBarState},
+    props: SceneRendererProps & { navigationState: tabBarState },
   ) => (
     <View style={styles.tabContainer}>
       {props.navigationState.routes.map((route, i) => {
@@ -165,14 +165,14 @@ const GivenAndReceivedAppriciation = ({
         return (
           <TouchableOpacity
             key={route.key}
+            disabled={disableBtn}
             onPress={() => props.jumpTo(route.key)}
             style={[
               styles.tab,
               isFocused ? styles.activeTab : styles.inactiveTab,
               i === 0 ? styles.leftTab : styles.rightTab,
               disableBtn && styles.btnOpacity,
-            ]}
-            disabled={disableBtn}>
+            ]}>
             <Text
               style={[
                 styles.tabText,
@@ -190,11 +190,11 @@ const GivenAndReceivedAppriciation = ({
     <SafeAreaView style={styles.container}>
       <View style={styles.appreciationList}>
         <TabView
-          navigationState={{index, routes}}
+          navigationState={{ index, routes }}
           renderScene={renderScene}
           renderTabBar={renderCustomTabBar}
           onIndexChange={setIndex}
-          initialLayout={{width: layout.width}}
+          initialLayout={{ width: layout.width }}
         />
       </View>
     </SafeAreaView>
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  noDataText: {fontSize: 16, fontWeight: 'bold', color: colors.LIGHT_GRAY},
+  noDataText: { fontSize: 16, fontWeight: 'bold', color: colors.LIGHT_GRAY },
 });
 
 export default GivenAndReceivedAppriciation;

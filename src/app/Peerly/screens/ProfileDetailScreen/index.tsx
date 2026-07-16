@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {InfoIcon, StarIcon} from '../../constants/icons';
+import {InfoIcon} from '../../constants/icons';
 import {dateFormat} from '../../utils';
 import {CircularProgressBase} from 'react-native-circular-progress-indicator';
 import {useGetAppreciationList} from '../HomeScreen/home.hooks';
@@ -41,7 +41,6 @@ const ProfileDetailScreen = () => {
 
   const isDisableTabBtn = useMemo(() => {
     if (
-      !appreciationList?.length ||
       isErrorAppreciations ||
       isLoadingAppreciations
     ) {
@@ -49,7 +48,7 @@ const ProfileDetailScreen = () => {
     } else {
       return false;
     }
-  }, [appreciationList?.length, isErrorAppreciations, isLoadingAppreciations]);
+  }, [isErrorAppreciations, isLoadingAppreciations]);
 
   if (isLoadingProfileDetail || isFetchingProfileDetail) {
     return (
@@ -72,14 +71,15 @@ const ProfileDetailScreen = () => {
   } = profileDetails || initialProfileDetails;
 
   const userName = `${first_name || ''} ${last_name || ''}`;
-  const badgeType = badge.toLowerCase() || '';
-  const member = badgeType ? (
-    <Text>{badgeData[badgeType.toLowerCase()].member}</Text>
-  ) : null;
+  const badgeType = (badge && badgeData[badge.toLowerCase()]) ? badge.toLowerCase() : 'basicuser';
+  const member = (
+    <Text>{badgeData[badgeType].member}</Text>
+  );
   const userNameLowerCase = `${(first_name || '').toLowerCase()} ${(
     last_name || ''
   ).toLowerCase()}`;
-  const rewardPointMargin = {marginTop: badgeType ? 30 : 0};
+  const hasBadgeIcon = badgeType && badgeData[badgeType]?.icon;
+  const rewardPointMargin = {marginTop: hasBadgeIcon ? 30 : 0};
 
   appreciationList.reverse();
 
@@ -137,45 +137,48 @@ const ProfileDetailScreen = () => {
             <View style={[styles.totalPoints, rewardPointMargin]}>
               <Text style={[styles.name, styles.bold]}>{total_points}</Text>
               <Text style={[styles.name, styles.bold, styles.fontSize]}>
-                Appreciation
+                My Reward
               </Text>
               <Text style={[styles.name, styles.bold, styles.fontSize]}>
                 Points
               </Text>
             </View>
           </View>
-          {badgeType && (
+          {badgeType && badgeData[badgeType]?.icon ? (
             <View style={styles.badgeWrapper}>
-              {badgeData[badgeType]?.icon}
+              {badgeData[badgeType].icon}
             </View>
-          )}
+          ) : null}
         </View>
         <View style={styles.rewardDetailsBox}>
-          <View>
-            <Text style={[styles.name, styles.bold]}>
-              Reward Balance{' '}
+          <View style={{ flex: 1 }}>
+            <View style={styles.rewardBalanceHeader}>
+              <Text style={[styles.name, styles.bold]}>Reward Balance</Text>
               <TouchableOpacity
                 onPress={openModal}
+                hitSlop={{top: 15, bottom: 15, left: 15, right: 15}}
                 style={styles.infoIconWrapper}>
-                <InfoIcon width={16} height={16} />
+                <InfoIcon width={16} height={16} fill={colors.PRIMARY} />
               </TouchableOpacity>
-            </Text>
-            <Text>Refill on {dateFormat(refil_date, 'MMMM YYYY')}</Text>
+            </View>
+            <Text>Next Refill on {dateFormat(refil_date, 'MMMM YYYY')}</Text>
           </View>
           <View style={styles.progressBar}>
             <CircularProgressBase
               clockwise={false}
-              value={reward_quota_balance}
+              value={reward_quota_balance ?? 0}
               radius={30}
-              maxValue={total_reward_quota}
+              maxValue={total_reward_quota || 100}
               activeStrokeColor={colors.GOLD}
               inActiveStrokeColor={colors.WHITE}
               activeStrokeWidth={8}
-              inActiveStrokeWidth={8}>
-              <View>
-                <StarIcon width={25} height={25} />
-              </View>
-            </CircularProgressBase>
+              inActiveStrokeWidth={8}
+            />
+            <View style={styles.progressTextWrapper}>
+              <Text style={styles.rewardBalanceText}>
+                {reward_quota_balance ?? 0}
+              </Text>
+            </View>
           </View>
         </View>
         <View style={styles.appreciationList}>
@@ -279,6 +282,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.LIGHT_PASTEL_BLUE,
     borderRadius: 10,
     marginLeft: 30,
+    position: 'relative',
+  },
+  progressTextWrapper: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   appreciationList: {
     marginTop: 10,
@@ -288,6 +301,16 @@ const styles = StyleSheet.create({
   },
   infoIconWrapper: {
     paddingHorizontal: 5,
+  },
+  rewardBalanceHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  rewardBalanceText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.BLACK,
   },
 });
 export default ProfileDetailScreen;

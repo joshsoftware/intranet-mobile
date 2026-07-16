@@ -37,7 +37,6 @@ const SearchScreen = () => {
 
   const isDisableTabBtn = useMemo(() => {
     if (
-      !appreciationList?.length ||
       isErrorAppreciation ||
       isLoadingAppreciations
     ) {
@@ -45,7 +44,7 @@ const SearchScreen = () => {
     } else {
       return false;
     }
-  }, [appreciationList?.length, isErrorAppreciation, isLoadingAppreciations]);
+  }, [isErrorAppreciation, isLoadingAppreciations]);
 
   const receivedAppriciationList = appreciationList.filter(
     (item: AppreciationDetails) => {

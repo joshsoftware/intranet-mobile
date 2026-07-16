@@ -10,9 +10,10 @@ import {MainScreenNavigationProp} from '../../navigation/types';
 interface Props {
   type: 'primary' | 'secondary';
   title?: string;
+  showDrawerButton?: boolean;
 }
 
-const Header = ({type, title}: Props) => {
+const Header = ({type, title, showDrawerButton = true}: Props) => {
   const navigation = useNavigation<MainScreenNavigationProp>();
   const inset = useSafeAreaInsets();
 
@@ -33,11 +34,14 @@ const Header = ({type, title}: Props) => {
             <View style={styles.logoContainer}>
               <JoshLogo height={18} width={85} fill={colors.WHITE} />
             </View>
-            <TouchableOpacity
-              style={styles.menuIconContainer}
-              onPress={handleMenuButtonPress}>
-              <DrawerMenuIcon />
-            </TouchableOpacity>
+            {showDrawerButton && (
+              <TouchableOpacity
+                style={styles.menuIconContainer}
+                onPress={handleMenuButtonPress}
+                activeOpacity={0.7}>
+                <DrawerMenuIcon width={26} height={16} fill={colors.WHITE} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       );
@@ -81,8 +85,12 @@ const styles = StyleSheet.create({
     transform: [{translateX: -42.5}],
   },
   menuIconContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
+    position: 'absolute',
+    right: 15,
+    height: 40,
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backText: {
     color: colors.WHITE,

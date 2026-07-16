@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
-import Slider from '@react-native-community/slider';
+import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import { Slider } from '@miblanchard/react-native-slider';
 import {GoldenStar} from '../constants/icons';
 import colors from '../constants/colors';
 
@@ -14,14 +14,15 @@ const RatingBar: React.FC<RatingBarProps> = ({reward, setReward, disabled}) => {
   return (
     <View style={styles.sliderContainer}>
       <Slider
-        style={styles.slider}
+        containerStyle={styles.slider}
         minimumValue={0}
         maximumValue={3}
         step={1}
         value={reward}
-        onSlidingComplete={value => setReward(value)}
-        thumbImage={GoldenStar}
-        onResponderGrant={() => true}
+        onSlidingComplete={value => setReward(Array.isArray(value) ? value[0] : value)}
+        renderThumbComponent={() => (
+          <Image source={GoldenStar} style={{width: 30, height: 30}} />
+        )}
         minimumTrackTintColor={colors.GOLD}
         maximumTrackTintColor={colors.LIGHT_GRAY}
         disabled={disabled || false}

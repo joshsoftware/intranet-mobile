@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  createNativeStackNavigator,
-  NativeStackNavigationOptions,
-} from '@react-navigation/native-stack';
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import RNBootSplash from 'react-native-bootsplash';
 import {checkVersion} from 'react-native-check-version';
@@ -21,6 +21,8 @@ import {navigationRef} from '.';
 import UserContext from '../context/user.context';
 import VersionContext from '../context/version.context';
 import AsyncStore from '../services/asyncStorage';
+import DeviceInfo from 'react-native-device-info';
+
 
 import {RootStackParamList} from './types';
 import {
@@ -49,9 +51,9 @@ import ProfileDetailScreen from '../Peerly/screens/ProfileDetailScreen';
 import AppreciationDetailsScreen from '../Peerly/screens/AppreciationDetailsScreen';
 import SearchScreen from '../Peerly/screens/SearchScreen';
 
-const RootStack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createStackNavigator<RootStackParamList>();
 
-const screenOptions: NativeStackNavigationOptions = {
+const screenOptions: StackNavigationOptions = {
   headerShown: false,
 };
 
@@ -80,6 +82,25 @@ const linking: any = {
   },
 };
 
+const isVersionGreater = (storeVersion: string, localVersion: string): boolean => {
+  if (!storeVersion || !localVersion) {
+    return false;
+  }
+  const storeParts = storeVersion.split('.').map(Number);
+  const localParts = localVersion.split('.').map(Number);
+  for (let i = 0; i < Math.max(storeParts.length, localParts.length); i++) {
+    const storeVal = storeParts[i] || 0;
+    const localVal = localParts[i] || 0;
+    if (storeVal > localVal) {
+      return true;
+    }
+    if (storeVal < localVal) {
+      return false;
+    }
+  }
+  return false;
+};
+
 const RootNavigator = () => {
   const [userContextData, setUserContextData] = useContext(UserContext);
   const [versionContextData, setVersionContextData] =
@@ -90,10 +111,25 @@ const RootNavigator = () => {
     const run = async () => {
       try {
         try {
-          const version = await checkVersion({
-            bundleId: BUNDLE_ID,
-          });
-          setVersionContextData(version);
+          const bundleId = DeviceInfo.getBundleId();
+          const currentVersion = DeviceInfo.getVersion();
+          if (bundleId === 'com.joshsoftware.intranet' && !__DEV__) {
+            const version = await checkVersion({
+              bundleId: BUNDLE_ID,
+              currentVersion: currentVersion,
+            });
+            const needsUpdate = version.version ? isVersionGreater(version.version, currentVersion) : false;
+            setVersionContextData({
+              ...version,
+              needsUpdate: needsUpdate,
+            });
+          } else {
+            setVersionContextData({
+              version: currentVersion,
+              needsUpdate: false,
+              url: '',
+            } as any);
+          }
         } catch {}
 
         const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
@@ -160,6 +196,7 @@ const RootNavigator = () => {
                 headerTitle: 'Appreciation',
                 headerShadowVisible: false,
                 headerShown: true,
+                headerBackTitleVisible: false,
               }}
             />
             <RootStack.Screen
@@ -169,6 +206,7 @@ const RootNavigator = () => {
                 headerTitle: '',
                 headerShadowVisible: false,
                 headerShown: true,
+                headerBackTitleVisible: false,
               }}
             />
             <RootStack.Screen
@@ -178,6 +216,7 @@ const RootNavigator = () => {
                 headerShadowVisible: false,
                 headerShown: true,
                 headerTitle: 'Profile',
+                headerBackTitleVisible: false,
               }}
             />
             <RootStack.Screen
@@ -187,6 +226,7 @@ const RootNavigator = () => {
                 headerShown: true,
                 headerTitle: '',
                 headerShadowVisible: false,
+                headerBackTitleVisible: false,
               }}
             />
           </>

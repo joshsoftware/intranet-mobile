@@ -34,7 +34,7 @@ function LoginInstructionScreen(props: LoginInstructionScreenNavigationProp) {
   return (
     <ImageBackground source={boxBackgroundImage} style={styles.imageContainer}>
       <View style={[styles.container, {paddingBottom: insets.bottom}]}>
-        <Header type="primary" />
+        <Header type="primary" showDrawerButton={false} />
         <View style={styles.headerContainer}>
           <Text style={styles.header}>Action Needed</Text>
         </View>

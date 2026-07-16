@@ -24,6 +24,10 @@ export const badgeData: BadgeMetaData = {
     member: 'Bronze Member',
     icon: <BronzeIcon width={60} height={60} />,
   },
+  basicuser: {
+    member: 'Basic User',
+    icon: null,
+  },
 };
 
 export const paginationData = {

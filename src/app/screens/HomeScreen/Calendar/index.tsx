@@ -1,7 +1,6 @@
-import React, {useCallback, useContext, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {CalendarList, DateData} from 'react-native-calendars';
-import {useNavigation} from '@react-navigation/native';
 
 import Typography from '../../../components/typography';
 import Label from './Label';
@@ -9,11 +8,8 @@ import {useHomeCalendar} from '../dashboard.hooks';
 
 import {getMonthYearFromISO, todaysDate} from '../../../utils/date';
 import {generateMarkedDates} from '../../../utils/home';
-import {isManagement} from '../../../utils/user';
-import UserContext from '../../../context/user.context';
 
 import colors from '../../../constant/colors';
-import {TIMESHEET_SCREEN, USER_TIMESHEET} from '../../../constant/screenNames';
 
 const theme = {
   textDayFontSize: 14,
@@ -34,12 +30,12 @@ const theme = {
   },
 };
 
+const MONTH_MAP: { [key: string]: number } = {
+  January: 0, February: 1, March: 2, April: 3, May: 4, June: 5,
+  July: 6, August: 7, September: 8, October: 9, November: 10, December: 11
+};
+
 function Calendar() {
-  const navigation = useNavigation<any>();
-  const [userData] = useContext(UserContext);
-
-  const isManager = isManagement(userData?.userData.role);
-
   const [month, setMonth] = useState(
     todaysDate().toLocaleString('indian', {month: 'long'}),
   );
@@ -67,75 +63,33 @@ function Calendar() {
     });
   }, [approved, pending, rejected, not_filled, leaves, holidays, weekends]);
 
-  const onDatePress = useCallback(
-    ({
-      dateString,
-      day: selected_day,
-      month: selected_month,
-      year: selected_year,
-    }: DateData) => {
-      const commonParams = {startDate: dateString, endDate: dateString};
+  const onDatePress = () => {
+    // Navigation to timesheet from day press is disabled as per user request
+  };
 
-      const screen = isManager ? USER_TIMESHEET : TIMESHEET_SCREEN;
-      const params = isManager
-        ? {...commonParams, user_id: userData?.userData.userId}
-        : commonParams;
+  const numWeeks = useMemo(() => {
+    const monthIndex = MONTH_MAP[month] ?? 0;
+    const firstDayIndex = (new Date(year, monthIndex, 1).getDay() + 6) % 7;
+    const totalDays = new Date(year, monthIndex + 1, 0).getDate();
+    return Math.ceil((firstDayIndex + totalDays) / 7);
+  }, [month, year]);
 
-      const today = new Date();
-
-      if (
-        selected_day === today.getDate() &&
-        selected_month === today.getMonth() + 1 &&
-        selected_year === today.getFullYear()
-      ) {
-        navigation.navigate(screen, params);
-        return;
-      }
-
-      switch (markedDates[dateString]?.type) {
-        case 'approved':
-          navigation.navigate(screen, params);
-          return;
-
-        case 'not_filled':
-          navigation.navigate(screen, {
-            ...params,
-            isAddModalOpen: true,
-          });
-          return;
-
-        case 'pending':
-          navigation.navigate(screen, params);
-          return;
-
-        case 'rejected':
-          navigation.navigate(screen, params);
-          return;
-
-        case 'weekends':
-          navigation.navigate(screen, {
-            ...params,
-            isAddModalOpen: true,
-          });
-          return;
-
-        default:
-          return;
-      }
-    },
-    [isManager, markedDates, navigation, userData?.userData.userId],
-  );
+  const calendarHeight = useMemo(() => {
+    if (numWeeks === 4) return 210;
+    if (numWeeks === 5) return 250;
+    return 290; // 6 weeks
+  }, [numWeeks]);
 
   return (
     <View style={styles.container}>
       <Typography type="header" style={styles.title}>
-        Timesheet
+        Calendar
       </Typography>
 
       <View style={styles.labelContainer}>
         <Label
           count={approved.length}
-          text="Approved"
+          text="Present"
           color={colors.LIGHT_GREEN_BACKGROUND}
         />
         <Label
@@ -170,9 +124,7 @@ function Calendar() {
         markedDates={markedDates}
         firstDay={1}
         onDayPress={onDatePress}
-        // calendarHeight is used as minHeight in library
-        // calendar will expand to take required space
-        calendarHeight={0}
+        calendarHeight={calendarHeight}
       />
     </View>
   );
@@ -193,6 +145,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
     marginBottom: 15,
     paddingVertical: 16,
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   title: {
     fontWeight: 'bold',

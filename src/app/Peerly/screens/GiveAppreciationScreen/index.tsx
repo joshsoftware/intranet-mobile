@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Pressable,
   Text,
+  ScrollView,
 } from 'react-native';
 import {
   useGetCoworkerList,
@@ -15,7 +16,6 @@ import {
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import Select from '../../components/select/Select';
 import CenteredModal from '../../components/Modal';
-import { ScrollView } from 'react-native-gesture-handler';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CoreValueInfoModal from '../../components/CoreValueInfoModal';

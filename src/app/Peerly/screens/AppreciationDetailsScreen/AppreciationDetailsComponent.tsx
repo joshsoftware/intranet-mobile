@@ -184,6 +184,14 @@ const AppreciationDetailsComponent = ({
     }
   };
 
+  const isRewardDisabled = useMemo(() => {
+    return (
+      getRewardConversion > 0 ||
+      isRewardAlreadyGiven ||
+      profileDetails?.reward_quota_balance === 0
+    );
+  }, [getRewardConversion, isRewardAlreadyGiven, profileDetails?.reward_quota_balance]);
+
   if (!cardDetails) {
     return (
       <View>
@@ -194,15 +202,6 @@ const AppreciationDetailsComponent = ({
 
   const receiverName = `${cardDetails?.receiver_first_name || ''} ${cardDetails?.receiver_last_name || ''
     } `;
-
-
-  const isRewardDisabled = useMemo(() => {
-    return (
-      getRewardConversion > 0 ||
-      isRewardAlreadyGiven ||
-      profileDetails?.reward_quota_balance === 0
-    );
-  }, [getRewardConversion, isRewardAlreadyGiven, profileDetails?.reward_quota_balance]);
 
 
   return (

@@ -37,14 +37,12 @@ const TabBar = (props: BottomTabBarProps) => {
 
   const state = props.state as StateType;
   const navigation = props.navigation as NavigationType;
-  const descriptors = props.descriptors;
+
 
   const focusedRoute = state.routes[state.index];
-  const focusedDescriptor = descriptors[focusedRoute.key];
-  const focusedOptions = focusedDescriptor.options;
+  const isModalOpen = (focusedRoute.params as any)?.isModalOpen;
 
-  const { tabBarHideOnKeyboard = false } = focusedOptions;
-  const tabBarHidden = tabBarHideOnKeyboard && isKeyboardShown;
+  const tabBarHidden = isKeyboardShown || isModalOpen;
 
   if (tabBarHidden) {
     return null;

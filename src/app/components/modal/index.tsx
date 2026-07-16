@@ -1,5 +1,5 @@
 import React, {memo, PropsWithChildren} from 'react';
-import {StyleSheet, View, ViewStyle} from 'react-native';
+import {Dimensions, StyleSheet, View, ViewStyle} from 'react-native';
 import ReactNativeModal, {ModalProps} from 'react-native-modal';
 
 import Toast from '../toast';
@@ -14,10 +14,14 @@ type Props = (PropsWithChildren | ModalProps) & {
 
 const BottomModal = ({children, style, contentStyle, ...props}: Props) => {
   const inset = useSafeAreaInsets();
+  const {height: screenHeight, width: screenWidth} = Dimensions.get('screen');
 
   return (
     <ReactNativeModal
       style={[styles.main, style, {paddingTop: inset.top}]}
+      deviceHeight={screenHeight}
+      deviceWidth={screenWidth}
+      statusBarTranslucent={true}
       {...props}>
       <View
         style={[

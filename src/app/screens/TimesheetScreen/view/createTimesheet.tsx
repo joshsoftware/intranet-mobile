@@ -1,5 +1,6 @@
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {Alert, Keyboard, StyleSheet, View} from 'react-native';
+import {Alert, Dimensions, Keyboard, Platform, StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import {useIsKeyboardShown} from '../../../hooks/useIsKeyboardShown';
 import Modal from '../../../components/modal';
@@ -36,6 +37,12 @@ const CreateTimesheet = ({
   userName,
   defaultDate,
 }: Props) => {
+  const navigation = useNavigation<any>();
+
+  useEffect(() => {
+    navigation.setParams({isModalOpen: isVisible});
+  }, [isVisible, navigation]);
+
   const [addedTimesheet, setAddedTimesheet] = useState<
     ITimesheetSectionListItem[]
   >([]);
@@ -221,6 +228,7 @@ const CreateTimesheet = ({
   return (
     <Modal
       isVisible={isVisible}
+      avoidKeyboard={Platform.OS === 'ios'}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
       animationInTiming={500}
@@ -269,28 +277,31 @@ const CreateTimesheet = ({
         />
       </View>
 
-      {!isKeyboardShown && (
-        <View style={styles.btns}>
-          <Button title="Cancel" type="secondary" onPress={resetStates} />
-          <Button
-            title="Save"
-            type="primary"
-            onPress={onSave}
-            isLoading={isLoading}
-            disabled={!addedTimesheet.length || disableSave}
-          />
-        </View>
-      )}
+      <View
+        style={[styles.btns, isKeyboardShown && styles.hiddenBtns]}
+        pointerEvents={isKeyboardShown ? 'none' : 'auto'}>
+        <Button title="Cancel" type="secondary" onPress={resetStates} />
+        <Button
+          title="Save"
+          type="primary"
+          onPress={onSave}
+          isLoading={isLoading}
+          disabled={!addedTimesheet.length || disableSave}
+        />
+      </View>
     </Modal>
   );
 };
 
+const {height: screenHeight} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   main: {
-    marginTop: '10%',
-    height: '95%',
+    marginTop: screenHeight * 0.1,
+    height: screenHeight * 0.9,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    justifyContent: 'flex-start',
   },
   title: {
     color: colors.SECONDARY,
@@ -341,6 +352,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 16,
     width: '100%',
+  },
+  hiddenBtns: {
+    opacity: 0,
+    height: 0,
+    overflow: 'hidden',
+    marginVertical: 0,
+    paddingVertical: 0,
   },
   btnText: {
     color: colors.PRIMARY,

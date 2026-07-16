@@ -26,7 +26,7 @@ export function useGetSearchAppreciationList(
     }
   }, [isError, error]);
   return {
-    data: data?.data.appreciations || [],
+    data: data?.data?.appreciations || [],
     isLoading,
     isFetching,
     isSuccess,

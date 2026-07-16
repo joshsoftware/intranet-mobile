@@ -1,5 +1,6 @@
 import React, {memo, useEffect, useState} from 'react';
 import {Platform, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -30,6 +31,12 @@ const EditTimesheetModal = ({
   isVisible,
   userId,
 }: Props) => {
+  const navigation = useNavigation<any>();
+
+  useEffect(() => {
+    navigation.setParams({isModalOpen: isVisible});
+  }, [isVisible, navigation]);
+
   const [isShowToast, setIsShowToast] = useState<Boolean>(false);
   const {keyboardHeight} = useIsKeyboardShown();
   const insets = useSafeAreaInsets();
@@ -72,6 +79,7 @@ const EditTimesheetModal = ({
   return (
     <Modal
       isVisible={isVisible}
+      avoidKeyboard={Platform.OS === 'ios'}
       animationIn={'slideInUp'}
       animationOut={'slideOutDown'}
       animationInTiming={500}

@@ -35,10 +35,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 16,
     marginBottom: 9,
     paddingHorizontal: 6,
-    color: colors.TERTIARY_TEXT,
     borderBottomWidth: 1,
     borderBottomColor: colors.TEXT_INPUT_BORDER,
   },
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     color: colors.SECONDARY,
-    width: '100%',
+    flex: 1,
     paddingVertical: 10,
   },
 });

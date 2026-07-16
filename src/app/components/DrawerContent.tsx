@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Linking, StyleSheet, TouchableOpacity } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +22,12 @@ const DrawerContent = (props: any) => {
   const goToProfile = () => {
     navigation.navigate(USER_PROFILE_SCREEN);
     closeDrawer();
+  };
+
+  const goToProvidesk = () => {
+    Linking.openURL('https://providesk.joshsoftware.com/complaints').catch(() => {
+      Alert.alert('Error', 'Could not open Providesk support page.');
+    });
   };
 
   const logout = async () => {
@@ -56,6 +62,12 @@ const DrawerContent = (props: any) => {
         label="Profile"
         labelStyle={styles.label}
         onPress={goToProfile}
+        style={styles.border}
+      />
+      <DrawerItem
+        label="Providesk"
+        labelStyle={styles.label}
+        onPress={goToProvidesk}
         style={styles.border}
       />
       <DrawerItem
