@@ -1,7 +1,8 @@
-import {AxiosError} from 'axios';
-import {useInfiniteQuery, useQuery} from 'react-query';
+import { AxiosError } from 'axios';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
-import {dateFormate} from '../../utils/date';
+import { dateFormate } from '../../utils/date';
 import {
   getManagerLeaveListRequest,
   getLeaveDetailRequest,
@@ -11,8 +12,8 @@ import {
 } from '../../services/leaves';
 import toast from '../../utils/toast';
 
-import {ISO_DATE_FROMAT} from '../../constant/date';
-import {ILeaveFilters, ILeaveListItemData} from './interface';
+import { ISO_DATE_FROMAT } from '../../constant/date';
+import { ILeaveFilters, ILeaveListItemData, LeaveDetail } from './interface';
 
 export function useManagerLeaveList(filters: ILeaveFilters) {
   const from = dateFormate(filters.from, ISO_DATE_FROMAT);
@@ -22,6 +23,7 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
     data,
     isLoading,
     isError,
+    error,
     fetchNextPage,
     isFetchingNextPage,
     refetch,
@@ -29,9 +31,10 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
     isRefetchError,
   } = useInfiniteQuery({
     queryKey: ['ManagerLeaveList', ...Object.values(filters), from, to],
-    queryFn: async ({pageParam}) =>
-      getManagerLeaveListRequest({...filters, from, to, page_no: pageParam}),
-    getNextPageParam: lastPage => {
+    queryFn: async ({ pageParam = 1 }) =>
+      getManagerLeaveListRequest({ ...filters, from, to, page_no: pageParam as number }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any) => {
       const totalPages = lastPage.data.data.total_pages;
       const lastPageNumber = lastPage.data.data.page_no;
 
@@ -41,11 +44,15 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
 
       return undefined;
     },
-    onError: (err: AxiosError) => {
-      const response = err.response?.data as any;
-      toast(response?.message || 'Failed to fetch leaves', 'error');
-    },
   });
+
+  useEffect(() => {
+    if (isError) {
+      const axiosError = error as AxiosError;
+      const response = axiosError.response?.data as any;
+      toast(response?.message || 'Failed to fetch leaves', 'error');
+    }
+  }, [isError, error]);
 
   let leaves: ILeaveListItemData[] = [];
   const pages = data?.pages || [];
@@ -70,20 +77,20 @@ export function useManagerLeaveList(filters: ILeaveFilters) {
 }
 
 export function useLeaveDetail(leaveID: number) {
-  const {data, isLoading, isError} = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['leaveDetail', leaveID],
-    queryFn: async () => getLeaveDetailRequest({leave_id: leaveID}),
+    queryFn: async () => getLeaveDetailRequest({ leave_id: leaveID }),
   });
 
   return {
-    data: data?.data?.data || {},
+    data: (data?.data?.data || {}) as LeaveDetail,
     isLoading,
     isError,
   };
 }
 
 export function useProjectList() {
-  const {data, refetch, isLoading, isError} = useQuery({
+  const { data, refetch, isLoading, isError } = useQuery({
     queryKey: ['allProjects'],
     queryFn: async () => getAllProjectsRequest(),
   });
@@ -92,7 +99,7 @@ export function useProjectList() {
 
   return {
     data:
-      projects.map(({name, project_id}) => ({
+      projects.map(({ name, project_id }) => ({
         label: name,
         value: project_id,
       })) || [],
@@ -103,7 +110,7 @@ export function useProjectList() {
 }
 
 export function useUserList() {
-  const {data, refetch, isLoading, isError} = useQuery({
+  const { data, refetch, isLoading, isError } = useQuery({
     queryKey: ['allUsers'],
     queryFn: async () => getAllUsersRequest(),
   });
@@ -112,7 +119,7 @@ export function useUserList() {
 
   return {
     data:
-      users.map(({name, email, user_id}) => ({
+      users.map(({ name, email, user_id }) => ({
         label:
           !name || name === ' ' // Due to inconsistent response from staging backend
             ? email
@@ -133,10 +140,10 @@ export const useLeavesList = (
   const from = dateFormate(initialDate, ISO_DATE_FROMAT);
   const to = dateFormate(endDate, ISO_DATE_FROMAT);
 
-  const {data, isLoading, refetch, isError, isRefetching} = useQuery(
-    ['employeeLeaves', from, to, isPendingLeaves ? 'pending' : 'history'],
-    () => getEmployeeLeaves({from, to, pending_flag: isPendingLeaves}),
-  );
+  const { data, isLoading, refetch, isError, isRefetching } = useQuery({
+    queryKey: ['employeeLeaves', from, to, isPendingLeaves ? 'pending' : 'history'],
+    queryFn: () => getEmployeeLeaves({ from, to, pending_flag: isPendingLeaves }),
+  });
 
   return {
     data: data?.data?.data?.leaves || [],

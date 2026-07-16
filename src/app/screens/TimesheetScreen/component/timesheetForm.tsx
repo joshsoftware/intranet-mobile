@@ -1,14 +1,12 @@
-import React, {memo, useEffect, useMemo, useRef} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, {memo, useEffect, useMemo} from 'react';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
-import Collapsible from 'react-native-collapsible';
 
 import Typography from '../../../components/typography';
 import PickerSelect from '../../../components/pickers/pickerSelect';
 import DatePicker from '../../../components/pickers/datePicker';
-import Input from '../../../components/input';
 import Button from '../../../components/button';
 import {useAssignedProjects, useTimesheetWarning} from '../timesheet.hooks';
 
@@ -22,7 +20,7 @@ import {workHoursData} from '../../../constant/timesheet';
 
 const timesheetFormSchema = yup.object().shape({
   project_id: yup.string().required('Project is a required field'),
-  date: yup.date().required('Date is a required field'),
+  date: yup.mixed().required('Date is a required field'),
   worked_minutes: yup.number().required('Work hours is a required field'),
   description: yup
     .string()
@@ -53,6 +51,15 @@ const TimesheetForm = ({
   userId,
   toggleForm,
 }: Props) => {
+  const initialValues = useMemo(() => {
+    return defaultData ?? {
+      project_id: undefined,
+      date: defaultDate ?? undefined,
+      worked_minutes: undefined,
+      description: undefined,
+    };
+  }, [defaultData, defaultDate]);
+
   const {
     handleSubmit,
     control,
@@ -61,13 +68,8 @@ const TimesheetForm = ({
     formState: {errors, isSubmitted, isSubmitSuccessful},
   } = useForm({
     mode: 'onSubmit',
-    values: defaultData ?? {
-      project_id: undefined,
-      date: defaultDate ?? undefined,
-      worked_minutes: undefined,
-      description: undefined,
-    },
-    resolver: yupResolver(timesheetFormSchema),
+    values: initialValues,
+    resolver: yupResolver(timesheetFormSchema as any),
   });
 
   const watchFields = watch(['project_id', 'worked_minutes']);
@@ -78,15 +80,9 @@ const TimesheetForm = ({
     watchFields,
   );
 
-  // Workaround for issue: https://github.com/facebook/react-native/issues/36494
-  const iOSTextInputWorkaroundRef = useRef(false);
-
   useEffect(() => {
     if (isSubmitted && isSubmitSuccessful) {
       reset();
-
-      // Workaround for issue: https://github.com/facebook/react-native/issues/36494
-      iOSTextInputWorkaroundRef.current = Platform.OS === 'ios';
     }
   }, [isSubmitted, isSubmitSuccessful, reset]);
 
@@ -120,49 +116,11 @@ const TimesheetForm = ({
 
   return (
     <>
-      <Collapsible collapsed={!isFormVisible} duration={400}>
-        <View>
-          <Typography type="header" style={styles.labelText}>
-            Project
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <PickerSelect
-                onValueChange={onChange}
-                value={value}
-                items={projects}
-                error={errors?.project_id?.message}
-              />
-            )}
-            name="project_id"
-          />
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.rowItem}>
+      {isFormVisible && (
+        <>
+          <View>
             <Typography type="header" style={styles.labelText}>
-              Select Date
-            </Typography>
-            <Controller
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <DatePicker
-                  onDateChange={onChange}
-                  hideIcon={false}
-                  selectedDate={value ? new Date(value) : undefined}
-                  placeholder="Select date"
-                  maximumDate={todaysDate()}
-                  error={errors?.date?.message}
-                />
-              )}
-              name="date"
-            />
-          </View>
-
-          <View style={styles.rowItem}>
-            <Typography type="header" style={styles.labelText}>
-              Work in hours
+              Project
             </Typography>
             <Controller
               control={control}
@@ -170,48 +128,91 @@ const TimesheetForm = ({
                 <PickerSelect
                   onValueChange={onChange}
                   value={value}
-                  items={workHoursData}
-                  error={errors?.worked_minutes?.message}
+                  items={projects}
+                  error={errors?.project_id?.message}
                 />
               )}
-              name="worked_minutes"
+              name="project_id"
             />
           </View>
-        </View>
 
-        <View>
-          <Typography type="header" style={styles.labelText}>
-            Description
-          </Typography>
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                onBlur={onBlur}
-                onChangeText={txt => {
-                  // Workaround for issue: https://github.com/facebook/react-native/issues/36494
-                  if (iOSTextInputWorkaroundRef.current) {
-                    iOSTextInputWorkaroundRef.current = false;
-                    return;
-                  }
-
-                  onChange(txt);
-                }}
-                value={value}
-                multiline={true}
-                placeholder={strings.DESCRIPTION_PLACEHOLDER}
-                style={styles.description}
-                error={errors?.description?.message}
+          <View style={styles.row}>
+            <View style={styles.rowItem}>
+              <Typography type="header" style={styles.labelText}>
+                Select Date
+              </Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <DatePicker
+                    onDateChange={onChange}
+                    hideIcon={false}
+                    selectedDate={value ? new Date(value) : undefined}
+                    placeholder="Select date"
+                    maximumDate={todaysDate()}
+                    error={errors?.date?.message}
+                  />
+                )}
+                name="date"
               />
-            )}
-            name="description"
-          />
-        </View>
+            </View>
 
-        {warningMessage && (
-          <Text style={styles.warningStyle}>{warningMessage}</Text>
-        )}
-      </Collapsible>
+            <View style={styles.rowItem}>
+              <Typography type="header" style={styles.labelText}>
+                Work in hours
+              </Typography>
+              <Controller
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <PickerSelect
+                    onValueChange={onChange}
+                    value={value}
+                    items={workHoursData}
+                    error={errors?.worked_minutes?.message}
+                  />
+                )}
+                name="worked_minutes"
+              />
+            </View>
+          </View>
+
+          <View>
+            <Typography type="header" style={styles.labelText}>
+              Description
+            </Typography>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <View
+                  style={[
+                    styles.descriptionContainer,
+                    errors?.description ? styles.errorBorder : {},
+                  ]}>
+                  <TextInput
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value ? value : ''}
+                    multiline={true}
+                    placeholder={strings.DESCRIPTION_PLACEHOLDER}
+                    placeholderTextColor={colors.PLACEHOLDER_TEXT}
+                    style={styles.description}
+                  />
+                </View>
+              )}
+              name="description"
+            />
+            {errors?.description?.message && (
+              <Typography style={styles.error} type="description">
+                {errors.description.message}
+              </Typography>
+            )}
+          </View>
+
+          {warningMessage && (
+            <Text style={styles.warningStyle}>{warningMessage}</Text>
+          )}
+        </>
+      )}
       {!isEditForm ? (
         <View style={styles.addButton}>
           <Button
@@ -240,9 +241,21 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginVertical: 5,
   },
+  descriptionContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.TEXT_INPUT_BORDER,
+    height: 100,
+  },
   description: {
-    maxHeight: 100,
+    color: colors.SECONDARY,
     fontSize: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 6,
+    flex: 1,
+    textAlignVertical: 'top',
+  },
+  errorBorder: {
+    borderBottomColor: colors.ERROR_RED,
   },
   row: {
     flexDirection: 'row',

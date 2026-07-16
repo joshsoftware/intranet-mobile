@@ -14,8 +14,10 @@ const TeamMembersBirthdays = () => {
     return null;
   }
 
+  const AnimatedView = Animated.View as any;
+
   return (
-    <Animated.View entering={FadeInDown} style={styles.container}>
+    <AnimatedView entering={FadeInDown} style={styles.container}>
       <Typography type="header" style={styles.title}>
         Upcoming Birthdays Of Employees
       </Typography>
@@ -25,7 +27,7 @@ const TeamMembersBirthdays = () => {
           <BirthdayCard {...item} />
         </Fragment>
       ))}
-    </Animated.View>
+    </AnimatedView>
   );
 };
 

@@ -29,4 +29,5 @@ export default {
   YELLOW_BACKGROUND: '#FCDDA3',
   LIGHT_BLUE_BACKGROUND: '#b9bfeb',
   GRAY_BACKGROUND: '#adadad',
+  TRANSPARENT: 'transparent',
 };

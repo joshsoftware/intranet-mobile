@@ -9,6 +9,7 @@ export type GetHomeTimesheetDataResponse = {
     not_filled: string[];
     leaves: string[];
     holidays: string[];
+    weekends: string[];
   };
 };
 

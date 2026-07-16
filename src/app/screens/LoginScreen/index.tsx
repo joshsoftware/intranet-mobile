@@ -120,11 +120,13 @@ const LoginScreen = () => {
         </View>
       </KeyboardAwareScrollView>
 
-      <AppleLoginInfoModal
-        isVisible={showAppleLoginInfoModal}
-        closeModal={() => setShowAppleLoginInfoModal(false)}
-        continueAppleLogin={handleAppleLoginContinue}
-      />
+      {showAppleLoginInfoModal && (
+        <AppleLoginInfoModal
+          isVisible={showAppleLoginInfoModal}
+          closeModal={() => setShowAppleLoginInfoModal(false)}
+          continueAppleLogin={handleAppleLoginContinue}
+        />
+      )}
     </ImageBackground>
   );
 };

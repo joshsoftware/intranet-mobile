@@ -1,4 +1,26 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+
+plugins {
+    id("com.facebook.react.settings")
+}
+
+includeBuild("../node_modules/@react-native/gradle-plugin") {
+    dependencySubstitution {
+        substitute(module("com.facebook.react:react-native-gradle-plugin")).using(project(":react-native-gradle-plugin"))
+    }
+}
+
+reactSettings {
+    autolinkLibrariesFromCommand()
+}
+
 rootProject.name = 'Intranet'
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
-includeBuild('../node_modules/@react-native/gradle-plugin')
+

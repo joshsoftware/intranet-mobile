@@ -9,6 +9,7 @@ import {
   Employee,
   TimesheetStatus,
 } from '../../app/screens/TimesheetScreen/interface';
+import {AppreciationDetails} from '../Peerly/services/home/types';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -26,12 +27,21 @@ export type RootStackParamList = {
   OTPAuthentication: {email: string};
   UpdateVersion: undefined;
   NoVersion: undefined;
+  PeerlyHome: undefined;
+  AppreciationSearch: undefined;
+  GiveAppreciation: undefined;
+  PeerlyProfile: {userId: number | undefined};
+  AppreciationDetail: {
+    cardId: number;
+    appriciationList: AppreciationDetails[];
+  };
 };
 
 export type MainTabParamList = {
   Home: undefined;
   Leave: undefined;
   Timesheet: {startDate?: string; endDate?: string; isAddModalOpen?: boolean};
+  Peerly: undefined;
 };
 
 export type DrawerParamList = {

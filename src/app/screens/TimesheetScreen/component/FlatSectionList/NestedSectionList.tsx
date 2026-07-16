@@ -12,10 +12,11 @@ interface IProps<T> {
     subSectionId?: number,
     subSection?: string,
   ) => React.ReactElement;
+  ListEmptyComponent?: React.FC;
 }
 
 const NestedSectionList = <T,>(props: IProps<T>) => {
-  const {data, superSection, renderItem} = props;
+  const {data, superSection, renderItem, ListEmptyComponent} = props;
 
   const renderSectionHeader = ({
     section: {title},
@@ -40,6 +41,7 @@ const NestedSectionList = <T,>(props: IProps<T>) => {
       sections={data}
       renderItem={renderItemWrapper}
       renderSectionHeader={renderSectionHeader}
+      ListEmptyComponent={ListEmptyComponent}
     />
   );
 };

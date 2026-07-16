@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  createNativeStackNavigator,
-  NativeStackNavigationOptions,
-} from '@react-navigation/native-stack';
+  createStackNavigator,
+  StackNavigationOptions,
+} from '@react-navigation/stack';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import RNBootSplash from 'react-native-bootsplash';
 import {checkVersion} from 'react-native-check-version';
@@ -21,6 +21,8 @@ import {navigationRef} from '.';
 import UserContext from '../context/user.context';
 import VersionContext from '../context/version.context';
 import AsyncStore from '../services/asyncStorage';
+import DeviceInfo from 'react-native-device-info';
+
 
 import {RootStackParamList} from './types';
 import {
@@ -36,10 +38,22 @@ import {
 } from '../constant/screenNames';
 import colors from '../constant/colors';
 import {BUNDLE_ID} from '../constant';
+import {
+  APPRECIATION_DETAILS_SCREEN,
+  APPRECIATION_SEARCH_SCREEN,
+  GIVE_APPRECIATION_SCREEN,
+  HOME_SCREEN,
+  PROFILE_DETAILS_SCREEN,
+} from '../Peerly/constants/screenNames';
+import HomeScreen from '../Peerly/screens/HomeScreen';
+import AppreciationScreen from '../Peerly/screens/GiveAppreciationScreen';
+import ProfileDetailScreen from '../Peerly/screens/ProfileDetailScreen';
+import AppreciationDetailsScreen from '../Peerly/screens/AppreciationDetailsScreen';
+import SearchScreen from '../Peerly/screens/SearchScreen';
 
-const RootStack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createStackNavigator<RootStackParamList>();
 
-const screenOptions: NativeStackNavigationOptions = {
+const screenOptions: StackNavigationOptions = {
   headerShown: false,
 };
 
@@ -68,6 +82,25 @@ const linking: any = {
   },
 };
 
+const isVersionGreater = (storeVersion: string, localVersion: string): boolean => {
+  if (!storeVersion || !localVersion) {
+    return false;
+  }
+  const storeParts = storeVersion.split('.').map(Number);
+  const localParts = localVersion.split('.').map(Number);
+  for (let i = 0; i < Math.max(storeParts.length, localParts.length); i++) {
+    const storeVal = storeParts[i] || 0;
+    const localVal = localParts[i] || 0;
+    if (storeVal > localVal) {
+      return true;
+    }
+    if (storeVal < localVal) {
+      return false;
+    }
+  }
+  return false;
+};
+
 const RootNavigator = () => {
   const [userContextData, setUserContextData] = useContext(UserContext);
   const [versionContextData, setVersionContextData] =
@@ -77,23 +110,39 @@ const RootNavigator = () => {
   useEffect(() => {
     const run = async () => {
       try {
-        const version = await checkVersion({
-          bundleId: BUNDLE_ID,
-        });
+        try {
+          const bundleId = DeviceInfo.getBundleId();
+          const currentVersion = DeviceInfo.getVersion();
+          if (bundleId === 'com.joshsoftware.intranet' && !__DEV__) {
+            const version = await checkVersion({
+              bundleId: BUNDLE_ID,
+              currentVersion: currentVersion,
+            });
+            const needsUpdate = version.version ? isVersionGreater(version.version, currentVersion) : false;
+            setVersionContextData({
+              ...version,
+              needsUpdate: needsUpdate,
+            });
+          } else {
+            setVersionContextData({
+              version: currentVersion,
+              needsUpdate: false,
+              url: '',
+            } as any);
+          }
+        } catch {}
 
-        setVersionContextData(version);
-      } catch {}
-
-      const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
-      const userData = await AsyncStore.getItem(AsyncStore.USER_DATA);
-      if (authToken === null || authToken === '' || userData === null) {
-        setUserContextData(null);
-      } else {
-        setUserContextData({authToken, userData: JSON.parse(userData)});
+        const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
+        const userData = await AsyncStore.getItem(AsyncStore.USER_DATA);
+        if (authToken === null || authToken === '' || userData === null) {
+          setUserContextData(null);
+        } else {
+          setUserContextData({authToken, userData: JSON.parse(userData)});
+        }
+      } finally {
+        await new Promise<void>(resolve => setTimeout(resolve, 1000));
+        setLoading(false);
       }
-
-      await new Promise<void>(resolve => setTimeout(resolve, 1000));
-      setLoading(false);
     };
 
     run();
@@ -112,14 +161,17 @@ const RootNavigator = () => {
       <RootStack.Navigator
         screenOptions={screenOptions}
         initialRouteName={DRAWER}>
-        {versionContextData === null || versionContextData.version === null ? (
+        {
+        versionContextData === null || versionContextData.version === null ? (
           <RootStack.Screen name={NO_VERSION} component={NoVersionScreen} />
-        ) : versionContextData.needsUpdate ? (
+        ) 
+        : versionContextData.needsUpdate ? (
           <RootStack.Screen
             name={UPDATE_VERSION}
             component={UpdateVersionScreen}
           />
-        ) : userContextData ? (
+        ) 
+        : userContextData ? (
           <>
             <RootStack.Screen name={DRAWER} component={DrawerNavigator} />
 
@@ -131,6 +183,51 @@ const RootNavigator = () => {
             <RootStack.Screen
               name={LEAVE_DETAIL_SCREEN}
               component={LeaveDetailScreen}
+            />
+            <RootStack.Screen
+              name={HOME_SCREEN}
+              component={HomeScreen}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name={GIVE_APPRECIATION_SCREEN}
+              component={AppreciationScreen}
+              options={{
+                headerTitle: 'Appreciation',
+                headerShadowVisible: false,
+                headerShown: true,
+                headerBackTitleVisible: false,
+              }}
+            />
+            <RootStack.Screen
+              name={APPRECIATION_DETAILS_SCREEN}
+              component={AppreciationDetailsScreen}
+              options={{
+                headerTitle: '',
+                headerShadowVisible: false,
+                headerShown: true,
+                headerBackTitleVisible: false,
+              }}
+            />
+            <RootStack.Screen
+              name={PROFILE_DETAILS_SCREEN}
+              component={ProfileDetailScreen}
+              options={{
+                headerShadowVisible: false,
+                headerShown: true,
+                headerTitle: 'Profile',
+                headerBackTitleVisible: false,
+              }}
+            />
+            <RootStack.Screen
+              name={APPRECIATION_SEARCH_SCREEN}
+              component={SearchScreen}
+              options={{
+                headerShown: true,
+                headerTitle: '',
+                headerShadowVisible: false,
+                headerBackTitleVisible: false,
+              }}
             />
           </>
         ) : (

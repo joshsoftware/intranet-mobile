@@ -1,8 +1,8 @@
 export interface ISkillsData {
-  primarySkill: string | null;
-  secondarySkill: string | null;
-  ternarySkill: string | null;
-  otherSkills: string | null;
+  primarySkill?: string;
+  secondarySkill?: string;
+  ternarySkill?: string;
+  otherSkills?: string;
 }
 
 export interface IUpdateSkillFormData {

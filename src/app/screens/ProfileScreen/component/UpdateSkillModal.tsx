@@ -98,13 +98,13 @@ function UpdateSkillModal({isVisible, closeModal, skillsData}: Props) {
     getValues,
     setValue,
     formState: {errors},
-  } = useForm({
+  } = useForm<ISkillsData>({
     mode: 'onSubmit',
     defaultValues: skillsData,
-    resolver: yupResolver(updateSkillFormSchema),
+    resolver: yupResolver(updateSkillFormSchema as any),
   });
 
-  const onSubmit = (formData: ISkillsData) => {
+  const onSubmit = (formData: any) => {
     updateSkills({
       primarySkill: formData.primarySkill || '',
       secondarySkill: formData.secondarySkill || '',

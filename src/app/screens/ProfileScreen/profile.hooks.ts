@@ -1,5 +1,5 @@
-import {Alert, Platform, ToastAndroid} from 'react-native';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import { Alert, Platform, ToastAndroid } from 'react-native';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   getAllSkillRequest,
@@ -11,7 +11,7 @@ import toast from '../../utils/toast';
 import strings from '../../constant/strings';
 
 function useProfileData() {
-  const {data, refetch, isError, isRefetchError, isLoading} = useQuery({
+  const { data, refetch, isError, isRefetchError, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: getUserRequest,
   });
@@ -26,7 +26,7 @@ function useProfileData() {
 }
 
 export function useSkillList() {
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: ['getSkills'],
     queryFn: getAllSkillRequest,
   });
@@ -43,32 +43,30 @@ export function useSkillList() {
 export function useUpdateSkills(closeModal: () => void) {
   const queryClient = useQueryClient();
 
-  const {isSuccess, isLoading, mutate, isError} = useMutation(
-    updateSkillRequest,
-    {
-      onSuccess: () => {
-        closeModal();
+  const { isSuccess, isPending: isLoading, mutate, isError } = useMutation({
+    mutationFn: updateSkillRequest,
+    onSuccess: () => {
+      closeModal();
 
-        if (Platform.OS === 'android') {
-          ToastAndroid.showWithGravity(
-            strings.UPDATE_SKILLS_SUCCESS,
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
-          );
-        } else {
-          Alert.alert(strings.UPDATE_SKILLS_SUCCESS);
-        }
+      if (Platform.OS === 'android') {
+        ToastAndroid.showWithGravity(
+          strings.UPDATE_SKILLS_SUCCESS,
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+        );
+      } else {
+        Alert.alert(strings.UPDATE_SKILLS_SUCCESS);
+      }
 
-        queryClient.invalidateQueries(['user']);
-      },
-      retry: false,
-      onError: error => {
-        if (error) {
-          toast(strings.UPDATE_SKILLS_ERROR, 'error');
-        }
-      },
+      queryClient.invalidateQueries({ queryKey: ['user'] });
     },
-  );
+    retry: false,
+    onError: (error: any) => {
+      if (error) {
+        toast(strings.UPDATE_SKILLS_ERROR, 'error');
+      }
+    },
+  });
 
   return {
     updateSkills: mutate,

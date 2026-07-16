@@ -38,10 +38,10 @@ const renderDrawerContent = (props: any) => <DrawerContent {...props} />;
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
-      // useLegacyImplementation
       initialRouteName={MAIN_SCREEN}
       screenOptions={screenOptions}
-      drawerContent={renderDrawerContent}>
+      drawerContent={renderDrawerContent}
+      useLegacyImplementation={false}>
       <Drawer.Screen name={MAIN_SCREEN} component={MainNavigator} />
     </Drawer.Navigator>
   );

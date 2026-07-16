@@ -43,3 +43,14 @@ export interface IUserData {
   user_id: number;
   emp_id: string;
 }
+
+export type LeaveDetail = {
+  emp_name: string;
+  leave_from: string;
+  leave_to: string;
+  leave_type: string;
+  leave_approver: string;
+  leave_note: string;
+  leave_reason: string;
+  leave_status: string;
+};

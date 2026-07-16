@@ -1,17 +1,17 @@
 import React from 'react';
-import {Alert, StyleSheet, TouchableOpacity} from 'react-native';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
+import { Alert, Linking, StyleSheet, TouchableOpacity } from 'react-native';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 import AsyncStore from '../services/asyncStorage';
 import UserContext from '../context/user.context';
-import {googleSignOut} from '../services/auth/google.auth';
+import { googleSignOut } from '../services/auth/google.auth';
 
-import {Cross} from '../constant/icons';
+import { Cross } from '../constant/icons';
 import colors from '../constant/colors';
-import {RootStackParamList} from '../navigation/types';
-import {USER_PROFILE_SCREEN} from '../constant/screenNames';
+import { RootStackParamList } from '../navigation/types';
+import { USER_PROFILE_SCREEN } from '../constant/screenNames';
 
 const DrawerContent = (props: any) => {
   const navigation =
@@ -24,11 +24,17 @@ const DrawerContent = (props: any) => {
     closeDrawer();
   };
 
+  const goToProvidesk = () => {
+    Linking.openURL('https://providesk.joshsoftware.com/complaints').catch(() => {
+      Alert.alert('Error', 'Could not open Providesk support page.');
+    });
+  };
+
   const logout = async () => {
     Alert.alert('Alert', 'Are you sure you want to log out?', [
       {
         text: 'Cancel',
-        onPress: () => {},
+        onPress: () => { },
         style: 'cancel',
       },
       {
@@ -56,6 +62,12 @@ const DrawerContent = (props: any) => {
         label="Profile"
         labelStyle={styles.label}
         onPress={goToProfile}
+        style={styles.border}
+      />
+      <DrawerItem
+        label="Providesk"
+        labelStyle={styles.label}
+        onPress={goToProvidesk}
         style={styles.border}
       />
       <DrawerItem

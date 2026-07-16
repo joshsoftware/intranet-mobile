@@ -18,7 +18,7 @@ export enum IntranetErrorCode {
   MISSING_EMAIL = 'MISSING_EMAIL',
 }
 
-type PayloadType =
+export type PayloadType =
   | {
       type: AuthType;
       idToken: string | null;
@@ -67,12 +67,12 @@ export const sendLoginRequest = async (payload: PayloadType) => {
   return response as AxiosResponse<LoginResponseBody>;
 };
 
-interface GeneratteOTPRequestBody {
+export interface GeneratteOTPRequestBody {
   type: string;
   email: string;
 }
 
-interface GenerateOTPResponseBody {
+export interface GenerateOTPResponseBody {
   message: string;
 }
 
