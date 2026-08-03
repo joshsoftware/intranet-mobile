@@ -33,3 +33,17 @@ npm start
 ### Features
 - Timesheet Management
 - Leave Management
+
+### Build app 
+
+- Production 
+cd android
+./gradlew bundleProdRelease
+
+- Output: android/app/build/outputs/bundle/prodRelease/app-prod-release.aab
+
+- Staging 
+cd android
+./gradlew bundleStageRelease
+
+- Output: android/app/build/outputs/bundle/stageRelease/app-stage-release.aab

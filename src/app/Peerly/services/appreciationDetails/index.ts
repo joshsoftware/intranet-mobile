@@ -1,9 +1,12 @@
 import {
   POST_REWARD_ROUTE,
   POST_OBJECTION_ROUTE,
+  GET_APPRECIATION_DETAILS_ROUTE,
 } from '../../constants/apiRoutes';
 import {apiCall} from '../api/index';
+import {AppreciationDetails} from '../home/types';
 import {
+  GetAppreciationByIdResponse,
   PostRewardRequest,
   PostRewardRequestBody,
   PostRewaredResponse,
@@ -11,6 +14,14 @@ import {
   PostObjectionRequestBody,
   PostObjectionResponse,
 } from './types';
+
+export const getAppreciationById = async (id: number) => {
+  const response = await apiCall<any, GetAppreciationByIdResponse>({
+    method: 'GET',
+    url: `${GET_APPRECIATION_DETAILS_ROUTE}/${id}`,
+  });
+  return response.data.data as AppreciationDetails;
+};
 
 export const postReward = async (payload: PostRewardRequest) => {
   const {body, params} = payload;

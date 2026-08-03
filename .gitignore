@@ -69,4 +69,5 @@ google-services.json
 .env
 .env.*
 GoogleService-Info.plist
+GoogleService-Info-stage-IJ.plist
 ios/tmp.xcconfig

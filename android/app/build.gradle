@@ -36,7 +36,7 @@ react {
     //   The list of variants to that are debuggable. For those we're going to
     //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
     //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.
-    // debuggableVariants = ["devDebug", "stageDebug", "prodDebug"]
+    debuggableVariants = ["devDebug", "stageDebug", "prodDebug"]
 
     /* Bundling */
     //   A list containing the node command and its flags. Default is just 'node'.
@@ -100,47 +100,6 @@ android {
 
 
 
-    flavorDimensions "default"
-    productFlavors {
-        prod {
-            minSdkVersion 24 // rootProject.ext.minSdkVersion
-            targetSdkVersion 35 // rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "com.joshsoftware.intranet"
-        }
-        stage {
-            minSdkVersion 24 // rootProject.ext.minSdkVersion
-            applicationIdSuffix ".stage"
-            targetSdkVersion 35 // rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "com.joshsoftware.intranet"
-        }
-        dev {
-            minSdkVersion 24 // rootProject.ext.minSdkVersion
-            applicationIdSuffix ".dev"
-            targetSdkVersion 35 // rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "com.joshsoftware.intranet"
-        }
-    }
-
-    namespace "com.joshsoftware.intranet"
-    defaultConfig {
-        applicationId "com.joshsoftware.intranet"
-        // minSdkVersion rootProject.ext.minSdkVersion
-        // targetSdkVersion rootProject.ext.targetSdkVersion
-        minSdk 24
-        targetSdk 35
-        versionCode 30
-        versionName "2.8.0"
-
-        ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-        }
-
-        externalNativeBuild {
-            cmake {
-                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
-            }
-        }
-    }
     signingConfigs {
         release {
             if (project.hasProperty('INTRANET_APP_STORE_FILE')) {
@@ -148,6 +107,15 @@ android {
                 storePassword INTRANET_APP_STORE_PASSWORD
                 keyAlias INTRANET_APP_KEY_ALIAS
                 keyPassword INTRANET_APP_KEY_PASSWORD
+            }
+        }
+        // Separate Play upload key for stage — prod keeps intranet-dev unchanged
+        stageUpload {
+            if (project.hasProperty('INTRANET_STAGE_STORE_FILE')) {
+                storeFile file(INTRANET_STAGE_STORE_FILE)
+                storePassword INTRANET_STAGE_STORE_PASSWORD
+                keyAlias INTRANET_STAGE_KEY_ALIAS
+                keyPassword INTRANET_STAGE_KEY_PASSWORD
             }
         }
         debug {
@@ -164,18 +132,61 @@ android {
             }
         }
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            applicationId "com.joshsoftware.intranet"
+            minSdkVersion 24 // rootProject.ext.minSdkVersion
+            targetSdkVersion 35 // rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.joshsoftware.intranet"
+            signingConfig signingConfigs.release
+        }
+        stage {
+            // Separate installable app — matches iOS stage bundle id
+            applicationId "com.joshsoftware.intranet.stage"
+            minSdkVersion 24 // rootProject.ext.minSdkVersion
+            targetSdkVersion 35 // rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.joshsoftware.intranet"
+            signingConfig signingConfigs.stageUpload
+        }
+        dev {
+            applicationId "com.joshsoftware.intranet.dev"
+            minSdkVersion 24 // rootProject.ext.minSdkVersion
+            targetSdkVersion 35 // rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.joshsoftware.intranet"
+            signingConfig signingConfigs.release
+        }
+    }
+
+    namespace "com.joshsoftware.intranet"
+    defaultConfig {
+        applicationId "com.joshsoftware.intranet"
+        // minSdkVersion rootProject.ext.minSdkVersion
+        // targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdk 24
+        targetSdk 35
+        versionCode 32
+        versionName "2.8.0"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+            }
+        }
+    }
     buildTypes {
         debug {
-            if (project.hasProperty('INTRANET_APP_STORE_FILE')) {
-                signingConfig signingConfigs.release
-            } else {
-                signingConfig signingConfigs.debug
-            }
+            // Signing comes from productFlavors (prod/dev → release, stage → stageUpload)
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.release
+            // Signing comes from productFlavors (prod/dev → release, stage → stageUpload)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

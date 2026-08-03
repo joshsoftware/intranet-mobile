@@ -17,9 +17,16 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+project 'Intranet', {
+  'Debug' => :debug,
+  'Release' => :release,
+  'StageDebug' => :debug,
+  'StageRelease' => :release,
+}
+
 target 'Intranet' do
   pod 'GoogleSignIn'
-  
+
   config = use_native_modules!
   # use_frameworks! :linkage => :static
   # $RNFirebaseAsStaticFramework = true
@@ -37,6 +44,9 @@ target 'Intranet' do
     inherit! :complete
     # Pods for testing
   end
+
+  # Intranet-stage reuses Pods-Intranet (linked in the Xcode target).
+  # Do not add a separate CocoaPods target unless pods diverge.
 
   post_install do |installer|
     react_native_post_install(

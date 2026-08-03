@@ -9,7 +9,7 @@ export type RootStackParamList = {
   PeerlyProfile: {userId: number | undefined};
   AppreciationDetail: {
     cardId: number;
-    appriciationList: AppreciationDetails[];
+    appriciationList?: AppreciationDetails[];
   };
 };
 
