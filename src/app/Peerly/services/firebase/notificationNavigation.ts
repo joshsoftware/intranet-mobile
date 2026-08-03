@@ -7,16 +7,18 @@ import {
   HOME_SCREEN,
 } from '../../constants/screenNames';
 import {loginPeerly} from '../api/login';
-import {getAppreciationById} from '../appreciationDetails';
 import {getAppreciationList} from '../home';
 import PeerlyAsyncStore from '../peerlyAsyncStorage';
 
 type NotificationData = Record<string, string | undefined> | undefined;
 
-const NAV_READY_TIMEOUT_MS = 20000;
-const NAV_POLL_MS = 150;
+const NAV_READY_TIMEOUT_MS = 25000;
+const NAV_POLL_MS = 200;
+const AUTH_RETRY_MS = 300;
+const AUTH_RETRY_COUNT = 20;
 
 let isHandlingNotification = false;
+let pendingNotificationData: NotificationData | undefined;
 
 const waitForNavigationReady = (timeoutMs = NAV_READY_TIMEOUT_MS) =>
   new Promise<boolean>(resolve => {
@@ -24,6 +26,49 @@ const waitForNavigationReady = (timeoutMs = NAV_READY_TIMEOUT_MS) =>
 
     const check = () => {
       if (navigationRef.current?.isReady()) {
+        resolve(true);
+        return;
+      }
+
+      if (Date.now() - startedAt >= timeoutMs) {
+        resolve(false);
+        return;
+      }
+
+      setTimeout(check, NAV_POLL_MS);
+    };
+
+    check();
+  });
+
+const waitForIntranetAuth = async () => {
+  for (let attempt = 0; attempt < AUTH_RETRY_COUNT; attempt += 1) {
+    const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
+    if (authToken) {
+      return authToken;
+    }
+    await new Promise<void>(resolve => setTimeout(resolve, AUTH_RETRY_MS));
+  }
+  return null;
+};
+
+const routeExistsInState = (name: string) => {
+  const state = navigationRef.current?.getRootState();
+  if (!state?.routeNames) {
+    return false;
+  }
+  return state.routeNames.includes(name);
+};
+
+const waitForAppreciationRoute = (timeoutMs = NAV_READY_TIMEOUT_MS) =>
+  new Promise<boolean>(resolve => {
+    const startedAt = Date.now();
+
+    const check = () => {
+      if (
+        navigationRef.current?.isReady() &&
+        routeExistsInState(APPRECIATION_DETAILS_SCREEN)
+      ) {
         resolve(true);
         return;
       }
@@ -66,13 +111,16 @@ export const normalizeNotificationData = (
     return undefined;
   }
 
-  return Object.entries(data).reduce<Record<string, string>>((acc, [key, value]) => {
-    if (value == null) {
+  return Object.entries(data).reduce<Record<string, string>>(
+    (acc, [key, value]) => {
+      if (value == null) {
+        return acc;
+      }
+      acc[key] = typeof value === 'string' ? value : String(value);
       return acc;
-    }
-    acc[key] = typeof value === 'string' ? value : String(value);
-    return acc;
-  }, {});
+    },
+    {},
+  );
 };
 
 const ensurePeerlyAuth = async () => {
@@ -98,12 +146,9 @@ const ensurePeerlyAuth = async () => {
   return true;
 };
 
-const openAppreciationDetail = async (cardId: number) => {
-  const appreciation = await getAppreciationById(cardId);
-  navigate(APPRECIATION_DETAILS_SCREEN, {
-    cardId,
-    appriciationList: [appreciation],
-  });
+const openAppreciationDetail = (cardId: number) => {
+  // Screen can load by cardId alone — avoid blocking on a prefetch that can fail.
+  navigate(APPRECIATION_DETAILS_SCREEN, {cardId});
 };
 
 const openLatestAppreciation = async () => {
@@ -128,6 +173,9 @@ const openLatestAppreciation = async () => {
 export const handlePeerlyNotificationOpen = async (
   data?: NotificationData,
 ) => {
+  // Keep latest tap if a previous open is still in progress (cold start races).
+  pendingNotificationData = data ?? pendingNotificationData;
+
   if (isHandlingNotification) {
     return;
   }
@@ -135,30 +183,43 @@ export const handlePeerlyNotificationOpen = async (
   isHandlingNotification = true;
 
   try {
-    const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
+    const authToken = await waitForIntranetAuth();
     if (!authToken) {
+      console.warn('Peerly notification open skipped: missing intranet auth');
       return;
     }
 
     const isNavReady = await waitForNavigationReady();
     if (!isNavReady) {
+      console.warn('Peerly notification open skipped: navigation not ready');
+      return;
+    }
+
+    const hasAppreciationRoute = await waitForAppreciationRoute();
+    if (!hasAppreciationRoute) {
+      console.warn(
+        'Peerly notification open skipped: AppreciationDetail route unavailable',
+      );
       return;
     }
 
     const hasPeerlyAuth = await ensurePeerlyAuth();
     if (!hasPeerlyAuth) {
+      console.warn('Peerly notification open skipped: peerly auth failed');
       return;
     }
 
-    const appreciationId = getAppreciationIdFromData(data);
+    const notificationData = pendingNotificationData;
+    pendingNotificationData = undefined;
+
+    const appreciationId = getAppreciationIdFromData(notificationData);
 
     if (appreciationId) {
-      await openAppreciationDetail(appreciationId);
+      openAppreciationDetail(appreciationId);
       return;
     }
 
-    // Current Peerly backend sends title/body only (no data payload).
-    // Fall back to the latest appreciation so the tap still lands in Peerly.
+    // Older backend payloads may still be title/body only.
     await openLatestAppreciation();
   } catch (error) {
     console.warn('Failed to open Peerly notification target:', error);
@@ -169,6 +230,15 @@ export const handlePeerlyNotificationOpen = async (
     }
   } finally {
     isHandlingNotification = false;
+
+    // Process a newer tap that arrived while we were handling the previous one.
+    if (pendingNotificationData) {
+      const queued = pendingNotificationData;
+      pendingNotificationData = undefined;
+      setTimeout(() => {
+        handlePeerlyNotificationOpen(queued);
+      }, 0);
+    }
   }
 };
 

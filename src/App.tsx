@@ -74,6 +74,17 @@ const App = () => {
         handleRemoteMessageOpen(remoteMessage);
       });
 
+    // Cold start from a Notifee-displayed notification (foreground-created trays).
+    notifee.getInitialNotification().then(initialNotification => {
+      if (initialNotification?.notification) {
+        handlePeerlyNotificationOpen(
+          normalizeNotificationData(
+            initialNotification.notification.data as any,
+          ),
+        );
+      }
+    });
+
     const unsubscribeNotifee = notifee.onForegroundEvent(({type, detail}) => {
       if (type === EventType.PRESS) {
         handlePeerlyNotificationOpen(
