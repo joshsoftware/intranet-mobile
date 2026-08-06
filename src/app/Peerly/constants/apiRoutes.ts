@@ -1,8 +1,8 @@
 export const PEERLY_LOGIN_ROUTE = '/user/login';
 export const POST_APPRECIATION_ROUTE = '/appreciations';
-export const GET_APPRECIATION_DETAILS_ROUTE = '/appreciation';
+export const GET_APPRECIATION_DETAILS_ROUTE = '/appreciations';
 export const GET_APPRECIATION_LIST_ROUTE = '/appreciations';
-export const DELETE_APPRECIATION_ROUTE = '/appreciation';
+export const DELETE_APPRECIATION_ROUTE = '/appreciations';
 export const PROFILE_DETAILS_ROUTE = '/user_profile';
 export const GET_ACTIVE_USERS_ROUTE = '/users/active';
 export const GET_TOP_USERS_ROUTE = '/users/top10';

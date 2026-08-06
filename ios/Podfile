@@ -17,9 +17,16 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+project 'Intranet', {
+  'Debug' => :debug,
+  'Release' => :release,
+  'StageDebug' => :debug,
+  'StageRelease' => :release,
+}
+
 target 'Intranet' do
   pod 'GoogleSignIn'
-  
+
   config = use_native_modules!
   # use_frameworks! :linkage => :static
   # $RNFirebaseAsStaticFramework = true
@@ -36,6 +43,11 @@ target 'Intranet' do
   target 'IntranetTests' do
     inherit! :complete
     # Pods for testing
+  end
+
+  # Stage app target — same pods as Intranet (prod target unchanged).
+  target 'Intranet-stage' do
+    inherit! :complete
   end
 
   post_install do |installer|

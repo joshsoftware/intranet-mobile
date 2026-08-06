@@ -8,8 +8,19 @@ To release app on play store, use following steps:
 npm run updateversion
 ```
 3. Generate the android bundle file of the app
+
+**Prod** (uses `intranet-dev.keystore` — unchanged):
 ```
 cd android/
-./gradlew bundleRelease
+./gradlew bundleProdRelease
 ```
-4. Then go to the `/android/app/build/outputs/bundle/prodRelease` directory and copy the bundle file and upload it on playstore.
+Output: `android/app/build/outputs/bundle/prodRelease/`
+
+**Stage** (uses `intranet-stage-upload.keystore` — separate Play upload key):
+```
+cd android/
+./gradlew bundleStageRelease
+```
+Output: `android/app/build/outputs/bundle/stageRelease/`
+
+4. Upload the `.aab` to the matching Play Console app (prod or Josh Intranet Stage).

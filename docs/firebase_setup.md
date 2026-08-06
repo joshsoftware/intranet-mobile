@@ -10,3 +10,11 @@ Intranet mobile app requires a fiirebase account. To setup firebase account foll
 - Register app with package name `com.joshsoftware.intranet.dev`(For Dev Mode) and follow all steps.
 - You can also register app for stage (`com.joshsoftware.intranet.stage`) and prod (`com.joshsoftware.intranet`) environment
 - Download the `google-services.json` file from firebase and add it into `android/app/` path of your project.
+
+3. Add iOS App
+- Register production with bundle id `com.joshsoftware.intranet` and save as `ios/GoogleService-Info.plist`.
+- Register staging with bundle id `com.joshsoftware.intranet.stage` and save as `ios/GoogleService-Info-stage-IJ.plist`.
+- Xcode targets:
+  - **Intranet** (prod) → copies `GoogleService-Info.plist`
+  - **Intranet-stage** (stage) → copies `GoogleService-Info-stage-IJ.plist`
+  (via build phase **Select GoogleService-Info**)

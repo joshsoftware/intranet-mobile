@@ -1,3 +1,12 @@
+import {AppreciationDetails} from '../home/types';
+
+export type GetAppreciationByIdResponse = {
+  success: boolean;
+  message: string;
+  status_code: number;
+  data: AppreciationDetails;
+};
+
 export type PostRewardRequest = {
   params: {
     id: number;
