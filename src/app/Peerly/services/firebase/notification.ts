@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
-import {PermissionsAndroid, Platform} from 'react-native';
+import {syncPeerlyFcmTopic} from './topics';
 
 const DEFAULT_CHANNEL_ID = 'default-channel';
 
@@ -66,7 +66,7 @@ const usePushNotification = () => {
   };
 
   const subscribeToTopic = async () => {
-    messaging().subscribeToTopic('peerly');
+    await syncPeerlyFcmTopic();
   };
 
   return {

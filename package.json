@@ -1,6 +1,6 @@
 {
   "name": "Intranet",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android --mode=devDebug --appId=com.joshsoftware.intranet.dev",

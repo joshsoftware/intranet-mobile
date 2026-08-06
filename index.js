@@ -16,10 +16,11 @@ import {
   handlePeerlyNotificationOpen,
   normalizeNotificationData,
 } from './src/app/Peerly/services/firebase/notificationNavigation';
+import {syncPeerlyFcmTopic} from './src/app/Peerly/services/firebase/topics';
 
 // Register background handler
 messaging().setBackgroundMessageHandler(async () => {});
-messaging().subscribeToTopic('peerly');
+syncPeerlyFcmTopic().catch(() => {});
 
 notifee.onBackgroundEvent(async ({type, detail}) => {
   if (type === EventType.PRESS) {
