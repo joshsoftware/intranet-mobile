@@ -27,6 +27,7 @@ export type RootStackParamList = {
   OTPAuthentication: {email: string};
   UpdateVersion: undefined;
   NoVersion: undefined;
+  QuestionOfTheDay: undefined;
   PeerlyHome: undefined;
   AppreciationSearch: undefined;
   GiveAppreciation: undefined;
