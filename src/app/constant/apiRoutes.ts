@@ -35,3 +35,9 @@ export const TEAM_MEMBERS_UPCOMING_BIRTHDAYS_ROUTE =
 export const EVENTS_ROUTE = '/api/mobile/v2/events';
 
 export const TIMESHEET_WARNING_ROUTE = '/api/mobile/v2/time_sheets/warning';
+
+export const FINTECH_TODAY_QUESTION_ROUTE =
+  '/api/mobile/v1/fintech_questions/today_question';
+
+export const FINTECH_SUBMIT_ANSWER_ROUTE =
+  '/api/mobile/v1/fintech_questions/submit_answer';

@@ -24,7 +24,7 @@ import VersionContext from '../context/version.context';
 import AsyncStore from '../services/asyncStorage';
 import DeviceInfo from 'react-native-device-info';
 
-import {hasCompletedDailyQuizToday} from '../screens/QuestionOfTheDay/dailyQuizStorage';
+import {useDailyQuizGate} from '../screens/QuestionOfTheDay/questionOfTheDay.hooks';
 import {RootStackParamList} from './types';
 import {
   DRAWER,
@@ -108,8 +108,18 @@ const RootNavigator = () => {
   const [versionContextData, setVersionContextData] =
     useContext(VersionContext);
   const [loading, setLoading] = useState(true);
-  const [dailyQuizCompleted, setDailyQuizCompleted] = useState<boolean | null>(
-    null,
+  const [quizBypassed, setQuizBypassed] = useState(false);
+
+  const isLoggedIn = Boolean(userContextData?.userData?.userId);
+  const shouldCheckDailyQuiz =
+    isLoggedIn &&
+    !loading &&
+    versionContextData !== null &&
+    versionContextData.version !== null &&
+    !versionContextData.needsUpdate;
+
+  const {gate: dailyQuizGate, question: dailyQuizQuestion} = useDailyQuizGate(
+    shouldCheckDailyQuiz && !quizBypassed,
   );
 
   useEffect(() => {
@@ -156,30 +166,19 @@ const RootNavigator = () => {
   }, [setUserContextData, setVersionContextData]);
 
   useEffect(() => {
-    let cancelled = false;
-
-    const syncDailyQuiz = async () => {
-      if (!userContextData?.userData?.userId) {
-        setDailyQuizCompleted(null);
-        return;
-      }
-
-      const completed = await hasCompletedDailyQuizToday(
-        userContextData.userData.userId,
-      );
-      if (!cancelled) {
-        setDailyQuizCompleted(completed);
-      }
-    };
-
-    syncDailyQuiz();
-
-    return () => {
-      cancelled = true;
-    };
+    setQuizBypassed(false);
   }, [userContextData?.userData?.userId]);
 
-  if (loading || (userContextData && dailyQuizCompleted === null)) {
+  const isDailyQuizLoading =
+    shouldCheckDailyQuiz && !quizBypassed && dailyQuizGate === 'loading';
+
+  const shouldShowDailyQuiz =
+    shouldCheckDailyQuiz &&
+    !quizBypassed &&
+    dailyQuizGate === 'required' &&
+    dailyQuizQuestion != null;
+
+  if (loading || isDailyQuizLoading) {
     return null;
   }
 
@@ -200,13 +199,14 @@ const RootNavigator = () => {
             component={UpdateVersionScreen}
           />
         ) : userContextData ? (
-          dailyQuizCompleted === false ? (
+          shouldShowDailyQuiz ? (
             <RootStack.Screen
               name={QUESTION_OF_THE_DAY}
               options={{gestureEnabled: false}}>
               {() => (
                 <QuestionOfTheDayScreen
-                  onCompleted={() => setDailyQuizCompleted(true)}
+                  question={dailyQuizQuestion!}
+                  onCompleted={() => setQuizBypassed(true)}
                 />
               )}
             </RootStack.Screen>

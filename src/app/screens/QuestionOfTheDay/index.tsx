@@ -1,5 +1,6 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
+  ActivityIndicator,
   BackHandler,
   SafeAreaView,
   ScrollView,
@@ -10,29 +11,40 @@ import {
 } from 'react-native';
 
 import OptionRow, {OptionVisualState} from './components/OptionRow';
-import {MOCK_DAILY_QUIZ} from './mockData';
-import {markDailyQuizCompletedToday} from './dailyQuizStorage';
+import {useSubmitAnswer} from './questionOfTheDay.hooks';
+import {mapApiOptions} from './utils/mapQuestionResponse';
 
 import {JoshLogo, QuizIcon} from '../../constant/icons';
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
-import UserContext from '../../context/user.context';
+import {
+  QuestionOption,
+  SubmitAnswerData,
+  TodayQuestionData,
+} from '../../services/fintechQuestions/types';
 
 type Props = {
+  question: TodayQuestionData;
   onCompleted: () => void;
 };
 
 type Phase = 'answering' | 'submitted';
 
-const QuestionOfTheDayScreen = ({onCompleted}: Props) => {
-  const [userContextData] = React.useContext(UserContext);
-  const quiz = MOCK_DAILY_QUIZ;
+const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
+  const options = useMemo(() => mapApiOptions(question), [question]);
 
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const [selectedOptionId, setSelectedOptionId] =
+    useState<QuestionOption | null>(null);
   const [phase, setPhase] = useState<Phase>('answering');
+  const [submitResult, setSubmitResult] = useState<SubmitAnswerData | null>(
+    null,
+  );
+
+  const {mutate: submit, isPending: isSubmitting} = useSubmitAnswer(onCompleted);
 
   const isSubmitted = phase === 'submitted';
-  const isCorrect = isSubmitted && selectedOptionId === quiz.correctOptionId;
+  const isCorrect = submitResult?.is_correct ?? false;
+  const correctOptionId = submitResult?.correct_option;
 
   useEffect(() => {
     const subscription = BackHandler.addEventListener(
@@ -43,11 +55,11 @@ const QuestionOfTheDayScreen = ({onCompleted}: Props) => {
   }, []);
 
   const getOptionState = useCallback(
-    (optionId: string): OptionVisualState => {
+    (optionId: QuestionOption): OptionVisualState => {
       if (!isSubmitted) {
         return selectedOptionId === optionId ? 'selected' : 'default';
       }
-      if (optionId === quiz.correctOptionId) {
+      if (optionId === correctOptionId) {
         return 'correct';
       }
       if (optionId === selectedOptionId) {
@@ -55,19 +67,31 @@ const QuestionOfTheDayScreen = ({onCompleted}: Props) => {
       }
       return 'muted';
     },
-    [isSubmitted, quiz.correctOptionId, selectedOptionId],
+    [correctOptionId, isSubmitted, selectedOptionId],
   );
 
   const handleSubmit = () => {
-    if (!selectedOptionId) {
+    if (!selectedOptionId || isSubmitting) {
       return;
     }
-    setPhase('submitted');
+
+    submit(
+      {
+        question_id: question.question_id,
+        selected_option: selectedOptionId,
+      },
+      {
+        onSuccess: response => {
+          if (response.data.data) {
+            setSubmitResult(response.data.data);
+            setPhase('submitted');
+          }
+        },
+      },
+    );
   };
 
-  const handleContinue = async () => {
-    const userId = userContextData?.userData?.userId ?? 'anonymous';
-    await markDailyQuizCompletedToday(userId);
+  const handleContinue = () => {
     onCompleted();
   };
 
@@ -77,43 +101,48 @@ const QuestionOfTheDayScreen = ({onCompleted}: Props) => {
       ? "Nice work. You're all set for today."
       : 'Answering is required before you can use the app today.';
 
-  const canSubmit = Boolean(selectedOptionId) && !isSubmitted;
+  const canSubmit =
+    Boolean(selectedOptionId) && !isSubmitted && !isSubmitting;
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.content}>
-        <View style={styles.hero}>
-          <View style={styles.logoWrap}>
-            <JoshLogo height={18} width={85} fill={colors.WHITE} />
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={isSubmitted}
+          keyboardShouldPersistTaps="handled">
+          <View style={styles.hero}>
+            <View style={styles.logoWrap}>
+              <JoshLogo height={18} width={85} fill={colors.WHITE} />
+            </View>
+            <View style={styles.iconBadge}>
+              <QuizIcon width={28} height={28} />
+            </View>
+            <Text style={styles.title}>Question of the Day</Text>
+            <Text style={styles.subtitle}>{subtitle}</Text>
           </View>
-          <View style={styles.iconBadge}>
-            <QuizIcon width={28} height={28} />
-          </View>
-          <Text style={styles.title}>Question of the Day</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
-        </View>
 
-        <View style={styles.card}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            bounces={false}
-            contentContainerStyle={styles.cardContent}>
+          <View style={styles.card}>
+            {question.coe ? (
+              <Text style={styles.coeLabel}>{question.coe.toUpperCase()}</Text>
+            ) : null}
             <Text style={styles.questionLabel}>QUESTION</Text>
-            <Text style={styles.questionText}>{quiz.question}</Text>
+            <Text style={styles.questionText}>{question.question}</Text>
 
             <View style={styles.options}>
-              {quiz.options.map(option => (
+              {options.map(option => (
                 <OptionRow
                   key={option.id}
                   label={option.text}
                   state={getOptionState(option.id)}
-                  disabled={isSubmitted}
+                  disabled={isSubmitted || isSubmitting}
                   onPress={() => setSelectedOptionId(option.id)}
                 />
               ))}
             </View>
 
-            {isSubmitted && (
+            {isSubmitted && submitResult && (
               <View style={styles.feedback}>
                 <View style={styles.feedbackTitleRow}>
                   <View
@@ -137,11 +166,13 @@ const QuestionOfTheDayScreen = ({onCompleted}: Props) => {
                     {isCorrect ? 'Correct answer' : 'Incorrect answer'}
                   </Text>
                 </View>
-                <Text style={styles.explanation}>{quiz.explanation}</Text>
+                <Text style={styles.explanation}>
+                  {submitResult.explanation}
+                </Text>
               </View>
             )}
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
 
         <TouchableOpacity
           activeOpacity={0.85}
@@ -151,13 +182,17 @@ const QuestionOfTheDayScreen = ({onCompleted}: Props) => {
             styles.actionButton,
             !isSubmitted && !canSubmit && styles.actionButtonDisabled,
           ]}>
-          <Text
-            style={[
-              styles.actionButtonText,
-              !isSubmitted && !canSubmit && styles.actionButtonTextDisabled,
-            ]}>
-            {isSubmitted ? 'Continue' : 'Submit'}
-          </Text>
+          {isSubmitting ? (
+            <ActivityIndicator color={colors.PRIMARY} />
+          ) : (
+            <Text
+              style={[
+                styles.actionButtonText,
+                !isSubmitted && !canSubmit && styles.actionButtonTextDisabled,
+              ]}>
+              {isSubmitted ? 'Continue' : 'Submit'}
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -174,6 +209,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingBottom: 16,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 8,
   },
   hero: {
     alignItems: 'center',
@@ -214,12 +256,15 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingHorizontal: 18,
     paddingTop: 22,
-    paddingBottom: 10,
-    marginBottom: 16,
-  },
-  cardContent: {
-    paddingBottom: 12,
+    paddingBottom: 22,
     gap: 14,
+  },
+  coeLabel: {
+    color: colors.PRIMARY,
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    fontFamily: fonts.ARIAL,
   },
   questionLabel: {
     color: colors.PRIMARY,
@@ -286,13 +331,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.ARIAL,
   },
   actionButton: {
-    marginTop: 'auto',
-    marginBottom: 20,
+    marginTop: 4,
+    marginBottom: 8,
     backgroundColor: colors.WHITE,
     borderRadius: 16,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 54,
   },
   actionButtonDisabled: {
     backgroundColor: colors.SECONDARY_BACKGROUND,
