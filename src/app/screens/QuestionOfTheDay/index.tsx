@@ -22,6 +22,7 @@ import {
   SubmitAnswerData,
   TodayQuestionData,
 } from '../../services/fintechQuestions/types';
+import {getCurrentCoordinates} from '../../utils/location';
 
 type Props = {
   question: TodayQuestionData;
@@ -39,8 +40,11 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
   const [submitResult, setSubmitResult] = useState<SubmitAnswerData | null>(
     null,
   );
+  const [isFetchingLocation, setIsFetchingLocation] = useState(false);
 
-  const {mutate: submit, isPending: isSubmitting} = useSubmitAnswer(onCompleted);
+  const {mutate: submit, isPending: isSubmittingAnswer} =
+    useSubmitAnswer(onCompleted);
+  const isSubmitting = isSubmittingAnswer || isFetchingLocation;
 
   const isSubmitted = phase === 'submitted';
   const isCorrect = submitResult?.is_correct ?? false;
@@ -70,25 +74,44 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
     [correctOptionId, isSubmitted, selectedOptionId],
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedOptionId || isSubmitting) {
       return;
     }
 
-    submit(
-      {
-        question_id: question.question_id,
-        selected_option: selectedOptionId,
-      },
-      {
-        onSuccess: response => {
-          if (response.data.data) {
-            setSubmitResult(response.data.data);
-            setPhase('submitted');
-          }
+    setIsFetchingLocation(true);
+    try {
+      let latitude: number | undefined;
+      let longitude: number | undefined;
+
+      try {
+        const coordinates = await getCurrentCoordinates();
+        latitude = coordinates.latitude;
+        longitude = coordinates.longitude;
+      } catch {
+        // Lat/lng are optional — submit without them if GPS is unavailable.
+      }
+
+      submit(
+        {
+          question_id: question.question_id,
+          selected_option: selectedOptionId,
+          ...(latitude != null && longitude != null
+            ? {latitude, longitude}
+            : {}),
         },
-      },
-    );
+        {
+          onSuccess: response => {
+            if (response.data.data) {
+              setSubmitResult(response.data.data);
+              setPhase('submitted');
+            }
+          },
+        },
+      );
+    } finally {
+      setIsFetchingLocation(false);
+    }
   };
 
   const handleContinue = () => {
@@ -127,7 +150,7 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
             {question.coe ? (
               <Text style={styles.coeLabel}>{question.coe.toUpperCase()}</Text>
             ) : null}
-            <Text style={styles.questionLabel}>QUESTION</Text>
+            {/* <Text style={styles.questionLabel}>QUESTION</Text> */}
             <Text style={styles.questionText}>{question.question}</Text>
 
             <View style={styles.options}>
@@ -266,13 +289,13 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     fontFamily: fonts.ARIAL,
   },
-  questionLabel: {
-    color: colors.PRIMARY,
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 0.8,
-    fontFamily: fonts.ARIAL,
-  },
+  // questionLabel: {
+  //   color: colors.PRIMARY,
+  //   fontSize: 12,
+  //   fontWeight: '800',
+  //   letterSpacing: 0.8,
+  //   fontFamily: fonts.ARIAL,
+  // },
   questionText: {
     color: colors.SECONDARY,
     fontSize: 18,

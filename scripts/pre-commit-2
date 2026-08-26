@@ -1,0 +1,184 @@
+#!/usr/bin/env sh
+
+set -eu
+
+###############################################################################
+# Configuration
+###############################################################################
+
+SERVER_URL="https://code-security.joshsoftware.com/pre-commit/diff-scan"
+
+###############################################################################
+# Verify Git Repository
+###############################################################################
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+    exit 0
+fi
+
+###############################################################################
+# Developer Git Identity
+#
+# Capture the Git identity configured for the current repository.
+# The centralized security server will receive both values and can
+# process/aggregate them later.
+###############################################################################
+
+GIT_USERNAME="$(git config user.name)"
+GIT_EMAIL="$(git config user.email)"
+
+###############################################################################
+# Repository Information
+###############################################################################
+
+REPOSITORY="$(basename "$(git rev-parse --show-toplevel)")"
+COMMIT="$(git rev-parse HEAD)"
+
+###############################################################################
+# Collect Staged Git Diff
+###############################################################################
+
+DIFF="$(git diff --cached)"
+
+if [ -z "${DIFF}" ]; then
+    exit 0
+fi
+
+###############################################################################
+# Send Staged Git Diff to Centralized Security Server
+###############################################################################
+
+echo "Sending staged Git diff to centralized security server..."
+echo
+
+if ! RESPONSE="$(
+    curl \
+        --silent \
+        --show-error \
+        --fail \
+        --form "username=${GIT_USERNAME}" \
+        --form "email=${GIT_EMAIL}" \
+        --form "repository=${REPOSITORY}" \
+        --form "commit=${COMMIT}" \
+        --form "diff=${DIFF}" \
+        "${SERVER_URL}"
+)"; then
+
+    echo
+    echo "================================================================================"
+    echo "Centralized Security Scan"
+    echo "================================================================================"
+    echo
+    echo "ERROR: Unable to contact the centralized security server."
+    echo
+    echo "Commit BLOCKED because the security scan could not be completed."
+    echo
+    echo "================================================================================"
+
+    exit 1
+fi
+
+###############################################################################
+# Extract Developer Output
+#
+# The server response is JSON containing:
+#
+# {
+#     "developer_output": "...",
+#     "policy": {
+#         "decision": "ALLOW" | "BLOCK"
+#     }
+# }
+#
+# We intentionally avoid requiring jq or any other dependency on the
+# developer laptop.
+###############################################################################
+
+DEVELOPER_OUTPUT="$(
+    printf '%s' "${RESPONSE}" |
+    sed -n 's/.*"developer_output":"\(.*\)","policy":.*/\1/p'
+)"
+
+DECISION="$(
+    printf '%s' "${RESPONSE}" |
+    sed -n 's/.*"policy":{[^}]*"decision":"\([^"]*\)".*/\1/p'
+)"
+
+###############################################################################
+# Validate Server Response
+###############################################################################
+
+if [ -z "${DEVELOPER_OUTPUT}" ] || [ -z "${DECISION}" ]; then
+
+    echo
+    echo "================================================================================"
+    echo "Centralized Security Scan"
+    echo "================================================================================"
+    echo
+    echo "ERROR: Invalid response received from centralized security server."
+    echo
+    echo "Commit BLOCKED because the security decision could not be determined."
+    echo
+    echo "================================================================================"
+
+    exit 1
+fi
+
+###############################################################################
+# Decode JSON Escaped Newlines / Characters
+#
+# The developer_output field contains escaped newlines such as:
+#
+#     "line one\nline two\nline three"
+#
+# Convert those into actual terminal newlines.
+###############################################################################
+
+DEVELOPER_OUTPUT="$(
+    printf '%s' "${DEVELOPER_OUTPUT}" |
+    sed \
+        's/\\n/\
+/g' |
+    sed \
+        's/\\"/"/g' |
+    sed \
+        's/\\\\/\\/g'
+)"
+
+###############################################################################
+# Display Human-Readable Security Result
+###############################################################################
+
+printf '%s\n' "${DEVELOPER_OUTPUT}"
+
+###############################################################################
+# Enforce Security Decision
+###############################################################################
+
+case "${DECISION}" in
+
+    ALLOW)
+        echo
+        echo "Commit ALLOWED by centralized security policy."
+        exit 0
+        ;;
+
+    BLOCK)
+        echo
+        echo "Commit BLOCKED by centralized security policy."
+        echo
+        echo "Please fix the blocking findings and try again."
+        exit 1
+        ;;
+
+    *)
+        echo
+        echo "================================================================================"
+        echo "ERROR: Unknown security decision: ${DECISION}"
+        echo "================================================================================"
+        echo
+        echo "Commit BLOCKED because the security decision was not recognized."
+        exit 1
+        ;;
+
+esac

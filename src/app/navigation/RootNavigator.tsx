@@ -15,6 +15,7 @@ import LoginInstructionScreen from '../screens/LoginScreen/LoginInstructionScree
 import OTPAuthenticationScreen from '../screens/LoginScreen/OTPAuthenticationScreen';
 import UpdateVersionScreen from '../screens/UpdateVersion';
 import NoVersionScreen from '../screens/UpdateVersion/NoVersionInfo';
+import LocationPermissionScreen from '../screens/LocationPermission';
 import QuestionOfTheDayScreen from '../screens/QuestionOfTheDay';
 import DrawerNavigator from './DrawerNavigation';
 import {navigationRef} from '.';
@@ -24,11 +25,13 @@ import VersionContext from '../context/version.context';
 import AsyncStore from '../services/asyncStorage';
 import DeviceInfo from 'react-native-device-info';
 
+import {useLocationGate} from '../screens/LocationPermission/locationPermission.hooks';
 import {useDailyQuizGate} from '../screens/QuestionOfTheDay/questionOfTheDay.hooks';
 import {RootStackParamList} from './types';
 import {
   DRAWER,
   LEAVE_DETAIL_SCREEN,
+  LOCATION_PERMISSION,
   LOGIN_INSTRUCTION_SCREEN,
   LOGIN_SCREEN,
   NO_VERSION,
@@ -111,12 +114,23 @@ const RootNavigator = () => {
   const [quizBypassed, setQuizBypassed] = useState(false);
 
   const isLoggedIn = Boolean(userContextData?.userData?.userId);
-  const shouldCheckDailyQuiz =
+  const canUseAppGates =
     isLoggedIn &&
     !loading &&
     versionContextData !== null &&
     versionContextData.version !== null &&
     !versionContextData.needsUpdate;
+
+  const {
+    gate: locationGate,
+    permissionStatus,
+    isRequesting: isRequestingLocation,
+    requestPermission,
+    openSettings,
+  } = useLocationGate(canUseAppGates);
+
+  const shouldCheckDailyQuiz =
+    canUseAppGates && locationGate === 'granted';
 
   const {gate: dailyQuizGate, question: dailyQuizQuestion} = useDailyQuizGate(
     shouldCheckDailyQuiz && !quizBypassed,
@@ -169,6 +183,11 @@ const RootNavigator = () => {
     setQuizBypassed(false);
   }, [userContextData?.userData?.userId]);
 
+  const isLocationLoading = canUseAppGates && locationGate === 'loading';
+
+  const shouldShowLocationPermission =
+    canUseAppGates && locationGate === 'required';
+
   const isDailyQuizLoading =
     shouldCheckDailyQuiz && !quizBypassed && dailyQuizGate === 'loading';
 
@@ -178,7 +197,7 @@ const RootNavigator = () => {
     dailyQuizGate === 'required' &&
     dailyQuizQuestion != null;
 
-  if (loading || isDailyQuizLoading) {
+  if (loading || isLocationLoading || isDailyQuizLoading) {
     return null;
   }
 
@@ -199,7 +218,20 @@ const RootNavigator = () => {
             component={UpdateVersionScreen}
           />
         ) : userContextData ? (
-          shouldShowDailyQuiz ? (
+          shouldShowLocationPermission ? (
+            <RootStack.Screen
+              name={LOCATION_PERMISSION}
+              options={{gestureEnabled: false}}>
+              {() => (
+                <LocationPermissionScreen
+                  permissionStatus={permissionStatus}
+                  isRequesting={isRequestingLocation}
+                  onAllow={requestPermission}
+                  onOpenSettings={openSettings}
+                />
+              )}
+            </RootStack.Screen>
+          ) : shouldShowDailyQuiz ? (
             <RootStack.Screen
               name={QUESTION_OF_THE_DAY}
               options={{gestureEnabled: false}}>
