@@ -12,9 +12,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 
-import AsyncStore from '../services/asyncStorage';
 import UserContext from '../context/user.context';
-import {googleSignOut} from '../services/auth/google.auth';
+import {logoutIntranet} from '../services/auth/logout';
 
 import {Cross} from '../constant/icons';
 import colors from '../constant/colors';
@@ -51,9 +50,7 @@ const DrawerContent = (props: any) => {
       {
         text: 'OK',
         onPress: async () => {
-          await googleSignOut();
-          AsyncStore.removeItem('authToken');
-          AsyncStore.removeItem('user_data');
+          await logoutIntranet();
           setUserContextData(null);
         },
       },

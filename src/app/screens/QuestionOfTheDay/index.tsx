@@ -142,7 +142,7 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
             <View style={styles.iconBadge}>
               <QuizIcon width={28} height={28} />
             </View>
-            <Text style={styles.title}>Question of the Day</Text>
+            <Text style={styles.title}>Daily Dose of Fintech</Text>
             <Text style={styles.subtitle}>{subtitle}</Text>
           </View>
 
