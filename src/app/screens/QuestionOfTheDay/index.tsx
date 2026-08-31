@@ -14,7 +14,7 @@ import OptionRow, {OptionVisualState} from './components/OptionRow';
 import {useSubmitAnswer} from './questionOfTheDay.hooks';
 import {mapApiOptions} from './utils/mapQuestionResponse';
 
-import {JoshLogo, QuizIcon} from '../../constant/icons';
+import {JoshLogo, LightBulbIdea} from '../../constant/icons';
 import colors from '../../constant/colors';
 import fonts from '../../constant/fonts';
 import {
@@ -23,6 +23,7 @@ import {
   TodayQuestionData,
 } from '../../services/fintechQuestions/types';
 import {getCurrentCoordinates} from '../../utils/location';
+import {getCoeVisualConfig} from './utils/coeConfig';
 
 type Props = {
   question: TodayQuestionData;
@@ -33,6 +34,7 @@ type Phase = 'answering' | 'submitted';
 
 const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
   const options = useMemo(() => mapApiOptions(question), [question]);
+  const coeConfig = useMemo(() => getCoeVisualConfig(question.coe), [question.coe]);
 
   const [selectedOptionId, setSelectedOptionId] =
     useState<QuestionOption | null>(null);
@@ -140,7 +142,7 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
               <JoshLogo height={18} width={85} fill={colors.WHITE} />
             </View>
             <View style={styles.iconBadge}>
-              <QuizIcon width={28} height={28} />
+              <LightBulbIdea width={28} height={28} />
             </View>
             <Text style={styles.title}>Daily Dose of Fintech</Text>
             <Text style={styles.subtitle}>{subtitle}</Text>
@@ -148,7 +150,29 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
 
           <View style={styles.card}>
             {question.coe ? (
-              <Text style={styles.coeLabel}>{question.coe.toUpperCase()}</Text>
+              <View
+                style={[
+                  styles.coeLabelWrap,
+                  {
+                    backgroundColor: coeConfig.background,
+                    borderColor: coeConfig.accent,
+                  },
+                ]}>
+                <View
+                  style={[
+                    styles.coeIconBadge,
+                    {backgroundColor: coeConfig.accent},
+                  ]}>
+                  <coeConfig.Icon
+                    width={18}
+                    height={18}
+                    fill={coeConfig.icon}
+                  />
+                </View>
+                <Text style={[styles.coeLabel, {color: coeConfig.icon}]}>
+                  {question.coe.toUpperCase()}
+                </Text>
+              </View>
             ) : null}
             {/* <Text style={styles.questionLabel}>QUESTION</Text> */}
             <Text style={styles.questionText}>{question.question}</Text>
@@ -256,7 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#5B8AFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   title: {
     color: colors.WHITE,
@@ -277,16 +301,31 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.WHITE,
     borderRadius: 16,
-    paddingHorizontal: 18,
-    paddingTop: 22,
-    paddingBottom: 22,
-    gap: 14,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
+    gap: 16,
+  },
+  coeLabelWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    alignSelf: 'flex-start',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    paddingEnd: 8,
+  },
+  coeIconBadge: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   coeLabel: {
-    color: colors.PRIMARY,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.6,
+    fontSize: 10,
+    fontWeight: '600',
     fontFamily: fonts.ARIAL,
   },
   // questionLabel: {
