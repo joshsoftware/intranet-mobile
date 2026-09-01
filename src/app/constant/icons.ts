@@ -21,6 +21,12 @@ import Warning from '../../assets/svg/warning.svg';
 import Lock from '../../assets/svg/lock.svg';
 import Employees from '../../assets/svg/employees.svg';
 import DrawerMenuIcon from '../../assets/svg/drawerIcon.svg';
+import LightBulbIdea from '../../assets/svg/lightBulbIdea.svg';
+import Trading from '../../assets/svg/trading.svg';
+import Payment from '../../assets/svg/payment.svg';
+import CoreBanking from '../../assets/svg/coreBanking.svg';
+import InvestmentWealth from '../../assets/svg/investmentWealth.svg';
+import Lending from '../../assets/svg/lending.svg';
 
 export {
   Calendar,
@@ -46,4 +52,10 @@ export {
   Lock,
   Employees,
   DrawerMenuIcon,
+  LightBulbIdea,
+  Trading,
+  Payment,
+  CoreBanking,
+  InvestmentWealth,
+  Lending,
 };

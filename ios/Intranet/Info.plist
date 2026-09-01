@@ -55,7 +55,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string />
+	<string>Location access is required to use the Intranet app and to verify your location when submitting the daily quiz.</string>
 	<key>RCTNewArchEnabled</key>
 	<true />
 	<key>UIAppFonts</key>
