@@ -155,13 +155,16 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
                   styles.coeLabelWrap,
                   {
                     backgroundColor: coeConfig.background,
-                    borderColor: coeConfig.accent,
+                    borderColor: coeConfig.background,
                   },
                 ]}>
                 <View
                   style={[
                     styles.coeIconBadge,
-                    {backgroundColor: coeConfig.accent},
+                    {
+                      backgroundColor: coeConfig.accent, 
+                      borderColor: coeConfig.accent
+                    },
                   ]}>
                   <coeConfig.Icon
                     width={18}
@@ -313,7 +316,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     borderRadius: 4,
     borderWidth: 1,
-    borderStyle: 'solid',
     paddingEnd: 8,
   },
   coeIconBadge: {
@@ -322,6 +324,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
   },
   coeLabel: {
     fontSize: 10,
