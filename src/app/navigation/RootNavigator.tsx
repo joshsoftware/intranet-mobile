@@ -42,7 +42,7 @@ import {
   USER_TIMESHEET,
 } from '../constant/screenNames';
 import colors from '../constant/colors';
-import {BUNDLE_ID} from '../constant';
+import {isProdIntranetBundle, isVersionGreater} from '../utils/appVersion';
 import {
   APPRECIATION_DETAILS_SCREEN,
   APPRECIATION_SEARCH_SCREEN,
@@ -87,25 +87,6 @@ const linking: any = {
   },
 };
 
-const isVersionGreater = (storeVersion: string, localVersion: string): boolean => {
-  if (!storeVersion || !localVersion) {
-    return false;
-  }
-  const storeParts = storeVersion.split('.').map(Number);
-  const localParts = localVersion.split('.').map(Number);
-  for (let i = 0; i < Math.max(storeParts.length, localParts.length); i++) {
-    const storeVal = storeParts[i] || 0;
-    const localVal = localParts[i] || 0;
-    if (storeVal > localVal) {
-      return true;
-    }
-    if (storeVal < localVal) {
-      return false;
-    }
-  }
-  return false;
-};
-
 const RootNavigator = () => {
   const [userContextData, setUserContextData] = useContext(UserContext);
   const [versionContextData, setVersionContextData] =
@@ -142,17 +123,17 @@ const RootNavigator = () => {
         try {
           const bundleId = DeviceInfo.getBundleId();
           const currentVersion = DeviceInfo.getVersion();
-          if (bundleId === 'com.joshsoftware.intranet' && !__DEV__) {
+          if (isProdIntranetBundle(bundleId) && !__DEV__) {
             const version = await checkVersion({
-              bundleId: BUNDLE_ID,
-              currentVersion: currentVersion,
+              bundleId,
+              currentVersion,
             });
             const needsUpdate = version.version
               ? isVersionGreater(version.version, currentVersion)
               : false;
             setVersionContextData({
               ...version,
-              needsUpdate: needsUpdate,
+              needsUpdate,
             });
           } else {
             setVersionContextData({
@@ -161,7 +142,9 @@ const RootNavigator = () => {
               url: '',
             } as any);
           }
-        } catch {}
+        } catch {
+          setVersionContextData(null);
+        }
 
         const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
         const userData = await AsyncStore.getItem(AsyncStore.USER_DATA);

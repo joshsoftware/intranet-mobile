@@ -90,7 +90,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 android {
     // ndkVersion rootProject.ext.ndkVersion
     ndkVersion "27.1.12297006"
-    compileSdk = 35
+    compileSdk = 36
 
     packagingOptions {
         jniLibs {
@@ -144,7 +144,7 @@ android {
             // Separate installable app — matches iOS stage bundle id
             applicationId "com.joshsoftware.intranet.stage"
             minSdkVersion 24 // rootProject.ext.minSdkVersion
-            targetSdkVersion 35 // rootProject.ext.targetSdkVersion
+            targetSdkVersion 36 // Play Console requires API 36
             resValue "string", "build_config_package", "com.joshsoftware.intranet"
             signingConfig signingConfigs.stageUpload
         }
@@ -164,8 +164,8 @@ android {
         // targetSdkVersion rootProject.ext.targetSdkVersion
         minSdk 24
         targetSdk 35
-        versionCode 38
-        versionName "2.9.0"
+        versionCode 43
+        versionName "2.9.1"
 
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"

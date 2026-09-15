@@ -1,6 +1,7 @@
 export type APIError = {
   message: string;
-  status: number;
+  status?: number;
+  code?: number;
 };
 
 export type FormInput = {

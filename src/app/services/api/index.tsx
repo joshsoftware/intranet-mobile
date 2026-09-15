@@ -23,8 +23,10 @@ export const Interceptor: FC<PropsWithChildren> = ({children}) => {
       },
       async error => {
         const isTokenInvalid =
-          error.response.status === 401 &&
-          error.response.data.message.toLowerCase().includes('invalid token');
+          error.response?.status === 401 &&
+          String(error.response?.data?.message ?? '')
+            .toLowerCase()
+            .includes('invalid token');
 
         if (isTokenInvalid) {
           await AsyncStore.removeItem(AsyncStore.AUTH_TOKEN_KEY);

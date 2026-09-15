@@ -42,3 +42,8 @@ export const FINTECH_TODAY_QUESTION_ROUTE =
 
 export const FINTECH_SUBMIT_ANSWER_ROUTE =
   '/api/mobile/v1/fintech_questions/submit_answer';
+
+export const FINTECH_UPDATE_LOCATION_ROUTE =
+  '/api/mobile/v1/fintech_questions/update_location';
+
+export const TALK_IT_OUT_ROUTE = '/api/mobile/v1/talk_it_out';

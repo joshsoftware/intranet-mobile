@@ -30,4 +30,6 @@ export default {
   ],
   MANAGEMENT_APPRECIATOR: 'Leader\'s Applause',
   NO_APPRECIATIONS_YET_MESSAGE: 'No appreciations received yet. Appreciate Now!',
+  NOTICE_PERIOD_RESTRICTED:
+    'Users on notice period are not allowed to perform this action',
 };

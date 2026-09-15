@@ -5,14 +5,84 @@ import {AxiosError, AxiosResponse} from 'axios';
 import {
   getTodayQuestion,
   submitAnswer,
+  updateLocation,
 } from '../../services/fintechQuestions';
 import {
+  SubmitAnswerData,
   SubmitAnswerRequest,
   SubmitAnswerResponse,
   TodayQuestionData,
   TodayQuestionResponse,
 } from '../../services/fintechQuestions/types';
+import {
+  getCachedCoordinates,
+  getCurrentCoordinates,
+} from '../../utils/location';
 import toast from '../../utils/toast';
+
+const LOCATION_RETRY_DELAYS_MS = [0, 1500, 4000];
+
+const delay = (ms: number) =>
+  new Promise<void>(resolve => {
+    setTimeout(resolve, ms);
+  });
+
+const parseResponseId = (payload?: SubmitAnswerData) => {
+  const raw =
+    payload?.response_id ??
+    (payload as {id?: number | string} | undefined)?.id;
+  const responseId = Number(raw);
+  if (!Number.isFinite(responseId) || responseId <= 0) {
+    return null;
+  }
+  return responseId;
+};
+
+const resolveCoordinates = async () => {
+  const cached = getCachedCoordinates();
+  if (cached) {
+    return cached;
+  }
+  return getCurrentCoordinates();
+};
+
+const postLocationWithRetry = async (
+  responseId: number,
+  latitude: number,
+  longitude: number,
+) => {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < LOCATION_RETRY_DELAYS_MS.length; attempt++) {
+    const waitMs = LOCATION_RETRY_DELAYS_MS[attempt];
+    if (waitMs > 0) {
+      await delay(waitMs);
+    }
+    try {
+      await updateLocation({
+        response_id: responseId,
+        latitude,
+        longitude,
+      });
+      return;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
+};
+
+const sendLocationInBackground = async (responseId: number) => {
+  try {
+    const coordinates = await resolveCoordinates();
+    await postLocationWithRetry(
+      responseId,
+      coordinates.latitude,
+      coordinates.longitude,
+    );
+  } catch (error) {
+    console.warn('[QuizLocation] Failed to send lat/long', error);
+  }
+};
 
 export type DailyQuizGate = 'loading' | 'required' | 'skipped';
 
@@ -60,6 +130,17 @@ export const useSubmitAnswer = (onAlreadySubmitted?: () => void) => {
     SubmitAnswerRequest
   >({
     mutationFn: submitAnswer,
+    onSuccess: response => {
+      const responseId = parseResponseId(response.data?.data);
+      if (responseId != null) {
+        sendLocationInBackground(responseId);
+      } else {
+        console.warn(
+          '[QuizLocation] Missing response_id on submit_answer; lat/long not sent',
+          response.data,
+        );
+      }
+    },
     onError: error => {
       const message =
         error.response?.data?.message ?? 'Failed to submit answer.';

@@ -24,6 +24,9 @@ const LOCATION_PERMISSION = Platform.select({
   default: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
 });
 
+let cachedCoordinates: Coordinates | null = null;
+let prefetchPromise: Promise<Coordinates> | null = null;
+
 const mapPermissionResult = (
   result: string,
 ): LocationPermissionStatus => {
@@ -57,16 +60,46 @@ const getGeolocation = () => {
   return Geolocation;
 };
 
+const isGranted = (status: LocationPermissionStatus) => status === 'granted';
+
 export const checkLocationPermission =
   async (): Promise<LocationPermissionStatus> => {
-    const result = await check(LOCATION_PERMISSION);
-    return mapPermissionResult(result);
+    const fineStatus = mapPermissionResult(await check(LOCATION_PERMISSION));
+    if (isGranted(fineStatus)) {
+      return 'granted';
+    }
+
+    if (Platform.OS === 'android') {
+      const coarseStatus = mapPermissionResult(
+        await check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION),
+      );
+      if (isGranted(coarseStatus)) {
+        return 'granted';
+      }
+      return coarseStatus === 'blocked' ? 'blocked' : fineStatus;
+    }
+
+    return fineStatus;
   };
 
 export const requestLocationPermission =
   async (): Promise<LocationPermissionStatus> => {
-    const result = await request(LOCATION_PERMISSION);
-    return mapPermissionResult(result);
+    const fineStatus = mapPermissionResult(await request(LOCATION_PERMISSION));
+    if (isGranted(fineStatus)) {
+      return 'granted';
+    }
+
+    if (Platform.OS === 'android') {
+      const coarseStatus = mapPermissionResult(
+        await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION),
+      );
+      if (isGranted(coarseStatus)) {
+        return 'granted';
+      }
+      return coarseStatus === 'blocked' ? 'blocked' : fineStatus;
+    }
+
+    return fineStatus;
   };
 
 export const openLocationSettings = async () => {
@@ -77,27 +110,62 @@ export const openLocationSettings = async () => {
   }
 };
 
-export const getCurrentCoordinates = (): Promise<Coordinates> => {
+const rememberCoordinates = (coordinates: Coordinates) => {
+  cachedCoordinates = coordinates;
+  return coordinates;
+};
+
+const requestPosition = (
+  enableHighAccuracy: boolean,
+  timeout: number,
+  maximumAge: number,
+): Promise<Coordinates> => {
   const Geolocation = getGeolocation();
 
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
-      (position: {
-        coords: {latitude: number; longitude: number};
-      }) => {
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
+      (position: {coords: {latitude: number; longitude: number}}) => {
+        resolve(
+          rememberCoordinates({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }),
+        );
       },
       (error: unknown) => {
         reject(error);
       },
       {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
+        enableHighAccuracy,
+        timeout,
+        maximumAge,
       },
     );
   });
+};
+
+export const getCachedCoordinates = (): Coordinates | null => cachedCoordinates;
+
+export const getCurrentCoordinates = async (): Promise<Coordinates> => {
+  try {
+    return await requestPosition(true, 12000, 60000);
+  } catch {
+    try {
+      return await requestPosition(false, 12000, 300000);
+    } catch (error) {
+      if (cachedCoordinates) {
+        return cachedCoordinates;
+      }
+      throw error;
+    }
+  }
+};
+
+export const prefetchCurrentCoordinates = (): Promise<Coordinates> => {
+  if (!prefetchPromise) {
+    prefetchPromise = getCurrentCoordinates().finally(() => {
+      prefetchPromise = null;
+    });
+  }
+  return prefetchPromise;
 };

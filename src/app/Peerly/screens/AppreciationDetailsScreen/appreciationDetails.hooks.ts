@@ -17,7 +17,7 @@ export function usePostReward() {
       queryClient.invalidateQueries({ queryKey: ['appreciation_list'] });
     },
     onError: (error: AxiosError<APIError>) => {
-      if (error.response?.data.message) {
+      if (error.response?.data?.message) {
         toast(error.response.data.message, 'error');
       } else {
         toast('Something went wrong while giving reward', 'error');

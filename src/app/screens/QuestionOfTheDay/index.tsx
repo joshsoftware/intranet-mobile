@@ -22,7 +22,7 @@ import {
   SubmitAnswerData,
   TodayQuestionData,
 } from '../../services/fintechQuestions/types';
-import {getCurrentCoordinates} from '../../utils/location';
+import {prefetchCurrentCoordinates} from '../../utils/location';
 import {getCoeVisualConfig} from './utils/coeConfig';
 
 type Props = {
@@ -42,17 +42,15 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
   const [submitResult, setSubmitResult] = useState<SubmitAnswerData | null>(
     null,
   );
-  const [isFetchingLocation, setIsFetchingLocation] = useState(false);
 
-  const {mutate: submit, isPending: isSubmittingAnswer} =
-    useSubmitAnswer(onCompleted);
-  const isSubmitting = isSubmittingAnswer || isFetchingLocation;
+  const {mutate: submit, isPending: isSubmitting} = useSubmitAnswer(onCompleted);
 
   const isSubmitted = phase === 'submitted';
   const isCorrect = submitResult?.is_correct ?? false;
   const correctOptionId = submitResult?.correct_option;
 
   useEffect(() => {
+    prefetchCurrentCoordinates().catch(() => undefined);
     const subscription = BackHandler.addEventListener(
       'hardwareBackPress',
       () => true,
@@ -76,44 +74,25 @@ const QuestionOfTheDayScreen = ({question, onCompleted}: Props) => {
     [correctOptionId, isSubmitted, selectedOptionId],
   );
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!selectedOptionId || isSubmitting) {
       return;
     }
 
-    setIsFetchingLocation(true);
-    try {
-      let latitude: number | undefined;
-      let longitude: number | undefined;
-
-      try {
-        const coordinates = await getCurrentCoordinates();
-        latitude = coordinates.latitude;
-        longitude = coordinates.longitude;
-      } catch {
-        // Lat/lng are optional — submit without them if GPS is unavailable.
-      }
-
-      submit(
-        {
-          question_id: question.question_id,
-          selected_option: selectedOptionId,
-          ...(latitude != null && longitude != null
-            ? {latitude, longitude}
-            : {}),
+    submit(
+      {
+        question_id: question.question_id,
+        selected_option: selectedOptionId,
+      },
+      {
+        onSuccess: response => {
+          if (response.data.data) {
+            setSubmitResult(response.data.data);
+            setPhase('submitted');
+          }
         },
-        {
-          onSuccess: response => {
-            if (response.data.data) {
-              setSubmitResult(response.data.data);
-              setPhase('submitted');
-            }
-          },
-        },
-      );
-    } finally {
-      setIsFetchingLocation(false);
-    }
+      },
+    );
   };
 
   const handleContinue = () => {

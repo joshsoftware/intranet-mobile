@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -30,6 +30,8 @@ import colors from '../../constants/colors';
 import messages from '../../constants/message';
 import AcknowledgementModal from '../../components/AcknowledgementModal';
 import message from '../../constants/message';
+import { useGetProfileDetails } from '../ProfileDetailScreen/profileDetail.hooks';
+import toast from '../../../utils/toast';
 
 const paginationData = {
   page: 1,
@@ -45,9 +47,19 @@ const schema = yup.object().shape({
 
 const AppreciationScreen = () => {
   const navigation = useNavigation<GiveAppreciationScreenNavigationProp>();
+  const { data: profileDetails } = useGetProfileDetails();
+  const isOnNotice = Boolean(profileDetails?.is_on_notice);
 
   const [isCoreValueModalVisible, setCoreValueModalVisible] = useState(false);
   const [isAckModalVisible, setAckModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (isOnNotice) {
+      toast(message.NOTICE_PERIOD_RESTRICTED, 'error');
+      navigation.goBack();
+    }
+  }, [isOnNotice, navigation]);
+
   const {
     data: coworkerList,
     isLoading: isCorworkerListLoading,
@@ -84,10 +96,19 @@ const AppreciationScreen = () => {
   });
 
   const onSubmit: SubmitHandler<FormInput> = () => {
+    if (isOnNotice) {
+      toast(message.NOTICE_PERIOD_RESTRICTED, 'error');
+      return;
+    }
     setAckModalVisible(true);
   };
 
   const handleAppreciationSubmit = useCallback(() => {
+    if (isOnNotice) {
+      toast(message.NOTICE_PERIOD_RESTRICTED, 'error');
+      setAckModalVisible(false);
+      return;
+    }
     let payload = {
       receiver: Number(getValues().receiver),
       core_value_id: Number(getValues().core_value_id),
@@ -95,7 +116,7 @@ const AppreciationScreen = () => {
     };
     postAppriciation(payload);
     setAckModalVisible(false);
-  }, [getValues, postAppriciation]);
+  }, [getValues, isOnNotice, postAppriciation]);
 
   const handleSuccessModalClose = useCallback(() => {
     resetPostAppreciation();
@@ -178,7 +199,7 @@ const AppreciationScreen = () => {
             title="Submit"
             type="primary"
             onPress={handleSubmit(onSubmit)}
-            disabled={isAppreciationLoading}
+            disabled={isAppreciationLoading || isOnNotice}
             isLoading={isAppreciationLoading}
           />
           <View>

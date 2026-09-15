@@ -1,13 +1,14 @@
 import React, {useContext, useState} from 'react';
 import {ImageBackground, StyleSheet, View, Text} from 'react-native';
 import {checkVersion} from 'react-native-check-version';
+import DeviceInfo from 'react-native-device-info';
 
 import Button from '../../components/button';
 import VersionContext from '../../context/version.context';
 
 import toast from '../../utils/toast';
 import colors from '../../constant/colors';
-import {BUNDLE_ID} from '../../constant';
+import {isVersionGreater} from '../../utils/appVersion';
 
 import boxBackgroundImage from '../../../assets/images/boxBackground.png';
 
@@ -20,8 +21,10 @@ const NoVersionScreen = () => {
     try {
       setIsLoading(true);
 
+      const currentVersion = DeviceInfo.getVersion();
       const version = await checkVersion({
-        bundleId: BUNDLE_ID,
+        bundleId: DeviceInfo.getBundleId(),
+        currentVersion,
       });
 
       setIsLoading(false);
@@ -29,7 +32,10 @@ const NoVersionScreen = () => {
       if (version.version === null) {
         toast('Could not fetch version info!', 'error');
       } else {
-        setVersionContextData(version);
+        setVersionContextData({
+          ...version,
+          needsUpdate: isVersionGreater(version.version, currentVersion),
+        });
       }
     } catch {
       toast('Could not fetch version info!', 'error');

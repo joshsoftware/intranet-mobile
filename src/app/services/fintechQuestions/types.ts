@@ -25,11 +25,10 @@ export type TodayQuestionResponse = {
 export type SubmitAnswerRequest = {
   question_id: number;
   selected_option: QuestionOption;
-  latitude?: number;
-  longitude?: number;
 };
 
 export type SubmitAnswerData = {
+  response_id?: number | string;
   question_id: number;
   selected_option: string;
   correct_option: QuestionOption;
@@ -42,4 +41,15 @@ export type SubmitAnswerResponse = {
   status: 'success' | 'error';
   message: string;
   data?: SubmitAnswerData;
+};
+
+export type UpdateLocationRequest = {
+  response_id: number;
+  latitude: number;
+  longitude: number;
+};
+
+export type UpdateLocationResponse = {
+  status: 'success' | 'error';
+  message: string;
 };

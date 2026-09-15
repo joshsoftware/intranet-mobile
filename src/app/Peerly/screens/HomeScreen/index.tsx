@@ -284,10 +284,12 @@ const HomeScreen = () => {
             )}
           </>
         )}
-        <FloatingButton
-          title="Give Appreciation"
-          onPress={() => navigation.navigate(GIVE_APPRECIATION_SCREEN)}
-        />
+        {!profileDetails?.is_on_notice && (
+          <FloatingButton
+            title="Give Appreciation"
+            onPress={() => navigation.navigate(GIVE_APPRECIATION_SCREEN)}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

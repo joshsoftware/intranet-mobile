@@ -5,6 +5,7 @@ import {
   checkLocationPermission,
   LocationPermissionStatus,
   openLocationSettings,
+  prefetchCurrentCoordinates,
   requestLocationPermission,
 } from '../../utils/location';
 
@@ -23,6 +24,9 @@ export const useLocationGate = (enabled: boolean) => {
 
     const status = await checkLocationPermission();
     setPermissionStatus(status);
+    if (status === 'granted') {
+      prefetchCurrentCoordinates().catch(() => undefined);
+    }
   }, [enabled]);
 
   useEffect(() => {
@@ -52,6 +56,9 @@ export const useLocationGate = (enabled: boolean) => {
     try {
       const status = await requestLocationPermission();
       setPermissionStatus(status);
+      if (status === 'granted') {
+        prefetchCurrentCoordinates().catch(() => undefined);
+      }
       return status;
     } finally {
       setIsRequesting(false);
