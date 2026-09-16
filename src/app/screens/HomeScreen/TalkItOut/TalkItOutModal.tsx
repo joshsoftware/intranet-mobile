@@ -73,7 +73,7 @@ const TalkItOutModal = ({isVisible, closeModal, talkItOut}: Props) => {
                   onPress={handleHono}
                 />
                 <Button
-                  title="Continue"
+                  title="Raise a Query"
                   type="primary"
                   onPress={handleContinue}
                 />

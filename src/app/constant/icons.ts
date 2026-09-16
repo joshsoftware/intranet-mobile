@@ -5,6 +5,7 @@ import Edit from '../../assets/svg/edit.svg';
 import Home from '../../assets/svg/home.svg';
 import Menu from '../../assets/svg/menu.svg';
 import Floating from '../../assets/svg/floating.svg';
+import TalkItOutIcon from '../../assets/svg/talkItOut.svg';
 import JoshLogo from '../../assets/svg/logo.svg';
 import Profile from '../../assets/svg/profile.svg';
 import ArrowUp from '../../assets/svg/arrowUp.svg';
@@ -38,6 +39,7 @@ export {
   Home,
   Menu,
   Floating,
+  TalkItOutIcon,
   ArrowUp,
   ArrowDown,
   Cross,

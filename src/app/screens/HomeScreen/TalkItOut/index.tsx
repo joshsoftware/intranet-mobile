@@ -8,12 +8,13 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import {Floating} from '../../../constant/icons';
+import colors from '../../../constant/colors';
+import {TalkItOutIcon} from '../../../constant/icons';
 import {useTalkItOut} from '../dashboard.hooks';
 import TalkItOutModal from './TalkItOutModal';
 
-const SIZE = 82;
-const MARGIN = 8;
+const SIZE = 58;
+const MARGIN = 16;
 
 const TalkItOutFab = () => {
   const {talkItOut, isLoading} = useTalkItOut();
@@ -70,7 +71,7 @@ const TalkItOutFab = () => {
     <View pointerEvents="box-none" style={styles.overlay} onLayout={onLayout}>
       <GestureDetector gesture={gesture}>
         <Animated.View collapsable={false} style={[styles.fab, fabStyle]}>
-          <Floating width={SIZE} height={SIZE} />
+          <TalkItOutIcon width={SIZE} height={SIZE} />
         </Animated.View>
       </GestureDetector>
       <TalkItOutModal
@@ -96,6 +97,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: MARGIN,
     bottom: MARGIN,
+    width: SIZE,
+    height: SIZE,
+    borderRadius: SIZE / 2,
+    backgroundColor: colors.WHITE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: colors.SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 6,
+    elevation: 5,
   },
 });
 
