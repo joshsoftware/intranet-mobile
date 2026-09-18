@@ -19,7 +19,29 @@ import {
 import {syncPeerlyFcmTopic} from './src/app/Peerly/services/firebase/topics';
 
 // Register background handler
-messaging().setBackgroundMessageHandler(async () => {});
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  if (remoteMessage.notification) {
+    return;
+  }
+
+  const channelId = await notifee.createChannel({
+    id: 'josh_notifications',
+    name: 'Default Channel',
+  });
+
+  await notifee.displayNotification({
+    title: String(remoteMessage.data?.title || 'Intranet'),
+    body: String(remoteMessage.data?.body || ''),
+    data: remoteMessage.data,
+    android: {
+      channelId,
+      smallIcon: 'ic_stat_josh',
+      largeIcon: 'ic_josh_logo',
+      color: '#3069F6',
+      pressAction: {id: 'default'},
+    },
+  });
+});
 syncPeerlyFcmTopic().catch(() => {});
 
 notifee.onBackgroundEvent(async ({type, detail}) => {

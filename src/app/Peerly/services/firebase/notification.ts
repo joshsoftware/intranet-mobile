@@ -2,8 +2,9 @@ import {useEffect, useState} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 import {syncPeerlyFcmTopic} from './topics';
+import colors from '../../constants/colors';
 
-const DEFAULT_CHANNEL_ID = 'default-channel';
+const DEFAULT_CHANNEL_ID = 'josh_notifications';
 
 const usePushNotification = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -47,7 +48,15 @@ const usePushNotification = () => {
     await notifee.displayNotification({
       title: message.notification?.title || 'No Title',
       body: message.notification?.body || 'No Body',
-      android: {channelId: DEFAULT_CHANNEL_ID},
+      android: {
+        channelId: DEFAULT_CHANNEL_ID,
+        smallIcon: 'ic_stat_josh',
+        largeIcon: 'ic_josh_logo',
+        color: colors.PRIMARY,
+        pressAction: {
+          id: 'default',
+        },
+      },
     });
   };
 

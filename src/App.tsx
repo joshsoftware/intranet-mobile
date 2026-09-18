@@ -24,7 +24,7 @@ import {
 } from './app/Peerly/services/firebase/notificationNavigation';
 
 const queryClient = new QueryClient();
-const DEFAULT_CHANNEL_ID = 'default';
+const DEFAULT_CHANNEL_ID = 'josh_notifications';
 
 const App = () => {
   const userContextValue = useState<UserContextData | null>(null);
@@ -48,7 +48,9 @@ const App = () => {
         data: normalizeNotificationData(remoteMessage.data),
         android: {
           channelId,
-          smallIcon: 'ic_launcher',
+          smallIcon: 'ic_stat_josh',
+          largeIcon: 'ic_josh_logo',
+          color: colors.PRIMARY,
           pressAction: {
             id: 'default',
           },

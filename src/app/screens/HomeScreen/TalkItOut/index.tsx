@@ -1,5 +1,10 @@
 import React, {useCallback, useState} from 'react';
-import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
+import {
+  AccessibilityActionEvent,
+  LayoutChangeEvent,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -36,6 +41,15 @@ const TalkItOutFab = () => {
     minY.value = Math.min(0, MARGIN - (height - SIZE - MARGIN));
   };
 
+  const onAccessibilityAction = useCallback(
+    (event: AccessibilityActionEvent) => {
+      if (event.nativeEvent.actionName === 'activate') {
+        openModal();
+      }
+    },
+    [openModal],
+  );
+
   const tap = Gesture.Tap().onEnd((_event, success) => {
     if (success) {
       runOnJS(openModal)();
@@ -57,6 +71,7 @@ const TalkItOutFab = () => {
       y.value = withSpring(Math.min(0, Math.max(minY.value, y.value)));
     });
 
+  // Pan wins when dragging; tap opens for sighted users
   const gesture = Gesture.Exclusive(pan, tap);
 
   const fabStyle = useAnimatedStyle(() => ({
@@ -67,11 +82,25 @@ const TalkItOutFab = () => {
     return null;
   }
 
+  const accessibilityLabel = talkItOut.title?.trim() || 'Talk it out';
+
   return (
-    <View pointerEvents="box-none" style={styles.overlay} onLayout={onLayout}>
+    <View
+      pointerEvents="box-none"
+      style={styles.overlay}
+      onLayout={onLayout}
+      accessible={false}>
       <GestureDetector gesture={gesture}>
-        <Animated.View collapsable={false} style={[styles.fab, fabStyle]}>
-          <TalkItOutIcon width={SIZE} height={SIZE} />
+        <Animated.View
+          collapsable={false}
+          style={[styles.fab, fabStyle]}
+          accessible
+          accessibilityRole="button"
+          accessibilityLabel={accessibilityLabel}
+          accessibilityHint="Opens help options to go to HONO or raise a query"
+          accessibilityActions={[{name: 'activate'}]}
+          onAccessibilityAction={onAccessibilityAction}>
+          <TalkItOutIcon width={SIZE} height={SIZE} accessible={false} />
         </Animated.View>
       </GestureDetector>
       <TalkItOutModal
