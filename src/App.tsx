@@ -50,7 +50,6 @@ const App = () => {
           channelId,
           smallIcon: 'ic_stat_josh',
           largeIcon: 'ic_josh_logo',
-          color: colors.PRIMARY,
           pressAction: {
             id: 'default',
           },

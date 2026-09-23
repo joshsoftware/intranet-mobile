@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 import {syncPeerlyFcmTopic} from './topics';
-import colors from '../../constants/colors';
 
 const DEFAULT_CHANNEL_ID = 'josh_notifications';
 
@@ -52,7 +51,6 @@ const usePushNotification = () => {
         channelId: DEFAULT_CHANNEL_ID,
         smallIcon: 'ic_stat_josh',
         largeIcon: 'ic_josh_logo',
-        color: colors.PRIMARY,
         pressAction: {
           id: 'default',
         },

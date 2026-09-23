@@ -18,9 +18,21 @@ import {
 } from './src/app/Peerly/services/firebase/notificationNavigation';
 import {syncPeerlyFcmTopic} from './src/app/Peerly/services/firebase/topics';
 
-// Register background handler
+// When FCM includes a `notification` payload, Android already shows it in the
+// system tray. The handler may still run with data-only fields — skip empty
+// fallbacks so swiping the real notification does not leave an "Intranet" ghost.
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   if (remoteMessage.notification) {
+    return;
+  }
+
+  const title = String(remoteMessage.data?.title ?? '').trim();
+  const body = String(
+    remoteMessage.data?.body ?? remoteMessage.data?.message ?? '',
+  ).trim();
+
+  // No user-visible content — do not post a tray notification
+  if (!title && !body) {
     return;
   }
 
@@ -30,14 +42,13 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   });
 
   await notifee.displayNotification({
-    title: String(remoteMessage.data?.title || 'Intranet'),
-    body: String(remoteMessage.data?.body || ''),
+    title: title || body,
+    body: title ? body : '',
     data: remoteMessage.data,
     android: {
       channelId,
       smallIcon: 'ic_stat_josh',
       largeIcon: 'ic_josh_logo',
-      color: '#3069F6',
       pressAction: {id: 'default'},
     },
   });

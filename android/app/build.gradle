@@ -164,7 +164,7 @@ android {
         // targetSdkVersion rootProject.ext.targetSdkVersion
         minSdk 24
         targetSdk 35
-        versionCode 37
+        versionCode 48
         versionName "2.9.2"
 
         ndk {
