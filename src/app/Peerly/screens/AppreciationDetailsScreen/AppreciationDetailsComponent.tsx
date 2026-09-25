@@ -73,6 +73,8 @@ const AppreciationDetailsComponent = ({
     profileDetails?.user_id,
   ]);
 
+  const isOnNotice = Boolean(profileDetails?.is_on_notice);
+
   const getRewardConversion = useMemo(() => {
     if (cardDetails?.given_reward_point === 5) {
       return 3;
@@ -148,6 +150,10 @@ const AppreciationDetailsComponent = ({
   );
 
   const handleReward = (point: number) => {
+    if (isOnNotice) {
+      toast(message.NOTICE_PERIOD_RESTRICTED, 'error');
+      return;
+    }
     if (point !== 0) {
       setOpenAckRewardModal(true);
     }
@@ -160,6 +166,11 @@ const AppreciationDetailsComponent = ({
   };
 
   const handleRewardAckSubmit = () => {
+    if (isOnNotice) {
+      toast(message.NOTICE_PERIOD_RESTRICTED, 'error');
+      setOpenAckRewardModal(false);
+      return;
+    }
     if (cardDetails) {
       const payload = {
         params: {
@@ -188,9 +199,15 @@ const AppreciationDetailsComponent = ({
     return (
       getRewardConversion > 0 ||
       isRewardAlreadyGiven ||
+      isOnNotice ||
       profileDetails?.reward_quota_balance === 0
     );
-  }, [getRewardConversion, isRewardAlreadyGiven, profileDetails?.reward_quota_balance]);
+  }, [
+    getRewardConversion,
+    isOnNotice,
+    isRewardAlreadyGiven,
+    profileDetails?.reward_quota_balance,
+  ]);
 
   if (!cardDetails) {
     return (
@@ -202,7 +219,11 @@ const AppreciationDetailsComponent = ({
 
   const receiverName = `${cardDetails?.receiver_first_name || ''} ${cardDetails?.receiver_last_name || ''
     } `;
-
+  const senderName = `${cardDetails?.sender_first_name || ''} ${cardDetails?.sender_last_name || ''
+    }`.trim();
+  const appreciatorName = cardDetails?.by_management
+    ? message.MANAGEMENT_APPRECIATOR
+    : senderName;
 
   return (
     <View style={styles.screen}>
@@ -231,6 +252,16 @@ const AppreciationDetailsComponent = ({
             </Typography>
             <Typography type="h5" style={styles.designation}>
               {cardDetails.receiver_designation}
+            </Typography>
+          </View>
+          <View style={styles.appreciatorBox}>
+            {!cardDetails?.by_management ? (
+              <Typography type="h5" style={styles.appreciatedByLabel}>
+                Appreciated by
+              </Typography>
+            ) : null}
+            <Typography type="h4" style={styles.senderName}>
+              {appreciatorName}
             </Typography>
           </View>
 
@@ -362,23 +393,25 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     marginTop: 35,
-    marginBottom: 30,
+    // marginBottom: 30,
     borderRadius: 15,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
     paddingTop: 25,
   },
   receiverImageBox: {
     alignItems: 'center',
+    position: 'relative',
   },
   senderImageBox: {
     alignItems: 'center',
     position: 'absolute',
     right: Dimensions.get('window').width <= 400 ? 70 : 90,
+    top: 20,
   },
   receiverImageAvatar: {
     marginTop: -60,
@@ -429,6 +462,21 @@ const styles = StyleSheet.create({
   designation: {
     fontWeight: '300',
     lineHeight: 15,
+    textAlign: 'center',
+  },
+  appreciatorBox: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  appreciatedByLabel: {
+    fontWeight: '300',
+    lineHeight: 15,
+    color: colors.GRAY_MEDIUM,
+    textAlign: 'center',
+  },
+  senderName: {
+    lineHeight: 18,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   coreValue: {

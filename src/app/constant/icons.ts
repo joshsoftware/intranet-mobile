@@ -5,6 +5,7 @@ import Edit from '../../assets/svg/edit.svg';
 import Home from '../../assets/svg/home.svg';
 import Menu from '../../assets/svg/menu.svg';
 import Floating from '../../assets/svg/floating.svg';
+import TalkItOutIcon from '../../assets/svg/talkItOut.svg';
 import JoshLogo from '../../assets/svg/logo.svg';
 import Profile from '../../assets/svg/profile.svg';
 import ArrowUp from '../../assets/svg/arrowUp.svg';
@@ -21,6 +22,12 @@ import Warning from '../../assets/svg/warning.svg';
 import Lock from '../../assets/svg/lock.svg';
 import Employees from '../../assets/svg/employees.svg';
 import DrawerMenuIcon from '../../assets/svg/drawerIcon.svg';
+import LightBulbIdea from '../../assets/svg/lightBulbIdea.svg';
+import Trading from '../../assets/svg/trading.svg';
+import Payment from '../../assets/svg/payment.svg';
+import CoreBanking from '../../assets/svg/coreBanking.svg';
+import InvestmentWealth from '../../assets/svg/investmentWealth.svg';
+import Lending from '../../assets/svg/lending.svg';
 
 export {
   Calendar,
@@ -32,6 +39,7 @@ export {
   Home,
   Menu,
   Floating,
+  TalkItOutIcon,
   ArrowUp,
   ArrowDown,
   Cross,
@@ -46,4 +54,10 @@ export {
   Lock,
   Employees,
   DrawerMenuIcon,
+  LightBulbIdea,
+  Trading,
+  Payment,
+  CoreBanking,
+  InvestmentWealth,
+  Lending,
 };

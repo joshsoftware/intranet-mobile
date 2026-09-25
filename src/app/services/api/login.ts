@@ -1,8 +1,9 @@
+import {Platform} from 'react-native';
 import {AxiosResponse} from 'axios';
 
 import {apiCall} from '.';
 import {EMAIL_OTP, LOGIN_ROUTE} from '../../constant/apiRoutes';
-// import {getNotificationToken} from '../firebase/messaging';
+import {getNotificationToken} from '../firebase/messaging';
 import {UserRole} from '../../context/user.context';
 
 export enum AuthType {
@@ -28,9 +29,15 @@ export type PayloadType =
     }
   | {type: AuthType; email: string; otp: string};
 
+export type DevicePlatform = 'android' | 'ios';
+
 export type LoginRequestBody = PayloadType & {
   notificationToken: string;
+  platform: DevicePlatform;
 };
+
+export const getDevicePlatform = (): DevicePlatform =>
+  Platform.OS === 'ios' ? 'ios' : 'android';
 
 export type LoginResponseBody = {
   message: string;
@@ -51,11 +58,12 @@ export type LoginErrorResponseBody = {
 };
 
 export const sendLoginRequest = async (payload: PayloadType) => {
-  // const notificationToken = await getNotificationToken();
+  const notificationToken = await getNotificationToken();
 
   const data: LoginRequestBody = {
     ...payload,
-    notificationToken: '',
+    notificationToken,
+    platform: getDevicePlatform(),
   };
 
   const response = await apiCall<LoginRequestBody, LoginResponseBody>({

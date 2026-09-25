@@ -1,5 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <application
     android:name=".MainApplication"
     android:label="@string/app_name"
@@ -7,6 +10,13 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:allowBackup="false"
     android:theme="@style/BootTheme">
+    <meta-data
+      android:name="com.google.firebase.messaging.default_notification_icon"
+      android:resource="@drawable/ic_stat_josh"
+      tools:replace="android:resource"/>
+    <meta-data
+      android:name="com.google.firebase.messaging.default_notification_color"
+      tools:node="remove"/>
     <activity
       android:name=".MainActivity"
       android:label="@string/app_name"

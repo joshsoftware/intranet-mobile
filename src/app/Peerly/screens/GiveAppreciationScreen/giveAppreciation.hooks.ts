@@ -86,7 +86,7 @@ export function usePostAppreciation() {
       queryClient.invalidateQueries({ queryKey: ['active_user_list'] });
     },
     onError: (error: AxiosError<APIError>) => {
-      if (error.response?.data.message) {
+      if (error.response?.data?.message) {
         toast(error.response.data.message, 'error');
       } else {
         toast('Something went wrong while giving appreciation', 'error');

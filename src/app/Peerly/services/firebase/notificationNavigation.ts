@@ -170,9 +170,18 @@ const openLatestAppreciation = async () => {
   });
 };
 
+const isFintechQuestionNotification = (data?: NotificationData) => {
+  const type = data?.type;
+  return type === 'fintech_question' || type === 'fintech_reminder';
+};
+
 export const handlePeerlyNotificationOpen = async (
   data?: NotificationData,
 ) => {
+  if (isFintechQuestionNotification(data)) {
+    return;
+  }
+
   // Keep latest tap if a previous open is still in progress (cold start races).
   pendingNotificationData = data ?? pendingNotificationData;
 

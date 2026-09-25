@@ -1,7 +1,8 @@
 export interface APIError {
   success: boolean;
   message: string;
-  status_code: number;
+  status_code?: number;
+  code?: number;
   data: null;
 }
 

@@ -47,4 +47,5 @@ export const initialProfileDetails = {
   total_points: 0,
   refil_date: 0,
   badge: '',
+  is_on_notice: false,
 };

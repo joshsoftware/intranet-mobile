@@ -71,11 +71,17 @@ const Button = ({
       disabled={disabled}
       style={style}
       activeOpacity={0.8}
-      onPress={onPress}>
+      onPress={onPress}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{disabled: disabled || isLoading, busy: isLoading}}>
       {isLoading ? (
         <ActivityIndicator color={colors.WHITE} />
       ) : (
-        <Text style={textStyle}>{title}</Text>
+        <Text style={textStyle} accessible={false}>
+          {title}
+        </Text>
       )}
     </TouchableOpacity>
   );

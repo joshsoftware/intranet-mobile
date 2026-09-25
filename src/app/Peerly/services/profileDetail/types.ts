@@ -13,6 +13,7 @@ export type ProfileDetailsDetail = {
   refil_date: number;
   badge: string;
   badge_created_at: number;
+  is_on_notice?: boolean;
 };
 
 export type GetProfileDetailsResponse = {

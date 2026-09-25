@@ -15,6 +15,8 @@ import LoginInstructionScreen from '../screens/LoginScreen/LoginInstructionScree
 import OTPAuthenticationScreen from '../screens/LoginScreen/OTPAuthenticationScreen';
 import UpdateVersionScreen from '../screens/UpdateVersion';
 import NoVersionScreen from '../screens/UpdateVersion/NoVersionInfo';
+import LocationPermissionScreen from '../screens/LocationPermission';
+import QuestionOfTheDayScreen from '../screens/QuestionOfTheDay';
 import DrawerNavigator from './DrawerNavigation';
 import {navigationRef} from '.';
 
@@ -23,21 +25,24 @@ import VersionContext from '../context/version.context';
 import AsyncStore from '../services/asyncStorage';
 import DeviceInfo from 'react-native-device-info';
 
-
+import {useLocationGate} from '../screens/LocationPermission/locationPermission.hooks';
+import {useDailyQuizGate} from '../screens/QuestionOfTheDay/questionOfTheDay.hooks';
 import {RootStackParamList} from './types';
 import {
   DRAWER,
   LEAVE_DETAIL_SCREEN,
+  LOCATION_PERMISSION,
   LOGIN_INSTRUCTION_SCREEN,
   LOGIN_SCREEN,
   NO_VERSION,
   OTP_AUTHENTICATION_SCREEN,
+  QUESTION_OF_THE_DAY,
   UPDATE_VERSION,
   USER_PROFILE_SCREEN,
   USER_TIMESHEET,
 } from '../constant/screenNames';
 import colors from '../constant/colors';
-import {BUNDLE_ID} from '../constant';
+import {isProdIntranetBundle, isVersionGreater} from '../utils/appVersion';
 import {
   APPRECIATION_DETAILS_SCREEN,
   APPRECIATION_SEARCH_SCREEN,
@@ -82,30 +87,35 @@ const linking: any = {
   },
 };
 
-const isVersionGreater = (storeVersion: string, localVersion: string): boolean => {
-  if (!storeVersion || !localVersion) {
-    return false;
-  }
-  const storeParts = storeVersion.split('.').map(Number);
-  const localParts = localVersion.split('.').map(Number);
-  for (let i = 0; i < Math.max(storeParts.length, localParts.length); i++) {
-    const storeVal = storeParts[i] || 0;
-    const localVal = localParts[i] || 0;
-    if (storeVal > localVal) {
-      return true;
-    }
-    if (storeVal < localVal) {
-      return false;
-    }
-  }
-  return false;
-};
-
 const RootNavigator = () => {
   const [userContextData, setUserContextData] = useContext(UserContext);
   const [versionContextData, setVersionContextData] =
     useContext(VersionContext);
   const [loading, setLoading] = useState(true);
+  const [quizBypassed, setQuizBypassed] = useState(false);
+
+  const isLoggedIn = Boolean(userContextData?.userData?.userId);
+  const canUseAppGates =
+    isLoggedIn &&
+    !loading &&
+    versionContextData !== null &&
+    versionContextData.version !== null &&
+    !versionContextData.needsUpdate;
+
+  const {
+    gate: locationGate,
+    permissionStatus,
+    isRequesting: isRequestingLocation,
+    requestPermission,
+    openSettings,
+  } = useLocationGate(canUseAppGates);
+
+  const shouldCheckDailyQuiz =
+    canUseAppGates && locationGate === 'granted';
+
+  const {gate: dailyQuizGate, question: dailyQuizQuestion} = useDailyQuizGate(
+    shouldCheckDailyQuiz && !quizBypassed,
+  );
 
   useEffect(() => {
     const run = async () => {
@@ -113,15 +123,17 @@ const RootNavigator = () => {
         try {
           const bundleId = DeviceInfo.getBundleId();
           const currentVersion = DeviceInfo.getVersion();
-          if (bundleId === 'com.joshsoftware.intranet' && !__DEV__) {
+          if (isProdIntranetBundle(bundleId) && !__DEV__) {
             const version = await checkVersion({
-              bundleId: BUNDLE_ID,
-              currentVersion: currentVersion,
+              bundleId,
+              currentVersion,
             });
-            const needsUpdate = version.version ? isVersionGreater(version.version, currentVersion) : false;
+            const needsUpdate = version.version
+              ? isVersionGreater(version.version, currentVersion)
+              : false;
             setVersionContextData({
               ...version,
-              needsUpdate: needsUpdate,
+              needsUpdate,
             });
           } else {
             setVersionContextData({
@@ -130,7 +142,9 @@ const RootNavigator = () => {
               url: '',
             } as any);
           }
-        } catch {}
+        } catch {
+          setVersionContextData(null);
+        }
 
         const authToken = await AsyncStore.getItem(AsyncStore.AUTH_TOKEN_KEY);
         const userData = await AsyncStore.getItem(AsyncStore.USER_DATA);
@@ -148,7 +162,25 @@ const RootNavigator = () => {
     run();
   }, [setUserContextData, setVersionContextData]);
 
-  if (loading) {
+  useEffect(() => {
+    setQuizBypassed(false);
+  }, [userContextData?.userData?.userId]);
+
+  const isLocationLoading = canUseAppGates && locationGate === 'loading';
+
+  const shouldShowLocationPermission =
+    canUseAppGates && locationGate === 'required';
+
+  const isDailyQuizLoading =
+    shouldCheckDailyQuiz && !quizBypassed && dailyQuizGate === 'loading';
+
+  const shouldShowDailyQuiz =
+    shouldCheckDailyQuiz &&
+    !quizBypassed &&
+    dailyQuizGate === 'required' &&
+    dailyQuizQuestion != null;
+
+  if (loading || isLocationLoading || isDailyQuizLoading) {
     return null;
   }
 
@@ -161,75 +193,101 @@ const RootNavigator = () => {
       <RootStack.Navigator
         screenOptions={screenOptions}
         initialRouteName={DRAWER}>
-        {
-        versionContextData === null || versionContextData.version === null ? (
+        {versionContextData === null || versionContextData.version === null ? (
           <RootStack.Screen name={NO_VERSION} component={NoVersionScreen} />
-        ) 
-        : versionContextData.needsUpdate ? (
+        ) : versionContextData.needsUpdate ? (
           <RootStack.Screen
             name={UPDATE_VERSION}
             component={UpdateVersionScreen}
           />
-        ) 
-        : userContextData ? (
-          <>
-            <RootStack.Screen name={DRAWER} component={DrawerNavigator} />
+        ) : userContextData ? (
+          shouldShowLocationPermission ? (
+            <RootStack.Screen
+              name={LOCATION_PERMISSION}
+              options={{gestureEnabled: false}}>
+              {() => (
+                <LocationPermissionScreen
+                  permissionStatus={permissionStatus}
+                  isRequesting={isRequestingLocation}
+                  onAllow={requestPermission}
+                  onOpenSettings={openSettings}
+                />
+              )}
+            </RootStack.Screen>
+          ) : shouldShowDailyQuiz ? (
+            <RootStack.Screen
+              name={QUESTION_OF_THE_DAY}
+              options={{gestureEnabled: false}}>
+              {() => (
+                <QuestionOfTheDayScreen
+                  question={dailyQuizQuestion!}
+                  onCompleted={() => setQuizBypassed(true)}
+                />
+              )}
+            </RootStack.Screen>
+          ) : (
+            <>
+              <RootStack.Screen name={DRAWER} component={DrawerNavigator} />
 
-            <RootStack.Screen name={USER_TIMESHEET} component={TimesheetList} />
-            <RootStack.Screen
-              name={USER_PROFILE_SCREEN}
-              component={ProfileScreen}
-            />
-            <RootStack.Screen
-              name={LEAVE_DETAIL_SCREEN}
-              component={LeaveDetailScreen}
-            />
-            <RootStack.Screen
-              name={HOME_SCREEN}
-              component={HomeScreen}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name={GIVE_APPRECIATION_SCREEN}
-              component={AppreciationScreen}
-              options={{
-                headerTitle: 'Appreciation',
-                headerShadowVisible: false,
-                headerShown: true,
-                headerBackTitleVisible: false,
-              }}
-            />
-            <RootStack.Screen
-              name={APPRECIATION_DETAILS_SCREEN}
-              component={AppreciationDetailsScreen}
-              options={{
-                headerTitle: '',
-                headerShadowVisible: false,
-                headerShown: true,
-                headerBackTitleVisible: false,
-              }}
-            />
-            <RootStack.Screen
-              name={PROFILE_DETAILS_SCREEN}
-              component={ProfileDetailScreen}
-              options={{
-                headerShadowVisible: false,
-                headerShown: true,
-                headerTitle: 'Profile',
-                headerBackTitleVisible: false,
-              }}
-            />
-            <RootStack.Screen
-              name={APPRECIATION_SEARCH_SCREEN}
-              component={SearchScreen}
-              options={{
-                headerShown: true,
-                headerTitle: '',
-                headerShadowVisible: false,
-                headerBackTitleVisible: false,
-              }}
-            />
-          </>
+              <RootStack.Screen
+                name={USER_TIMESHEET}
+                component={TimesheetList}
+              />
+              <RootStack.Screen
+                name={USER_PROFILE_SCREEN}
+                component={ProfileScreen}
+              />
+              <RootStack.Screen
+                name={LEAVE_DETAIL_SCREEN}
+                component={LeaveDetailScreen}
+              />
+              <RootStack.Screen
+                name={HOME_SCREEN}
+                component={HomeScreen}
+                options={{headerShown: false}}
+              />
+              <RootStack.Screen
+                name={GIVE_APPRECIATION_SCREEN}
+                component={AppreciationScreen}
+                options={{
+                  headerTitle: 'Appreciation',
+                  headerShadowVisible: false,
+                  headerShown: true,
+                  headerBackTitleVisible: false,
+                }}
+              />
+              <RootStack.Screen
+                name={APPRECIATION_DETAILS_SCREEN}
+                component={AppreciationDetailsScreen}
+                options={{
+                  headerTitle: '',
+                  headerShadowVisible: false,
+                  headerShown: true,
+                  headerBackTitleVisible: false,
+                }}
+              />
+              <RootStack.Screen
+                name={PROFILE_DETAILS_SCREEN}
+                component={ProfileDetailScreen}
+                options={{
+                  headerShadowVisible: false,
+                  headerShown: true,
+                  headerTitle: 'Profile',
+                  headerBackTitleVisible: false,
+                }}
+              />
+              <RootStack.Screen
+                name={APPRECIATION_SEARCH_SCREEN}
+                component={SearchScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: '',
+                  headerShadowVisible: false,
+                  headerBackTitleVisible: false,
+                }}
+              />
+            </>
+          )
         ) : (
           <>
             <RootStack.Screen name={LOGIN_SCREEN} component={LoginScreen} />

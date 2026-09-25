@@ -11,6 +11,7 @@ interface UserDetails {
   grade_id: number;
   grade: string;
   created_at: number;
+  is_on_notice?: boolean;
 }
 
 export interface PeerlyLoginResponse {

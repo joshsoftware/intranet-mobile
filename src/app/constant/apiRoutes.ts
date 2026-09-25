@@ -1,4 +1,5 @@
 export const LOGIN_ROUTE = '/api/mobile/v1/login_in';
+export const LOGOUT_ROUTE = '/api/mobile/v1/logout';
 export const EMAIL_OTP = '/api/mobile/v1/email_otp';
 
 export const USER_PROFILE_ROUTE = '/api/mobile/v1/user_details';
@@ -35,3 +36,14 @@ export const TEAM_MEMBERS_UPCOMING_BIRTHDAYS_ROUTE =
 export const EVENTS_ROUTE = '/api/mobile/v2/events';
 
 export const TIMESHEET_WARNING_ROUTE = '/api/mobile/v2/time_sheets/warning';
+
+export const FINTECH_TODAY_QUESTION_ROUTE =
+  '/api/mobile/v1/fintech_questions/today_question';
+
+export const FINTECH_SUBMIT_ANSWER_ROUTE =
+  '/api/mobile/v1/fintech_questions/submit_answer';
+
+export const FINTECH_UPDATE_LOCATION_ROUTE =
+  '/api/mobile/v1/fintech_questions/update_location';
+
+export const TALK_IT_OUT_ROUTE = '/api/mobile/v1/talk_it_out';

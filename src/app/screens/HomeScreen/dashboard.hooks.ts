@@ -13,6 +13,7 @@ import toast from '../../utils/toast';
 import { filterWFHFromLeaves } from '../../utils/home';
 
 import { GetHomeTimesheetDataResponse } from '../../services/home/types';
+import { getTalkItOut } from '../../services/talkItOut';
 
 export const useHomeCalendar = (month: string, year: number) => {
   const { data, isLoading, isError, error } = useQuery({
@@ -82,6 +83,19 @@ export const useLiveEvents = () => {
 
   return {
     events: data?.data?.data || [],
+    isLoading: isLoading || isRefetching,
+    refetch,
+  };
+};
+
+export const useTalkItOut = () => {
+  const {data, isLoading, isRefetching, refetch} = useQuery({
+    queryKey: ['talk-it-out'],
+    queryFn: getTalkItOut,
+  });
+
+  return {
+    talkItOut: data?.data?.data,
     isLoading: isLoading || isRefetching,
     refetch,
   };
