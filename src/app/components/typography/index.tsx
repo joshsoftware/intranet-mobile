@@ -6,6 +6,7 @@ import fonts from '../../constant/fonts';
 
 type Props = PropsWithChildren & {
   style?: StyleProp<TextStyle>;
+  numberOfLines?: number;
   type?:
     | 'title'
     | 'header'
@@ -17,44 +18,40 @@ type Props = PropsWithChildren & {
     | 'error';
 };
 
-const Typography = ({children, type = 'title', style}: Props) => (
-  <Text style={[styles[type], style]}>{children}</Text>
+const Typography = ({children, type = 'title', style, numberOfLines}: Props) => (
+  <Text style={[styles[type], style]} numberOfLines={numberOfLines}>
+    {children}
+  </Text>
 );
 
 const styles = StyleSheet.create({
   title: {
     color: colors.PRIMARY,
-    lineHeight: 16,
     fontFamily: fonts.ARIAL,
     fontSize: 14,
   },
   header: {
     color: colors.SECONDARY,
-    lineHeight: 16,
     fontFamily: fonts.ARIAL,
     fontSize: 14,
   },
   subheader: {
     color: colors.SECONDARY,
-    lineHeight: 14,
     fontFamily: fonts.ARIAL,
     fontSize: 12,
   },
   description: {
     color: colors.SECONDARY_TEXT,
-    lineHeight: 14,
     fontFamily: fonts.OVERPASS,
     fontSize: 12,
   },
   smallText: {
     color: colors.SECONDARY,
-    lineHeight: 12,
     fontFamily: fonts.OVERPASS,
     fontSize: 10,
   },
   label: {
     color: colors.LABEL_COLOR_PRIMARY,
-    lineHeight: 16,
     fontFamily: fonts.ARIAL,
     fontSize: 14,
   },

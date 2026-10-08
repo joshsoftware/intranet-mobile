@@ -16,3 +16,6 @@ export const UPDATE_VERSION = 'UpdateVersion';
 export const NO_VERSION = 'NoVersion';
 export const LOCATION_PERMISSION = 'LocationPermission';
 export const QUESTION_OF_THE_DAY = 'QuestionOfTheDay';
+export const COURSES_SCREEN = 'Courses';
+export const MONTHLY_SUMMARY_SCREEN = 'MonthlySummary';
+

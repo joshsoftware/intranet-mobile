@@ -15,6 +15,7 @@
     "ios-stage-release": "ENVFILE=.env.stage react-native run-ios --scheme Intranet-Stage --mode Release",
     "lint": "eslint .",
     "start": "react-native start",
+    "start-stage": "ENVFILE=.env.stage react-native start --reset-cache",
     "updateversion": "react-native-version --never-amend",
     "test": "jest",
     "postinstall": "node ./scripts/patch-tab-view.js"

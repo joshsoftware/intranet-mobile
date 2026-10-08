@@ -68,11 +68,14 @@ target 'Intranet' do
     )
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
         config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
         config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
 
-        # Disable Folly coroutines and enable Hermes V1 for all Pods to avoid compile errors
-        ['FOLLY_CFG_NO_COROUTINES=1', 'HERMES_V1_ENABLED=1'].each do |definition|
+        definitions = ['FOLLY_CFG_NO_COROUTINES=1', 'HERMES_V1_ENABLED=1', 'RN_ENABLE_DEBUG_STRING_CONVERTIBLE=0', 'RN_DEBUG_STRING_CONVERTIBLE=0']
+        cxx_flags = ['-DFOLLY_CFG_NO_COROUTINES=1', '-DHERMES_V1_ENABLED=1', '-DRN_ENABLE_DEBUG_STRING_CONVERTIBLE=0', '-DRN_DEBUG_STRING_CONVERTIBLE=0']
+
+        definitions.each do |definition|
           if config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].nil?
             config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = ['$(inherited)', definition]
           elsif config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].is_a?(Array)
@@ -82,7 +85,7 @@ target 'Intranet' do
           end
         end
 
-        ['-DFOLLY_CFG_NO_COROUTINES=1', '-DHERMES_V1_ENABLED=1'].each do |flag|
+        cxx_flags.each do |flag|
           if config.build_settings['OTHER_CPLUSPLUSFLAGS'].nil?
             config.build_settings['OTHER_CPLUSPLUSFLAGS'] = ['$(inherited)', flag]
           elsif config.build_settings['OTHER_CPLUSPLUSFLAGS'].is_a?(Array)
@@ -100,7 +103,10 @@ target 'Intranet' do
         user_target.build_configurations.each do |config|
           config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
 
-          ['FOLLY_CFG_NO_COROUTINES=1', 'HERMES_V1_ENABLED=1'].each do |definition|
+          definitions = ['FOLLY_CFG_NO_COROUTINES=1', 'HERMES_V1_ENABLED=1', 'RN_ENABLE_DEBUG_STRING_CONVERTIBLE=0', 'RN_DEBUG_STRING_CONVERTIBLE=0']
+          cxx_flags = ['-DFOLLY_CFG_NO_COROUTINES=1', '-DHERMES_V1_ENABLED=1', '-DRN_ENABLE_DEBUG_STRING_CONVERTIBLE=0', '-DRN_DEBUG_STRING_CONVERTIBLE=0']
+
+          definitions.each do |definition|
             if config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].nil?
               config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = ['$(inherited)', definition]
             elsif config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].is_a?(Array)
@@ -110,7 +116,7 @@ target 'Intranet' do
             end
           end
 
-          ['-DFOLLY_CFG_NO_COROUTINES=1', '-DHERMES_V1_ENABLED=1'].each do |flag|
+          cxx_flags.each do |flag|
             if config.build_settings['OTHER_CPLUSPLUSFLAGS'].nil?
               config.build_settings['OTHER_CPLUSPLUSFLAGS'] = ['$(inherited)', flag]
             elsif config.build_settings['OTHER_CPLUSPLUSFLAGS'].is_a?(Array)

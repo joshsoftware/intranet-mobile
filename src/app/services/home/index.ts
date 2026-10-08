@@ -24,19 +24,21 @@ export const getTimesheetCalendar = async (month: string, year: number) => {
   return response;
 };
 
-export const getTeamMembersUpcomingLeaves = async () => {
+export const getTeamMembersUpcomingLeaves = async (params?: {days?: number}) => {
   const response = await apiCall<any, GetTeamMembersLeavesResponse>({
     method: 'GET',
     url: TEAM_MEMBERS_UPCOMING_LEAVES_ROUTE,
+    params,
   });
 
   return response;
 };
 
-export const getTeamMembersUpcomingBirthdays = async () => {
+export const getTeamMembersUpcomingBirthdays = async (params?: {days?: number}) => {
   const response = await apiCall<any, GetTeamMembersBirthdaysResponse>({
     method: 'GET',
     url: TEAM_MEMBERS_UPCOMING_BIRTHDAYS_ROUTE,
+    params,
   });
 
   return response;

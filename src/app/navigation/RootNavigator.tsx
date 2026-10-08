@@ -17,6 +17,8 @@ import UpdateVersionScreen from '../screens/UpdateVersion';
 import NoVersionScreen from '../screens/UpdateVersion/NoVersionInfo';
 import LocationPermissionScreen from '../screens/LocationPermission';
 import QuestionOfTheDayScreen from '../screens/QuestionOfTheDay';
+import CoursesScreen from '../screens/CoursesScreen';
+import MonthlySummaryScreen from '../screens/MonthlySummaryScreen';
 import DrawerNavigator from './DrawerNavigation';
 import {navigationRef} from '.';
 
@@ -40,6 +42,8 @@ import {
   UPDATE_VERSION,
   USER_PROFILE_SCREEN,
   USER_TIMESHEET,
+  COURSES_SCREEN,
+  MONTHLY_SUMMARY_SCREEN,
 } from '../constant/screenNames';
 import colors from '../constant/colors';
 import {isProdIntranetBundle, isVersionGreater} from '../utils/appVersion';
@@ -285,6 +289,16 @@ const RootNavigator = () => {
                   headerShadowVisible: false,
                   headerBackTitleVisible: false,
                 }}
+              />
+              <RootStack.Screen
+                name={COURSES_SCREEN}
+                component={CoursesScreen}
+                options={{headerShown: false}}
+              />
+              <RootStack.Screen
+                name={MONTHLY_SUMMARY_SCREEN}
+                component={MonthlySummaryScreen}
+                options={{headerShown: false}}
               />
             </>
           )

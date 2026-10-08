@@ -25,17 +25,26 @@ export const ALL_PROJECTS_ROUTE = '/api/mobile/v1/leaves/all_project_list';
 export const USERS_LIST_LEAVE_ROUTE = '/api/mobile/v1/employees_for_leaves';
 
 export const HOME_CALENDAR_ROUTE =
-  '/api/mobile/v2/time_sheets/timesheet_calender';
+  '/api/mobile/v2/attendance/calendar';
 
+export const TEAM_MEMBERS_UPCOMING_LEAVES_V1_ROUTE =
+  '/api/mobile/v1/leave_applications/upcoming_users_leaves';
 export const TEAM_MEMBERS_UPCOMING_LEAVES_ROUTE =
-  '/api/mobile/v1/leaves/upcoming_users_leaves';
+  '/api/mobile/v2/leaves/upcoming';
 
+export const TEAM_MEMBERS_UPCOMING_BIRTHDAYS_V1_ROUTE =
+  '/api/mobile/v1/user/employee_birthdays';
 export const TEAM_MEMBERS_UPCOMING_BIRTHDAYS_ROUTE =
-  '/api/mobile/v1/employee_birthdays';
+  '/api/mobile/v2/birthdays/upcoming';
 
 export const EVENTS_ROUTE = '/api/mobile/v2/events';
 
+export const COURSES_ROUTE = '/api/mobile/v2/courses';
+
 export const TIMESHEET_WARNING_ROUTE = '/api/mobile/v2/time_sheets/warning';
+
+export const TIMESHEET_CALENDAR_BUCKETS_ROUTE =
+  '/api/mobile/v2/time_sheets/timesheet_calender';
 
 export const FINTECH_TODAY_QUESTION_ROUTE =
   '/api/mobile/v1/fintech_questions/today_question';
@@ -45,5 +54,11 @@ export const FINTECH_SUBMIT_ANSWER_ROUTE =
 
 export const FINTECH_UPDATE_LOCATION_ROUTE =
   '/api/mobile/v1/fintech_questions/update_location';
+
+export const FINTECH_SEMESTER_SUMMARY_ROUTE =
+  '/api/mobile/v2/fintech_questions/semester_summary';
+
+export const USER_ATTENDANCE_SUMMARY_ROUTE =
+  '/api/mobile/v2/user/attendance_summary';
 
 export const TALK_IT_OUT_ROUTE = '/api/mobile/v1/talk_it_out';

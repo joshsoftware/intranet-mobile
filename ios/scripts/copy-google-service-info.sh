@@ -46,8 +46,13 @@ else
 fi
 
 if [[ ! -f "${SOURCE}" ]]; then
-  echo "error: Firebase config not found at ${SOURCE}" >&2
-  exit 1
+  if [[ "${is_stage}" == true ]] && [[ -f "${SRCROOT_DIR}/GoogleService-Info.plist" ]]; then
+    SOURCE="${SRCROOT_DIR}/GoogleService-Info.plist"
+    echo "info: Stage Firebase config not found, falling back to (${SOURCE})"
+  else
+    echo "error: Firebase config not found at ${SOURCE}" >&2
+    exit 1
+  fi
 fi
 
 mkdir -p "${APP_DIR}"

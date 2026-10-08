@@ -29,6 +29,8 @@ export type RootStackParamList = {
   NoVersion: undefined;
   LocationPermission: undefined;
   QuestionOfTheDay: undefined;
+  Courses: undefined;
+  MonthlySummary: undefined;
   PeerlyHome: undefined;
   AppreciationSearch: undefined;
   GiveAppreciation: undefined;

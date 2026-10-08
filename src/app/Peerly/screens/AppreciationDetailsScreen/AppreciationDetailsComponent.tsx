@@ -225,6 +225,29 @@ const AppreciationDetailsComponent = ({
     ? message.MANAGEMENT_APPRECIATOR
     : senderName;
 
+  const quotaMessage = useMemo(() => {
+    if (selfAppreciations) return null;
+    if (getRewardConversion > 0 || isRewardAlreadyGiven) return null;
+    if (isOnNotice) return 'You cannot give rewards during notice period.';
+    if (profileDetails?.reward_quota_balance === 0) {
+      return 'Your reward quota for this quarter is finished.';
+    }
+    if (
+      profileDetails?.reward_quota_balance !== undefined &&
+      profileDetails.reward_quota_balance < 5 &&
+      profileDetails.reward_quota_balance > 0
+    ) {
+      return `Remaining quota: ${profileDetails.reward_quota_balance} pts. Options exceeding balance are disabled.`;
+    }
+    return null;
+  }, [
+    selfAppreciations,
+    getRewardConversion,
+    isRewardAlreadyGiven,
+    isOnNotice,
+    profileDetails?.reward_quota_balance,
+  ]);
+
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
@@ -318,17 +341,30 @@ const AppreciationDetailsComponent = ({
               <View
                 style={{
                   opacity: isRewardDisabled ? 0.5 : 1,
-                  pointerEvents: isRewardDisabled ? "none" : "auto",
+                  pointerEvents: isRewardDisabled ? 'none' : 'auto',
                 }}
               >
                 <RatingBar
                   reward={reward}
                   setReward={handleReward}
                   disabled={isRewardDisabled}
+                  rewardQuotaBalance={profileDetails?.reward_quota_balance}
                 />
               </View>
             </View>
           )}
+          {quotaMessage ? (
+            <Text
+              style={{
+                textAlign: 'center',
+                color: colors.ERROR_RED,
+                fontSize: 12,
+                marginTop: 6,
+                fontWeight: '500',
+              }}>
+              {quotaMessage}
+            </Text>
+          ) : null}
         </View>
         <InfoModal
           message={message.REWARD_INFO}

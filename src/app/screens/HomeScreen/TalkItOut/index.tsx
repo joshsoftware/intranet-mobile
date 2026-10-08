@@ -84,6 +84,8 @@ const TalkItOutFab = () => {
 
   const accessibilityLabel = talkItOut.title?.trim() || 'Talk it out';
 
+  const AnimatedView = Animated.View as any;
+
   return (
     <View
       pointerEvents="box-none"
@@ -91,7 +93,7 @@ const TalkItOutFab = () => {
       onLayout={onLayout}
       accessible={false}>
       <GestureDetector gesture={gesture}>
-        <Animated.View
+        <AnimatedView
           collapsable={false}
           style={[styles.fab, fabStyle]}
           accessible
@@ -101,7 +103,7 @@ const TalkItOutFab = () => {
           accessibilityActions={[{name: 'activate'}]}
           onAccessibilityAction={onAccessibilityAction}>
           <TalkItOutIcon width={SIZE} height={SIZE} accessible={false} />
-        </Animated.View>
+        </AnimatedView>
       </GestureDetector>
       <TalkItOutModal
         isVisible={visible}

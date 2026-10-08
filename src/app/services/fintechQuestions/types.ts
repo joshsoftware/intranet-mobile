@@ -53,3 +53,77 @@ export type UpdateLocationResponse = {
   status: 'success' | 'error';
   message: string;
 };
+
+export type SemesterInfo = {
+  label: string;
+  start_date: string;
+  end_date: string;
+};
+
+export type OverallSummary = {
+  total_assigned: number;
+  total_answered: number;
+  correct_count: number;
+  incorrect_count: number;
+  attempt_rate: number;
+  accuracy_rate: number;
+};
+
+export type MonthlySummaryApiItem = {
+  year: number;
+  month: number;
+  label: string;
+  short_label: string;
+  assigned_count: number;
+  answered_count: number;
+  correct_count: number;
+  accuracy_rate: number;
+  is_future: boolean;
+  is_current: boolean;
+};
+
+export type SemesterSummaryData = {
+  semester: SemesterInfo;
+  overall_summary: OverallSummary;
+  monthly_summary: MonthlySummaryApiItem[];
+};
+
+export type SemesterSummaryResponse = {
+  status: 'success' | 'error';
+  data: SemesterSummaryData;
+};
+
+export type AttendanceSummaryCounts = {
+  present_days?: number;
+  absent_days?: number;
+  pending_leaves?: number;
+  approved_leaves?: number;
+  holidays?: number;
+  present_count?: number;
+  absent_count?: number;
+  pending_leaves_count?: number;
+  approved_leaves_count?: number;
+  holidays_count?: number;
+};
+
+export type AttendanceSummaryData = {
+  year?: number;
+  month?: number;
+  label?: string;
+  present_days?: number;
+  absent_days?: number;
+  pending_leaves?: number;
+  approved_leaves?: number;
+  holidays?: number;
+  present_count?: number;
+  absent_count?: number;
+  pending_leaves_count?: number;
+  approved_leaves_count?: number;
+  holidays_count?: number;
+  summary?: AttendanceSummaryCounts;
+};
+
+export type AttendanceSummaryResponse = {
+  status: 'success' | 'error';
+  data: AttendanceSummaryData;
+};

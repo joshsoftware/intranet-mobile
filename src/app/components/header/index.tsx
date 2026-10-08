@@ -18,7 +18,9 @@ const Header = ({type, title, showDrawerButton = true}: Props) => {
   const inset = useSafeAreaInsets();
 
   const goBack = () => {
-    navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
   };
 
   const handleMenuButtonPress = () => {
@@ -50,15 +52,19 @@ const Header = ({type, title, showDrawerButton = true}: Props) => {
         <View
           style={[{paddingTop: inset.top, backgroundColor: colors.PRIMARY}]}>
           <View style={styles.container}>
-            <TouchableOpacity activeOpacity={0.5} onPress={goBack}>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={goBack}
+              style={styles.backButtonContainer}
+              hitSlop={{top: 15, bottom: 15, left: 15, right: 30}}>
               <Arrow
                 height={20}
                 width={20}
                 style={styles.arrow}
                 fill={colors.WHITE}
               />
+              <Text style={styles.backText}>{title}</Text>
             </TouchableOpacity>
-            <Text style={styles.backText}>{title}</Text>
           </View>
         </View>
       );
@@ -92,14 +98,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  backButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingRight: 12,
+  },
   backText: {
     color: colors.WHITE,
     fontSize: 16,
-    marginStart: 20,
+    marginStart: 12,
     fontWeight: 'bold',
   },
   arrow: {
-    marginTop: 5,
     transform: [{rotate: '180deg'}],
   },
 });
